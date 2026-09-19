@@ -1,0 +1,17 @@
+# Binaries
+INPUTCSV
+*.o
+*.so
+*.dylib
+*.dll
+*.exe
+
+# Outputs
+# output.csv is committed as reference sample, but scratch outputs can be ignored if needed
+*.tmp
+*.log
+
+# Editor / OS
+.DS_Store
+*.swp
+*.swo

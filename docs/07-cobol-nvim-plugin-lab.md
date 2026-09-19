@@ -23,7 +23,9 @@ nvim INPUTCSV.COB
 }
 ```
 
-Aerial 只负责侧边栏大纲，是可选依赖。插件核心功能不依赖 Aerial。
+Aerial 是一个为 Neovim 提供代码结构 Outline 侧边栏的插件；在这里它负责显示
+`cobol.nvim` 识别出的 Division、Section、Paragraph 和数据记录。它只是可选依赖，
+插件核心功能不依赖 Aerial。
 
 如果 Neovim 不是从本仓库目录启动，建议设置项目根目录：
 

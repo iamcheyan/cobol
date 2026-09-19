@@ -223,7 +223,9 @@ COPY "EMP-REC.CPY".
 ## 4. Neovim 现代化 COBOL 插件使用指南
 
 配合安装了公开插件 [`iamcheyan/cobol.nvim`](https://github.com/iamcheyan/cobol.nvim) 的
-Neovim，你可以享受现代 IDE 般的编辑体验。Aerial 是可选依赖；不安装 Aerial 时，
+Neovim，你可以享受现代 IDE 般的编辑体验。Aerial 是一个为 Neovim 提供代码结构
+Outline 侧边栏的插件，`cobol.nvim` 为它提供 COBOL 专用 backend。Aerial 是可选依赖；
+不安装 Aerial 时，
 标尺、导航、计算器、折叠、格式化和 GnuCOBOL 诊断仍然可用。
 
 在插件中打开本仓库的文件时，当前目录就是默认项目根目录，因此 `gf`、`K` 和

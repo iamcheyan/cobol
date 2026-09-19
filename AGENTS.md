@@ -10,7 +10,7 @@
 - **本地路径**：`/home/tetsuya/development/cobol`
 - **核心定位**：
   1. **COBOL 语言实战学习工坊**：提供生产级、可独立运行的 COBOL 85/2002 固定格式（Fixed-Format）代码样例，涵盖完整文件 I/O、Copybook 模块依赖、`UNSTRING`/`STRING` 数据处理以及复杂数据结构。
-  2. **Neovim 现代化工具链协同演练场**：作为专有 Neovim 插件 `cobol.nvim` 与 `aerial.nvim` 的真实代码测试基准，通过“边学边做、边用边测”的方式持续推进 COBOL 现代化开发体验。
+  2. **Neovim 现代化工具链协同演练场**：作为 Neovim 插件 `cobol.nvim` 与可选的 `aerial.nvim` 代码结构 Outline 侧边栏的真实代码测试基准，通过“边学边做、边用边测”的方式持续推进 COBOL 现代化开发体验。
 
 ---
 
@@ -21,7 +21,7 @@
 | 仓库层级 | 本地路径 / 子模块路径 | 负责内容与协作边界 |
 |---|---|---|
 | **公开实战工坊（本仓库）** | `/home/tetsuya/development/cobol` | COBOL 示例代码（`INPUTCSV.COB`、`EMP-REC.CPY`）、输入测试数据、`Makefile` 构建脚本与新手实战教程。 |
-| **公开插件仓库 (`cobol.nvim`)** | `~/chezmoi/dot_config/nvim-private/lua/cobol.nvim` | Neovim COBOL 插件 canonical source（细线标尺、Winbar、Aerial backend、导航、PIC 计算、诊断、折叠、格式化）。Chezmoi 只通过 submodule 指针部署它。 |
+| **公开插件仓库 (`cobol.nvim`)** | `~/chezmoi/dot_config/nvim-private/lua/cobol.nvim` | Neovim COBOL 插件 canonical source（细线标尺、Winbar、Aerial 的 COBOL backend、导航、PIC 计算、诊断、折叠、格式化）。Chezmoi 只通过 submodule 指针部署它。 |
 | **公开基础层 (`dotfiles`)** | `~/dotfiles/config/nvim/lua/` | 公开通用 Neovim 配置；COBOL 专属 Aerial backend 不再位于此处。 |
 | **私有编排层 (`chezmoi`)** | `~/chezmoi` | 管理私有插件的部署接线（`dot_config/nvim-private/lua/plugins/cobol.lua`）及全局系统维护文档（`dot_config/docs/`）。 |
 

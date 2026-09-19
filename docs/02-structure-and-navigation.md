@@ -27,7 +27,7 @@ PROCEDURE DIVISION.            <-- 执行逻辑区：各种节（SECTION）与�
 ## 2. 插件配备的导航利器
 
 1. **Winbar 动态面包屑**：标尺右侧常驻更新当前光标所在的 Division > Section > Paragraph 路径。
-2. **Aerial 3 层符号侧边栏（`<leader>cs`）**：自动提取 Divisions -> Sections -> Paragraphs/Records，支持搜索与回车跳转。
+2. **Aerial 3 层符号侧边栏（`<leader>cs`）**：Aerial 是 Neovim 的代码结构 Outline 插件；本插件的 COBOL backend 会自动提取 Divisions -> Sections -> Paragraphs/Records，支持搜索与回车跳转。
 3. **段落与数据定义一键直达（`gd`）**：光标停在 `PERFORM 1000-INITIALIZE` 或变量名上按 `gd` 瞬间跳至定义行。
 4. **原生标签栈回跳（`<C-o>` / `<C-t>`）**：利用 Neovim 原生 Jumplist/Tagstack，看完定义后一键原路返回，绝不迷路。
 5. **Copybook 悬停浮窗预览（`K`）**：光标在 `COPY "EMP-REC.CPY".` 上按 `K`，居中弹出语法高亮浮窗就地查阅，按 `q` 随手关闭。
@@ -53,6 +53,10 @@ nvim INPUTCSV.COB
 5. **体验收获**：无论你在代码中如何快速滚动，抬头一眼就能知道当前代码块位于整个系统架构的哪一个分支。
 
 ### 任务 2.2：使用 Aerial 3 层大纲侧边栏
+
+Aerial 是 Neovim 的代码结构大纲（Outline）侧边栏插件。它不是 COBOL 编译器，
+也不是语言服务器；在本练习中，它只负责把 `cobol.nvim` 识别出的程序结构显示
+在侧边栏中。
 1. 在 Normal 模式下按下 **`<leader>cs`**（或执行 `:AerialToggle!`）；
 2. **观察左侧侧边栏**：
    - 顶层根节点：4 大 Division（带模块图标）；

@@ -21,8 +21,8 @@
 | 仓库层级 | 本地路径 / 子模块路径 | 负责内容与协作边界 |
 |---|---|---|
 | **公开实战工坊（本仓库）** | `/home/tetsuya/development/cobol` | COBOL 示例代码（`INPUTCSV.COB`、`EMP-REC.CPY`）、输入测试数据、`Makefile` 构建脚本与新手实战教程。 |
-| **私有插件仓库 (`cobol.nvim`)** | `~/chezmoi/dot_config/nvim-private/lua/cobol.nvim` | 专为 Neovim 打造的私有增强插件源码（细线标尺、Winbar 刻度、`gd` 直达、`K` 浮窗预览、PIC 计算器等）。修改后需在子仓库内 push，并在 `chezmoi` 提交子模块指针与 `chezmoi apply`。 |
-| **公开基础层 (`dotfiles`)** | `~/dotfiles/config/nvim/lua/` | 公开通用 Neovim 配置，包含 `aerial.nvim` 的通用符号树配置及 [cobol.lua](file:///home/tetsuya/dotfiles/config/nvim/lua/aerial/backends/cobol.lua) 正则大纲解析后端。 |
+| **公开插件仓库 (`cobol.nvim`)** | `~/chezmoi/dot_config/nvim-private/lua/cobol.nvim` | Neovim COBOL 插件 canonical source（细线标尺、Winbar、Aerial backend、导航、PIC 计算、诊断、折叠、格式化）。Chezmoi 只通过 submodule 指针部署它。 |
+| **公开基础层 (`dotfiles`)** | `~/dotfiles/config/nvim/lua/` | 公开通用 Neovim 配置；COBOL 专属 Aerial backend 不再位于此处。 |
 | **私有编排层 (`chezmoi`)** | `~/chezmoi` | 管理私有插件的部署接线（`dot_config/nvim-private/lua/plugins/cobol.lua`）及全局系统维护文档（`dot_config/docs/`）。 |
 
 ---
@@ -43,7 +43,8 @@
 
 ## 4. 当前研发进展与功能完成度清单
 
-截至 2026-09-19，本套件已完成的功能与验收状态如下：
+截至 2026-09-19，本套件已完成的功能与验收状态如下。配套练习章节位于 `docs/01` 至
+`docs/07`，可按顺序边学边练：
 
 - [x] **Phase 1: 穿孔卡安全标尺底座 (v0.1.0)**
   - 纯细线标尺（第 7、8、12、73 列绘制纤细 `│`，自动避让文字，空行贯穿全屏）。
@@ -70,21 +71,21 @@
 
 当智能体接手后续任务时，请按以下预定路线图推进：
 
-### 🎯 下一优先级：Phase 3 数据层级与 PIC 结构计算器
+### 🎯 已完成：Phase 3 数据层级与 PIC 结构计算器
 1. **单项 PIC 字节实时换算（Virtual Text / Float）**：
    - 文本型：`PIC X(20)` → `/* 20B */`
    - 数值型：`PIC 9(5)V99` → `/* 7B (5.2) */`
-   - 压缩十进制：`PIC S9(7) COMP-3` → 换算公式 `floor((N+1)/2)` → `/* 4B (COMP-3) */`
+   - 压缩十进制：`PIC S9(7) COMP-3` → 换算公式 `ceil((N+1)/2)` → `/* 4B (COMP-3) */`
    - 二进制整数：`PIC S9(4) COMP` → `/* 2B (COMP) */`，`PIC S9(9) COMP` → `/* 4B (COMP) */`
 2. **`01 RECORD` 自动递归向下求和**：
    - 光标停在 `01 RECORD-NAME.` 时，自动向下扫描所属的所有叶子子字段，递归累加总字节数；
    - 在行尾通过 Virtual Text 提示：`/* Record Size: 256 Bytes */`，或通过命令 `:CobolCalcRecord` 输出明细。
 
-### 🎯 紧随其后：Phase 4 GnuCOBOL (`cobc`) 实时语法飞检
-1. 在保存文件（`BufWritePost`）或输入停顿（`CursorHold`）时，异步执行 `cobc -fsyntax-only INPUTCSV.COB`。
+### 🎯 已完成：Phase 4 GnuCOBOL (`cobc`) 实时语法飞检
+1. 在保存文件（`BufWritePost`）、文本变更防抖（`TextChanged`）或离开插入模式（`InsertLeave`）时，异步执行 `cobc -fsyntax-only`。
 2. 将编译器输出（缺少句号 `.`、Area A/B 越界、未定义标识符）解析并映射为 Neovim Diagnostics（行内红色/黄色波浪线 + 悬浮提示）。
 
-### 🎯 进阶优化：Phase 5 语法折叠与规范化
+### 🎯 已完成：Phase 5 语法折叠与规范化
 1. 基于 Division / Section / Paragraph 行号范围实现原生语法折叠（`za`/`zc`/`zo`）。
 2. 提供 `:CobolFormatCase` 命令，将小写输入的 COBOL 保留字批量规整为大写。
 
@@ -104,7 +105,7 @@
    make clean    # 清理二进制产物
    ```
 3. **自动化端到端测试准则**：
-   - 任何对插件或导航的修改，必须在 headless Neovim 中对真实文件 `/home/tetsuya/development/cobol/INPUTCSV.COB` 执行自动化验证脚本。
+   - 任何对插件或导航的修改，必须在 headless Neovim 中对练习仓库的真实示例执行验证；插件仓库提供 `scripts/test.sh`，练习仓库提供 `make check`。
    - 验证通过后方可提交推送。
 
 ---

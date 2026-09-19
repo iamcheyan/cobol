@@ -48,8 +48,8 @@ nvim INPUTCSV.COB
 ### 任务 2.1：体验 Winbar 实时动态面包屑
 1. 观察窗口顶部 Winbar 最右侧的彩色面包屑标签；
 2. 移动光标至第 1 行 `IDENTIFICATION DIVISION`，Winbar 显示 `[ IDENTIFICATION ]`；
-3. 移动光标至第 40 行 `WORKING-STORAGE SECTION`，Winbar 变为绿色的 `[ DATA > WORKING-STORAGE ]`；
-4. 移动光标至第 114 行 `2100-PROCESS-RECORD`，Winbar 变为亮蓝色的 `[ PROCEDURE > 2000-PROCESS-SECTION > 2100-PROCESS-RECORD ]`；
+3. 移动光标至 `WORKING-STORAGE SECTION`，Winbar 变为绿色的 `[ DATA > WORKING-STORAGE ]`；
+4. 移动光标至 `2100-PROCESS-RECORD`，Winbar 变为亮蓝色的 `[ PROCEDURE > 2000-PROCESS-SECTION > 2100-PROCESS-RECORD ]`；
 5. **体验收获**：无论你在代码中如何快速滚动，抬头一眼就能知道当前代码块位于整个系统架构的哪一个分支。
 
 ### 任务 2.2：使用 Aerial 3 层大纲侧边栏
@@ -59,27 +59,27 @@ nvim INPUTCSV.COB
    - 次层节点：`WORKING-STORAGE SECTION`、`1000-INIT-SECTION` 等；
    - 底层叶子：各个过程段落（如 `0000-MAIN`, `1000-INITIALIZE`, `2100-PROCESS-RECORD`）与 `01` 根级记录变量；
 3. 在左侧侧边栏中用 `j`/`k` 光标移动到 `3000-PARSE-RECORD`，按下 **`<CR>`（回车）**；
-4. **观察**：主编辑窗口瞬间精准平滑地跳转到第 134 行的 `3000-PARSE-RECORD.` 段落；
+4. **观察**：主编辑窗口瞬间精准平滑地跳转到 `3000-PARSE-RECORD.` 段落；
 5. 在主窗口中按 `j`/`k` 移动代码光标，观察左侧侧边栏对应节点会双向联动高亮；
 6. 再次按下 **`<leader>cs`** 随手收起大纲。
 
 ### 任务 2.3：段落与变量直达跳转（`gd` / `<C-o>`）
 这是日常开发中最常用的高频组合技：
-1. 移动光标到第 74 行：`PERFORM 1000-INITIALIZE`；
+1. 移动光标到 `PERFORM 1000-INITIALIZE`；
 2. 将光标放在单词 `1000-INITIALIZE` 上，按下 **`gd`**（Go to Definition）；
-3. **观察**：光标瞬间跨越数十行，直达第 83 行的 `1000-INITIALIZE.` 段落定义顶格处；
+3. **观察**：光标瞬间跨越数十行，直达 `1000-INITIALIZE.` 段落定义顶格处；
 4. 确认完逻辑后，按下 **`<C-o>`**；
-5. **观察**：光标原路飞回第 74 行的 `PERFORM` 调用处！
-6. 移动光标到第 84 行：`INITIALIZE WS-FLAGS WS-COUNTERS.`；
+5. **观察**：光标原路飞回 `PERFORM` 调用处！
+6. 移动光标到 `INITIALIZE WS-FLAGS WS-COUNTERS.`；
 7. 将光标停在变量名 `WS-FLAGS` 上，按下 **`gd`**；
-8. **观察**：光标直飞到数据部第 41 行 `01  WS-FLAGS.` 变量声明行！
-9. 再次按下 **`<C-o>`** 原路跳回第 84 行。
+8. **观察**：光标直飞到 `01  WS-FLAGS.` 变量声明行！
+9. 再次按下 **`<C-o>`** 原路跳回调用处。
 
 > 💡 **技巧**：`gd` 与 `<C-o>` 在 Neovim 中形成完美的“前进-后退”工作流，彻底消除在几千行文件里上下滚动的疲惫。
 
 ### 任务 2.4：Copybook 浮窗就地预览（`K`）与文件打开（`gf`）
 COBOL 大量依靠 Copybook（类似 C 语言的 `#include`）复用数据结构。
-1. 移动光标到第 66 行：`COPY "EMP-REC.CPY".`；
+1. 移动光标到 `COPY "EMP-REC.CPY".`；
 2. 按下 **`K`**（悬停预览快捷键）；
 3. **观察效果**：屏幕中央弹出一个带圆角边框的高亮浮动窗口，清晰展示了 `EMP-REC.CPY` 的内部代码：
    ```cobol
@@ -93,12 +93,12 @@ COBOL 大量依靠 Copybook（类似 C 语言的 `#include`）复用数据结构
    ```
 4. 看完后按 **`q`** 或 **`<Esc>`**，浮窗平滑关闭，原编辑现场完好如初；
 5. 在同一行按下 **`gf`**（Go to File）：Neovim 自动搜寻路径并直接打开该 `.CPY` 实体文件供你编辑；输入 `:bd` 或 `:b INPUTCSV.COB` 可切回主文件。
-6. 光标停在第 75 行 `PERFORM 2000-PROCESS-FILE` 上按 **`K`**：浮窗直接弹出该过程段落的代码片段，按 `q` 随手退出。
+6. 光标停在 `PERFORM 2000-PROCESS-FILE` 上按 **`K`**：浮窗直接弹出该过程段落的代码片段，按 `q` 随手退出。
 
 ### 任务 2.5：查看深层嵌套字段的宿主回溯
-1. 移动光标到第 59 行：`10  IN-FULL-NAME         PIC X(80).`；
+1. 移动光标到 `10  IN-FULL-NAME         PIC X(80).`；
 2. **观察行尾**：自动出现淡灰色斜体虚拟文本：`  ← 05 IN-NAME-GROUP (01 WS-INPUT-FIELDS)`；
-3. 移动光标到第 46 行：`88  CONVERT-SUCCESS      VALUE "S".`；
+3. 移动光标到 `88  CONVERT-SUCCESS      VALUE "S".`；
 4. **观察行尾**：自动显示 `  ← 05 WS-CONVERT-FLAG (01 WS-FLAGS)`；
 5. **思考**：面对 5-10 层嵌套的超大 COBOL 报文时，再也不用往上数缩进找父对象了。
 

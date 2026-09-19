@@ -1,5 +1,8 @@
 # Binaries
 INPUTCSV
+FIXEDREC
+TBLSRCH
+BATCHRPT
 *.o
 *.so
 *.dylib
@@ -10,6 +13,8 @@ INPUTCSV
 # output.csv is committed as reference sample, but scratch outputs can be ignored if needed
 *.tmp
 *.log
+tx_report.txt
+sales_report.txt
 
 # Editor / OS
 .DS_Store

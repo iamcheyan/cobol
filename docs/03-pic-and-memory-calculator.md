@@ -21,6 +21,7 @@ COBOL 使用 `PIC`（Picture，图像子句）描述数据的存储格式。
 | `PIC 9(05)` | 5 位未压缩字符型数字（如 `"12345"`） | **5 字节**（每个字符 1 字节） |
 | `PIC 9(05)V99` | 7 位数值（5 位整数 + 2 位小数），`V` 是虚拟隐式小数点 | **7 字节**（`V` 不占任何物理存储空间！） |
 | `PIC S9(05)` | 带有代数正负号的 5 位数字 | 默认 **5 字节**（符号被编码进最高位或最低位的半字节中，不占额外字节；除非显式声明 `SIGN IS SEPARATE`） |
+| `PIC S9(4) COMP-1` / `COMP-2` | 单精度/双精度浮点 | 常见 ABI 下分别为 **4 / 8 字节** |
 
 ---
 
@@ -78,17 +79,17 @@ nvim INPUTCSV.COB
               05  IN-EMPLOYEE-ID         PIC X(20).
    ```
    **观察行尾**：自动显示 `/* 20 B */`；
-2. 移动光标至第 52 行：
+2. 移动光标至 `WS-TOTAL-SALARY`：
    ```cobol
-          05  WS-TOTAL-SALARY        PIC S9(7)V99 COMP-3 VALUE ZERO.
+          05  WS-TOTAL-SALARY        PIC S9(9) COMP-3 VALUE ZERO.
    ```
    **观察行尾**：自动显示 `/* 5 B COMP-3 */`！
    - *思考*：7 位整数加 2 位小数共 9 位数字，加 1 个符号半字节共 10 个半字节，正好占用 5 个物理字节！
-3. 移动光标至第 51 行：
+3. 移动光标至 `WS-RECORD-COUNT`：
    ```cobol
-          05  WS-RECORD-COUNT        PIC 9(07) VALUE ZERO.
+          05  WS-RECORD-COUNT        PIC 9(5) COMP VALUE ZERO.
    ```
-   **观察行尾**：显示 `/* 7 B */`。
+   **观察行尾**：显示 `/* 2 B COMP */`。
 
 ### 任务 3.2：观察 `01` 顶级结构体总字节递归汇总
 1. 移动光标至第 26 行：
@@ -105,7 +106,7 @@ nvim INPUTCSV.COB
 
 ### 任务 3.3：呼出居中内存排布报表（`<leader>cr`）
 定长接口联调时，外部系统经常问：“你的 `IN-SALARY` 字段从第几个字节开始？占几个字节？”
-1. 保持光标停留在第 56 行 `01 WS-INPUT-FIELDS` 上；
+1. 保持光标停留在 `01 WS-INPUT-FIELDS` 上；
 2. 按下快捷键 **`<leader>cr`**（或在命令行输入 `:CobolCalcRecord`）；
 3. **观察屏幕效果**：屏幕居中弹出一个格式优雅的 ASCII 表格：
    ```text
@@ -116,12 +117,12 @@ nvim INPUTCSV.COB
    ├──────────────────────────────┼─────┼─────────┼──────────┼──────────────┤
    │ IN-EMPLOYEE-ID               │ 05  │      +0 │     20 B │ PIC X(20)    │
    │ IN-FULL-NAME                 │ 10  │     +20 │     80 B │ PIC X(80)    │
-   │ IN-AGE                       │ 05  │    +100 │      3 B │ PIC 9(03)    │
-   │ IN-SALARY                    │ 05  │    +103 │     15 B │ PIC 9(13)V99 │
-   │ IN-DEPARTMENT                │ 05  │    +118 │     30 B │ PIC X(30)    │
-   │ IN-JOIN-DATE                 │ 05  │    +148 │      8 B │ PIC X(08)    │
+   │ NAME-LENGTH                  │ 10  │    +100 │      2 B │ PIC 99       │
+   │ IN-AGE                       │ 05  │    +102 │     10 B │ PIC X(10)    │
+   │ IN-SALARY                    │ 05  │    +112 │     30 B │ PIC X(30)    │
+   │ CSV-LINE                     │ 05  │    +142 │    256 B │ PIC X(256)   │
    ├──────────────────────────────┴─────┴─────────┴──────────┴──────────────┤
-   │ Total Elementary Fields: 6                   Total Size: 156 Bytes     │
+   │ Total Elementary Fields: 6                   Total Size: 398 Bytes     │
    └────────────────────────────────────────────────────────────────────────┘
    ```
    *(注：具体偏移量数值根据代码实际定义列出)*
@@ -138,4 +139,6 @@ nvim INPUTCSV.COB
 | `01` 行行尾提示 | 自动递归向下累加并显示整个结构体的总字节数（如 `/* Total: 398 Bytes (6 fields) */`） |
 | `<leader>cr` | 居中弹出当前 `01` 记录的物理内存排布与偏移量 ASCII 报表（Cobol Record Layout） |
 | `:CobolCalcRecord` | 用户命令，等价于 `<leader>cr` |
+| `:CobolFormatCase` | 将当前行、Visual 选区或整个文件中的 COBOL 保留字规范为大写 |
+| `za` / `zc` / `zo` | 折叠、关闭或打开 Division、Section、Paragraph 和数据记录结构 |
 | `q` 或 `<Esc>` | 随手关闭排布报表浮窗 |

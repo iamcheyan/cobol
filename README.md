@@ -230,6 +230,9 @@ COPY "EMP-REC.CPY".
 |---|---|---|---|
 | `<leader>uc` | Normal | 全局 | **一键开关** COBOL 细线标尺与 Winbar 打孔卡刻度 |
 | `<leader>cs` | Normal | 全局 | **呼出/隐藏 Aerial 符号大纲侧边栏**（回车可跳转） |
+| `<leader>cr` | Normal | 01 记录 / 字段 | **计算 01 记录内存排布与字节总和**（居中弹窗展示偏移量表格） |
+| `<leader>cl` | Normal | 全局 | **立即触发 GnuCOBOL 语法飞检**（Cobol Lint，状态栏提示结果） |
+| `<leader>cq` | Normal | 全局 | **打开诊断 Quickfix 列表**（集中浏览与跳转所有错误与告警） |
 | `gd` | Normal | 段落 / 变量 / Copybook | **直达定义**（跳到段落定义行、数据字段行或 Copybook 文件） |
 | `<C-o>` | Normal | 全局 | **跳回原位置**（Neovim 原生 Jumplist/Tagstack 回退） |
 | `gf` | Normal | `COPY` 语句 | **打开文件**（直接打开光标处引用的 Copybook 实体文件） |
@@ -240,11 +243,11 @@ COPY "EMP-REC.CPY".
 | `g73` | Normal | 当前行 | 光标直跳 **第 73 列**（Identification 识别区起始列） |
 | `<leader>c*` | Normal / Visual | 当前行 / 多选选区 | **在第 7 列切换 `*` 注释**（绝不破坏后续代码缩进） |
 | `<Tab>` | Insert | 行首或前导空白 | **智能吸附**：1~6 列跳 Area A（8列），7~11 列跳 Area B（12列） |
-| `q` 或 `<Esc>` | Normal | 预览浮窗内 | **随手关闭** 悬停预览浮窗 |
+| `q` 或 `<Esc>` | Normal | 预览/计算浮窗内 | **随手关闭** 悬停预览或内存计算浮窗 |
 
 ---
 
-### 4.2 七步实战演练法
+### 4.2 九步实战演练法
 
 打开测试文件开始动手练习：
 
@@ -271,6 +274,15 @@ nvim INPUTCSV.COB
    - 按 `gf` 直接打开进入该文件。
 7. **练习 7：行尾数据层级宿主回溯**
    - 移动光标至第 59 行 `10 IN-FULL-NAME`，看行尾自动淡灰斜体提示：`← 05 IN-NAME-GROUP (01 WS-INPUT-FIELDS)`。
+8. **练习 8：PIC 字节计算与 01 结构体内存排布报表 (`<leader>cr`)**
+   - 移动光标至第 52 行 `05 WS-TOTAL-SALARY`，观察行尾自动显示 `/* 5 B COMP-3 */`；
+   - 移动光标至第 56 行 `01 WS-INPUT-FIELDS`，行尾自动计算并展示 `/* Total: 398 Bytes (6 fields) */`；
+   - 按下 `<leader>cr`（或输入 `:CobolCalcRecord`），屏幕居中弹出精美 ASCII 报表，清晰列出各个字段层级、物理偏移量（`+0`, `+20`, `+50`...）与字节大小，按 `q` 退出。
+9. **练习 9：GnuCOBOL 异步实时语法飞检与诊断 (`<leader>cl` / `<leader>cq`)**
+   - 故意将第 85 行的 `OPEN INPUT INPUT-FILE` 改为 `PERFORM NOT-EXIST-PARAGRAPH.`，保存文件；
+   - 观察 Neovim 立即在第 85 行下方绘制红色波浪下划线，精确标红 `'NOT-EXIST-PARAGRAPH'`，光标停在上方浮窗显示 `'NOT-EXIST-PARAGRAPH' is not defined`；
+   - 按下 `<leader>cq` 呼出 Quickfix 列表，回车即可直达错误行；
+   - 将代码改回正确并保存，红色波浪下划线立即自动消除！按下 `<leader>cl`，状态栏弹出绿色的 `✓ No syntax errors or warnings found by cobc.` 提示。
 
 ---
 
@@ -281,11 +293,14 @@ nvim INPUTCSV.COB
 - [x] **Phase 1: 穿孔卡标尺与安全边界**（细线标尺、Winbar 打孔卡刻度、72 列越界告警、第 7 列智能注释、智能 Tab 吸附）
 - [x] **Phase 2.1: 结构大纲与层级展示**（Winbar 实时面包屑、01/88 级高亮、行尾宿主回溯、Aerial 3 层符号树）
 - [x] **Phase 2.2: 代码定义直达与 Copybook 预览**（`gd` 段落/变量定义直达、`<C-o>` 原生回跳、`gf` 文件跳转、`K` 悬停浮窗）
-- [ ] **Phase 3: 数据层级与 PIC 结构计算器**：
+- [x] **Phase 3: 数据层级与 PIC 结构计算器**：
   - 单项 PIC 字节换算（`PIC S9(7) COMP-3` 换算为 `4B`）；
-  - `01 RECORD` 自动递归向下累加所有子字段字节数，在行尾显示 `/* Record Size: 256 Bytes */`，解决定长文件算字节痛点。
-- [ ] **Phase 4: GnuCOBOL (`cobc`) 实时语法飞检**：
-  - 异步在后台调用 `cobc -fsyntax-only`，保存时将漏写标点 `.`、Area A/B 错位等语法错误直接以 Neovim Diagnostics 标红显示。
+  - `01 RECORD` 自动递归向下累加所有子字段字节数，在行尾显示 `/* Total: 398 Bytes (6 fields) */`；
+  - `<leader>cr` / `:CobolCalcRecord` 居中弹窗展示各字段偏移量与内存排布 ASCII 表格。
+- [x] **Phase 4: GnuCOBOL (`cobc`) 异步实时语法飞检**：
+  - 异步在后台调用 `cobc -fsyntax-only`，保存（`BufWritePost`）、内容修改防抖（`TextChanged`）及离开插入模式（`InsertLeave`）时自动飞检；
+  - 将漏写标点 `.`、未定义段落/变量、Area A/B 错位等语法错误直接以 Neovim Diagnostics 红黄波浪线标红；
+  - Copybook 穿透联动与 `<leader>cl` / `<leader>cq` Quickfix 列表。
 - [ ] **Phase 5: 原生语法折叠与保留字格式化**：
   - 支持 `za` 一键折叠庞大的 `DATA DIVISION` 或各个 Section；
   - 提供 `:CobolFormatCase` 将关键字规范为全大写。

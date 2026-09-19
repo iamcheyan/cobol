@@ -247,7 +247,7 @@ COPY "EMP-REC.CPY".
 
 ---
 
-### 4.2 九步实战演练法
+### 4.2 九步实战演练法（快速自测）
 
 打开测试文件开始动手练习：
 
@@ -255,38 +255,33 @@ COPY "EMP-REC.CPY".
 nvim INPUTCSV.COB
 ```
 
-1. **练习 1：标尺与列穿梭**
-   - 观察 7、8、12、73 列的浅钢蓝细线 `│`。
-   - 按 `g8` 跳到 Area A，按 `g12` 跳到 Area B，按 `g7` 跳到指示符列；按 `<leader>uc` 开合标尺。
-2. **练习 2：智能 Tab 与智能注释**
-   - 空行按 `o`，在第 1 列按一次 `<Tab>` 吸附到第 8 列，再按一次吸附到第 12 列；
-   - 退出插入模式后按 `<leader>c*`，观察第 7 列精准生成/清除 `*` 注释符。
-3. **练习 3：72 列越界防线**
-   - 在任意行尾输入长文本超过 72 列，观察超出部分立刻出现亮红波浪下划线警示。
-4. **练习 4：Aerial 层级大纲树**
-   - 按下 `<leader>cs`，展开 3 层树状大纲，选择 `2100-PROCESS-RECORD` 回车直达。
-5. **练习 5：过程与变量定义直达 (`gd` / `<C-o>`)**
-   - 光标停在第 74 行 `PERFORM 1000-INITIALIZE` 上，按 `gd` 瞬间跳至第 83 行定义；
-   - 按 `<C-o>` 瞬间原路跳回！
-   - 光标停在第 84 行 `WS-FLAGS` 上，按 `gd` 直跳数据部第 41 行声明处。
-6. **练习 6：Copybook 浮窗预览与打开 (`K` / `gf`)**
-   - 光标停在第 66 行 `COPY "EMP-REC.CPY".` 上按 `K`，居中弹窗就地预览 Copybook 结构，按 `q` 退出；
-   - 按 `gf` 直接打开进入该文件。
-7. **练习 7：行尾数据层级宿主回溯**
-   - 移动光标至第 59 行 `10 IN-FULL-NAME`，看行尾自动淡灰斜体提示：`← 05 IN-NAME-GROUP (01 WS-INPUT-FIELDS)`。
-8. **练习 8：PIC 字节计算与 01 结构体内存排布报表 (`<leader>cr`)**
-   - 移动光标至第 52 行 `05 WS-TOTAL-SALARY`，观察行尾自动显示 `/* 5 B COMP-3 */`；
-   - 移动光标至第 56 行 `01 WS-INPUT-FIELDS`，行尾自动计算并展示 `/* Total: 398 Bytes (6 fields) */`；
-   - 按下 `<leader>cr`（或输入 `:CobolCalcRecord`），屏幕居中弹出精美 ASCII 报表，清晰列出各个字段层级、物理偏移量（`+0`, `+20`, `+50`...）与字节大小，按 `q` 退出。
-9. **练习 9：GnuCOBOL 异步实时语法飞检与诊断 (`<leader>cl` / `<leader>cq`)**
-   - 故意将第 85 行的 `OPEN INPUT INPUT-FILE` 改为 `PERFORM NOT-EXIST-PARAGRAPH.`，保存文件；
-   - 观察 Neovim 立即在第 85 行下方绘制红色波浪下划线，精确标红 `'NOT-EXIST-PARAGRAPH'`，光标停在上方浮窗显示 `'NOT-EXIST-PARAGRAPH' is not defined`；
-   - 按下 `<leader>cq` 呼出 Quickfix 列表，回车即可直达错误行；
-   - 将代码改回正确并保存，红色波浪下划线立即自动消除！按下 `<leader>cl`，状态栏弹出绿色的 `✓ No syntax errors or warnings found by cobc.` 提示。
+1. **练习 1：标尺与列穿梭**（`g8` / `g12` / `g7` / `<leader>uc`）
+2. **练习 2：智能 Tab 与智能注释**（行首 `<Tab>` 吸附 / `<leader>c*`）
+3. **练习 3：72 列越界防线**（超 72 列字符标红波浪线警告）
+4. **练习 4：Aerial 层级大纲树**（`<leader>cs` 呼出 3 层符号树并回车跳转）
+5. **练习 5：过程与变量定义直达**（`gd` 秒级跳定义，`<C-o>` 原路跳回）
+6. **练习 6：Copybook 浮窗预览与打开**（`K` 就地浮窗预览结构，`gf` 直接打开文件）
+7. **练习 7：行尾数据层级宿主回溯**（`← 05 PARENT (01 ROOT)` 虚词提示）
+8. **练习 8：PIC 字节计算与 01 结构体内存排布报表**（行尾提示 / `<leader>cr` 弹出内存排布 ASCII 表）
+9. **练习 9：GnuCOBOL 异步实时语法飞检与诊断**（保存/编辑实时波浪线下划线 / `<leader>cl` / `<leader>cq`）
 
 ---
 
-## 5. 边学边建：插件共建路线图 (Roadmap)
+## 5. 边学边练：分章节详细教程手册 (Modular Tutorials)
+
+为了方便系统化循序渐进练习，我们已将全部理论与每一步的实操按主题拆分为独立章节教程，可按顺序逐篇学习：
+
+| 章节手册 | 核心内容与实战重点 | 对应插件功能 |
+|---|---|---|
+| 📖 **[第 1 课：穿孔卡 80 列标准与标尺列穿梭](docs/01-punchcard-and-ruler.md)** | 80 列穿孔卡历史、Area A/B 规则、Indicator 列、72 列越界截断防线、标尺开关与智能 Tab 吸附 | 细线标尺、Winbar 刻度、`g7/g8/g12/g73`、`<leader>uc`、`<leader>c*` |
+| 🗺️ **[第 2 课：结构概览、大纲树与代码定义直达](docs/02-structure-and-navigation.md)** | 四大 Division 体系、Winbar 面包屑、Aerial 侧边栏、`PERFORM` 段落与变量跳转、Copybook 浮窗预览 | `<leader>cs`、`gd`、`<C-o>`、`K`、`gf`、行尾宿主回溯 |
+| 🧮 **[第 3 课：数据层级与 PIC 内存计算器](docs/03-pic-and-memory-calculator.md)** | COBOL 数据类型、`COMP-3`（Packed Decimal 压缩十进制）原理与换算、行尾字节提示、`01` 结构体内存排布报表 | 行尾虚拟文本、`<leader>cr`、`:CobolCalcRecord` |
+| 🩺 **[第 4 课：GnuCOBOL 异步实时语法飞检与排错](docs/04-syntax-check-and-diagnostics.md)** | 避开新手三大深坑（句号 `.`、Area 错位、未定义标识符）、实时非阻塞飞检、Diagnostics 红色波浪线、Quickfix 排错 | `<leader>cl`、`<leader>cq`、`:CobolLint`、Neovim Diagnostics |
+| ⚙️ **[第 5 课：GnuCOBOL 构建、批处理测试与工程实战](docs/05-compilation-and-workflow.md)** | `cobc` 编译机制、Makefile 自动化构建、输入输出管道文件处理、端到端跑批与数据校验 | `make check`、`make`、`make run`、`make clean` |
+
+---
+
+## 6. 边学边建：插件共建路线图 (Roadmap)
 
 我们在实践中一边学习 COBOL 语言特性，一边为其构建现代化的编辑器工具：
 

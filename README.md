@@ -291,7 +291,7 @@ nvim INPUTCSV.COB
 
 ## 5. 边学边练：分章节详细教程手册 (Modular Tutorials)
 
-下一版企业实战课程的[完整设计与制作要求](docs/curriculum/README.md)已单独建档：12 模块、76 小时，以统一银行夜间系统贯穿数据、突合、DB、JOB、事故和维护。当前为设计阶段，下面旧课程保留为素材。
+下一版企业实战课程的[完整设计与制作要求](docs/curriculum/README.md)已单独建档：12 模块、76 小时，以统一银行夜间系统贯穿数据、突合、DB、JOB、事故和维护。新课程已[开始分阶段制作](curriculum/README.md)，下面旧课程保留为素材；未完成项在新入口明确列出。
 
 面向从零学习到独立完成 GNUCOBOL 批处理项目的系统课程已整理到 [`course/`](course/README.md)。共 30 课，每课一个独立目录，包含概念讲解、可编译示例、运行与修改练习，并穿插 `cobol.nvim` 导航/诊断练习；Bash 编译、批量测试、日志和作业集成也包含在课程中。可从第 00 课开始，或运行 `make course-check` 检查课程示例。
 

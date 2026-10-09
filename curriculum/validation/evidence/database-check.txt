@@ -1,0 +1,15 @@
+CREATE TABLE
+INSERT 0 2
+Warning: program compiled against libxml 212 using older 209
+SINGLE-NULL=YES
+EMPTY=02000
+NULL=YES
+ROWS=2
+EOF=02000
+DUPLICATE=23505
+ROLLBACK=100
+COMMIT=101
+REOPEN=YES
+--- terminating libgixsql
+CONNECTION=REJECTED
+PASS: real SQL cursor, NULL, EOF, unique violation, rollback, commit

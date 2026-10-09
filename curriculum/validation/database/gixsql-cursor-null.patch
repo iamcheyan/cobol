@@ -1,0 +1,12 @@
+--- a/runtime/libgixsql/gixsql.cpp
++++ b/runtime/libgixsql/gixsql.cpp
+@@ -826,7 +826,8 @@
+ 		}
+ 
+ 		int sql_code_local = DBERR_NO_ERROR;
+-		(*it)->createCobolData(buffer.get(), datalen, &sql_code_local);
++		(*it)->createCobolData(is_null ? nullptr : buffer.get(),
++			is_null ? 0 : datalen, &sql_code_local);
+ 		if (sql_code_local) {
+ 			setStatus(st, dbi, sql_code_local);
+ 			sqlcode = sql_code_local;

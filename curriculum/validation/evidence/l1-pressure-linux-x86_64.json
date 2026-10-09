@@ -1,0 +1,17 @@
+[
+  {
+    "records_per_side": 10000,
+    "seconds": 0.396,
+    "max_rss_kib": 12600
+  },
+  {
+    "records_per_side": 100000,
+    "seconds": 3.714,
+    "max_rss_kib": 12892
+  },
+  {
+    "records_per_side": 1000000,
+    "seconds": 36.356,
+    "max_rss_kib": 12892
+  }
+]

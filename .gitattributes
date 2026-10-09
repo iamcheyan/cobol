@@ -1,0 +1,2 @@
+# Unified diff context preserves upstream tabs and blank context lines.
+curriculum/validation/database/*.patch whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab

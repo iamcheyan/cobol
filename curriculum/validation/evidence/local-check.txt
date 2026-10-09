@@ -1,0 +1,33 @@
+PASS: DISPLAY, positive/negative COMP-3, COMP and COMP-5; 23 bytes
+HEX=30 30 31 32 33 34 35 00 12 34 5c 00 12 34 5d 00 01 e2 40 40 e2 01 00
+PASS: 24 sequential matching cases
+test_bad_bytes_and_missing_input (__main__.MatchingContract.test_bad_bytes_and_missing_input) ... ok
+test_committed_invalid_fixtures (__main__.MatchingContract.test_committed_invalid_fixtures) ... ok
+test_eof_matrix (__main__.MatchingContract.test_eof_matrix) ... ok
+test_extreme_keys_are_not_eof (__main__.MatchingContract.test_extreme_keys_are_not_eof) ... ok
+test_invalid_calendar_date (__main__.MatchingContract.test_invalid_calendar_date) ... ok
+test_normal_three_way (__main__.MatchingContract.test_normal_three_way) ... ok
+test_output_protection (__main__.MatchingContract.test_output_protection) ... ok
+test_reverse_order (__main__.MatchingContract.test_reverse_order) ... ok
+test_uncooperative_publication_collision (__main__.MatchingContract.test_uncooperative_publication_collision) ... ok
+test_unexpected_program_exit_is_system_failure (__main__.MatchingContract.test_unexpected_program_exit_is_system_failure) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 6.260s
+
+OK
+boundary/empty.dat: OK
+boundary/single-account.dat: OK
+boundary/single-transaction.dat: OK
+invalid/account-date.dat: OK
+invalid/account-duplicate.dat: OK
+invalid/account-long.dat: OK
+invalid/account-reversed.dat: OK
+invalid/account-short.dat: OK
+invalid/transaction-duplicate.dat: OK
+invalid/transaction-no-lf.dat: OK
+invalid/transaction-nul.dat: OK
+invalid/transaction-reversed.dat: OK
+normal/account.dat: OK
+normal/transaction.dat: OK
+PASS: all new COBOL/Copybooks within 72 columns

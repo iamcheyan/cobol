@@ -1,0 +1,14 @@
+--- a/runtime/libgixsql/CursorManager.cpp
++++ b/runtime/libgixsql/CursorManager.cpp
+@@ -106,8 +106,10 @@
+ 
+ 	for (it = _cur_to_close.begin(); it != _cur_to_close.end(); it++) {
+ 		std::shared_ptr<Cursor> c = (*it);
+-		if (c && c->getConnection() && c->getConnection()->getDbInterface())
++		if (c && c->isOpen() && c->getConnection() && c->getConnection()->getDbInterface()) {
+ 			c->getConnection()->getDbInterface()->cursor_close(c);
++			c->setOpened(false);
++		}
+ 	}
+ }
+ 

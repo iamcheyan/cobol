@@ -1,0 +1,179 @@
+{
+  "status": "PASS",
+  "pool": "2M",
+  "tiers": {
+    "10000": {
+      "sort": {
+        "raw_rc": 0,
+        "wait_status": 0,
+        "stdout": "CHILD_PID=711058 WAIT_STATUS=0 MAX_RSS_KIB=5304\n",
+        "stderr": "Warning: program compiled against libxml 212 using older 209\n",
+        "elapsed_seconds": 0.215,
+        "max_rss_kib_wait4_child": 5304,
+        "sampled_cobol_vm_hwm_kib": 5364,
+        "observed_cobol_pid": 711058,
+        "observed_sort_workfiles": {},
+        "output_bytes": 560000,
+        "output_sha256": "9a4ed0b1443d3bbef22ce7a252db52110cb3f6996447e83d97ac1a64e5ecb21d",
+        "input_sha256": "ea87bfc38eb44df8d87cf7daed60a5c5b2927ab04dccf2c68ee8f0b9c89cc5ad",
+        "input_bytes": 560000,
+        "observed_temp_max_bytes": 0,
+        "spill_proven": false
+      },
+      "merge": {
+        "raw_rc": 0,
+        "wait_status": 0,
+        "stdout": "CHILD_PID=711061 WAIT_STATUS=0 MAX_RSS_KIB=5140\n",
+        "stderr": "Warning: program compiled against libxml 212 using older 209\n",
+        "elapsed_seconds": 0.213,
+        "max_rss_kib_wait4_child": 5140,
+        "sampled_cobol_vm_hwm_kib": 5180,
+        "observed_cobol_pid": 711061,
+        "observed_sort_workfiles": {},
+        "output_bytes": 560000,
+        "output_sha256": "9a4ed0b1443d3bbef22ce7a252db52110cb3f6996447e83d97ac1a64e5ecb21d",
+        "feed_a_sha256": "1d3e2c9309d5e11b59e477392eefabab3a5d47378b5626391dead185222317fa",
+        "feed_b_sha256": "f9229262e59ec12e0dce91f122c3b096c609992c32174bf64d6c956ad985b631",
+        "input_bytes_total": 560000
+      },
+      "max_same_account_group": 5000
+    },
+    "100000": {
+      "sort": {
+        "raw_rc": 0,
+        "wait_status": 0,
+        "stdout": "CHILD_PID=711063 WAIT_STATUS=0 MAX_RSS_KIB=6420\n",
+        "stderr": "Warning: program compiled against libxml 212 using older 209\n",
+        "elapsed_seconds": 2.47,
+        "max_rss_kib_wait4_child": 6420,
+        "sampled_cobol_vm_hwm_kib": 6592,
+        "observed_cobol_pid": 711063,
+        "observed_sort_workfiles": {
+          "/tmp/b02-pressure-c9dvrw5r/100000/sort-tmp/cobsort711063_0 (deleted)": 5872065,
+          "/tmp/b02-pressure-c9dvrw5r/100000/sort-tmp/cobsort711063_1 (deleted)": 2397980,
+          "/tmp/b02-pressure-c9dvrw5r/100000/sort-tmp/cobsort711063_2 (deleted)": 4302850,
+          "/tmp/b02-pressure-c9dvrw5r/100000/sort-tmp/cobsort711063_3 (deleted)": 2379534
+        },
+        "output_bytes": 5600000,
+        "output_sha256": "e30d4acc88dfc316b0df42d577fcf448266b8fbc6157ba474b5ec3fd47566997",
+        "input_sha256": "da70d835ac47494abd2433f53d7c17fe87c16d93a1a50abf3b9d317e7584cb8a",
+        "input_bytes": 5600000,
+        "observed_temp_max_bytes": 5872065,
+        "spill_proven": true
+      },
+      "merge": {
+        "raw_rc": 0,
+        "wait_status": 0,
+        "stdout": "CHILD_PID=711068 WAIT_STATUS=0 MAX_RSS_KIB=6692\n",
+        "stderr": "Warning: program compiled against libxml 212 using older 209\n",
+        "elapsed_seconds": 2.186,
+        "max_rss_kib_wait4_child": 6692,
+        "sampled_cobol_vm_hwm_kib": 6780,
+        "observed_cobol_pid": 711068,
+        "observed_sort_workfiles": {
+          "/tmp/b02-pressure-c9dvrw5r/100000/merge-tmp/cobsort711068_0 (deleted)": 5872065,
+          "/tmp/b02-pressure-c9dvrw5r/100000/merge-tmp/cobsort711068_1 (deleted)": 2397980,
+          "/tmp/b02-pressure-c9dvrw5r/100000/merge-tmp/cobsort711068_2 (deleted)": 4302850,
+          "/tmp/b02-pressure-c9dvrw5r/100000/merge-tmp/cobsort711068_3 (deleted)": 2379534
+        },
+        "output_bytes": 5600000,
+        "output_sha256": "e30d4acc88dfc316b0df42d577fcf448266b8fbc6157ba474b5ec3fd47566997",
+        "feed_a_sha256": "b6f7fdfcfcf671f49f647ec16d52ccebccf79595deedc55cde3e5d7fa716b6cf",
+        "feed_b_sha256": "15b9a3c55ded78ff1ebd173755bbb932ecc337e6dcb1db25c91032921d4fb037",
+        "input_bytes_total": 5600000
+      },
+      "max_same_account_group": 50000
+    },
+    "1000000": {
+      "sort": {
+        "raw_rc": 0,
+        "wait_status": 0,
+        "stdout": "CHILD_PID=711077 WAIT_STATUS=0 MAX_RSS_KIB=6760\n",
+        "stderr": "Warning: program compiled against libxml 212 using older 209\n",
+        "elapsed_seconds": 22.754,
+        "max_rss_kib_wait4_child": 6760,
+        "sampled_cobol_vm_hwm_kib": 6836,
+        "observed_cobol_pid": 711077,
+        "observed_sort_workfiles": {
+          "/tmp/b02-pressure-c9dvrw5r/1000000/sort-tmp/cobsort711077_0 (deleted)": 35232194,
+          "/tmp/b02-pressure-c9dvrw5r/1000000/sort-tmp/cobsort711077_1 (deleted)": 31647980,
+          "/tmp/b02-pressure-c9dvrw5r/1000000/sort-tmp/cobsort711077_2 (deleted)": 35232196,
+          "/tmp/b02-pressure-c9dvrw5r/1000000/sort-tmp/cobsort711077_3 (deleted)": 31404534
+        },
+        "output_bytes": 56000000,
+        "output_sha256": "c0105a41a5e023aa1f36d28b19fa89bc18ea51861968323d2bb99782834b73a9",
+        "input_sha256": "7f4373e05b6432d1d11aa5ca4fa07a65f30f3c26d68eadb398f8f5d009b86fc1",
+        "input_bytes": 56000000,
+        "observed_temp_max_bytes": 35232196,
+        "spill_proven": true
+      },
+      "merge": {
+        "raw_rc": 0,
+        "wait_status": 0,
+        "stdout": "CHILD_PID=711262 WAIT_STATUS=0 MAX_RSS_KIB=6472\n",
+        "stderr": "Warning: program compiled against libxml 212 using older 209\n",
+        "elapsed_seconds": 22.035,
+        "max_rss_kib_wait4_child": 6472,
+        "sampled_cobol_vm_hwm_kib": 6720,
+        "observed_cobol_pid": 711262,
+        "observed_sort_workfiles": {
+          "/tmp/b02-pressure-c9dvrw5r/1000000/merge-tmp/cobsort711262_0 (deleted)": 35232194,
+          "/tmp/b02-pressure-c9dvrw5r/1000000/merge-tmp/cobsort711262_1 (deleted)": 31647980,
+          "/tmp/b02-pressure-c9dvrw5r/1000000/merge-tmp/cobsort711262_2 (deleted)": 35232196,
+          "/tmp/b02-pressure-c9dvrw5r/1000000/merge-tmp/cobsort711262_3 (deleted)": 31404534
+        },
+        "output_bytes": 56000000,
+        "output_sha256": "c0105a41a5e023aa1f36d28b19fa89bc18ea51861968323d2bb99782834b73a9",
+        "feed_a_sha256": "8be16d602612e10c738240c8123dbbf85462e1fda46bdb3289e66cc5ca013e4a",
+        "feed_b_sha256": "ba4cb8affb1b4630647b9cec3ca90c6a44285511d5071a2daa22e0cffe0c560d",
+        "input_bytes_total": 56000000
+      },
+      "max_same_account_group": 500000
+    }
+  },
+  "max_rss_threshold_kib": 65536,
+  "rss_growth_threshold_kib": 8192,
+  "measurement_scope": "wait4 reports only the exec'd COBOL core child; libcob core allocations are included. Python generator/verifier and C wait4 helper are excluded. Disk workfiles are recorded separately.",
+  "driver_memory": "Input generation and verification stream one record at a time; no transaction-ID list is held.",
+  "sort_same_account_max_group": 500000,
+  "cobc_version": "cobc (GnuCOBOL) 3.2.0",
+  "compiler_version": "cc (Debian 14.2.0-19) 14.2.0",
+  "python_version": "3.13.5",
+  "sort_version": "sort (GNU coreutils) 9.7",
+  "kernel": "6.12.101+deb13-amd64",
+  "sort_source_sha256": "c5be77850416f4459e441b5872e50741f80ce8a61f62979f3af4c355ba41d0e3",
+  "merge_source_sha256": "fb8717a146e1662d26ce983a1afb7d41357673a20ca737c11b54d2a2600fb5bc",
+  "transaction_copybook_sha256": "5c4371d69985d153bb791a46b452ed1ab2b14bfa8e1d0c6586fa5eb1beb568a2",
+  "runtime_cfg_sha256": "f34ad81159631d45a9f8c6e4a513c5afd3120393d4bff506a478ba0251af7494",
+  "wait4_helper_sha256": "3f31ac53a1677ddfa8558499eee75771561da1e260c211d4c9dd0416cb45d42e",
+  "rss_growth_kib": 1620,
+  "rss_bounded_pass": true,
+  "million_sort_spill_pass": true,
+  "measured_tiers": [
+    10000,
+    100000,
+    1000000
+  ],
+  "readonly_tmp_failure": {
+    "input_records": 150000,
+    "input_bytes": 8400000,
+    "input_sha256": "10a22598fa3cd85fb587ee40381998897c8c2054723e4a7b19506b563967837a",
+    "build_tmp_writable": true,
+    "runtime_tmp_writable": false,
+    "raw_runner_rc": 12,
+    "published": false,
+    "lock_left": false,
+    "stdout": "150000\nBuilt /tmp/b02-pressure-c9dvrw5r/workfile-failure/.sorttx.gq36q3VF/sorttx\n",
+    "stderr": "Warning: program compiled against libxml 212 using older 209\nlibcob: error: permanent file error (status = 30) for file TX-WORK ('20261009')\nlibcob: warning: implicit CLOSE of TX-OUT ('/tmp/b02-pressure-c9dvrw5r/workfile-failure/.sorttx.gq36q3VF/candidate.dat')\nlibcob: warning: implicit CLOSE of TX-IN ('/tmp/b02-pressure-c9dvrw5r/workfile-failure/.sorttx.gq36q3VF/input.dat')\nUnexpected core RC=1\n"
+  },
+  "file_size_limit_failure": {
+    "input_records": 150000,
+    "input_bytes": 8400000,
+    "raw_runner_rc": 12,
+    "core_shell_rc_text": "153 (128+SIGXFSZ) observed in runner stderr",
+    "published": false,
+    "lock_left": false,
+    "stdout": "150000\nBuilt /tmp/b02-pressure-c9dvrw5r/workfile-failure/.sorttx.hawi7JdO/sorttx\n",
+    "stderr": "Warning: program compiled against libxml 212 using older 209\n/home/tetsuya/development/cobol/curriculum/modules/07-matching/labs/02-sort-merge/01-sort/scripts/run.sh: line 44: 711517 File size limit exceeded( ulimit -f \"$B02_FILESIZE_LIMIT_BLOCKS\"; exec \"$work/sorttx\" )\nUnexpected core RC=153\n"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "scope": "primary independent direct core permission probe; runner mapping pending",
+  "uid": 1000,
+  "records": 150000,
+  "input_bytes": 8400000,
+  "pool": "2M",
+  "runtime_tmpdir_mode": "0500",
+  "build_tmpdir": "normal writable directory before runtime restriction",
+  "source_sha256": "c5be77850416f4459e441b5872e50741f80ce8a61f62979f3af4c355ba41d0e3",
+  "core_rc": 1,
+  "runtime_error": "libcob: error: permanent file error (status = 30) for file TX-WORK",
+  "candidate_bytes": 0,
+  "runner_prebuild_control": {
+    "runner_rc": 12,
+    "failure_phase": "cobc intermediate source creation, not SORT runtime"
+  }
+}

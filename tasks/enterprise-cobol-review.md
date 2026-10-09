@@ -126,3 +126,79 @@ Luna提出发布前独立字节核验器。主代理要求其流式读取输入/
 主代理最终总入口session77158原始RC0，独立复审最后无新实质阻塞；正常/业务拒绝/致命数据/环境错误、原始输出字节、两级守恒、锁保护、真实三路写满runner RC12无发布、固定格式及基线回归通过。主代理最终源码四档压力证据已保存，增长2320KiB。教材starter、分步操作、讲师提示/评分、版本布局、夹具与哈希、失败历史均已核读。B00/B01放行，后续B02按原合同执行。
 
 明确边界：发布核验器负责完整性及守恒，非全业务独立重算器；逐笔政策与中间余额由COBOL及独立expected验证。GNU运行时核心直接写满可返回业务RC4，必须走runner核验后发布。压力只验证本机指定规模且无密集冲正的输入；未验证其他平台或生产容量。整个12模块与毕业系统仍未完成，本次放行不代表全Goal完成。
+
+## B02 接手与合同预审 — 2026-10-10
+
+B00/B01提交d4ca202并推送；生成Python缓存随后在8895ce5删除并加入ignore。Luna已接B02任务，主代理确认两课目录02-sort-merge/01-sort与02-merge方案：真实SD SORT INPUT/OUTPUT PROCEDURE和RELEASE/RETURN、至少两路真实MERGE，保留ASCII/LF交易v1全部55字节；完整账户/序号/ID键确定次序，全球交易ID重复RC8。正常RC0，数据RC8，系统RC12；不设没有业务意义的RC4。
+
+额外预审要求：显式固定排序内存池预算，并以足够大输入产生磁盘spill后测试真实临时目录失败，不能以小文件全内存排序冒充临时盘验证。禁止用concat+外部sort代替MERGE。须以含冲正的未排序交易实际接L2验证，不改变ID/seq及关联语义。执行代理已接受，开始TDD/语法实验。B02尚未实现验收，后续12模块目标保持不变。
+
+### B02正常夹具独立核算
+
+主代理独立读取新设计的SORT normal与MERGE两源，均共6条55B+LF；分别验证MERGE每源按账户/序号/ID有序，独立完整键排序结果为Z1、A2、M3、A4、A6、B5。原金额按方向累计：账户1净+50、账户2净0，与期初1000/100下期末1050/100一致。该证据仅核对夹具和人工合同，SORT/MERGE源码尚未实现，不能声称程序通过。
+
+另主代理自建 `curriculum/validation/fixtures/b02-key-order/` 四份独立55B夹具及哈希：输入B(seq2)、Z(seq1)、A(seq2)，正确Z/A/B，两个MERGE源为Z/B与A，净变化95。待实现后用它独立执行，验证不会把整行ASCII排序误当业务键。
+
+### B02 SORT纵切独立运行与源码预审
+
+主代理首次运行独立夹具遇到开发中runner在mktemp后清空work，实际RC1且/ids权限失败，无发布；反馈后再次执行同一独立输入，实际RC0、3条输出与expected.dat原始bytes完全一致，顺序Z/A/B。此结果证明当前SORT完整键选择正确，不代表整批通过。
+
+源码预审确认已使用真实SD SORT/RELEASE/RETURN及MERGE USING。发现当前SORT仍LINE SEQUENTIAL PIC X(55)后直接RELEASE，验证全在Python；MERGE也缺承诺的COBOL预先有序性检查。这与已批准DESIGN的COBOL原始长度/字段/有序性校验不符，已要求补齐。Python可做独立oracle与全局ID唯一性外部JOB，不代替被教校验。当前完整实现位于starter也须在最终交付分离到instructor，starter保留可构建TODO。
+
+主代理随后实际运行独立双流MERGE夹具：merge-left Z(seq1)/B(seq2)，merge-right A(seq2)，runner原始RC0，输出与expected.dat原始bytes完全一致（Z/A/B，3条）。仅证明该正常合并及完整键次序，不覆盖其他异常。Luna报告已增加COBOL variable-length字段/日期/各源顺序校验；主代理要求直接绕开Python预检验证无末LF/CRLF/Tab/NUL/短长行，确认LINE SEQUENTIAL转换不会掩盖原字节，未取得证据前不算契约闭环。
+
+### B02核心原字节独立探针
+
+主代理从instructor直接编译两个核心，绕过Python，以同一合法单记录分别构造有效、无LF、CRLF、ID含Tab、ID含NUL、长行、短行，MERGE使用变异源A和空源B。实测SORT依次RC0/8/8/8/8/8/8，原字节契约符合；MERGE依次RC0/0/0/12/12/0/0，仍受LINE SEQUENTIAL转换影响。已要求Luna补真实原字节MERGE预扫，使数据错误RC8；此为开发中具体缺陷，不以外层Python预检通过代替。
+
+同日逐字节MERGE修复后，Luna提供核心稳定信号。主代理再次直接编译并运行相同七项探针：有效RC0有输出；无LF、CRLF、Tab、NUL、长、短均原始RC8且输出文件不存在。该原字节缺陷已在稳定核心复验消除，已要求执行代理纳入永久直接核心检查，不仅依赖Python预检。
+
+### B02运行脚本系统故障注入
+
+主代理在临时PATH加入只返回1的mktemp替身，分别执行SORT/MERGE runner正常夹具。两者实际RC1、未发布、锁均已清理。系统失败应映射RC12，已要求修复并永久测试。此证据仅证明工具失败传播与清理，不等价于真实SORT工作文件spill或磁盘故障；后者仍须独立实验。runner也应固定LC_ALL=C，不能依赖调用者locale。
+
+同日修复复验：主代理重跑完全相同的mktemp失败注入，SORT与MERGE均原始RC12、无正式输出、无遗留锁。当前runner已固定LC_ALL=C。该工具失败问题已闭环，仍不能代替真实SORT临时工作文件故障验证。
+
+### B02永久核心检查及资源实验进度
+
+主代理独立运行两课check-core-raw.py均原始RC0，并运行MERGE check.py（session59477）原始RC0。原字节/字段/日期/每源顺序检查已进入可重复验收入口。
+
+Luna报告250k交易/2M排序池时，实际/proc FD观察到TMPDIR下cobsort_0..3 deleted文件，最大14MB；资源大小限制后核心SIGXFSZ、runnerRC12且无发布/无遗留锁，L2桥接余额1050/100。这些尚为执行代理报告，主代理要求保存完整脚本/JSON、区分原始信号与shell状态、补真实临时目录权限故障及多档压力，再独立验收。不能以报告代替主代理已复跑证明。
+
+### B02 永久 runner 保护测试独立复跑
+
+主代理执行 `python3 curriculum/modules/07-matching/labs/02-sort-merge/scripts/check-runner-failures.py`，原始 RC0。两课 mktemp RC1 故障均映射 RC12、不发布且清理自身锁；已有目标内容保持；已有锁及 owner 文件保持。此为 runner 保护证据，不代替真实 SORT spill/磁盘资源故障证据。B02 仍在实施，尚未放行。
+
+### B02 独立代码审查：字段政策漂移（待修复）
+
+course_review 只读审查复现：小写交易ID及status R经SORT RC0发布而L2 RC8；零金额经SORT RC8而L2结构合法后业务拒绝RC4。主代理静读确认Python isalnum、金额>0、N/R政策，且COBOL IS ALPHABETIC包含空格，小写与空格ID门禁不足。要求B02保持既有TRANSACTION v1：ID明确A-Z0-9、状态N、非负金额包含零；零金额供下游业务判断。已要求Luna同步修复两课核心/runner/夹具/设计说明，并增加直接核心与runner反例以及零金额桥接L2 RC4测试。审查确认真实SORT/MERGE、复合键、每流顺序、全局ID外部去重和硬链接发布；这些不能抵消字段契约阻塞。
+
+### B02 真实 TMPDIR 权限核心故障独立复现
+
+主代理uid1000使用150,000条/8.4MB输入与2M排序池，先正常构建，再将核心运行TMPDIR指向现存0500目录。原始核心RC1，libcob报TX-WORK permanent file error status30，候选文件0B。独立JSON：`curriculum/validation/evidence/B02-primary-permission-2026-10-10.json`。对照直接runner继承0500 TMPDIR虽RC12无发布，但实际失败在cobc临时源创建，不能作为SORT运行时故障证据。已要求Luna永久脚本明确构建/运行临时目录边界，补真实核心失败经runner映射与发布保护测试。
+
+### B02 字段核心修复独立复测通过
+
+主代理绕过Python门禁直接编译运行两课核心，valid及zero金额均RC0且原始bytes精确保留；小写ID、16空格ID、status R均RC8。共10个独立探针，证据`curriculum/validation/evidence/B02-primary-field-policy-2026-10-10.json`，含当前两份核心SHA。两份永久check-core-raw.py另独立RC0。核心字段阻塞已修复；runner永久反例、zero金额接L2 RC4业务拒绝和完整交付仍待最终验证，B02尚未放行。
+
+### B02 最新 runner 契约回归（实施中）
+
+主代理MERGE check.py session86599原始RC0；SORT check.py session11645原始RC1，新增zero→L2桥接在引用未定义REPO时NameError。已反馈Luna补变量并整包复跑。这是验收脚本问题，不应将该次SORT测试称通过。pressure已新增wait4核心计量、源码/hash与真实只读TMPDIR和文件大小限制runner证据；当前已见JSON仅1000条smoke，不能作为百万档最终压力通过证据。等待Luna稳定整包后独立执行最终档位。
+
+### B02 教材与重置脚本审查（待修复）
+
+独立course_review发现两课check.sh引用不存在的课内check-runner-failures.py（实际为共享脚本）；SORT教程引用不存在CHECK-KEY段落；starter命令重用reference输出先被no-clobber挡住，不能证明执行starter；reset会删除empty output lock，而runner活锁本身为空目录。独立marked workspace+empty lock探针两课均reset RC0并删锁，需改为任意锁存在即拒绝，保持文件并加回归。已全部反馈Luna整包修复。字段政策静读复核一致。
+
+### B02 reset 活锁保护修复独立通过
+
+主代理两课marked workspace内同时放预存binary/output和empty lock，reset均拒绝且保留三者；独立断言通过。此项不再阻塞。教材命令与最终全套仍待稳定包复验。
+
+### B02 教材命令实际复验
+
+course_review 实际执行两课scripts/check.sh均RC0；临时workspace init/build/reference run均RC0，starter独立输出RC12无发布，reset有锁RC12保持三者、无锁RC0。MERGE README实际代码已改独立starter目标，旧问题撤销。剩余教学问题：修改starter后运行硬编码instructor的check-core-raw.py无法检测学生更改，已要求两课支持COURSE_SOURCE并补workspace副本命令。发布保护无新阻塞，正式pressure尚待最终结果。
+
+### B02 最终主代理验收 — 放行
+
+最终总入口session78535原始RC0，独立pressure session7620原始RC0。独立JSON `curriculum/validation/evidence/B02-primary-pressure-2026-10-10.json` 的两份核心SHA与当前源码一致。10k/100k/1m两算法全部通过；百万SORT22.029s/6656KiB，MERGE23.857s/6604KiB；全档RSS增长1480KiB。百万SORT实际观察四个cobsort FD，最大单文件35,232,196B，非以输入规模推断spill。真实0500运行TMPDIR原始核心RC1/status30及文件大小限制shell153都经runner归一RC12，无发布/无锁遗留。FD证据是抽样路径/大小聚合，无时间戳，不声称逐时序磁盘轨迹。
+
+最后独立full-key反例SORT/MERGE均Z,A,B精确bytes；COURSE_SOURCE指定starter两课core测试都实际失败，证明不会暗测讲师源码；参考源码默认测试已在总入口通过。教材命令实际验证、reset活锁保护及字段政策漂移均闭环。学习包参考实现独立放instructor，正式学员无答案打包在B05/B14按原计划完成。B02交付与要求匹配，放行提交；B03及其余模块仍须逐批实施，不宣称整体完成。

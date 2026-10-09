@@ -1,0 +1,69 @@
+{
+  "scope": "direct compiled COBOL core, bypass runner Python gate",
+  "results": [
+    {
+      "lesson": "01-sort",
+      "case": "valid",
+      "core_rc": 0,
+      "byte_exact": true
+    },
+    {
+      "lesson": "01-sort",
+      "case": "lowercase-id",
+      "core_rc": 8,
+      "byte_exact": false
+    },
+    {
+      "lesson": "01-sort",
+      "case": "blank-id",
+      "core_rc": 8,
+      "byte_exact": false
+    },
+    {
+      "lesson": "01-sort",
+      "case": "status-R",
+      "core_rc": 8,
+      "byte_exact": false
+    },
+    {
+      "lesson": "01-sort",
+      "case": "zero",
+      "core_rc": 0,
+      "byte_exact": true
+    },
+    {
+      "lesson": "02-merge",
+      "case": "valid",
+      "core_rc": 0,
+      "byte_exact": true
+    },
+    {
+      "lesson": "02-merge",
+      "case": "lowercase-id",
+      "core_rc": 8,
+      "byte_exact": false
+    },
+    {
+      "lesson": "02-merge",
+      "case": "blank-id",
+      "core_rc": 8,
+      "byte_exact": false
+    },
+    {
+      "lesson": "02-merge",
+      "case": "status-R",
+      "core_rc": 8,
+      "byte_exact": false
+    },
+    {
+      "lesson": "02-merge",
+      "case": "zero",
+      "core_rc": 0,
+      "byte_exact": true
+    }
+  ],
+  "source_sha256": {
+    "SORTTX.COB": "c5be77850416f4459e441b5872e50741f80ce8a61f62979f3af4c355ba41d0e3",
+    "MERGETX.COB": "fb8717a146e1662d26ce983a1afb7d41357673a20ca737c11b54d2a2600fb5bc"
+  }
+}

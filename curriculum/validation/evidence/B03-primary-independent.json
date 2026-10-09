@@ -1,0 +1,122 @@
+{
+  "status": "PASS",
+  "scope": "primary independent small byte-exact cases",
+  "fixture_sha256": {
+    "README.md": "1e05ad0c724b65b9da7216b31586dd7577144a3e64c4c5423dd943ad77f62192",
+    "SHA256SUMS": "aed1e2573196f87cabe4457ec7def8a4e0b2da81b60648e51506c5af4e2e6715",
+    "account.dat": "94df7058c6ede5e78f0e0019b5ea738f80ad347923f8b93ae2ae7ec37b3575b9",
+    "case-expectations.json": "0c0771d0f4ccf1d09634bd14274cffdd89d84e379de8a7e58edd3c990192b748",
+    "customer-snapshot.dat": "fa2bbed713bea1393b6d4604edff67da5c1488ddda3e05bada8fb5b7cbfa3add",
+    "expected-customer-totals.csv": "3f7ec7ddb06e01d066f4b3a7db3cd4bd1ab1e5863a0bd12efbdde27c1a931bca",
+    "expected-master.dat": "0454edaa903abc3899699bfecde3cdf2c2e2786d782f9544a24b6314c8dcda93",
+    "previous-day.dat": "05b839280bb6af8a07c524f958395bb2c9fa7594b4f26edf5268bdbefd66f270",
+    "previous-missing-customer1.dat": "ed13237f5aff021c804699e1989cfdd3b8e221e9ade1d52f56f197044a165ff9",
+    "previous-wrong-balance4001.dat": "fe437936096aa22510158520c0b16d1eff27b500d06ad8c105056298a57646e9",
+    "previous-wrong-count0.dat": "82050c0d61c4efe665ef7ed6d1ea1e003ebba525c3231d9f190e379eabf5b0cf",
+    "reversal-link.dat": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "snapshot-account-limit1.dat": "248c8154ec9d37cb90f84a4d8a5645dcf02bd35f0892374e37a7f7ab37a81304",
+    "snapshot-disabled-customer2.dat": "34e16dbc52b6b0b687be009ba6165ad8cccb1393d8e897f1610db35c4f05df60",
+    "snapshot-limit-below-4099.dat": "684ad37d8468f1c1020a163d8c74d12089ea4369b8aee0f6a5b54f5013b904d2",
+    "snapshot-limit-equal-4100.dat": "a4ac0349f0790ce71cf1eecaf2a3b67d148505d24a27c81a6dcd62261350d85b",
+    "snapshot-missing-customer1.dat": "e9381ee483a191e8aef72b93b225f5490422719630c3604b90dbef359c2b19ef",
+    "snapshot-stale.dat": "49521c475fc333668a8d14bf718314c41ab356dab6b425060e571a601f300bb2",
+    "transaction.dat": "56c74987f58aba72b4aedc25f84369e1823123cc3e9f029b79053b460ce3cb4b"
+  },
+  "results": [
+    {
+      "case": "normal-nonmonotone-customer",
+      "raw_rc": 0,
+      "expected_rc": 0,
+      "published": true,
+      "stdout": "PASS: business and control totals verified\nPASS: independent disk-backed stream/byte/count/money oracle\n./account.input.dat: OK\n./customer-snapshot.input.dat: OK\n./previous-day.input.dat: OK\n./reversal-link.input.dat: OK\n./transaction.input.dat: OK\naccount.input.dat: OK\ntransaction.input.dat: OK\nreversal-link.input.dat: OK\ncustomer-snapshot.input.dat: OK\nprevious-day.input.dat: OK\nl2/master.dat: OK\nl2/accepted.dat: OK\nl2/rejected.dat: OK\nl2/report.txt: OK\neligible-master.dat: OK\neligible-transaction.dat: OK\nrejected-l2.dat: OK\nl2-report.txt: OK\ncustomer-totals.csv: OK\ncustomer-status.txt: OK\nisolation.txt: OK\ncontrol.txt: OK\nPASS: B03 customer aggregation, conservation and bytes verified\n",
+      "stderr": "Warning: program compiled against libxml 212 using older 209\nWarning: program compiled against libxml 212 using older 209\n",
+      "byte_exact_outputs_and_source_partition": true
+    },
+    {
+      "case": "missing-customer1",
+      "raw_rc": 4,
+      "expected_rc": 4,
+      "published": true,
+      "stdout": "PASS: business and control totals verified\nPASS: independent disk-backed stream/byte/count/money oracle\n./account.input.dat: OK\n./customer-snapshot.input.dat: OK\n./previous-day.input.dat: OK\n./reversal-link.input.dat: OK\n./transaction.input.dat: OK\naccount.input.dat: OK\ntransaction.input.dat: OK\nreversal-link.input.dat: OK\ncustomer-snapshot.input.dat: OK\nprevious-day.input.dat: OK\nl2/master.dat: OK\nl2/accepted.dat: OK\nl2/rejected.dat: OK\nl2/report.txt: OK\neligible-master.dat: OK\neligible-transaction.dat: OK\nrejected-l2.dat: OK\nl2-report.txt: OK\ncustomer-totals.csv: OK\ncustomer-status.txt: OK\nisolation.txt: OK\ncontrol.txt: OK\nPASS: B03 customer aggregation, conservation and bytes verified\n",
+      "stderr": "Warning: program compiled against libxml 212 using older 209\nWarning: program compiled against libxml 212 using older 209\n",
+      "byte_exact_outputs_and_source_partition": true
+    },
+    {
+      "case": "disabled-customer2",
+      "raw_rc": 4,
+      "expected_rc": 4,
+      "published": true,
+      "stdout": "PASS: business and control totals verified\nPASS: independent disk-backed stream/byte/count/money oracle\n./account.input.dat: OK\n./customer-snapshot.input.dat: OK\n./previous-day.input.dat: OK\n./reversal-link.input.dat: OK\n./transaction.input.dat: OK\naccount.input.dat: OK\ntransaction.input.dat: OK\nreversal-link.input.dat: OK\ncustomer-snapshot.input.dat: OK\nprevious-day.input.dat: OK\nl2/master.dat: OK\nl2/accepted.dat: OK\nl2/rejected.dat: OK\nl2/report.txt: OK\neligible-master.dat: OK\neligible-transaction.dat: OK\nrejected-l2.dat: OK\nl2-report.txt: OK\ncustomer-totals.csv: OK\ncustomer-status.txt: OK\nisolation.txt: OK\ncontrol.txt: OK\nPASS: B03 customer aggregation, conservation and bytes verified\n",
+      "stderr": "Warning: program compiled against libxml 212 using older 209\nWarning: program compiled against libxml 212 using older 209\n",
+      "byte_exact_outputs_and_source_partition": true
+    },
+    {
+      "case": "balance-limit-equality",
+      "raw_rc": 0,
+      "expected_rc": 0,
+      "published": true,
+      "stdout": "PASS: business and control totals verified\nPASS: independent disk-backed stream/byte/count/money oracle\n./account.input.dat: OK\n./customer-snapshot.input.dat: OK\n./previous-day.input.dat: OK\n./reversal-link.input.dat: OK\n./transaction.input.dat: OK\naccount.input.dat: OK\ntransaction.input.dat: OK\nreversal-link.input.dat: OK\ncustomer-snapshot.input.dat: OK\nprevious-day.input.dat: OK\nl2/master.dat: OK\nl2/accepted.dat: OK\nl2/rejected.dat: OK\nl2/report.txt: OK\neligible-master.dat: OK\neligible-transaction.dat: OK\nrejected-l2.dat: OK\nl2-report.txt: OK\ncustomer-totals.csv: OK\ncustomer-status.txt: OK\nisolation.txt: OK\ncontrol.txt: OK\nPASS: B03 customer aggregation, conservation and bytes verified\n",
+      "stderr": "Warning: program compiled against libxml 212 using older 209\nWarning: program compiled against libxml 212 using older 209\n",
+      "byte_exact_outputs_and_source_partition": true
+    },
+    {
+      "case": "balance-limit-exceeded",
+      "raw_rc": 4,
+      "expected_rc": 4,
+      "published": true,
+      "stdout": "PASS: business and control totals verified\nPASS: independent disk-backed stream/byte/count/money oracle\n./account.input.dat: OK\n./customer-snapshot.input.dat: OK\n./previous-day.input.dat: OK\n./reversal-link.input.dat: OK\n./transaction.input.dat: OK\naccount.input.dat: OK\ntransaction.input.dat: OK\nreversal-link.input.dat: OK\ncustomer-snapshot.input.dat: OK\nprevious-day.input.dat: OK\nl2/master.dat: OK\nl2/accepted.dat: OK\nl2/rejected.dat: OK\nl2/report.txt: OK\neligible-master.dat: OK\neligible-transaction.dat: OK\nrejected-l2.dat: OK\nl2-report.txt: OK\ncustomer-totals.csv: OK\ncustomer-status.txt: OK\nisolation.txt: OK\ncontrol.txt: OK\nPASS: B03 customer aggregation, conservation and bytes verified\n",
+      "stderr": "Warning: program compiled against libxml 212 using older 209\nWarning: program compiled against libxml 212 using older 209\n",
+      "byte_exact_outputs_and_source_partition": true
+    },
+    {
+      "case": "account-limit-exceeded",
+      "raw_rc": 4,
+      "expected_rc": 4,
+      "published": true,
+      "stdout": "PASS: business and control totals verified\nPASS: independent disk-backed stream/byte/count/money oracle\n./account.input.dat: OK\n./customer-snapshot.input.dat: OK\n./previous-day.input.dat: OK\n./reversal-link.input.dat: OK\n./transaction.input.dat: OK\naccount.input.dat: OK\ntransaction.input.dat: OK\nreversal-link.input.dat: OK\ncustomer-snapshot.input.dat: OK\nprevious-day.input.dat: OK\nl2/master.dat: OK\nl2/accepted.dat: OK\nl2/rejected.dat: OK\nl2/report.txt: OK\neligible-master.dat: OK\neligible-transaction.dat: OK\nrejected-l2.dat: OK\nl2-report.txt: OK\ncustomer-totals.csv: OK\ncustomer-status.txt: OK\nisolation.txt: OK\ncontrol.txt: OK\nPASS: B03 customer aggregation, conservation and bytes verified\n",
+      "stderr": "Warning: program compiled against libxml 212 using older 209\nWarning: program compiled against libxml 212 using older 209\n",
+      "byte_exact_outputs_and_source_partition": true
+    },
+    {
+      "case": "missing-previous-customer1",
+      "raw_rc": 4,
+      "expected_rc": 4,
+      "published": true,
+      "stdout": "PASS: business and control totals verified\nPASS: independent disk-backed stream/byte/count/money oracle\n./account.input.dat: OK\n./customer-snapshot.input.dat: OK\n./previous-day.input.dat: OK\n./reversal-link.input.dat: OK\n./transaction.input.dat: OK\naccount.input.dat: OK\ntransaction.input.dat: OK\nreversal-link.input.dat: OK\ncustomer-snapshot.input.dat: OK\nprevious-day.input.dat: OK\nl2/master.dat: OK\nl2/accepted.dat: OK\nl2/rejected.dat: OK\nl2/report.txt: OK\neligible-master.dat: OK\neligible-transaction.dat: OK\nrejected-l2.dat: OK\nl2-report.txt: OK\ncustomer-totals.csv: OK\ncustomer-status.txt: OK\nisolation.txt: OK\ncontrol.txt: OK\nPASS: B03 customer aggregation, conservation and bytes verified\n",
+      "stderr": "Warning: program compiled against libxml 212 using older 209\nWarning: program compiled against libxml 212 using older 209\n",
+      "byte_exact_outputs_and_source_partition": true
+    },
+    {
+      "case": "previous-balance-mismatch",
+      "raw_rc": 4,
+      "expected_rc": 4,
+      "published": true,
+      "stdout": "PASS: business and control totals verified\nPASS: independent disk-backed stream/byte/count/money oracle\n./account.input.dat: OK\n./customer-snapshot.input.dat: OK\n./previous-day.input.dat: OK\n./reversal-link.input.dat: OK\n./transaction.input.dat: OK\naccount.input.dat: OK\ntransaction.input.dat: OK\nreversal-link.input.dat: OK\ncustomer-snapshot.input.dat: OK\nprevious-day.input.dat: OK\nl2/master.dat: OK\nl2/accepted.dat: OK\nl2/rejected.dat: OK\nl2/report.txt: OK\neligible-master.dat: OK\neligible-transaction.dat: OK\nrejected-l2.dat: OK\nl2-report.txt: OK\ncustomer-totals.csv: OK\ncustomer-status.txt: OK\nisolation.txt: OK\ncontrol.txt: OK\nPASS: B03 customer aggregation, conservation and bytes verified\n",
+      "stderr": "Warning: program compiled against libxml 212 using older 209\nWarning: program compiled against libxml 212 using older 209\n",
+      "byte_exact_outputs_and_source_partition": true
+    },
+    {
+      "case": "previous-account-count-mismatch",
+      "raw_rc": 4,
+      "expected_rc": 4,
+      "published": true,
+      "stdout": "PASS: business and control totals verified\nPASS: independent disk-backed stream/byte/count/money oracle\n./account.input.dat: OK\n./customer-snapshot.input.dat: OK\n./previous-day.input.dat: OK\n./reversal-link.input.dat: OK\n./transaction.input.dat: OK\naccount.input.dat: OK\ntransaction.input.dat: OK\nreversal-link.input.dat: OK\ncustomer-snapshot.input.dat: OK\nprevious-day.input.dat: OK\nl2/master.dat: OK\nl2/accepted.dat: OK\nl2/rejected.dat: OK\nl2/report.txt: OK\neligible-master.dat: OK\neligible-transaction.dat: OK\nrejected-l2.dat: OK\nl2-report.txt: OK\ncustomer-totals.csv: OK\ncustomer-status.txt: OK\nisolation.txt: OK\ncontrol.txt: OK\nPASS: B03 customer aggregation, conservation and bytes verified\n",
+      "stderr": "Warning: program compiled against libxml 212 using older 209\nWarning: program compiled against libxml 212 using older 209\n",
+      "byte_exact_outputs_and_source_partition": true
+    },
+    {
+      "case": "stale-snapshot",
+      "raw_rc": 8,
+      "expected_rc": 8,
+      "published": false,
+      "stdout": "PASS: business and control totals verified\n",
+      "stderr": "Warning: program compiled against libxml 212 using older 209\nWarning: program compiled against libxml 212 using older 209\nlibcob: warning: implicit CLOSE of SNAP-NORMAL ('/tmp/primary-b03-independent-nqlido8_/.b03-stage.CoRGiAGW/snapshot.normal.dat')\nlibcob: warning: implicit CLOSE of SNAP-RAW ('/tmp/primary-b03-independent-nqlido8_/.b03-stage.CoRGiAGW/customer-snapshot.input.dat')\n"
+    }
+  ],
+  "source_sha256": "49135419a1e6a7c2d20d3c5bb4c0ce6f908f7e173d71c80da675e4bbdc095613",
+  "supporting_source_sha256": {
+    "curriculum/modules/07-matching/labs/04-many-to-many/scripts/run.sh": "ffdace03608791fbbcea810378a9c13173b7380a38f8dbfd849e9e24c67b35c1",
+    "curriculum/modules/07-matching/labs/04-many-to-many/scripts/verify.py": "71ed802af7b3606d52a5fa123900f0453a7b52f6a0b3052c22038b995d831fd8",
+    "curriculum/modules/07-matching/labs/04-many-to-many/scripts/build.sh": "2af3e841d75d5954c9e77bcab381a0e05d848001d9e77252af02d4e6ebab0023"
+  }
+}

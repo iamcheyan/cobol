@@ -202,3 +202,87 @@ course_review 实际执行两课scripts/check.sh均RC0；临时workspace init/bu
 最终总入口session78535原始RC0，独立pressure session7620原始RC0。独立JSON `curriculum/validation/evidence/B02-primary-pressure-2026-10-10.json` 的两份核心SHA与当前源码一致。10k/100k/1m两算法全部通过；百万SORT22.029s/6656KiB，MERGE23.857s/6604KiB；全档RSS增长1480KiB。百万SORT实际观察四个cobsort FD，最大单文件35,232,196B，非以输入规模推断spill。真实0500运行TMPDIR原始核心RC1/status30及文件大小限制shell153都经runner归一RC12，无发布/无锁遗留。FD证据是抽样路径/大小聚合，无时间戳，不声称逐时序磁盘轨迹。
 
 最后独立full-key反例SORT/MERGE均Z,A,B精确bytes；COURSE_SOURCE指定starter两课core测试都实际失败，证明不会暗测讲师源码；参考源码默认测试已在总入口通过。教材命令实际验证、reset活锁保护及字段政策漂移均闭环。学习包参考实现独立放instructor，正式学员无答案打包在B05/B14按原计划完成。B02交付与要求匹配，放行提交；B03及其余模块仍须逐批实施，不宣称整体完成。
+
+### B03 实施启动与独立反例准备
+
+B02提交2affe66已推送origin/main。已下发完整B03四流/N:N任务给同一Luna，强调版本字段目录、业务消费规则、真实COBOL有界内存、全套教材/故障/压力与总入口。主代理准备非单调customer关联人工反例 `curriculum/validation/fixtures/b03-customer-order/README.md`：account1→customer2、account2→customer1、account3→customer2；独立余额算术6000+120−120=6000。此仅待设计落地的测试基线，不称运行通过；Snapshot/Previous字节契约确定后补四流实际数据。已提醒执行代理不能假设account排序同时使customer单调。
+
+### B03 业务策略设计决定
+
+执行代理提出客户日汇总对账及按ordinal配对两种方案，主代理批准前者：同客户多账户/多交易先聚合再比较，非笛卡尔积。官方runner从原始ACCOUNT/TX/REVERSAL-LINK进入真实B01 L2，保留原始拒绝与控制，再用accepted推进L3，不能伪造已接受交易或再次应用交易。四流包括版本化Customer Snapshot与Previous Day；缺客户/前日RC4隔离关联客户候选，结构/日期/版本/重复/逆序RC8全批关闭。快照与前日要含真实控制字段并实际比较，不能仅判断存在；孤儿快照/前日必须消费分类，空流EOF组合覆盖。前日教学规则为前Gregorian日，明确非银行工作日日历并覆盖月/年/闰日。此为设计批准，不是实现验收；等待字段目录、真实COBOL及独立证据。
+
+### B03 独立四流字节数据与L2前置实测
+
+主代理已独立生成非单调客户反例的47B ACCOUNT、55B TRANSACTION、36B Snapshot与39B Previous、空REVERSAL-LINK及人工expected-master/customer totals，SHA清单和宽度均核验。用真实B01 L2处理该原始account/tx/link，原始RC0，master精确匹配人工1030/1900/3070，4笔accepted原样保留且reject空。此仅证明B03独立夹具及L2前置，L3四流关联还未实现运行，不能扩称B03通过。
+
+### B03 草案物理布局独立编译核对
+
+主代理实际cobc编译COPY新两份v1，LENGTH OF实测36B/39B，符合字段目录与独立四流夹具。DESIGN明确先L2后客户聚合、四流消费和RC隔离，整体符合批准策略。已反馈两处all-account措辞及TX无布局字段说明；另要求明确整组最终判定后通过磁盘重读/spool输出eligible/隔离，不能缓存整客户组。此阶段尚无L3核心通过证据。
+
+### B03 早期独立设计审查
+
+course_review确认36/39布局正确，非单调customer磁盘重排与单客户spool有界策略可行。两项需在实现中收口：L2 master仅非余额字段与原ACCOUNT逐字一致，余额当然允许按已接受交易变化；eligible/隔离需账户数、accepted TX数、贷/借金额逐类拆分守恒，L2 rejected单列。主代理已反馈Luna写入DESIGN与独立发布验收，防止仅全局守恒而漏写/错分eligible。此为设计审查，尚无L3核心通过证据。
+
+### B03 核心早期静审：隔离RC累计缺陷
+
+独立reviewer与主代理均静读确认1580每隔离客户ADD4 TO RETURN-CODE；2组→8/3组→12被main视致命，4组→16又可能main归0。已要求改持久业务差异flag/隔离计数或幂等MOVE4，补多隔离客户永久测试。另指出customer顺序replay会使eligible master按A2,A1,A3输出，官方runner应明确恢复canonical account顺序并byte-exact核对原人工expected。尚无稳定runner，不称运行复现或已修复。
+
+B03同次核心静审另确认：CONTROL X(160)不足十三项标签+最短数字164B，STRING无ON OVERFLOW，空流也截断；需按最大字段预算扩容/分行并独立验证完整字段。Snapshot/Previous孤儿仅统一原因+零totals，空spool不产生来源行，需逐流定位原记录并核对输入/匹配/孤儿守恒。已反馈Luna连同RC问题整包修复。客户磁盘重排/归属/spool及非余额比较方向正确，未见重复记账；未编译运行，保持静态结论边界。
+
+### B03 初次独立normal runner探针与发布oracle审查
+
+主代理用独立四流normal跑新runner，实际RC12、无发布，verify报eligible-master mismatch。静读原因为oracle按customer顺序生成预期，而runner已正确恢复canonical account顺序。另oracle宣称disk-backed但实际SQLite :memory:且keys/fetchall/expected/actual全量列表；13项control只数分隔符，拆分等式仅对自算变量而非实际control，推导RC未比真实core RC。已要求Luna磁盘SQLite/索引/游标流式核对实际bytes/count/money/control完整值及真实RC，孤儿S/P同步expected；不改独立手算夹具迎合错误。该探针仅实施中首次失败证据，非最终验收。此前runner预建L2目标与COURSE_SOURCE继承已静读修正。
+
+### B03 主代理独立小矩阵实际通过
+
+独立脚本 `curriculum/validation/check-b03-independent.py` 已实际运行原始RC0，10案全部通过；证据 `curriculum/validation/evidence/B03-primary-independent.json` 固化夹具与核心SHA。normal非单调customer归属、限额相等RC0；缺Snapshot/disabled/余额超限/账户数超限/缺Previous/前日金额与户数差异RC4；过期Snapshot RC8无发布。逐字节核对eligible master/TX与人工客户总计，核对状态及原账户/交易隔离多重集补集、输入未改和自身锁清理。先前normal oracle顺序错误在本轮实际运行中已关闭。此只证明10个独立小案例，不放行B03；完整教材、原始输入故障矩阵、孤儿来源、压力与总入口仍待稳定整包。
+
+### B03 发布oracle修复复核
+
+主代理静读当前verify.py确认SQLite改为临时磁盘文件、temp_store=FILE，客户键/账户/TX及最终expected均游标迭代与磁盘文件比较，无先前全量keys/fetchall/output列表。最终expected按account及(account,sequence,TXID)排序；实际五份输出逐字节比较。当前control已扩展18项，逐标签/值验证客户、账户、TX与eligible/isolated贷借金额，并对照runner传入真实core RC。十案运行通过提供小矩阵动态支持；内存规模行为仍须正式压力验证，不能仅凭静读宣称有界RSS。
+
+### B03 独立教学入口实测缺陷
+
+course_review只读临时workspace探针：reset末尾find删除marker之外所有文件，学生BATCHL3.COB实际被删且RC0，必须限明确生成物并保护学员修改；normal发布成功但inputs.sha256含stage绝对路径，发布后sha256sum -c实际RC1，须改相对路径；README裸输入路径缺准备步骤，按文starter会先因输入不存在RC12，不能证明执行学员实现。已将三项具体复现交Luna修复并要求永久回归，未放行。
+
+### B03 入口修复复验及starter新缺陷
+
+主代理临时workspace实测reset保护BATCHL3.COB/notes.md/custom.dat；有empty.lock RC12保留所有生成物，无锁RC0只删明确生成物。normal官方runner RC0，发布后inputs.sha256检查RC0，前两缺陷关闭。README已补输入复制，但正常示例末尾留在输出目录使随后starter相对路径失效，已要求子shell保持cwd。实际starter runner RC12无发布，但stderr为cobc语法错误：build用-free，starter用固定列7星号注释；当前是编译失败而非可编译starter运行RC12。已要求修注释、单独build/直接运行/runner三层验证，防止将任何RC12视为starter通过。
+
+### B03 starter格式缺陷关闭
+
+主代理临时目录实际三层复验：指定starter build原始RC0，裸binary运行原始RC12，指定COURSE_SOURCE官方runner原始RC12无发布且无compiler error。证明当前RC12由可编译stub主动返回，已关闭上轮注释格式假阳性。B03全批仍待故障/压力/完整材料验收。
+
+### B03 发布oracle独立篡改反例
+
+主代理以官方normal RC0发布目录为基线，在临时目录逐项改eligible-master、eligible-transaction、customer-status、customer-totals、isolation（追加EXTRA行）及control客户数2→3，每次恢复再测，六项实际均被verify原始RC12拒绝。另对完整未改输出谎传core RC4，实际RC12且明确RC mismatch。此证明当前oracle会检测真实输出与control/RC篡改，不仅自算等式；不代替大规模压力及故障矩阵。
+
+### B03 压力草稿证据口径审查
+
+主代理静读实施中的pressure.py发现main仅跑默认balanced（1000账户、count笔TX），却宣称records_per_side=count、max同客户组1m；实际最大组count/1000，one-customer分支未运行，且朴素百万sequence会超6位破坏55B。已提醒Luna正式交付必须按实际各流数量/组大小记录并真正运行max组、维持每账户序号6位与限额政策，禁止以未执行分支当压力证据。该草稿尚未交付，不作最终失败结论。
+
+### B03 主代理本课检查入口实跑
+
+主代理实际运行bash curriculum/modules/07-matching/labs/04-many-to-many/scripts/check.sh，session37327终止原始RC0。输出four-stream N:N suite/source/starter/compile failure/reset guards及全部fixture/expected SHA通过。静读测试入口含2/3/4隔离客户、16输入EOF组合、闰日/月界/年界日期、直接核心Snapshot/Previous物理字节矩阵和三类真实/dev/full候选输出故障。此为已存在本课测试入口实跑，不等同整批最终验收；正式压力和完整讲师材料仍在实施。
+
+### B03 发布后验收导致RC/目录矛盾
+
+独立course_review确认核心SHA49135419且前RC累计/control截断/孤儿来源修复已存在，无新核心业务阻塞；但run.sh在rename正式目录之后调用sha256sum -c。以仅令-c返回1其余调用真sha的轻量shim，normal实际RC12且published=True，违反系统错误不发布。已要求Luna所有失败型校验移到stage rename之前并加永久回归，不得以失败后删除正式目录补救。正式压力继续完成，随后按最终runner版本复验。
+
+### B03 执行代理压力证据到达
+
+主代理读取author压力JSON确认status=passed，六档pass且源码SHA与当前49135419一致；balanced 10k/100k/1m交易及单客户组10k/100k/1m实际跑完。执行代理报告core峰值6988KiB、相对首档增长888KiB，实际cobsort最大56,343,772B，真实TMPDIR0500核心status30/RC1→runner12无发布。注意此为执行代理JSON检查，主代理尚未独立重跑压力；证据对应checksum发布边界修复之前runner，后续版本必须区分，不能标最终入口已通过。
+
+### B03 发布边界修复独立复验通过
+
+主代理确认sha256sum -c移至stage rename之前；独立PATH shim只令-c失败，实际runner原始RC12、正式目标不存在、自身锁清理，原发布后验收缺陷关闭。当前入口重新运行主代理10案session82542原始RC0，全部byte-exact与隔离分区再通过，JSON增加run/verify/build supporting SHA，区分压力旧入口证据。下一步基于稳定当前入口独立正式压力和整包材料验收。
+
+### B03 最终材料审查待修
+
+独立review发现README trace把T002账户1 D20写成再借100，前行又已计D20，逐事件跟读会重复扣款，必须按真实READ重写并手算闭环。INSTRUCTOR账户/customer原序与重排序混写、control仍13实际18；curriculum README入口仍称L3待制作。已交Luna仅修文档，不动正在独立压力的脚本。其余运行/starter cwd、字段政策、评分、终端替代与学生模板基本齐全，链接有效；材料错误未闭环前不放行。
+
+### B03 最终主代理验收 — 放行
+
+主代理独立pressure session19425原始RC0，六档balanced/单客户10k/100k/1m均通过；百万单客户真实2账户各500k，max客户组1m。核心峰值7016KiB，相对首档增长1084KiB（全档最大减最小1260KiB）；百万balanced/集中RSS6964/6932KiB。真实cobsort最大56,343,772B，0500运行TMPDIR核心status30/RC1→runner12无发布。主代理JSON core/runner/driver SHA均与当前源逐项吻合，未混用执行代理修前入口证据。最终总入口session29350原始RC0，日志/tmp/cobol-primary-b03-final-check.log。
+
+主代理10个手算小案例、六输出篡改与假RC、sha工具失败未发布、starter三层、reset保护学生源码及empty lock均实际通过。独立核心审查未发现未闭环业务阻塞；原发布后校验缺陷已独立故障复验关闭。最终README逐READ trace已按1500真实阶段核对：客户1 A02→T003→S01→P01，客户2 A01/A03→T001/T002/T004→S02→P02，余额1900/4100；账户与customer排序和18项control说明已修正，课程总目录有真实入口。教材/字段目录/讲师评分/学生模板/终端替代满足本批要求。B03放行提交，B04与其余模块仍按原scope继续，不宣称模块07或全部课程完成。

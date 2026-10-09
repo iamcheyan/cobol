@@ -12,10 +12,10 @@
 | 04.1–04.3 | 复杂结构与150+字段目录/差异练习 | 未开始 |
 | 05.1–05.3 | 控制/字符串/客户清洗 | 未开始 |
 | 06.1–06.4 | 文件契约、长度/状态/拒绝转换 | 未开始 |
-| 07.1–07.2 | SD SORT 与双流 MERGE | B02实现完成，待主代理审查 |
+| 07.1–07.2 | SD SORT 与双流 MERGE | 主代理已验收并提交 `2affe66` |
 | 07.3 | Boss L1 1:1（47B/55B，三分类） | B00回归RC0，随B01提交验收 |
 | 07.4 | Boss L2 1:N Key Break、余额、拒绝、冲正 | 主代理已验收并提交 `d4ca202` |
-| 07.5 | Boss L3 多流/N:N | 未开始（等待B02放行） |
+| 07.5 | Boss L3 多流/N:N | B03实施中（客户日汇总/缺失快照RC4/隔离政策已批准；尚未整包验收） |
 | 07.6 | Boss L4 150+字段逐字段比较 | 未开始 |
 | 08.1–08.4 | GixSQL游标/NULL/事务到完整DB课程 | P1真实DB基线已存在；课程未开始 |
 | 09.1–09.3 | CALL/LINKAGE/版本参数与共通模块 | 未开始 |
@@ -68,9 +68,25 @@ B00/B01已由主代理放行：最终总入口session77158原始RC0；主代理�
 - 两课永久检查各自验证reference排序/归并、空/单流、字段及物理原字节错误、global ID重复、桥接L2 RC0、SORT零金额桥接L2 RC4、starter实际TODO RC12、失败关闭、reset锁保护。共享故障检查覆盖编译失败、mktemp失败、既有目标和既有锁保护。两课check.sh改为调用实际共享脚本路径。
 - 正式压力`python3 curriculum/modules/07-matching/labs/02-sort-merge/scripts/pressure.py`原始RC=0，10k/100k/1m分别测试SORT与MERGE；最大单账户组500k。2M池下百万SORT观察到四个`cobsort`临时文件，最大单文件35,232,196B；百万SORT/MERGE分别约22.754/22.035秒，core RSS分别6760/6472KiB；全档最高6760KiB、最低5140KiB，RSS增长1620KiB，低于65,536KiB绝对及8,192KiB增长阈值。JSON保存wait4各核心RSS、PID及`/proc`抽样所得临时FD路径/最大文件大小；FD抽样未记录时间戳。退出后路径显示`(deleted)`。压力JSON含输入/输出hash及工具版本。
 - 真实临时目录权限故障（构建目录可写，核心TMPDIR为0500）runner RC12、无发布/无锁遗留；原生核心报永久文件错误status30/RC1。文件大小限制导致核心外层shell RC153(SIGXFSZ)，runner RC12、无发布/无锁遗留。早期实际spill观察和资源失败的原始记录均保留在pressure JSON。
-- `bash curriculum/check.sh` 已接入B02并保留B01检查，最终原始RC=0；23B布局/24项matching/10项L1契约/BDB索引探针/L2、两课SORT-MERGE完整检查/全部SHA256/COBOL固定格式72列均通过。执行代理报告该稳定快照待主代理审查；B02尚未主代理验收，不进入B03。
+- `bash curriculum/check.sh` 已接入B02并保留B01检查，最终原始RC=0；23B布局/24项matching/10项L1契约/BDB索引探针/L2、两课SORT-MERGE完整检查/全部SHA256/COBOL固定格式72列均通过。主代理已验收并提交B02 `2affe66`，后续压力与审查记录见本节尾部放行记录。
 - 实现源SHA与测量工具/配置、全档输出和独立L2 expected见`curriculum/modules/07-matching/labs/02-sort-merge/evidence/B02-pressure-2026-10-10.json`；课程静态fixture/expected摘要由各课根`SHA256SUMS`覆盖。不得将L1/B01压力数字作为本课依据。
 - B01状态澄清：主代理已验收并提交`d4ca202`，后续Python缓存ignore为`8895ce5`。历史IO review与修正作为已闭环证据，不再标待审；压力JSON的源码SHA `8ec0...171`早于reject可变行实现当前SHA `bc22549...621f2`，不同版本不混用。
 - TDD技能已复读；当前先写RED用例再实现，无后台压力任务。主代理批准目录/接口与键策略，并要求含Z-ID较早sequence、A-ID较晚sequence和同sequence多ID的反例数据。
 
+### B03 模块07.5 Boss L3 多流/N:N — 实施中
+
+- B02已由主代理验收提交 `2affe66`；B03单批实施中，不进入B04，未提交/推送。
+- 已复读 B03 Goal、PRD、SYLLABUS、BANK-SYSTEM、AUTHORING-STANDARD、B01/B02接口和TDD技能。工作区原Makefile/course脏文件保留。
+- 主代理已批准客户日汇总：B01先按ACCOUNT/TRANSACTION/REVERSAL-LINK执行账务与冲正；B03用原ACCOUNT、L2 accepted、离线customer snapshot、previous-day按customer聚合。缺snapshot/previous及业务差异RC4定位隔离；结构日期/版本/重复/排序错误RC8整批不发布。该snapshot是离线种子，不冒称DB抽取；08再接真实数据库。
+- 已建立DESIGN/FIELD-CATALOG、36B/39B独立Copybook、四流状态消费表和非单调account→customer人工trace；正常数据与独立expected已固定。RED用例在runner尚不存在时原始被测RC127失败，断言失败状态保留于脚本/证据待补。
+- 主代理新增审查要求已纳入契约：L2 closing master除余额外必须与原ACCOUNT逐字段节一致；余额独立按opening+accepted credit-debit核验。账户、accepted交易、credit、debit分别按eligible/isolation守恒；L2 rejected单独统计不混入accepted金额。
+- B03当前状态：COBOL四流核心、L2→L3 runner、磁盘流式独立oracle、客户级拆分守恒、候选校验/no-clobber发布、normal及业务差异case已实现。主代理独立的10案复核已通过，非单调客户账户顺序和独立expected一致。
+- 本地永久测试已覆盖16种A/T/S/P EOF组合、2/3/4个客户同时隔离、L2 RC0/4分类、snapshot/previous Gregorian闰日/跨月/跨年及非法日期、课程starter编译与实际RC12、COURSE_SOURCE、编译失败映射、reset保留未知/学生文件和遇锁拒绝。直接核心坏原字节矩阵（snapshot/previous无LF、CRLF、Tab、NUL、短、长）RC8；三路真实BATCHL3 `/dev/full` runner注入RC12且无发布。最终复跑`bash curriculum/check.sh`为RC0，包含B01/B02回归、B03、本批Copybook/COBOL ASCII与72列门禁。
+- 正式多档压力`python3 curriculum/modules/07-matching/labs/04-many-to-many/scripts/pressure.py`原始RC=0，证据为`curriculum/modules/07-matching/labs/04-many-to-many/evidence/B03-author-pressure-2026-10-10.json`。balanced 10k/100k/1m实际为1000账户、10000/100000/1000000 TX、max customer group 10/100/1000；集中单客户组10k/100k/1m实际为1/1/2账户、max group 10k/100k/1m，百万组两账户各50万笔。核心child VmHWM分别balanced 6100/6988/6944KiB、集中组5816/6812/6948KiB；峰值6988KiB、相对首档增长888KiB，均低于65,536KiB/8,192KiB阈值。10k档全内存；100k及以上档实际观察到`cobsort`工作FD，单文件最大56,343,772B；压力明确固定`COB_SORT_MEMORY=2M`。压力脚本记录每档准确账户/TX/snapshot/previous条数、输入/输出SHA256、核心PID、源码/runner/driver/tool版本。核心RSS含libcob，排除B01、外部sort、SQLite oracle和driver。
+- 同一JSON记录真实运行时TMPDIR `0500`故障：100k集中TX、核心GNUCOBOL SORT-WORK status30/raw RC1，runner RC12、无发布；脚本在构建完成后才把runtime TMPDIR切到无权限目录。
+- 发布后sha256校验的审查注入曾复现旧runner返回RC12但已发布目录。已将input/manifest校验移至stage内、原子rename前，并永久加入仅令`sha256sum -c`失败的PATH shim测试；修复后runner RC12、目标不存在、锁清理。`check-source.py`与总入口RC0。pressure JSON中的runner SHA准确指向修复前被测runner，JSON同时记录修后runner SHA和仅校验顺序的差异；主代理正在按修后稳定入口做独立pressure复核。
+- 剩余工作是主代理整批独立审查并修复其指出的问题；本执行代理不提交/推送，也不进入B04，直到B03主代理放行。
+
 B02主代理放行：总入口session78535 RC0；独立pressure session7620 RC0，10k/100k/1m SORT与MERGE逐档通过，核心RSS增长1480KiB，百万SORT/MERGE分别6656/6604KiB，真实spill四个临时文件、最大35,232,196B。真实TMPDIR权限及文件大小限制均runner12无发布无锁。独立full-key Z,A,B最终byte exact通过；COURSE_SOURCE确实测试学生源码，reset空锁保护通过。独立证据见validation/evidence/B02-primary-pressure-2026-10-10.json及enterprise-cobol-review.md。仅放行B02，12模块目标仍未完成。
+
+B03主代理最终放行：独立pressure19425和总入口29350均原始RC0；六档含单客户百万组全部pass，core峰值7016KiB、相对首档增长1084KiB、实际spill最大56,343,772B，0500 TMPDIR runner12不发布；当前core/runner/driver SHA匹配主代理JSON。手算10案、source/reset/starter、输出篡改、发布前hash失败回归及最终真实READ教材trace均闭环。主代理review详见enterprise-cobol-review.md；B03放行提交，B04尚未实现，完整12模块目标仍未完成。

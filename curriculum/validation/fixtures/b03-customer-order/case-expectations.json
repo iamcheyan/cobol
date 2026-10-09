@@ -1,0 +1,160 @@
+{
+  "scope": "independent authored expected isolation; not an executed pass",
+  "base_inputs": "account.dat, transaction.dat, reversal-link.dat, customer-snapshot.dat, previous-day.dat",
+  "transaction_ordinals": "P000000000000001 through P000000000000004",
+  "cases": [
+    {
+      "case": "missing-customer1",
+      "override_stream": "snapshot",
+      "override_file": "snapshot-missing-customer1.dat",
+      "expected_rc": 4,
+      "eligible_customer_ids": [
+        2
+      ],
+      "eligible_account_ids": [
+        1,
+        3
+      ],
+      "eligible_transaction_ordinals": [
+        1,
+        2,
+        4
+      ],
+      "failed_batch_no_publish": false
+    },
+    {
+      "case": "disabled-customer2",
+      "override_stream": "snapshot",
+      "override_file": "snapshot-disabled-customer2.dat",
+      "expected_rc": 4,
+      "eligible_customer_ids": [
+        1
+      ],
+      "eligible_account_ids": [
+        2
+      ],
+      "eligible_transaction_ordinals": [
+        3
+      ],
+      "failed_batch_no_publish": false
+    },
+    {
+      "case": "balance-limit-equality",
+      "override_stream": "snapshot",
+      "override_file": "snapshot-limit-equal-4100.dat",
+      "expected_rc": 0,
+      "eligible_customer_ids": [
+        1,
+        2
+      ],
+      "eligible_account_ids": [
+        1,
+        2,
+        3
+      ],
+      "eligible_transaction_ordinals": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "failed_batch_no_publish": false
+    },
+    {
+      "case": "balance-limit-exceeded",
+      "override_stream": "snapshot",
+      "override_file": "snapshot-limit-below-4099.dat",
+      "expected_rc": 4,
+      "eligible_customer_ids": [
+        1
+      ],
+      "eligible_account_ids": [
+        2
+      ],
+      "eligible_transaction_ordinals": [
+        3
+      ],
+      "failed_batch_no_publish": false
+    },
+    {
+      "case": "account-limit-exceeded",
+      "override_stream": "snapshot",
+      "override_file": "snapshot-account-limit1.dat",
+      "expected_rc": 4,
+      "eligible_customer_ids": [
+        1
+      ],
+      "eligible_account_ids": [
+        2
+      ],
+      "eligible_transaction_ordinals": [
+        3
+      ],
+      "failed_batch_no_publish": false
+    },
+    {
+      "case": "missing-previous-customer1",
+      "override_stream": "previous",
+      "override_file": "previous-missing-customer1.dat",
+      "expected_rc": 4,
+      "eligible_customer_ids": [
+        2
+      ],
+      "eligible_account_ids": [
+        1,
+        3
+      ],
+      "eligible_transaction_ordinals": [
+        1,
+        2,
+        4
+      ],
+      "failed_batch_no_publish": false
+    },
+    {
+      "case": "previous-balance-mismatch",
+      "override_stream": "previous",
+      "override_file": "previous-wrong-balance4001.dat",
+      "expected_rc": 4,
+      "eligible_customer_ids": [
+        1
+      ],
+      "eligible_account_ids": [
+        2
+      ],
+      "eligible_transaction_ordinals": [
+        3
+      ],
+      "failed_batch_no_publish": false
+    },
+    {
+      "case": "previous-account-count-mismatch",
+      "override_stream": "previous",
+      "override_file": "previous-wrong-count0.dat",
+      "expected_rc": 4,
+      "eligible_customer_ids": [
+        2
+      ],
+      "eligible_account_ids": [
+        1,
+        3
+      ],
+      "eligible_transaction_ordinals": [
+        1,
+        2,
+        4
+      ],
+      "failed_batch_no_publish": false
+    },
+    {
+      "case": "stale-snapshot",
+      "override_stream": "snapshot",
+      "override_file": "snapshot-stale.dat",
+      "expected_rc": 8,
+      "eligible_customer_ids": [],
+      "eligible_account_ids": [],
+      "eligible_transaction_ordinals": [],
+      "failed_batch_no_publish": true
+    }
+  ]
+}

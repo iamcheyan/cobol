@@ -1,0 +1,56 @@
+{
+  "source_sha256": "8ec0c14c74bba3b51fc527526041d584323de6f486a293b0124d0ea31766b171",
+  "rss_metric": "COBOL child wait4 ru_maxrss only; excludes driver and sort",
+  "runs": [
+    {
+      "label": "micro-10",
+      "accounts": 1,
+      "transactions": 10,
+      "maximum_same_account_group": 10,
+      "seconds": 0.004,
+      "matcher_max_rss_kib": 17452,
+      "account_sha256": "0c6cff10615ba6568c030703240c9de39fc285b8b851f5942ee0a52b1d898021",
+      "transaction_sha256": "fe19f9e8fb3c07a83a95b19b39693fcd4e92bf7aff89e3db04a19769111d45d7",
+      "links_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "report_sha256": "8bb7187514596e06ba3cbdb84523ecc8e327fb4d02e464e89f40397816e3983d"
+    },
+    {
+      "label": "10k-accounts-100k",
+      "accounts": 10000,
+      "transactions": 100000,
+      "maximum_same_account_group": 10,
+      "seconds": 5.455,
+      "matcher_max_rss_kib": 17752,
+      "account_sha256": "762ed9ed18c6a2b826eacd8fdfd74e98ab7425f78da896ebf7b93445d0e1428b",
+      "transaction_sha256": "de6c70646693ed96ba0b988fefe27c01721cbf3e40c52ff66b223ab27f79aa89",
+      "links_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "report_sha256": "9938bb195e3659cec8a8e9a7f84cb3bff97717f5d00ef8baa33ca5963c7ce3dc"
+    },
+    {
+      "label": "100k-accounts-1m",
+      "accounts": 100000,
+      "transactions": 1000000,
+      "maximum_same_account_group": 10,
+      "seconds": 52.379,
+      "matcher_max_rss_kib": 19768,
+      "account_sha256": "e91c8dcc272122eccad6974ff0ce4e2bc3cef66004ac7c58dc5e7244bf2ac956",
+      "transaction_sha256": "8bf86e8b20ed7443740783c750e197d0e6c1ba2e87cb03da1de104cdd5a7df45",
+      "links_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "report_sha256": "6a584fb98971e00f209362d7caa752bf955e84fc74cf7855ef80560e4e3b167c"
+    },
+    {
+      "label": "single-key-100k",
+      "accounts": 1,
+      "transactions": 100000,
+      "maximum_same_account_group": 100000,
+      "seconds": 5.109,
+      "matcher_max_rss_kib": 19772,
+      "account_sha256": "0c6cff10615ba6568c030703240c9de39fc285b8b851f5942ee0a52b1d898021",
+      "transaction_sha256": "458b1cc0a3e3267994b0ee1c57122ea7fc069bbd74a0b3b1f47695e4e1b4375a",
+      "links_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "report_sha256": "e589306e592a4153c4e43683b4c1ab066fcaf8f276723e55020df796cef8eae2"
+    }
+  ],
+  "memory_growth_kib": 2320,
+  "bounded_growth_pass": true
+}

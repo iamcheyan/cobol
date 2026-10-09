@@ -5,6 +5,7 @@ python3 "$here/validation/layout/check.py"
 python3 "$here/validation/matching/check.py"
 python3 "$here/modules/07-matching/labs/01-one-to-one/scripts/check.py"
 (cd "$here/modules/07-matching/labs/01-one-to-one/fixtures" && sha256sum -c SHA256SUMS)
+python3 "$here/modules/07-matching/labs/03-one-to-many/scripts/check.py"
 python3 - "$here" <<'PY'
 from pathlib import Path
 import sys

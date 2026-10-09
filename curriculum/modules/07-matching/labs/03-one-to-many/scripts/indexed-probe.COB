@@ -1,0 +1,70 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. L2-INDEX-PROBE.
+       ENVIRONMENT DIVISION.
+       INPUT-OUTPUT SECTION.
+       FILE-CONTROL.
+           SELECT IX-FILE ASSIGN TO DYNAMIC IX-PATH
+               ORGANIZATION IS INDEXED ACCESS MODE IS DYNAMIC
+               RECORD KEY IS IX-KEY FILE STATUS IS IX-STATUS.
+       DATA DIVISION.
+       FILE SECTION.
+       FD IX-FILE.
+       01 IX-RECORD.
+          05 IX-KEY PIC X(16).
+          05 IX-VALUE PIC X(16).
+       WORKING-STORAGE SECTION.
+       01 IX-PATH PIC X(4096).
+       01 IX-STATUS PIC XX.
+       PROCEDURE DIVISION.
+           ACCEPT IX-PATH FROM ENVIRONMENT 'IX_PATH'
+           OPEN OUTPUT IX-FILE
+           IF IX-STATUS NOT = '00'
+               DISPLAY 'OPEN=' IX-STATUS
+               MOVE 12 TO RETURN-CODE
+               GOBACK
+           END-IF
+           MOVE 'TX00000000000001' TO IX-KEY
+           MOVE 'ACCEPTED' TO IX-VALUE
+           WRITE IX-RECORD
+           IF IX-STATUS NOT = '00' MOVE 12 TO RETURN-CODE
+               GOBACK END-IF
+           WRITE IX-RECORD
+           IF IX-STATUS = '22'
+               DISPLAY 'DUPLICATE=22'
+           ELSE
+               DISPLAY 'DUPLICATE=' IX-STATUS
+               MOVE 12 TO RETURN-CODE
+               GOBACK
+           END-IF
+           CLOSE IX-FILE
+           OPEN I-O IX-FILE
+           IF IX-STATUS NOT = '00' MOVE 12 TO RETURN-CODE
+               GOBACK END-IF
+           MOVE 'TX00000000000001' TO IX-KEY
+           READ IX-FILE KEY IS IX-KEY
+           IF IX-STATUS NOT = '00' MOVE 12 TO RETURN-CODE
+               GOBACK END-IF
+           DISPLAY 'READ=' IX-VALUE
+           MOVE 'REVERSED' TO IX-VALUE
+           REWRITE IX-RECORD
+           IF IX-STATUS NOT = '00' MOVE 12 TO RETURN-CODE
+               GOBACK END-IF
+           MOVE 'TX00000000000002' TO IX-KEY
+           READ IX-FILE KEY IS IX-KEY
+           IF IX-STATUS = '23'
+               DISPLAY 'MISSING=23'
+           ELSE
+               DISPLAY 'MISSING=' IX-STATUS
+               MOVE 12 TO RETURN-CODE
+               GOBACK
+           END-IF
+           MOVE 'TX00000000000001' TO IX-KEY
+           READ IX-FILE KEY IS IX-KEY
+           IF IX-STATUS NOT = '00' MOVE 12 TO RETURN-CODE
+               GOBACK END-IF
+           DISPLAY 'REWRITE=' IX-VALUE
+           CLOSE IX-FILE
+           IF IX-STATUS NOT = '00' MOVE 12 TO RETURN-CODE
+               GOBACK END-IF
+           MOVE 0 TO RETURN-CODE
+           GOBACK.

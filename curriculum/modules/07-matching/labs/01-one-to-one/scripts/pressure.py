@@ -1,5 +1,6 @@
 """Generate data, execute COBOL, stream-verify output, measure matcher only."""
 from pathlib import Path
+import hashlib
 import json
 import os
 import subprocess
@@ -8,6 +9,16 @@ import time
 
 REPO = Path(__file__).resolve().parents[6]
 results = []
+
+
+def sha256(path):
+    digest = hashlib.sha256()
+    with Path(path).open('rb') as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b''):
+            digest.update(block)
+    return digest.hexdigest()
+
+
 with tempfile.TemporaryDirectory(prefix='bank-memory-') as tmp:
     tmp = Path(tmp)
     source = REPO/'instructor/modules/07/01-one-to-one/MATCH.COB'
@@ -34,7 +45,10 @@ with tempfile.TemporaryDirectory(prefix='bank-memory-') as tmp:
                 for x in (size,size,size,0,0))+'\n').encode()
             assert report.read() == b''
         results.append(dict(records_per_side=size, seconds=round(elapsed,3),
-            max_rss_kib=usage.ru_maxrss))
+            max_rss_kib=usage.ru_maxrss,
+            account_sha256=sha256(tmp/'account'),
+            transaction_sha256=sha256(tmp/'transaction'),
+            report_sha256=sha256(tmp/'report')))
     # A coarse regression bound, not a production capacity promise.
     assert max(x['max_rss_kib'] for x in results) <= results[0]['max_rss_kib'] + 16_384
-print(json.dumps(results, indent=2))
+print(json.dumps(dict(source_sha256=sha256(source), runs=results), indent=2))

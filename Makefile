@@ -1,4 +1,4 @@
-.PHONY: all build check run clean run-csv run-fixed run-table run-report
+.PHONY: all build check course-check run clean run-csv run-fixed run-table run-report
 
 COBC = cobc
 BINS = INPUTCSV FIXEDREC TBLSRCH BATCHRPT
@@ -14,6 +14,14 @@ check:
 	$(COBC) -fsyntax-only TBLSRCH.COB
 	$(COBC) -fsyntax-only BATCHRPT.COB
 	@echo "✓ All COBOL programs passed syntax check!"
+
+course-check:
+	@echo "=== Checking GNUCOBOL course examples ==="
+	@find course/lessons -name '*.COB' -exec $(COBC) -I course/lessons/14-copybooks-redefines -fsyntax-only {} +
+	@bash -n course/lessons/22-bash-build-run/run.sh
+	@bash -n course/lessons/23-bash-tests-batch/test.sh
+	@bash -n course/lessons/24-bash-pipelines-scheduling/run-pipeline.sh
+	@course/lessons/23-bash-tests-batch/test.sh
 
 INPUTCSV: INPUTCSV.COB EMP-REC.CPY
 	$(COBC) -x -o $@ $<

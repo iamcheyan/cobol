@@ -1,0 +1,32 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. FILE-DEMO.
+       ENVIRONMENT DIVISION.
+       INPUT-OUTPUT SECTION.
+       FILE-CONTROL.
+           SELECT INPUT-FILE ASSIGN TO "input.txt"
+               ORGANIZATION IS LINE SEQUENTIAL
+               FILE STATUS IS WS-FILE-STATUS.
+       DATA DIVISION.
+       FILE SECTION.
+       FD INPUT-FILE.
+       01 INPUT-LINE PIC X(80).
+       WORKING-STORAGE SECTION.
+       01 WS-FILE-STATUS PIC XX.
+       01 WS-EOF PIC X VALUE "N".
+           88 EOF-YES VALUE "Y".
+       PROCEDURE DIVISION.
+       0000-MAIN.
+           OPEN INPUT INPUT-FILE
+           IF WS-FILE-STATUS NOT = "00"
+               DISPLAY "OPEN failed: " WS-FILE-STATUS
+               MOVE 1 TO RETURN-CODE
+               STOP RUN
+           END-IF
+           PERFORM UNTIL EOF-YES
+               READ INPUT-FILE
+                   AT END SET EOF-YES TO TRUE
+                   NOT AT END DISPLAY FUNCTION TRIM(INPUT-LINE)
+               END-READ
+           END-PERFORM
+           CLOSE INPUT-FILE
+           STOP RUN.

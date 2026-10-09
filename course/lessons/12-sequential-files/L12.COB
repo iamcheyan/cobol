@@ -1,0 +1,10 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. L12.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 WS-LINE PIC X(80).
+       PROCEDURE DIVISION.
+       0000-MAIN.
+           DISPLAY "See README."
+           DISPLAY "OPEN INPUT -> READ loop -> CLOSE"
+           STOP RUN.

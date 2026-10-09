@@ -1,0 +1,12 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. L09.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 WS-INDEX PIC 9(2) VALUE 1.
+       PROCEDURE DIVISION.
+       0000-MAIN.
+           PERFORM UNTIL WS-INDEX > 5
+               DISPLAY "INDEX=" WS-INDEX
+               ADD 1 TO WS-INDEX
+           END-PERFORM
+           STOP RUN.

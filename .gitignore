@@ -20,3 +20,7 @@ sales_report.txt
 .DS_Store
 *.swp
 *.swo
+
+# Python test/runtime caches
+__pycache__/
+*.py[cod]

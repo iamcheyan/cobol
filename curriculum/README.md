@@ -19,6 +19,8 @@ python3 curriculum/modules/07-matching/labs/01-one-to-one/scripts/pressure.py
 
 第一条不需要Docker；第二条首次联网构建ESQL工具，使用一次性数据库/网络，退出清理，无宿主端口或持久化数据库卷；第三条生成最高每侧百万条数据并清理，Linux上测matcher进程RSS。课程编译产物不写入源码目录。
 
+执行任务与主代理审查协议见[实施Goal交接文档](../tasks/enterprise-cobol-implementation-goal.md)。
+
 ## 制作进度
 
 | 阶段 | 当前状态 |

@@ -1,0 +1,89 @@
+# 第 10 课：REDEFINES 共用存储的不同视图
+
+> 状态：课程草稿。目录已确认；示例源码 100 行固定格式，适用于 GnuCOBOL 3.2.0 默认方言。
+
+## 一、课程目标
+
+学完本课后，你可以：
+
+- 解释 `REDEFINES` 如何让两个数据项描述同一存储区域。
+- 检查重定义项与被重定义项的层级、位置和存储长度。
+- 用交易类型码选择适用的数据布局。
+- 说明重定义不会复制数据、转换数据或自动校验类型码。
+- 识别把共享字节按错误视图解释时产生的结果。
+
+## 二、两种交易视图
+
+[`lesson_10.cob`](./lesson_10.cob) 在同一个 `01` 交易记录里定义一个交易码，以及两个同为 `05` 层级的负载组：
+
+| 视图 | 基本项 | 长度 |
+|---|---|---:|
+| `WS-DEPOSIT-PAYLOAD` | 账户号 `X(10)`、金额 `9(5)V99`、参考号 `X(10)` | 27 个显示字符位 |
+| `WS-TRANSFER-PAYLOAD` | 来源账户 `X(10)`、目标账户 `X(10)`、金额 `9(5)V99` | 27 个显示字符位 |
+
+`WS-TRANSFER-PAYLOAD REDEFINES WS-DEPOSIT-PAYLOAD` 在 subject 的子项定义之后声明；它与 subject 同为 `05` 层级，两个组的总长度相同。GnuCOBOL 手册还规定，重定义项和它的子项不能写 `VALUE` 子句；本例通过 `PROCEDURE DIVISION` 的 `MOVE` 写入数据。
+
+## 三、共享存储的执行过程
+
+1. `1000-LOAD-DEPOSIT` 设置交易码 `D`，通过 subject 视图写入账户号、金额和参考号，并逐字段显示结果。
+2. `2000-LOAD-TRANSFER` 把交易码改为 `T`，再通过 redefining 视图写入来源账户、目标账户和金额。
+3. 两次写入使用相同的 27 个位置。第二次写入覆盖第一次的负载字节；它没有创建第二份独立负载。
+4. 程序先按 `T` 视图显示来源、目标和金额，再故意用 `D` 视图读取同一字节，展示错误解释的结果。
+5. 目标账户开头七位 `0007654` 被 subject 的 `9(5)V99` 字段显示为 `00076.54`。其余三位 `321` 与转账金额的七个数字合成参考号 `3210025075`。
+
+这不是合法的存款记录，只是共享字节的另一种读取方式。执行实际业务时，交易类型码必须决定使用哪个视图；`REDEFINES` 自身不会选择或验证视图。
+
+## 四、编译、运行和预期输出
+
+在本目录运行以下命令。编译产物留在临时目录：
+
+```sh
+scratch_dir=$(mktemp -d)
+trap 'rm -rf "$scratch_dir"' EXIT
+cobc -fsyntax-only lesson_10.cob
+cobc -x -Wall -o "$scratch_dir/lesson_10" lesson_10.cob
+"$scratch_dir/lesson_10"
+```
+
+GnuCOBOL 3.2.0 的程序标准输出：
+
+```text
+TYPE=D
+DEPOSIT ACCOUNT=0001234567
+DEPOSIT AMOUNT=00125.50
+DEPOSIT REFERENCE=TXN-000001
+TYPE=T
+TRANSFER SOURCE=0001234567
+TRANSFER TARGET=0007654321
+TRANSFER AMOUNT=00250.75
+DEPOSIT VIEW OF SAME BYTES:
+ACCOUNT=0001234567
+AMOUNT=00076.54
+REFERENCE=3210025075
+```
+
+语法检查、编译和运行均已实际执行，返回码为 0，标准输出与上面一致。当前运行环境的标准错误还会出现系统警告 `Warning: program compiled against libxml 212 using older 209`；它不是程序输出。
+
+本例未声明 `USAGE`，数值项使用默认显示格式。`PIC 9(5)V99` 有七个数字位置；单独显示时 GnuCOBOL 按数值项显示小数点，覆盖到 `X` 组视图后，字节仍只是那些字符，不会保留一个实际小数点字符。
+
+## 五、修改练习（有答案）
+
+1. 将存款视图的金额初值从 `125.50` 改为 `80.25`。确认第一次显示的存款金额改变，并说明第二个交易载入后共享字节为何再次改变。
+2. 将转账金额从 `250.75` 改为 `99.99`。确认转账金额改变；再追踪存款视图中的金额和参考号如何反映新的共享字节。
+
+参考答案只覆盖这两项修改练习，见 [`answer.md`](./answer.md)。练习说明在 [`exercise.md`](./exercise.md)。
+
+## 六、举一反三（无答案）
+
+为现金取款和账户间转账设计两个共用同一负载区域的组视图。先计算两个视图的总字符位数，再写入样例值并通过各自视图读取。增加一个类型码输出，说明它如何决定解释方式。确保 `REDEFINES` 层级和长度满足规则，并避免给 redefining 项或其子项添加 `VALUE`。
+
+本题不提供答案。程序只使用固定内存数据；不要加入文件、表格或数据库。
+
+## 七、企业实战补充
+
+同一协议记录可能按类型码包含不同字段布局。`REDEFINES` 可以表达这种共用区域，但类型码和布局必须来自已约定的接口契约；错误类型码会让同一字节序列被错误解释。生产处理还要验证记录长度、字段格式、版本兼容和拒绝策略。重定义本身不提供这些校验。
+
+## 参考资料
+
+- [GnuCOBOL Programmer’s Guide：REDEFINES](https://gnucobol.sourceforge.io/HTML/gnucobpg.html#REDEFINES)
+- [GnuCOBOL Programmer’s Guide：Data Definition Principles](https://gnucobol.sourceforge.io/HTML/gnucobpg.html#Data-Definition-Principles)

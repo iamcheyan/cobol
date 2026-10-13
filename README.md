@@ -38,7 +38,7 @@ make course-check
 | [`lessons/`](lessons/README.md) | CPR #31 主课程，01–32 课；每课保留源码、讲解、练习、答案及所需素材 |
 | [`extensions/README.md`](extensions/README.md) | 可选课程、扩展课程、插件教程和独立示例索引 |
 | [`extensions/legacy-workshop/`](extensions/legacy-workshop/README.md) | 旧版 00–29 课，作为补充讲义与练习素材 |
-| [`curriculum/README.md`](curriculum/README.md) | 企业批处理扩展：12 个模块、银行夜间处理案例及验收入口 |
+| [`extensions/enterprise-batch/`](extensions/enterprise-batch/README.md) | 企业批处理扩展：12 个模块、银行夜间处理案例及验收入口 |
 | [`docs/`](docs/01-punchcard-and-ruler.md) | `cobol.nvim` 标尺、导航、PIC、诊断、工作流与插件实验教程 |
 | [`Makefile`](Makefile) | 根目录独立 COBOL 示例的语法检查、构建、运行与清理 |
 

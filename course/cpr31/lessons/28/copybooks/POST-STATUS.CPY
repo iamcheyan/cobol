@@ -1,0 +1,1 @@
+       01 WS-POST-STATUS PIC X(12).

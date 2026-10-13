@@ -1,0 +1,16 @@
+       01 WS-ACCOUNT-TABLE.
+          05 WS-ACCOUNT-ROW OCCURS 20 TIMES.
+             10 WS-ACCOUNT-NO PIC X(10).
+             10 WS-CUSTOMER-ID PIC X(8).
+             10 WS-ACCOUNT-BALANCE PIC S9(7)V99 COMP-3.
+       01 WS-BATCH-COUNTS.
+          05 WS-ACCOUNT-COUNT PIC 99.
+          05 WS-TRANSACTION-COUNT PIC 999.
+          05 WS-POSTED-COUNT PIC 999.
+          05 WS-REJECTED-COUNT PIC 999.
+          05 WS-UPDATED-COUNT PIC 999.
+          05 WS-UNCHANGED-COUNT PIC 999.
+          05 WS-INSERTED-COUNT PIC 999.
+          05 WS-FAILED PIC X.
+      * GixSQL comments the final linkage field; keep this spare byte.
+          05 WS-INTERFACE-RESERVED PIC X.

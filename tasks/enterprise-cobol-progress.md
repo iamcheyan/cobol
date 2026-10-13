@@ -15,8 +15,8 @@
 | 07.1–07.2 | SD SORT 与双流 MERGE | 主代理已验收并提交 `2affe66` |
 | 07.3 | Boss L1 1:1（47B/55B，三分类） | B00回归RC0，随B01提交验收 |
 | 07.4 | Boss L2 1:N Key Break、余额、拒绝、冲正 | 主代理已验收并提交 `d4ca202` |
-| 07.5 | Boss L3 多流/N:N | B03实施中（客户日汇总/缺失快照RC4/隔离政策已批准；尚未整包验收） |
-| 07.6 | Boss L4 150+字段逐字段比较 | 未开始 |
+| 07.5 | Boss L3 多流/N:N | 主代理已验收并放行 |
+| 07.6 | Boss L4 150+字段逐字段比较 | 实现与执行代理验证完成；等待主代理独立审查 |
 | 08.1–08.4 | GixSQL游标/NULL/事务到完整DB课程 | P1真实DB基线已存在；课程未开始 |
 | 09.1–09.3 | CALL/LINKAGE/版本参数与共通模块 | 未开始 |
 | 10.1–10.5 | 参数/RC/锁/快照/发布/恢复JOB | 未开始 |
@@ -90,3 +90,73 @@ B00/B01已由主代理放行：最终总入口session77158原始RC0；主代理�
 B02主代理放行：总入口session78535 RC0；独立pressure session7620 RC0，10k/100k/1m SORT与MERGE逐档通过，核心RSS增长1480KiB，百万SORT/MERGE分别6656/6604KiB，真实spill四个临时文件、最大35,232,196B。真实TMPDIR权限及文件大小限制均runner12无发布无锁。独立full-key Z,A,B最终byte exact通过；COURSE_SOURCE确实测试学生源码，reset空锁保护通过。独立证据见validation/evidence/B02-primary-pressure-2026-10-10.json及enterprise-cobol-review.md。仅放行B02，12模块目标仍未完成。
 
 B03主代理最终放行：独立pressure19425和总入口29350均原始RC0；六档含单客户百万组全部pass，core峰值7016KiB、相对首档增长1084KiB、实际spill最大56,343,772B，0500 TMPDIR runner12不发布；当前core/runner/driver SHA匹配主代理JSON。手算10案、source/reset/starter、输出篡改、发布前hash失败回归及最终真实READ教材trace均闭环。主代理review详见enterprise-cobol-review.md；B03放行提交，B04尚未实现，完整12模块目标仍未完成。
+
+### B04 模块07.6 Boss L4 — 实现与执行代理验证完成，等待主代理独立审查
+
+- 主代理已批准既有设计；本批保持目录 `curriculum/modules/07-matching/labs/05-large-record/`，讲师参考核心与canonical Copybook位于 `instructor/modules/07/05-large-record/`。学生starter独立，不共享讲师答案源码。
+- 固定1778B无分隔二进制记录，175个具名字段。目录独立列PIC/USAGE、偏移/长度、domain、NULL、敏感级别及比较语义。V1分类维持1字节；两字节分类只作为未来V2迁移练习。
+- Instructor COBOL核心使用固定顺序文件与双游标比较；匹配记录逐175字段执行RAW、TEXT-NORM、DISPLAY/COMP/COMP-3 numeric或IGNORE-AUDIT语义。结构/域校验覆盖版本、ABI、key及唯一递增顺序、DISPLAY ASCII、required/null关系、日期/时间、数字和packed有效半字节、字段范围；binary COMP高位不作ASCII扫描，packed只允许C/D符号，数学正负零相等。输出包含字段ID/物理位置、脱敏值与控制计数；OLD/NEW-only key也脱敏。
+- `B04-layout-author.json`由GnuCOBOL 3.2运行时逐字段取`ADDRESS OF`与field length，实测175个offset/length均匹配目录，总长1778B；记录compiler及目录、canonical Copybook、COBOL源码SHA。course Copybook与canonical instructor Copybook逐bytes同步门禁通过；课程包SHA涵盖讲师核心/Copybook/README，拒绝漂移。
+- 实际独立expected与Python byte-level verifier检查binary fixtures、报告、stage发布前候选。Python仅生成/独立验收，不做比较核心。starter由`COURSE_SOURCE`实编译并真实运行，TODO映射RC12且不发布。
+- 当前永久变更/故障矩阵涵盖规范化相等、正负packed零表示相等、audit-only、DISPLAY/COMP/COMP-3实值改变与缩放边界、忽略字段、敏感字段遮蔽、域/required-null/optional-null、日期/时间、packed digit/sign、COMP高位、key/version/ABI/order、空/单边/截断记录、starter、reset保护和发布/hash失败。通过RC0，证明上游B00–B03未被本课回归破坏。
+- 压力证据`B04-pressure-author.json`：直接COBOL core依次比对10k/100k/1m OLD记录（每条1778B；最大输入1,778,000,000B）与空NEW流，OLD-only控制全核验，核心返回预期RC4；VmHWM为5052/5076/5068KiB，首末增长16KiB，耗时1.139/11.354/111.127秒。证据记录core/二进制/runner/driver及输入报告hash。测量不包含runner与Python verifier RSS，未将其扩大声称为全JOB内存界限。
+- 2026-10-10执行验证：`python3 .../scripts/check.py` RC0；压力脚本RC0；`bash .../scripts/check.sh` RC0（课程与fixture所有SHA通过）；`bash curriculum/check.sh` RC0（B00–B04及格式检查通过）。详细可复现记录见课程包`evidence/B04-author-run-2026-10-10.md`。该记录是执行证据，不是独立验收声明。
+- 主代理独立审查尚未完成；课程目标仍不能标“已验收”。不得据此提交/推送或开始B05。工作区既有Makefile/course脏材料保留，未暂存/提交/推送；禁止修改review与独立验收材料。
+- 执行边界遵循主代理最新指示：当前仅实施B04，完成后等主代理审查反馈；没有明确放行不得推进后续批次。
+
+## 接手执行代理批次（2026-10-10，接手交接文档后）
+
+本批次由接手执行代理完成 B04 收尾、B05 收口与模块 01–06、08–12 实现。执行代理不提交/推送、不宣布验收；以下均为执行证据，待主代理独立审查。
+
+### B04 收尾 — 已完成（执行证据，待主代理验收）
+
+- 根因修复：`scripts/verify.py` 原将整个输入读入内存并构造整份 expected 报告。已改为流式：逐 1778B 记录生成 expected 到临时文件，再以 1MiB 分块与 COBOL 报告比较；峰值内存为单条记录 + 目录，与记录数、报告大小无关。
+- 永久回归：`scripts/check.py` 新增 oracle 有界内存守卫——120,000 条（213MB）输入必须在 `ulimit -v 140000`（140MB）下通过；整份缓存会 >213MB 而失败。`verify.py` 另在 200,000 条（355MB）下经 160MB 上限实测通过。
+- 完整链路压力：`scripts/pressure.py` 改为驱动真实 `scripts/run.sh`（COBOL core + 流式 verifier + manifest/发布门禁），记录 standalone verifier 的精确 `wait4` `ru_maxrss` 与 10ms `/proc` 采样各进程 VmHWM、运行时树聚合 RSS。大文件 scratch 选非 /tmp 文件系统并在退出时清理；夹具只读。
+- 结果（`evidence/B04-pressure-author.json`，core SHA `831eef1f…`）：百万匹配高差异（1,000,000×2，输入 3.556GB，每条一个字段变化）runner RC4 发布、core VmHWM 5,220KiB、in-run python3 VmHWM 21,136KiB、verifier standalone `ru_maxrss` 20,908KiB、报告 49,000,308B、wall 577.5s；十万匹配无差异 runner RC0、core 5,216KiB、verifier 19,760KiB。完整链路失败注入（仅令 verifier 失败）runner RC12、无发布、无锁遗留。
+- 更新 `evidence/B04-author-run-2026-10-10.md` 与 lab `SHA256SUMS`；`bash curriculum/modules/07-matching/labs/05-large-record/scripts/check.sh` 与 `bash curriculum/modules/07-matching/check.sh` 均 RC0。仍属执行证据，非主代理验收。
+
+### B05 模块07收口 — 已完成（执行证据，待主代理验收）
+
+- 新增 `curriculum/modules/07-matching/README.md`（07.1–07.6 课次到实验单元映射、SORT→L2→L3→L4 关联图、冻结契约、命令、验收要点）与 `curriculum/modules/07-matching/check.sh`（SORT/MERGE + L1 + L2 + L3 + L4 全入口）——实跑 RC0。
+- 新增 `curriculum/scripts/package-student.sh`：可重复学生打包，排除 `instructor/` 与位于 `curriculum/` 内的 `INSTRUCTOR.md` 讲师说明、`__pycache__`；生成 `MANIFEST.txt`/`MANIFEST.sha256` 并断言无答案路径。实测无 instructor 泄漏。`.gitignore` 增加 `/dist/`。
+
+### 模块 01–06、08–12 实现 — 已完成（执行代理自测，待主代理验收）
+
+- 每个模块交付中文 README、DESIGN、可构建 starter（未完成 RC12 不发布）、讲师参考实现（`instructor/modules/NN-*/`）、normal/boundary/invalid 真实夹具 + SHA256SUMS、独立核算 expected、`scripts/{build,run,check,reset}`（任意 cwd、空格路径、no-clobber、锁保护、失败不发布）、学员证据模板。
+- 各模块 `check.sh` 执行代理实跑 RC0：01–06、07、09、10、11、12（`scripts/check.sh`）；08 离线 `check-quick.sh` RC0 + 真实 DB `scripts/check.sh` RC0（Docker + PostgreSQL 17 + GixSQL 固定 commit + 两个 P1 补丁，一次性容器）。
+- 模块08 独立复跑：`bash curriculum/modules/08-database/scripts/check.sh` 原始 RC0（离线契约 + 真实 DB 端到端 + 独立 psql 核对 + starter）。遵守固定格式，已修正 copybook 的 CJK 注释与 >72 列问题。
+- 总入口 `curriculum/check.sh` 重写：P1 校验 + 遍历全部 12 模块快速入口（模块可提供 `scripts/check-quick.sh` 以声明无 Docker 的快速入口）+ 固定格式门禁（`.COB/.CPY/.CBL` 全 ASCII、≤72 列、无 Tab，含 instructor `.COB`）。
+- 模块12 规模统计：被编排的陌生系统约 9,909 行 COBOL、22 Copybook、17 Shell、32 JOB 节点、12 逻辑表；**模块12 内新写 COBOL 仅 609 行**。是否按“模块内新增 8,000 行”解读由主代理裁定，执行代理不自行豁免。
+
+### 本批次限制（如实标注，未验证不写通过）
+
+- 平台仅 Linux x86-64 + GnuCOBOL 3.2.0；macOS/WSL/ARM 未验证。
+- 真实 DB 仅模块08（及 P1 工具链）；模块10/11/12 的 DB 为标注 `real_db_verified=false` 的离线文件检查点。
+- 模块11 维护 T9/T10、模块12 结业现场未知事故、各模块非 PostgreSQL 平台错误码等未在本机执行。
+- 工作区既有 `Makefile`、`course/`、`tasks/`、`docs/` 等历史改动保留；本批次只新增课程模块目录、模块07收口文件、`curriculum/check.sh`、`curriculum/README.md`、`curriculum/scripts/package-student.sh`、`.gitignore` 与 B04 相关文件。未 commit/push。
+
+### 待主代理独立验收
+
+- 全部模块的独立复跑、expected 人工核算抽查、失败夹具无发布、DB 独立连接与重跑、事故包可复现性、学生包打包。
+- 尤其：模块08 真实 DB 复跑；模块10/11/12 离线 DB 声明是否满足“真实 DB 不可用则标注”的政策；模块12 规模解读。
+
+### 冻结契约违规纠错（2026-10-10，执行证据，待主代理验收）
+
+独立审计发现两处违反 BANK-SYSTEM §2 的硬约束：CUSTOMER v1 第 27 字节按契约必须是**记录状态 status**（A 有效 / D 停用），而模块 11 将其标为 `CUSTOMER-CLASSIFICATION`（A/B/C/D）并把客户区分维护寄生在该字节；模块 12 将其标为 `distinction`（A active/D dormant）并扩为 2 位。BANK-SYSTEM 明确“不要把状态字段擅自当客户区分”，维护课须“先定义独立、版本化的企业客户布局”。
+
+- 已新增 canonical [curriculum/bank/README.md](../../curriculum/bank/README.md) 与 [curriculum/bank/copybooks/CUSTOMER-V1.CPY](../../curriculum/bank/copybooks/CUSTOMER-V1.CPY)（第 27 字节 `CUSTOMER-STATUS`，编译器实测 27B），与既有 ACCOUNT-V1(47B)/TRANSACTION-V1(55B) 一并作为单一 canonical 来源。
+- 模块 11：system 与 6 个事故场景的 CUSTOMER-V1 副本恢复 status 语义；客户区分维护改为作用于独立版本化 `ENTERPRISE-CUSTOMER-V1/V2`（对齐模块 07 L4 命名/版本约定）；`M11CUST.COB`、JOB007/008、fixtures/expected/SHA/讲师材料/证据全部更新；`check.py` 新增契约守卫（若再出现“第 27 字节=区分”则 FAIL）。`bash curriculum/modules/11-incidents/scripts/check.sh` 与维护 `check.sh` 均 RC0；6 事故与 RED→GREEN 仍成立。
+- 模块 12：byte 27 恢复 status；区分维护改为作用于 `ENTERPRISE-CUSTOMER-V1/V2`（v1=31B → v2=32B，嵌入未变的 27B 前缀），删除旧 `CUSTOMER-V2.CPY`；COBOL/lib/JOB/schema/fixtures/expected/SHA/grading/讲师/证据全部更新。`bash curriculum/modules/12-capstone/scripts/check.sh` RC0，`grading/grade.py` 100/100 全硬门禁通过。
+- 重跑 `bash curriculum/check.sh` 原始 RC0（P1 + 12 模块 + 142 源固定格式门禁）。
+- 一致性守卫：新增 [curriculum/validation/interfaces/check.py](../../curriculum/validation/interfaces/check.py) 并接入总入口——所有 `copybooks/{ACCOUNT,TRANSACTION,CUSTOMER}-V1.CPY`（32 份，含 instructor）经真实 GnuCOBOL 编译实测为 47/55/27 字节，冻结布局一旦漂移即 FAIL。各模块因多个接口在同一程序内 COPY 会产生重名冲突，COBOL 字段名允许本地前缀（如 `CUST-ID`/`ACCOUNT-V1-RECORD`），但字节宽度由该守卫强制一致；因此不要求逐字节同一文件。
+- 残余：企业客户布局与模块 07 L4 的 `ENTERPRISE-CUSTOMER-V1` 仅对齐命名/版本约定，不是同一 1778B 二进制编码；真实 DB 仅在模块 08 接入，模块 10/11/12 仍为标注的离线检查点。
+
+## R01–R15 最终验收返工（2026-10-10，执行证据，待主代理独立复验）
+
+按 `tasks/enterprise-cobol-final-review-2026-10-10.md` 逐项复现反例→修实现/文档→补回归。逐项状态、命令、原始 RC、证据与未完成项见 `tasks/enterprise-cobol-r01r15-fix-report.md`。要点：
+
+- P1：R01 真实 DB 贯通 JOB004/JOB006（模块10/12，Docker+PostgreSQL17+GixSQL，离线路线保留并标注）；R02 账本先行、余额派生自愈（ledger 失败余额不变）；R03 发布后失败保留已发布产物与 DB 提交（`has_committed_or_published`）；R04 模块09 全局重复交易ID 外排拦截 RC8；R05 模块03/04 独立语义验证（改标志不再能发布）；R06 模块08 COURSE_SOURCE 正确源 RC0；R07 学生包按角色+内容排除答案且全模块隔离包可 build/run/check；R09 B04 差异报告含 run_id/版本/序号/脱敏键/字段名；R10 B04 reset 统一锁协议 RC12 保留；R11 压力须断言且记录磁盘高水位/临时空间耗尽；R12 模块02/05/06/11 补齐实操；R13 评分不认空文件、G6 永不自动 PASS。
+- P2：R14 事故目录改中性 `INC-2026-00x`；R15 新增 `COMPOSITION.md` 去重组成清单，如实记录实际执行 COBOL 1,640 行 vs 8,000 目标差距。
+- 修复后 `bash curriculum/check.sh` 原始 RC0（156 源）；模块08/10/12 真实 DB RC0；P1 RC0；`pressure.py` RC0 status=pass；隔离学生包回归 PASS。
+- 未决：R07 模块10 BANKVAL 练习答案被模块11 既存系统逐字节 vendored（隔离包回归仅允许既定路径，其余失败）；R09 字段名采用 catalog `cobol_name`。均交主代理裁定。未提交/推送，工作树保留。

@@ -1,0 +1,22 @@
+{
+  "normal": 0,
+  "empty-customers": 0,
+  "no-transactions": 0,
+  "max-amount": 0,
+  "all-empty": 0,
+  "customer-bad-status": 4,
+  "customer-bad-id": 4,
+  "customer-no-name": 4,
+  "zero-amount": 4,
+  "overdraft": 4,
+  "overflow": 4,
+  "unknown-direction": 4,
+  "no-account": 4,
+  "frozen-account": 4,
+  "bad-layout-version": 8,
+  "short-account": 8,
+  "bad-account-date": 8,
+  "unsorted-transactions": 8,
+  "dup-global-txid": 8,
+  "dup-cross-account": 8
+}

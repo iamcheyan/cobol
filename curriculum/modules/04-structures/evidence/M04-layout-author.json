@@ -1,0 +1,11 @@
+{
+  "compiler": "cobc (GnuCOBOL) 3.2.0",
+  "copybook_sha256": "3cf66e93de0dd8415a464e029c147c95de6222b95d15979941db85883acb5b98",
+  "catalog_sha256": "8a3d07b1903963a83f8d990be88279408fb59de3f34b0ec9c8d952d57745bdad",
+  "record_bytes": 1778,
+  "field_offsets_checked": 175,
+  "classification_offset_1_based": 460,
+  "sync_state_offset_v1": 1778,
+  "sync_state_offset_v2": 1779,
+  "offset_method": "GnuCOBOL ADDRESS OF each leaf minus ADDRESS OF group"
+}

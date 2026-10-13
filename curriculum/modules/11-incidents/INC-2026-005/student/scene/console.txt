@@ -1,0 +1,6 @@
+JOB001 INFO: start
+JOB002 INFO: start
+JOB003 INFO: start
+JOB003 ERROR: cannot create sort workspace (temp space/permission)
+JOB003 ERROR: system failure rc=12
+nightly failed rc=12; forensic scene preserved at /tmp/m11-scenes/INC-2026-005-out

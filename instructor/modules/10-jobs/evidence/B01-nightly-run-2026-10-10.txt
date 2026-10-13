@@ -1,0 +1,38 @@
+$ bash curriculum/modules/10-jobs/scripts/run.sh --input fixtures/normal --output /tmp/m10ev/out --db /tmp/m10ev/db --business-date 20261009 --run-id ev1
+JOB001 INFO: start
+JOB002 INFO: start
+JOB003 INFO: start
+JOB004 INFO: start
+JOB005 INFO: start
+JOB006 INFO: start
+JOB007 INFO: start
+JOB008 INFO: start
+JOB009 INFO: start
+exit=4
+
+$ python3 lib/db.py status --db /tmp/m10ev/db --business-date 20261009
+{"applied_transactions": 4, "business_date": "20261009", "commit": {"applied_transactions": 4, "business_date": "20261009", "commit_id": "fc59a68d55cf15ba", "ledger_sha256": "99b25829188e463008e6edcc8a766c018143d1d2de18863a53c8425ca3097b22", "new_transactions": 4, "run_id": "ev1"}, "committed": true}
+
+$ cat work/control/control.txt
+received=10
+validate_accepted=6
+validate_rejected=4
+batch_accepted=4
+batch_rejected=2
+ledger_applied=4
+accounts=3
+opening_total=1050
+credit_total=600
+debit_total=1100
+closing_total=550
+
+$ find publish -type f
+publish/CURRENT
+publish/ev1/MANIFEST.sha256
+publish/ev1/accepted-tx.dat
+publish/ev1/closing-master.dat
+publish/ev1/control-report-human.txt
+publish/ev1/control-report.txt
+publish/ev1/manifest.json
+publish/ev1/rejected-match.dat
+publish/ev1/rejected-validate.txt

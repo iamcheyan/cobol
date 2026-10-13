@@ -3,7 +3,11 @@ set -Eeuo pipefail
 here=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
 repo=$(cd "$here/../../../../../../" && pwd)
 target=${1:-"$PWD/sorttx"}
-source=${2:-"${COURSE_SOURCE:-$repo/instructor/modules/07/02-sort-merge/SORTTX.COB}"}
+# Prefer the instructor reference (authoring repo); in a student bundle build
+# the learner's own starter, which later modules 10/12 reuse once completed.
+default_source="$repo/instructor/modules/07/02-sort-merge/SORTTX.COB"
+[[ -f $default_source ]] || default_source="$here/starter/SORTTX.COB"
+source=${2:-"${COURSE_SOURCE:-$default_source}"}
 [[ ! -e $target && ! -L $target ]] || { echo 'Build target exists' >&2; exit 12; }
 [[ -f $source && -d $(dirname -- "$target") ]] || { echo 'Build input/parent missing' >&2; exit 12; }
 tmp=$(mktemp "$(dirname -- "$target")/.sorttx.XXXXXXXX") || { echo "Build workspace failed" >&2; exit 12; }

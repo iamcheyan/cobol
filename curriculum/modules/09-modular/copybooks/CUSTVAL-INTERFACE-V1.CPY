@@ -1,0 +1,7 @@
+       01 CUST-VAL-INTERFACE.
+           05 CVL-IFACE-LENGTH PIC 9(4) COMP-5.
+           05 CVL-IFACE-VERSION PIC X(3).
+           05 CVL-CUSTOMER-ID PIC X(8).
+           05 CVL-NAME PIC X(10).
+           05 CVL-STATUS-IN PIC X.
+           05 CVL-REASON PIC X(16).

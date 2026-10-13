@@ -1,0 +1,7 @@
+business_date=20261010
+layout_transaction=001
+layout_account=001
+layout_customer=002
+file transaction.dat 2b1509117e9925bb07f1e5edefed92a26203c4f9889edea44f7c725cd8ce2c8d
+file customer.dat ed6c01077d7e772bac9dd7375249ac78821e99ac1c139cd766cbf2a4520050df
+file account_seed.dat 371f3a645a962395db87f0ea56320edc001b66929954578dfda715e0529cd306

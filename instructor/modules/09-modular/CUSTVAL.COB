@@ -1,0 +1,47 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. CUSTVAL.
+      *    Shared customer validation, interface CUSTVAL v1.
+      *    Returns 0 valid, 4 business reject, 8 interface error.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 WS-EXPECTED-LENGTH PIC 9(4) COMP-5.
+       LINKAGE SECTION.
+           COPY "CUSTVAL-INTERFACE-V1.CPY".
+       PROCEDURE DIVISION USING CUST-VAL-INTERFACE.
+       0000-VALIDATE.
+           MOVE 0 TO RETURN-CODE
+           MOVE SPACES TO CVL-REASON
+           COMPUTE WS-EXPECTED-LENGTH = LENGTH OF CUST-VAL-INTERFACE
+           IF CVL-IFACE-LENGTH NOT = WS-EXPECTED-LENGTH
+              MOVE 'IFACE-LENGTH' TO CVL-REASON
+              MOVE 8 TO RETURN-CODE
+              GOBACK
+           END-IF
+           IF CVL-IFACE-VERSION NOT = '001'
+              MOVE 'IFACE-VERSION' TO CVL-REASON
+              MOVE 8 TO RETURN-CODE
+              GOBACK
+           END-IF
+           IF CVL-CUSTOMER-ID IS NOT NUMERIC
+              MOVE 'BAD-ID' TO CVL-REASON
+              MOVE 4 TO RETURN-CODE
+              GOBACK
+           END-IF
+           IF CVL-NAME = SPACES
+              MOVE 'CUST-NO-NAME' TO CVL-REASON
+              MOVE 4 TO RETURN-CODE
+              GOBACK
+           END-IF
+           EVALUATE CVL-STATUS-IN
+             WHEN 'A'
+               MOVE 'OK' TO CVL-REASON
+               MOVE 0 TO RETURN-CODE
+             WHEN 'D'
+               MOVE 'CUST-DISABLED' TO CVL-REASON
+               MOVE 4 TO RETURN-CODE
+             WHEN OTHER
+               MOVE 'CUST-BAD-STATUS' TO CVL-REASON
+               MOVE 4 TO RETURN-CODE
+           END-EVALUATE
+           GOBACK.
+       END PROGRAM CUSTVAL.

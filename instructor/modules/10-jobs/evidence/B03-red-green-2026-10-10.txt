@@ -1,0 +1,25 @@
+# RED->GREEN: rerun idempotency guard for JOB006 (module 10)
+# helper: disable the (business_date, transaction_id) ledger guard and
+# the candidate cross-check in lib/db.py, then run the same day twice.
+
+## RED (ledger guard removed)
+patched
+first_run_rc=4
+rerun_rc=8  (expected on a correct system: 4)
+balances (acct sign+digits):
+0000000001 -0000000000200
+0000000002 +0000000000250
+0000000003 +0000000000000
+ledger_lines=8  (double debit)
+
+## GREEN (guard restored)
+first_run_rc=4
+rerun_rc=4  (expected: 4)
+balances (acct sign+digits):
+0000000001 +0000000000400
+0000000002 +0000000000150
+0000000003 +0000000000000
+ledger_lines=4
+
+check.py assertion that catches RED:
+  assert second.returncode == 4  ->  RED fails (rc=8), GREEN passes

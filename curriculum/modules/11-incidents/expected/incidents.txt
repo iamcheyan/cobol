@@ -1,0 +1,9 @@
+# fixture as_found_rc desired_rc publish_before publish_after
+normal 0 0 yes yes
+INC-2026-001 8 8 no no
+INC-2026-002 0 8 yes no
+INC-2026-003 12 12 no no
+INC-2026-004 8 8 no no
+INC-2026-005 12 12 no no
+INC-2026-006 0 8 yes no
+INC-2026-007 8 8 no no

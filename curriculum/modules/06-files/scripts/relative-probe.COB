@@ -1,0 +1,59 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. M06-RELATIVE-PROBE.
+      *> Lesson 06.4: GnuCOBOL relative file WRITE / READ / REWRITE /
+      *> DELETE keyed by RELATIVE KEY, with duplicate and invalid-key
+      *> status codes. Reading lab only.
+       ENVIRONMENT DIVISION.
+       INPUT-OUTPUT SECTION.
+       FILE-CONTROL.
+           SELECT R-FILE ASSIGN TO DYNAMIC R-PATH
+               ORGANIZATION IS RELATIVE ACCESS MODE IS DYNAMIC
+               RELATIVE KEY IS R-KEY FILE STATUS IS R-STATUS.
+       DATA DIVISION.
+       FILE SECTION.
+       FD R-FILE.
+       01 R-RECORD.
+          05 R-VALUE PIC X(4).
+       WORKING-STORAGE SECTION.
+       01 R-PATH PIC X(4096).
+       01 R-KEY PIC 9(4).
+       01 R-STATUS PIC XX.
+       PROCEDURE DIVISION.
+       1000-MAIN.
+           ACCEPT R-PATH FROM ENVIRONMENT 'RELPATH'
+           OPEN OUTPUT R-FILE
+           DISPLAY 'CREATE=' R-STATUS
+           IF R-STATUS NOT = '00' MOVE 12 TO RETURN-CODE GOBACK END-IF
+           MOVE 1 TO R-KEY
+           MOVE 'AAAA' TO R-VALUE
+           WRITE R-RECORD
+           DISPLAY 'WRITE1=' R-STATUS
+           MOVE 2 TO R-KEY
+           MOVE 'BBBB' TO R-VALUE
+           WRITE R-RECORD
+           DISPLAY 'WRITE2=' R-STATUS
+           WRITE R-RECORD
+           DISPLAY 'DUPLICATE=' R-STATUS
+           CLOSE R-FILE
+           DISPLAY 'CLOSE=' R-STATUS
+           OPEN I-O R-FILE
+           DISPLAY 'IO=' R-STATUS
+           MOVE 1 TO R-KEY
+           READ R-FILE
+           DISPLAY 'READ1=' R-STATUS ' ' R-VALUE
+           MOVE 1 TO R-KEY
+           MOVE 'ZZZZ' TO R-VALUE
+           REWRITE R-RECORD
+           DISPLAY 'REWRITE=' R-STATUS
+           MOVE 9 TO R-KEY
+           READ R-FILE
+           DISPLAY 'READ9=' R-STATUS
+           MOVE 1 TO R-KEY
+           DELETE R-FILE
+           DISPLAY 'DELETE=' R-STATUS
+           MOVE 1 TO R-KEY
+           READ R-FILE
+           DISPLAY 'DELETED-READ=' R-STATUS
+           CLOSE R-FILE
+           MOVE 0 TO RETURN-CODE
+           GOBACK.

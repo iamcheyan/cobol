@@ -1,0 +1,11 @@
+PASS: module 10 JOB chain, RC, lock, recovery, persistence boundaries and idempotency
+NOTICE:  table "batch_commit" does not exist, skipping
+NOTICE:  table "transaction_ledger" does not exist, skipping
+NOTICE:  table "batch_run" does not exist, skipping
+NOTICE:  table "account_balance" does not exist, skipping
+NOTICE:  table "account" does not exist, skipping
+NOTICE:  table "customer" does not exist, skipping
+NOTICE:  table "probe_null" does not exist, skipping
+NOTICE:  table "schema_version" does not exist, skipping
+PASS: module 10 real DB (extraction + single-transaction apply + independent verify)
+PASS: module 10 real DB verified (/tmp/m10-realdb.9t48LJ/out)

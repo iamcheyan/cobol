@@ -286,3 +286,17 @@ course_review只读临时workspace探针：reset末尾find删除marker之外所�
 主代理独立pressure session19425原始RC0，六档balanced/单客户10k/100k/1m均通过；百万单客户真实2账户各500k，max客户组1m。核心峰值7016KiB，相对首档增长1084KiB（全档最大减最小1260KiB）；百万balanced/集中RSS6964/6932KiB。真实cobsort最大56,343,772B，0500运行TMPDIR核心status30/RC1→runner12无发布。主代理JSON core/runner/driver SHA均与当前源逐项吻合，未混用执行代理修前入口证据。最终总入口session29350原始RC0，日志/tmp/cobol-primary-b03-final-check.log。
 
 主代理10个手算小案例、六输出篡改与假RC、sha工具失败未发布、starter三层、reset保护学生源码及empty lock均实际通过。独立核心审查未发现未闭环业务阻塞；原发布后校验缺陷已独立故障复验关闭。最终README逐READ trace已按1500真实阶段核对：客户1 A02→T003→S01→P01，客户2 A01/A03→T001/T002/T004→S02→P02，余额1900/4100；账户与customer排序和18项control说明已修正，课程总目录有真实入口。教材/字段目录/讲师评分/学生模板/终端替代满足本批要求。B03放行提交，B04与其余模块仍按原scope继续，不宣称模块07或全部课程完成。
+
+### B04 设计阶段主代理初审
+
+B03已提交推送ad058c5，B04已委派同一Luna，先设计批准再核心。当前目录176具名叶子，DISPLAY156/COMP1/COMP-3 19，比较RAW62/NUMERIC25/TEXT-NORM79/IGNORE10。主代理packed原语实测signedC/D合法、F拒绝；COMP实测big-endian、COMP5 native little，证据独立保存validation/evidence/B04-primary-{packed,binary}-probe.json。设计仍有大量field-specific域规则占位，permission等泛X24、expiry/date误作TEXT-NORM、PIC9序号范围写ASCII；V1已同时放1位legacy与2位v2使未来实际宽度扩展含糊，已要求闭合并安排独立设计审查。未批准布局/核心，不宣称176字段课程已完成。
+
+### B04 修订设计批准进入实现
+
+主代理复读修订DESIGN/CSV并独立核对175唯一field_id/COBOL名、连续1778B、PIC/USAGE分列、域规则占位已清除；19 Packed中18限额非负与风险调整正负risk-points明确，日期/时间/NULL规则和一位classification V1→两位V2物理迁移闭合。仅批准设计进入实现，不是Copybook实际布局或课程验收。复审代理本轮达到用量限制，未产生新复审结论；上述结论来自主代理直接检查。原实现代理句柄已不存在，按用户授权新建GPT-6 Luna代理luna_b04继续现有设计实现，禁止重启已完成批次/修改旧course材料。ASCII门禁只针对DISPLAY字节，不能拒绝合法COMP/Packed高位字节。
+
+设计文件SHA：e61ff0826fb8cfe562518d38bfe2d6e6400d628dfc2863ab8184596eb22474ca；目录SHA：8a3d07b1903963a83f8d990be88279408fb59de3f34b0ec9c8d952d57745bdad。
+
+### 用户调整执行边界：模块07完成后交接并停止
+
+用户明确要求完成07后停止，写详细交接文档，由其他agent一次性实现其余课程，随后主代理统一验收。已更新实施合同最新执行边界并通知Luna：当前B04继续，放行后B05收口，完成07独立验收与实际证据交接文档后停止，不自动进入B06。全12模块最终scope和高标准保留；不能将07完成误报全部课程完成，也不在当前提前暂停。

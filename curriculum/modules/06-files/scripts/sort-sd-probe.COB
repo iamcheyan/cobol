@@ -1,0 +1,51 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. M06-SORT-SD-PROBE.
+      *> Lesson 06.1: the SD (Sort Description) entry pairs with a
+      *> SORT statement.  This reads a LINE SEQUENTIAL file, sorts it
+      *> ON ASCENDING KEY through the SD work file, and re-emits the
+      *> ordered records.  check.sh compiles and runs it.
+       ENVIRONMENT DIVISION.
+       INPUT-OUTPUT SECTION.
+       FILE-CONTROL.
+           SELECT SORT-INPUT ASSIGN TO DYNAMIC SI-PATH
+               ORGANIZATION IS LINE SEQUENTIAL FILE STATUS IS SI-STAT.
+           SELECT SORT-OUTPUT ASSIGN TO DYNAMIC SO-PATH
+               ORGANIZATION IS LINE SEQUENTIAL FILE STATUS IS SO-STAT.
+           SELECT SORT-WORK ASSIGN TO "sort-work-tmp".
+       DATA DIVISION.
+       FILE SECTION.
+       FD SORT-INPUT.
+       01 SI-REC PIC X(20).
+       SD SORT-WORK.
+       01 SW-REC.
+          05 SW-KEY PIC X(5).
+          05 FILLER PIC X(15).
+       FD SORT-OUTPUT.
+       01 SO-REC PIC X(20).
+       WORKING-STORAGE SECTION.
+       01 SI-PATH PIC X(4096).
+       01 SO-PATH PIC X(4096).
+       01 SI-STAT PIC XX.
+       01 SO-STAT PIC XX.
+       01 EOF-FLAG PIC 9 VALUE 0.
+       PROCEDURE DIVISION.
+       1000-MAIN.
+           ACCEPT SI-PATH FROM ENVIRONMENT 'SI_PATH'
+           ACCEPT SO-PATH FROM ENVIRONMENT 'SO_PATH'
+           SORT SORT-WORK
+             ON ASCENDING KEY SW-KEY
+             USING SORT-INPUT
+             GIVING SORT-OUTPUT
+           OPEN INPUT SORT-OUTPUT
+           IF SO-STAT NOT = '00' MOVE 12 TO RETURN-CODE GOBACK END-IF
+           PERFORM UNTIL EOF-FLAG = 1
+             READ SORT-OUTPUT
+             IF SO-STAT = '10'
+               MOVE 1 TO EOF-FLAG
+             ELSE
+               DISPLAY FUNCTION TRIM(SO-REC)
+             END-IF
+           END-PERFORM
+           CLOSE SORT-OUTPUT
+           MOVE 0 TO RETURN-CODE
+           GOBACK.

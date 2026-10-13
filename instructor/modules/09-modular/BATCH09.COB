@@ -1,0 +1,535 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. BATCH09.
+      *    Module 09 nightly driver. Composes three shared modules:
+      *    CUSTVAL (customer validation), AMTCALC (amount posting) and
+      *    LOGGER (append-only log) via CALL ... USING ... RETURNING.
+       ENVIRONMENT DIVISION.
+       INPUT-OUTPUT SECTION.
+       FILE-CONTROL.
+           SELECT C-FILE ASSIGN TO DYNAMIC C-PATH
+               ORGANIZATION IS SEQUENTIAL FILE STATUS IS C-STAT.
+           SELECT M-FILE ASSIGN TO DYNAMIC M-PATH
+               ORGANIZATION IS SEQUENTIAL FILE STATUS IS M-STAT.
+           SELECT T-FILE ASSIGN TO DYNAMIC T-PATH
+               ORGANIZATION IS SEQUENTIAL FILE STATUS IS T-STAT.
+           SELECT LEDGER-OUT ASSIGN TO DYNAMIC L-PATH
+               ORGANIZATION IS LINE SEQUENTIAL FILE STATUS IS L-STAT.
+           SELECT VALID-OUT ASSIGN TO DYNAMIC V-PATH
+               ORGANIZATION IS LINE SEQUENTIAL FILE STATUS IS V-STAT.
+           SELECT REJECT-OUT ASSIGN TO DYNAMIC R-PATH
+               ORGANIZATION IS LINE SEQUENTIAL FILE STATUS IS R-STAT.
+       DATA DIVISION.
+       FILE SECTION.
+       FD C-FILE.
+       01 C-BYTE PIC X.
+       FD M-FILE.
+       01 M-BYTE PIC X.
+       FD T-FILE.
+       01 T-BYTE PIC X.
+       FD LEDGER-OUT.
+       01 L-OUT PIC X(47).
+       FD VALID-OUT.
+       01 V-OUT PIC X(27).
+       FD REJECT-OUT RECORD IS VARYING IN SIZE FROM 29 TO 46
+           CHARACTERS DEPENDING ON R-LENGTH.
+       01 R-OUT PIC X(46).
+       WORKING-STORAGE SECTION.
+       01 C-PATH PIC X(4096).
+       01 M-PATH PIC X(4096).
+       01 T-PATH PIC X(4096).
+       01 L-PATH PIC X(4096).
+       01 V-PATH PIC X(4096).
+       01 R-PATH PIC X(4096).
+       01 RUN-DATE PIC X(8).
+       01 C-STAT PIC XX.
+       01 M-STAT PIC XX.
+       01 T-STAT PIC XX.
+       01 L-STAT PIC XX.
+       01 V-STAT PIC XX.
+       01 R-STAT PIC XX.
+       01 C-SIZE BINARY-LONG.
+       01 C-DONE PIC 9.
+       01 C-EOF PIC 9.
+       01 M-SIZE BINARY-LONG.
+       01 M-DONE PIC 9.
+       01 M-EOF PIC 9.
+       01 T-SIZE BINARY-LONG.
+       01 T-DONE PIC 9.
+       01 T-EOF PIC 9.
+       01 C-RAW PIC X(27).
+       01 M-RAW PIC X(47).
+       01 T-RAW PIC X(55).
+       01 M-PREV PIC X(10) VALUE LOW-VALUES.
+       01 T-PREV-ACCT PIC X(10) VALUE LOW-VALUES.
+       01 T-PREV-SEQ PIC X(6) VALUE LOW-VALUES.
+       01 T-PREV-ID PIC X(16) VALUE LOW-VALUES.
+       01 R-LENGTH BINARY-LONG.
+       01 R-POINTER BINARY-LONG.
+       01 WS-SUB-RC PIC 9(2) COMP-5.
+       01 WS-TX-DONE PIC 9 VALUE 0.
+       01 BIZ-FLAG PIC 9 VALUE 0.
+       01 ACCT-OPEN PIC 9 VALUE 0.
+       01 ACCT-HAD-TX PIC 9 VALUE 0.
+       01 CUR-ACCT-ID PIC X(10).
+       01 CUR-STATUS PIC X.
+       01 CUR-BAL PIC S9(13) COMP-3.
+       01 WS-AMOUNT PIC 9(13) COMP-3.
+       01 WS-REASON-OUT PIC X(16).
+       01 SIGN-EDIT PIC X.
+       01 BAL-EDIT PIC 9(13).
+       01 CREAD-COUNT PIC 9(12) VALUE 0.
+       01 COK-COUNT PIC 9(12) VALUE 0.
+       01 CREJ-COUNT PIC 9(12) VALUE 0.
+       01 ACCT-COUNT PIC 9(12) VALUE 0.
+       01 NOTX-COUNT PIC 9(12) VALUE 0.
+       01 TX-COUNT PIC 9(12) VALUE 0.
+       01 ACCEPT-COUNT PIC 9(12) VALUE 0.
+       01 REJECT-COUNT PIC 9(12) VALUE 0.
+       01 OPENING-TOTAL PIC S9(18) COMP-3 VALUE 0.
+       01 CLOSING-TOTAL PIC S9(18) COMP-3 VALUE 0.
+       01 CREDIT-TOTAL PIC 9(18) VALUE 0.
+       01 DEBIT-TOTAL PIC 9(18) VALUE 0.
+           COPY "AMTCALC-INTERFACE-V1.CPY".
+           COPY "CUSTVAL-INTERFACE-V1.CPY".
+           COPY "LOGGER-INTERFACE-V1.CPY".
+           COPY "CUSTOMER-V1.CPY".
+           COPY "ACCOUNT-V1.CPY".
+           COPY "TRANSACTION-V1.CPY".
+       PROCEDURE DIVISION.
+       1000-MAIN.
+           MOVE 0 TO RETURN-CODE
+           PERFORM 1100-INIT
+           PERFORM 2000-VALIDATE-CUSTOMERS
+           PERFORM 3000-POST-ACCOUNTS
+           PERFORM 8000-FINISH.
+       1100-INIT.
+           ACCEPT RUN-DATE FROM ENVIRONMENT 'BATCH_DATE'
+           IF RUN-DATE IS NOT NUMERIC
+              PERFORM 9200-CONTRACT-FAIL
+           END-IF
+           ACCEPT C-PATH FROM ENVIRONMENT 'CUSTOMER_FILE'
+           ACCEPT M-PATH FROM ENVIRONMENT 'ACCOUNT_FILE'
+           ACCEPT T-PATH FROM ENVIRONMENT 'TRANSACTION_FILE'
+           ACCEPT L-PATH FROM ENVIRONMENT 'LEDGER_OUTPUT'
+           ACCEPT V-PATH FROM ENVIRONMENT 'VALID_OUTPUT'
+           ACCEPT R-PATH FROM ENVIRONMENT 'REJECT_OUTPUT'
+           OPEN INPUT C-FILE
+           IF C-STAT NOT = '00' PERFORM 9100-SYSTEM-FAIL END-IF
+           OPEN INPUT M-FILE
+           IF M-STAT NOT = '00' PERFORM 9100-SYSTEM-FAIL END-IF
+           OPEN INPUT T-FILE
+           IF T-STAT NOT = '00' PERFORM 9100-SYSTEM-FAIL END-IF
+           OPEN OUTPUT LEDGER-OUT
+           IF L-STAT NOT = '00' PERFORM 9100-SYSTEM-FAIL END-IF
+           OPEN OUTPUT VALID-OUT
+           IF V-STAT NOT = '00' PERFORM 9100-SYSTEM-FAIL END-IF
+           OPEN OUTPUT REJECT-OUT
+           IF R-STAT NOT = '00' PERFORM 9100-SYSTEM-FAIL END-IF
+           MOVE 'I' TO LOG-SEVERITY
+           MOVE 'JOBSTART' TO LOG-EVENT
+           MOVE SPACES TO LOG-MESSAGE
+           PERFORM 7000-CALL-LOGGER.
+       2000-VALIDATE-CUSTOMERS.
+           PERFORM 2100-READ-CUSTOMER
+           PERFORM UNTIL C-EOF = 1
+              PERFORM 2200-ONE-CUSTOMER
+              PERFORM 2100-READ-CUSTOMER
+           END-PERFORM
+           DISPLAY 'CUST-CONTROL|READ=' CREAD-COUNT '|OK=' COK-COUNT
+             '|REJECT=' CREJ-COUNT.
+       2100-READ-CUSTOMER.
+           MOVE 0 TO C-SIZE C-DONE
+           MOVE SPACES TO C-RAW
+           PERFORM UNTIL C-DONE = 1
+              READ C-FILE
+              EVALUATE C-STAT
+                WHEN '10'
+                  IF C-SIZE NOT = 0 PERFORM 9200-CONTRACT-FAIL END-IF
+                  MOVE 1 TO C-EOF C-DONE
+                WHEN '00'
+                  IF C-BYTE = X'0A'
+                     MOVE 1 TO C-DONE
+                  ELSE
+                     IF C-SIZE = 27 PERFORM 9200-CONTRACT-FAIL END-IF
+                     ADD 1 TO C-SIZE
+                     MOVE C-BYTE TO C-RAW(C-SIZE:1)
+                  END-IF
+                WHEN OTHER
+                  PERFORM 9100-SYSTEM-FAIL
+              END-EVALUATE
+           END-PERFORM.
+       2200-ONE-CUSTOMER.
+           ADD 1 TO CREAD-COUNT
+             ON SIZE ERROR PERFORM 9100-SYSTEM-FAIL
+           END-ADD
+           MOVE C-RAW TO CUSTOMER-RECORD
+           MOVE LENGTH OF CUST-VAL-INTERFACE TO CVL-IFACE-LENGTH
+           MOVE '001' TO CVL-IFACE-VERSION
+           MOVE CUST-MASTER-ID TO CVL-CUSTOMER-ID
+           MOVE CUSTOMER-NAME TO CVL-NAME
+           MOVE CUSTOMER-STATUS TO CVL-STATUS-IN
+           MOVE SPACES TO CVL-REASON
+           CALL 'CUSTVAL' USING CUST-VAL-INTERFACE RETURNING WS-SUB-RC
+           EVALUATE WS-SUB-RC
+             WHEN 8 PERFORM 9000-INTERFACE-FAIL
+             WHEN 12 PERFORM 9100-SYSTEM-FAIL
+           END-EVALUATE
+           IF WS-SUB-RC = 0
+              ADD 1 TO COK-COUNT
+                ON SIZE ERROR PERFORM 9100-SYSTEM-FAIL
+              END-ADD
+              DISPLAY 'CUST|' CUST-MASTER-ID '|OK|'
+                FUNCTION TRIM(CUSTOMER-NAME)
+              MOVE C-RAW TO V-OUT
+              WRITE V-OUT
+              IF V-STAT NOT = '00' PERFORM 9100-SYSTEM-FAIL END-IF
+              MOVE 'I' TO LOG-SEVERITY
+           ELSE
+              ADD 1 TO CREJ-COUNT
+                ON SIZE ERROR PERFORM 9100-SYSTEM-FAIL
+              END-ADD
+              MOVE 1 TO BIZ-FLAG
+              DISPLAY 'CUST|' CUST-MASTER-ID '|REJECT|'
+                FUNCTION TRIM(CVL-REASON)
+              MOVE SPACES TO R-OUT
+              MOVE 1 TO R-POINTER
+              STRING C-RAW DELIMITED BY SIZE '|' DELIMITED BY SIZE
+                FUNCTION TRIM(CVL-REASON) DELIMITED BY SIZE
+                INTO R-OUT WITH POINTER R-POINTER
+              END-STRING
+              COMPUTE R-LENGTH = R-POINTER - 1
+              WRITE R-OUT
+              IF R-STAT NOT = '00' PERFORM 9100-SYSTEM-FAIL END-IF
+              MOVE 'W' TO LOG-SEVERITY
+           END-IF
+           MOVE 'CUSTVAL' TO LOG-EVENT
+           MOVE SPACES TO LOG-MESSAGE
+           STRING CUST-MASTER-ID DELIMITED BY SIZE ' ' DELIMITED BY SIZE
+             FUNCTION TRIM(CVL-REASON) DELIMITED BY SIZE
+             INTO LOG-MESSAGE
+           END-STRING
+           PERFORM 7000-CALL-LOGGER.
+       3000-POST-ACCOUNTS.
+           MOVE 0 TO M-EOF ACCT-OPEN
+           PERFORM 3100-READ-ACCOUNT
+           IF M-EOF = 0 PERFORM 3400-START-ACCOUNT END-IF
+           PERFORM 3200-READ-TX
+           PERFORM UNTIL T-EOF = 1
+              PERFORM 3300-CLASSIFY-TX
+              PERFORM 3200-READ-TX
+           END-PERFORM
+           PERFORM 3600-CLOSE-ACCOUNT
+           PERFORM UNTIL M-EOF = 1
+              PERFORM 3100-READ-ACCOUNT
+              IF M-EOF = 0
+                 PERFORM 3400-START-ACCOUNT
+                 PERFORM 3600-CLOSE-ACCOUNT
+              END-IF
+           END-PERFORM
+           DISPLAY 'POST-CONTROL|ACCTS=' ACCT-COUNT '|NOTX=' NOTX-COUNT
+             '|TX=' TX-COUNT '|ACCEPT=' ACCEPT-COUNT
+             '|REJECT=' REJECT-COUNT '|OPENING=' OPENING-TOTAL
+             '|CLOSING=' CLOSING-TOTAL '|CREDIT=' CREDIT-TOTAL
+             '|DEBIT=' DEBIT-TOTAL.
+       3100-READ-ACCOUNT.
+           MOVE 0 TO M-SIZE M-DONE
+           MOVE SPACES TO M-RAW
+           PERFORM UNTIL M-DONE = 1
+              READ M-FILE
+              EVALUATE M-STAT
+                WHEN '10'
+                  IF M-SIZE NOT = 0 PERFORM 9200-CONTRACT-FAIL END-IF
+                  MOVE 1 TO M-EOF M-DONE
+                WHEN '00'
+                  IF M-BYTE = X'0A'
+                     MOVE 1 TO M-DONE
+                  ELSE
+                     IF M-SIZE = 47 PERFORM 9200-CONTRACT-FAIL END-IF
+                     ADD 1 TO M-SIZE
+                     MOVE M-BYTE TO M-RAW(M-SIZE:1)
+                  END-IF
+                WHEN OTHER
+                  PERFORM 9100-SYSTEM-FAIL
+              END-EVALUATE
+           END-PERFORM
+           IF M-EOF = 0
+              IF M-RAW(1:10) IS NOT NUMERIC OR
+                 M-RAW(11:8) IS NOT NUMERIC OR
+                 M-RAW(19:3) NOT = 'JPY' OR
+                 (M-RAW(22:1) NOT = '+' AND M-RAW(22:1) NOT = '-') OR
+                 M-RAW(23:13) IS NOT NUMERIC OR
+                 (M-RAW(36:1) NOT = 'A' AND M-RAW(36:1) NOT = 'F'
+                    AND M-RAW(36:1) NOT = 'C') OR
+                 M-RAW(37:8) NOT = RUN-DATE OR
+                 M-RAW(45:3) NOT = '001'
+                 PERFORM 9200-CONTRACT-FAIL
+              END-IF
+              IF M-RAW(1:10) NOT > M-PREV
+                 PERFORM 9200-CONTRACT-FAIL
+              END-IF
+           END-IF.
+       3200-READ-TX.
+           MOVE 0 TO T-SIZE T-DONE
+           MOVE SPACES TO T-RAW
+           PERFORM UNTIL T-DONE = 1
+              READ T-FILE
+              EVALUATE T-STAT
+                WHEN '10'
+                  IF T-SIZE NOT = 0 PERFORM 9200-CONTRACT-FAIL END-IF
+                  MOVE 1 TO T-EOF T-DONE
+                WHEN '00'
+                  IF T-BYTE = X'0A'
+                     MOVE 1 TO T-DONE
+                  ELSE
+                     IF T-SIZE = 55 PERFORM 9200-CONTRACT-FAIL END-IF
+                     ADD 1 TO T-SIZE
+                     MOVE T-BYTE TO T-RAW(T-SIZE:1)
+                  END-IF
+                WHEN OTHER
+                  PERFORM 9100-SYSTEM-FAIL
+              END-EVALUATE
+           END-PERFORM
+           IF T-EOF = 0
+              IF T-RAW(1:10) IS NOT NUMERIC OR
+                 T-RAW(27:8) NOT = RUN-DATE OR
+                 T-RAW(35:6) IS NOT NUMERIC OR
+                 T-RAW(42:13) IS NOT NUMERIC
+                 PERFORM 9200-CONTRACT-FAIL
+              END-IF
+              IF T-RAW(1:10) < T-PREV-ACCT OR
+                 (T-RAW(1:10) = T-PREV-ACCT AND
+                    (T-RAW(35:6) < T-PREV-SEQ OR
+                       (T-RAW(35:6) = T-PREV-SEQ AND
+                          T-RAW(11:16) NOT > T-PREV-ID)))
+                 PERFORM 9200-CONTRACT-FAIL
+              END-IF
+              MOVE T-RAW(1:10) TO T-PREV-ACCT
+              MOVE T-RAW(35:6) TO T-PREV-SEQ
+              MOVE T-RAW(11:16) TO T-PREV-ID
+           END-IF.
+       3300-CLASSIFY-TX.
+           MOVE T-RAW TO TRANSACTION-RECORD
+           MOVE 0 TO WS-TX-DONE
+           PERFORM UNTIL WS-TX-DONE = 1
+              IF ACCT-OPEN = 0
+                 IF M-EOF = 1
+                    PERFORM 5000-ORPHAN-TX
+                    MOVE 1 TO WS-TX-DONE
+                 ELSE
+                    PERFORM 3100-READ-ACCOUNT
+                    IF M-EOF = 1
+                       PERFORM 5000-ORPHAN-TX
+                       MOVE 1 TO WS-TX-DONE
+                    ELSE
+                       PERFORM 3400-START-ACCOUNT
+                    END-IF
+                 END-IF
+              ELSE
+                 IF CUR-ACCT-ID < TX-ACCOUNT-ID
+                    PERFORM 3600-CLOSE-ACCOUNT
+                 ELSE
+                    IF CUR-ACCT-ID = TX-ACCOUNT-ID
+                       PERFORM 6000-POST-TX
+                    ELSE
+                       PERFORM 5000-ORPHAN-TX
+                    END-IF
+                    MOVE 1 TO WS-TX-DONE
+                 END-IF
+              END-IF
+           END-PERFORM.
+       3400-START-ACCOUNT.
+           MOVE M-RAW TO ACCOUNT-RECORD
+           MOVE ACCOUNT-ID TO CUR-ACCT-ID M-PREV
+           MOVE ACCOUNT-STATUS TO CUR-STATUS
+           COMPUTE CUR-BAL = FUNCTION NUMVAL(OPENING-BALANCE)
+           IF BALANCE-SIGN = '-'
+              COMPUTE CUR-BAL = 0 - CUR-BAL
+           END-IF
+           ADD CUR-BAL TO OPENING-TOTAL
+             ON SIZE ERROR PERFORM 9100-SYSTEM-FAIL
+           END-ADD
+           MOVE 0 TO ACCT-HAD-TX
+           MOVE 1 TO ACCT-OPEN
+           ADD 1 TO ACCT-COUNT
+             ON SIZE ERROR PERFORM 9100-SYSTEM-FAIL
+           END-ADD.
+       3600-CLOSE-ACCOUNT.
+           IF ACCT-OPEN = 1
+              IF ACCT-HAD-TX = 0
+                 ADD 1 TO NOTX-COUNT
+                   ON SIZE ERROR PERFORM 9100-SYSTEM-FAIL
+                 END-ADD
+              END-IF
+              MOVE CUR-BAL TO BAL-EDIT
+              MOVE '+' TO SIGN-EDIT
+              IF CUR-BAL < 0
+                 MOVE '-' TO SIGN-EDIT
+                 COMPUTE BAL-EDIT = 0 - CUR-BAL
+              END-IF
+              DISPLAY 'ACCT|' CUR-ACCT-ID '|' SIGN-EDIT BAL-EDIT
+              MOVE M-RAW TO L-OUT
+              MOVE SIGN-EDIT TO L-OUT(22:1)
+              MOVE BAL-EDIT TO L-OUT(23:13)
+              WRITE L-OUT
+              IF L-STAT NOT = '00' PERFORM 9100-SYSTEM-FAIL END-IF
+              ADD CUR-BAL TO CLOSING-TOTAL
+                ON SIZE ERROR PERFORM 9100-SYSTEM-FAIL
+              END-ADD
+              MOVE 0 TO ACCT-OPEN
+           END-IF.
+       5000-ORPHAN-TX.
+           ADD 1 TO TX-COUNT
+             ON SIZE ERROR PERFORM 9100-SYSTEM-FAIL
+           END-ADD
+           ADD 1 TO REJECT-COUNT
+             ON SIZE ERROR PERFORM 9100-SYSTEM-FAIL
+           END-ADD
+           MOVE 1 TO BIZ-FLAG
+           DISPLAY 'POST|' TX-ACCOUNT-ID '|' TRANSACTION-ID
+             '|REJECT|NO-ACCOUNT'
+           MOVE 'TXPOST' TO LOG-EVENT
+           MOVE 'W' TO LOG-SEVERITY
+           MOVE SPACES TO LOG-MESSAGE
+           STRING TRANSACTION-ID DELIMITED BY SIZE
+             ' REJECT NO-ACCOUNT' DELIMITED BY SIZE
+             INTO LOG-MESSAGE
+           END-STRING
+           PERFORM 7000-CALL-LOGGER.
+       6000-POST-TX.
+           MOVE 1 TO ACCT-HAD-TX
+           ADD 1 TO TX-COUNT
+             ON SIZE ERROR PERFORM 9100-SYSTEM-FAIL
+           END-ADD
+           IF TRANSACTION-STATUS NOT = 'N'
+              MOVE 'TX-STATUS' TO WS-REASON-OUT
+              PERFORM 6100-REJECT-TX
+           ELSE
+              IF CUR-STATUS NOT = 'A'
+                 MOVE 'ACCOUNT-STATUS' TO WS-REASON-OUT
+                 PERFORM 6100-REJECT-TX
+              ELSE
+                 PERFORM 6200-APPLY-AMOUNT
+              END-IF
+           END-IF.
+       6100-REJECT-TX.
+           ADD 1 TO REJECT-COUNT
+             ON SIZE ERROR PERFORM 9100-SYSTEM-FAIL
+           END-ADD
+           MOVE 1 TO BIZ-FLAG
+           DISPLAY 'POST|' TX-ACCOUNT-ID '|' TRANSACTION-ID
+             '|REJECT|' FUNCTION TRIM(WS-REASON-OUT)
+           MOVE 'TXPOST' TO LOG-EVENT
+           MOVE 'W' TO LOG-SEVERITY
+           MOVE SPACES TO LOG-MESSAGE
+           STRING TRANSACTION-ID DELIMITED BY SIZE ' REJECT '
+             DELIMITED BY SIZE FUNCTION TRIM(WS-REASON-OUT)
+             DELIMITED BY SIZE INTO LOG-MESSAGE
+           END-STRING
+           PERFORM 7000-CALL-LOGGER.
+       6200-APPLY-AMOUNT.
+           MOVE LENGTH OF AMT-CALC-INTERFACE TO AMT-IFACE-LENGTH
+           MOVE '001' TO AMT-IFACE-VERSION
+           MOVE 'PST' TO AMT-IFACE-OP
+           MOVE TRANSACTION-DIRECTION TO AMT-DIRECTION
+           MOVE TRANSACTION-AMOUNT TO AMT-AMOUNT-IN
+           MOVE CUR-BAL TO AMT-BALANCE
+           MOVE SPACES TO AMT-REASON
+           CALL 'AMTCALC' USING AMT-CALC-INTERFACE RETURNING WS-SUB-RC
+           EVALUATE WS-SUB-RC
+             WHEN 8 PERFORM 9000-INTERFACE-FAIL
+             WHEN 12 PERFORM 9100-SYSTEM-FAIL
+           END-EVALUATE
+           IF WS-SUB-RC = 0
+              MOVE AMT-BALANCE TO CUR-BAL
+              COMPUTE WS-AMOUNT = FUNCTION NUMVAL(TRANSACTION-AMOUNT)
+              IF TRANSACTION-DIRECTION = 'C'
+                 ADD WS-AMOUNT TO CREDIT-TOTAL
+                   ON SIZE ERROR PERFORM 9100-SYSTEM-FAIL
+                 END-ADD
+              ELSE
+                 ADD WS-AMOUNT TO DEBIT-TOTAL
+                   ON SIZE ERROR PERFORM 9100-SYSTEM-FAIL
+                 END-ADD
+              END-IF
+              ADD 1 TO ACCEPT-COUNT
+                ON SIZE ERROR PERFORM 9100-SYSTEM-FAIL
+              END-ADD
+              MOVE CUR-BAL TO BAL-EDIT
+              MOVE '+' TO SIGN-EDIT
+              IF CUR-BAL < 0
+                 MOVE '-' TO SIGN-EDIT
+                 COMPUTE BAL-EDIT = 0 - CUR-BAL
+              END-IF
+              DISPLAY 'POST|' TX-ACCOUNT-ID '|' TRANSACTION-ID
+                '|ACCEPT|' SIGN-EDIT BAL-EDIT
+              MOVE 'TXPOST' TO LOG-EVENT
+              MOVE 'I' TO LOG-SEVERITY
+              MOVE SPACES TO LOG-MESSAGE
+              STRING TRANSACTION-ID DELIMITED BY SIZE ' ACCEPT'
+                DELIMITED BY SIZE INTO LOG-MESSAGE
+              END-STRING
+           ELSE
+              MOVE AMT-REASON TO WS-REASON-OUT
+              MOVE 1 TO BIZ-FLAG
+              ADD 1 TO REJECT-COUNT
+                ON SIZE ERROR PERFORM 9100-SYSTEM-FAIL
+              END-ADD
+              DISPLAY 'POST|' TX-ACCOUNT-ID '|' TRANSACTION-ID
+                '|REJECT|' FUNCTION TRIM(WS-REASON-OUT)
+              MOVE 'TXPOST' TO LOG-EVENT
+              MOVE 'W' TO LOG-SEVERITY
+              MOVE SPACES TO LOG-MESSAGE
+              STRING TRANSACTION-ID DELIMITED BY SIZE ' REJECT '
+                DELIMITED BY SIZE FUNCTION TRIM(WS-REASON-OUT)
+                DELIMITED BY SIZE INTO LOG-MESSAGE
+              END-STRING
+           END-IF
+           PERFORM 7000-CALL-LOGGER.
+       7000-CALL-LOGGER.
+           MOVE LENGTH OF LOG-INTERFACE TO LOG-IFACE-LENGTH
+           MOVE '001' TO LOG-IFACE-VERSION
+           CALL 'LOGGER' USING BY CONTENT LOG-INTERFACE
+             RETURNING WS-SUB-RC
+           IF WS-SUB-RC NOT = 0
+              PERFORM 9100-SYSTEM-FAIL
+           END-IF.
+       8000-FINISH.
+           MOVE 'JOBEND' TO LOG-EVENT
+           IF BIZ-FLAG = 1
+              MOVE 'W' TO LOG-SEVERITY
+           ELSE
+              MOVE 'I' TO LOG-SEVERITY
+           END-IF
+           MOVE SPACES TO LOG-MESSAGE
+           STRING 'ACCEPT=' DELIMITED BY SIZE ACCEPT-COUNT
+             DELIMITED BY SIZE ' REJECT=' DELIMITED BY SIZE
+             REJECT-COUNT DELIMITED BY SIZE INTO LOG-MESSAGE
+           END-STRING
+           PERFORM 7000-CALL-LOGGER
+           CLOSE C-FILE
+           IF C-STAT NOT = '00' PERFORM 9100-SYSTEM-FAIL END-IF
+           CLOSE M-FILE
+           IF M-STAT NOT = '00' PERFORM 9100-SYSTEM-FAIL END-IF
+           CLOSE T-FILE
+           IF T-STAT NOT = '00' PERFORM 9100-SYSTEM-FAIL END-IF
+           CLOSE LEDGER-OUT
+           IF L-STAT NOT = '00' PERFORM 9100-SYSTEM-FAIL END-IF
+           CLOSE VALID-OUT
+           IF V-STAT NOT = '00' PERFORM 9100-SYSTEM-FAIL END-IF
+           CLOSE REJECT-OUT
+           IF R-STAT NOT = '00' PERFORM 9100-SYSTEM-FAIL END-IF
+           MOVE 0 TO RETURN-CODE
+           IF BIZ-FLAG = 1 MOVE 4 TO RETURN-CODE END-IF
+           GOBACK.
+       9000-INTERFACE-FAIL.
+           DISPLAY 'INTERFACE-MISMATCH' UPON STDERR
+           MOVE 8 TO RETURN-CODE
+           STOP RUN.
+       9100-SYSTEM-FAIL.
+           DISPLAY 'SYSTEM-FAIL' UPON STDERR
+           MOVE 12 TO RETURN-CODE
+           STOP RUN.
+       9200-CONTRACT-FAIL.
+           DISPLAY 'CONTRACT-FAIL' UPON STDERR
+           MOVE 8 TO RETURN-CODE
+           STOP RUN.

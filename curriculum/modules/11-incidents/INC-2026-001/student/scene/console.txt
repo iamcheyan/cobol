@@ -1,0 +1,5 @@
+JOB001 INFO: start
+JOB002 INFO: start
+JOB002 ERROR: validator failed rc=8
+JOB002 ERROR: business failure rc=8
+nightly failed rc=8; forensic scene preserved at /tmp/m11-scenes/INC-2026-001-out

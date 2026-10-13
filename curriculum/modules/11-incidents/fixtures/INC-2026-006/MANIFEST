@@ -1,0 +1,9 @@
+business_date=20261009
+layout_transaction=001
+layout_account=001
+layout_customer=001
+file transaction.dat dca653c78e57056f6d028ec4078ae909069c2882377d7d56e2c8cad3372a648d
+control_received=4
+control_credit_total=625
+control_debit_total=200
+control_closing_total=1475

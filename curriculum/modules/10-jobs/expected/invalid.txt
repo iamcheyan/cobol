@@ -1,0 +1,3 @@
+invalid-short-record=8
+invalid-long-record=8
+invalid-bad-digit=8

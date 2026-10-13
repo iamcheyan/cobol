@@ -1,0 +1,114 @@
+==== crash at before-db-commit ====
+JOB001 INFO: start
+JOB002 INFO: start
+JOB003 INFO: start
+JOB004 INFO: start
+JOB005 INFO: start
+JOB006 INFO: start
+JOB006 INFO: injected crash during DB commit
+JOB006 WARN: injected crash (rc=97)
+injected crash (rc=97); state preserved for recovery at /tmp/m10evlab/out-before-db-commit
+crash_rc=97
+JOB001 INFO: resume: already complete (rc=0)
+JOB002 INFO: resume: already complete (rc=4)
+JOB003 INFO: resume: already complete (rc=0)
+JOB004 INFO: resume: already complete (rc=0)
+JOB005 INFO: resume: already complete (rc=4)
+JOB006 INFO: start
+JOB007 INFO: start
+JOB008 INFO: start
+JOB009 INFO: start
+recover_rc=4
+ledger_lines=4 committed=yes complete=yes current=lab-before-db-commit
+==== crash at mid-db-commit ====
+JOB001 INFO: start
+JOB002 INFO: start
+JOB003 INFO: start
+JOB004 INFO: start
+JOB005 INFO: start
+JOB006 INFO: start
+JOB006 INFO: injected crash during DB commit
+JOB006 WARN: injected crash (rc=97)
+injected crash (rc=97); state preserved for recovery at /tmp/m10evlab/out-mid-db-commit
+crash_rc=97
+JOB001 INFO: resume: already complete (rc=0)
+JOB002 INFO: resume: already complete (rc=4)
+JOB003 INFO: resume: already complete (rc=0)
+JOB004 INFO: resume: already complete (rc=0)
+JOB005 INFO: resume: already complete (rc=4)
+JOB006 INFO: start
+JOB007 INFO: start
+JOB008 INFO: start
+JOB009 INFO: start
+recover_rc=4
+ledger_lines=4 committed=yes complete=yes current=lab-mid-db-commit
+==== crash at after-db-commit ====
+JOB001 INFO: start
+JOB002 INFO: start
+JOB003 INFO: start
+JOB004 INFO: start
+JOB005 INFO: start
+JOB006 INFO: start
+JOB006 INFO: injected crash during DB commit
+JOB006 WARN: injected crash (rc=97)
+injected crash (rc=97); state preserved for recovery at /tmp/m10evlab/out-after-db-commit
+crash_rc=97
+JOB001 INFO: resume: already complete (rc=0)
+JOB002 INFO: resume: already complete (rc=4)
+JOB003 INFO: resume: already complete (rc=0)
+JOB004 INFO: resume: already complete (rc=0)
+JOB005 INFO: resume: already complete (rc=4)
+JOB006 INFO: start
+JOB007 INFO: start
+JOB008 INFO: start
+JOB009 INFO: start
+recover_rc=4
+ledger_lines=4 committed=yes complete=yes current=lab-after-db-commit
+==== crash at during-publish ====
+JOB001 INFO: start
+JOB002 INFO: start
+JOB003 INFO: start
+JOB004 INFO: start
+JOB005 INFO: start
+JOB006 INFO: start
+JOB007 INFO: start
+JOB008 INFO: start
+JOB008 INFO: injected crash during publish (staged, not switched)
+JOB008 WARN: injected crash (rc=97)
+injected crash (rc=97); state preserved for recovery at /tmp/m10evlab/out-during-publish
+crash_rc=97
+JOB001 INFO: resume: already complete (rc=0)
+JOB002 INFO: resume: already complete (rc=4)
+JOB003 INFO: resume: already complete (rc=0)
+JOB004 INFO: resume: already complete (rc=0)
+JOB005 INFO: resume: already complete (rc=4)
+JOB006 INFO: resume: already complete (rc=0)
+JOB007 INFO: resume: already complete (rc=0)
+JOB008 INFO: start
+JOB009 INFO: start
+recover_rc=4
+ledger_lines=4 committed=yes complete=yes current=lab-during-publish
+==== crash at after-publish ====
+JOB001 INFO: start
+JOB002 INFO: start
+JOB003 INFO: start
+JOB004 INFO: start
+JOB005 INFO: start
+JOB006 INFO: start
+JOB007 INFO: start
+JOB008 INFO: start
+JOB008 WARN: injected crash after publish, before completion
+injected crash (rc=97); state preserved for recovery at /tmp/m10evlab/out-after-publish
+crash_rc=97
+JOB001 INFO: resume: already complete (rc=0)
+JOB002 INFO: resume: already complete (rc=4)
+JOB003 INFO: resume: already complete (rc=0)
+JOB004 INFO: resume: already complete (rc=0)
+JOB005 INFO: resume: already complete (rc=4)
+JOB006 INFO: resume: already complete (rc=0)
+JOB007 INFO: resume: already complete (rc=0)
+JOB008 INFO: resume: already complete (rc=0)
+JOB009 INFO: start
+recover_rc=4
+ledger_lines=4 committed=yes complete=yes current=lab-after-publish
+PASS: all crash boundaries recovered consistently

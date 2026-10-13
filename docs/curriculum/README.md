@@ -7,4 +7,4 @@
 3. [银行案例、数据契约与 JOB Flow](BANK-SYSTEM.md)
 4. [材料要求、测试和毕业验收](AUTHORING-STANDARD.md)
 
-课程已开始按阶段实施，实际代码、验收入口及未完成项见 [课程制作入口](../../curriculum/README.md)。旧 `course/` 内容及未提交的数据补丁属于历史素材；不得据此宣称新课程已完成。按技术验证→模块07标杆→基础链→工程链→事故与毕业的顺序推进；单个实验通过不等于模块完成。
+课程已开始按阶段实施，实际代码、验收入口及未完成项见 [课程制作入口](../../curriculum/README.md)。旧版 00–29 课归档在 [`extensions/legacy-workshop/`](../../extensions/legacy-workshop/README.md)；不得据此宣称新课程已完成。按技术验证→模块07标杆→基础链→工程链→事故与毕业的顺序推进；单个实验通过不等于模块完成。

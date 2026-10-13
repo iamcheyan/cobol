@@ -1,0 +1,69 @@
+# A01 incident reproduction (module 11) — 2026-10-10T01:35:38Z
+# platform: Linux x86_64 | cobc (GnuCOBOL) 3.2.0 | python3 3.13.5
+# note: the snapshot now publishes CUSTOMER v1 STATUS as customer-status.txt (was customer-class.txt);
+#       the 27-byte CUSTOMER v1 byte 27 is the record status (A/D), never a classification.
+# note: on 2026-10-10 the student incident dirs were renamed from root-cause names
+#       (inc-0X-<root-cause>) to neutral event IDs INC-2026-00X; mapping in INSTRUCTOR.md.
+#       Raw RCs below are unchanged by the rename (post-rename rerun in A06).
+# command pattern: bash <module>/system/scripts/run.sh --input fixtures/<case> --output ... --db ... --business-date 20261009 --run-id as-found --keep-scene
+
+=== normal ===
+raw_rc=0
+published=yes
+-- key log lines --
+
+=== INC-2026-001 ===
+raw_rc=8
+published=no
+-- key log lines --
+BANKVAL: structural error, batch failed
+2026-10-10T01:35:39Z | JOB002 | ERROR | validator failed rc=8
+2026-10-10T01:35:39Z | JOB002 | ERROR | business failure rc=8
+
+=== INC-2026-002 ===
+raw_rc=0
+published=yes
+-- key log lines --
+
+=== INC-2026-003 ===
+raw_rc=12
+published=no
+-- key log lines --
+2026-10-10T01:35:40Z | JOB001 | ERROR | checksum mismatch for 'transaction.dat'
+2026-10-10T01:35:40Z | JOB001 | ERROR | system failure rc=12
+
+=== INC-2026-004 ===
+raw_rc=8
+published=no
+-- key log lines --
+M11MATCH: structural error, batch failed
+2026-10-10T01:35:41Z | JOB005 | ERROR | match failed rc=8
+2026-10-10T01:35:41Z | JOB005 | ERROR | business failure rc=8
+
+=== INC-2026-006 ===
+raw_rc=0
+published=yes
+-- key log lines --
+
+=== INC-2026-005 (PATH shim: failing mktemp) ===
+raw_rc=12
+published=no
+-- key log lines --
+2026-10-10T01:35:42Z | JOB003 | ERROR | cannot create sort workspace (temp space/permission)
+2026-10-10T01:35:42Z | JOB003 | ERROR | system failure rc=12
+
+=== normal control totals (independently generated in expected/) ===
+  received=4
+  validate_accepted=4
+  validate_rejected=0
+  batch_accepted=4
+  batch_rejected=0
+  ledger_applied=4
+  accounts=3
+  opening_total=1050
+  credit_total=625
+  debit_total=200
+  closing_total=1475
+  customer status extract (expected/customer-v1.txt):
+    STATUS|00000001|A
+    STATUS|00000002|D

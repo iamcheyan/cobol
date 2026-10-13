@@ -1,4 +1,4 @@
-.PHONY: all build check course-check run clean run-csv run-fixed run-table run-report
+.PHONY: all build check course-check legacy-course-check run clean run-csv run-fixed run-table run-report
 
 COBC = cobc
 BINS = INPUTCSV FIXEDREC TBLSRCH BATCHRPT
@@ -16,12 +16,27 @@ check:
 	@echo "✓ All COBOL programs passed syntax check!"
 
 course-check:
-	@echo "=== Checking GNUCOBOL course examples ==="
-	@find course/lessons -name '*.COB' -exec $(COBC) -I course/lessons/14-copybooks-redefines -fsyntax-only {} +
-	@bash -n course/lessons/22-bash-build-run/run.sh
-	@bash -n course/lessons/23-bash-tests-batch/test.sh
-	@bash -n course/lessons/24-bash-pipelines-scheduling/run-pipeline.sh
-	@course/lessons/23-bash-tests-batch/test.sh
+	@echo "=== Checking CPR #31 course and Lesson 01 ==="
+	@set -eu; for lesson in lessons/[0-9][0-9]; do \
+		test -f "$$lesson/lesson_$${lesson##*/}.cob"; \
+		test -f "$$lesson/README.md"; \
+		test -f "$$lesson/exercise.md"; \
+		test -f "$$lesson/answer.md"; \
+	done
+	@tmp=$$(mktemp -d); trap 'rm -rf "$$tmp"' EXIT; \
+		$(COBC) -fsyntax-only lessons/01/lesson_01.cob; \
+		$(COBC) -x -Wall -o "$$tmp/lesson_01" lessons/01/lesson_01.cob; \
+		output=$$("$$tmp/lesson_01"); \
+		test "$$output" = 'Hello, COBOL!'; \
+		printf '%s\n' "$$output"
+
+legacy-course-check:
+	@echo "=== Checking the legacy workshop lessons ==="
+	@find extensions/legacy-workshop/lessons -name '*.COB' -exec $(COBC) -I extensions/legacy-workshop/lessons/14-copybooks-redefines -fsyntax-only {} +
+	@bash -n extensions/legacy-workshop/lessons/22-bash-build-run/run.sh
+	@bash -n extensions/legacy-workshop/lessons/23-bash-tests-batch/test.sh
+	@bash -n extensions/legacy-workshop/lessons/24-bash-pipelines-scheduling/run-pipeline.sh
+	@extensions/legacy-workshop/lessons/23-bash-tests-batch/test.sh
 
 INPUTCSV: INPUTCSV.COB EMP-REC.CPY
 	$(COBC) -x -o $@ $<

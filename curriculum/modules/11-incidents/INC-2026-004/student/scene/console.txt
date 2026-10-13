@@ -1,0 +1,8 @@
+JOB001 INFO: start
+JOB002 INFO: start
+JOB003 INFO: start
+JOB004 INFO: start
+JOB005 INFO: start
+JOB005 ERROR: match failed rc=8
+JOB005 ERROR: business failure rc=8
+nightly failed rc=8; forensic scene preserved at /tmp/m11-scenes/INC-2026-004-out

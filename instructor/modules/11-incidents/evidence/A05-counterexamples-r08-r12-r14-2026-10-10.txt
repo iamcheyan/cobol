@@ -1,0 +1,47 @@
+# A05 counter-examples (R08 / R12 / R14, module 11) — 2026-10-10
+# platform: Linux x86_64 | cobc (GnuCOBOL) 3.2.0 | python3 3.13.5
+# purpose: capture the reviewer's counter-examples BEFORE the fix, so the
+#          after-fix evidence (A06) can be compared against real failures.
+
+## R14 · student-visible incident directory names answer the investigation
+
+$ ls -1 curriculum/modules/11-incidents | grep '^inc-'
+inc-01-bad-digit
+inc-02-dup-txid
+inc-03-truncated
+inc-04-unsorted-master
+inc-05-resource
+inc-06-wrong-amount
+
+# and the module README itself prints the root cause in the first column:
+#   | 非法数字 | inc-01-bad-digit/ | ... |
+#   | DB 唯一约束 | inc-02-dup-txid/ | ... |
+#   | 0 字节文件 | inc-03-truncated/ | ... |
+#   | Master 逆序 | inc-04-unsorted-master/ | ... |
+#   | 系统资源失败 | inc-05-resource/ | ... |
+#   | RC0 但业务错误 | inc-06-wrong-amount/ | ... |
+
+## R08 · ENTERPRISE-CUSTOMER-V1 means three incompatible records
+
+$ wc -l \
+    curriculum/modules/07-matching/labs/05-large-record/copybooks/ENTERPRISE-CUSTOMER-V1.CPY \
+    curriculum/modules/11-incidents/maintenance/copybooks/ENTERPRISE-CUSTOMER-V1.CPY \
+    curriculum/modules/12-capstone/system/copybooks/ENTERPRISE-CUSTOMER-V1.CPY
+  186 .../07-matching/labs/05-large-record/copybooks/ENTERPRISE-CUSTOMER-V1.CPY   (1778 bytes / 175 fields)
+   19 .../11-incidents/maintenance/copybooks/ENTERPRISE-CUSTOMER-V1.CPY           (23 bytes)
+   21 .../12-capstone/system/copybooks/ENTERPRISE-CUSTOMER-V1.CPY                 (31 bytes)
+
+# module 11's own layout is 23 bytes and is NOT the canonical 1778-byte record.
+
+## R12 · maintenance README tells the student to run a Python script with bash
+
+$ M11CUST_INPUT=curriculum/modules/11-incidents/fixtures/enterprise-customer/customer.v1 \
+    bash instructor/modules/11-incidents/maintenance/migrate-customer.py \
+    to-v2 curriculum/modules/11-incidents/fixtures/enterprise-customer/customer.v1 /tmp/ent.v2
+# bash: migrate-customer.py: line 24: Enterprise customer layout v1 <-> v2 migration ...
+# bash: migrate-customer.py: line 25: from: command not found
+# ...
+raw_rc=2
+
+$ M11CUST_INPUT=... python3 .../migrate-customer.py to-v2 .../customer.v1 /tmp/ent.v2
+raw_rc=0

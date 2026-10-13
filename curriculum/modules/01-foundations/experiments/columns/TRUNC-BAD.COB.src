@@ -1,0 +1,15 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. TRUNC-BAD.
+      *> Fixed-format column experiment: the COMPUTE line below is
+      *> 73 columns wide. The digit at column 73 is deliberately
+      *> outside the source area and becomes invisible to the
+      *> compiler, silently turning the literal 111110 into 11111.
+      *> Compare TRUNC-GOOD.COB and run: make it fit in 72 columns.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 WS-BASE PIC 9(9) VALUE 1.
+       01 WS-TOTAL-AMOUNT-BALANCE-DISPLAY-XYZ PIC 9(38) VALUE 0.
+       PROCEDURE DIVISION.
+           COMPUTE WS-TOTAL-AMOUNT-BALANCE-DISPLAY-XYZ = WS-BASE + 111110
+           DISPLAY 'RESULT=' WS-TOTAL-AMOUNT-BALANCE-DISPLAY-XYZ
+           GOBACK.

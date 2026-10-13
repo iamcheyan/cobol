@@ -1,0 +1,15 @@
+business_date=20261010
+run_id=night-20261010-01
+scheduler=local-bash-flow (not JP1/z/OS)
+job   status  rc
+JOB001 DONE 0
+JOB002 DONE 4
+JOB003 FAIL 8
+JOB004 SKIPPED -
+JOB005 SKIPPED -
+JOB006 SKIPPED -
+JOB007 SKIPPED -
+JOB008 SKIPPED -
+JOB009 SKIPPED -
+publish=CURRENT not updated; no closing-master.dat
+db_ledger_rows=0

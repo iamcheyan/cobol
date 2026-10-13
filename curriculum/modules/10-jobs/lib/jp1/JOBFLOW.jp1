@@ -1,0 +1,35 @@
+# ILLUSTRATIVE JP1/IM NET DEFINITION - READING EXERCISE ONLY (10.5)
+#
+# This is a teaching sketch of an enterprise job scheduler (Hitachi JP1)
+# net definition.  It was NOT loaded into any JP1/AJS manager.  No real
+# JP1 product was available during authoring.  Use it only to map the
+# scheduler vocabulary onto jobs/nightly.sh.
+#
+# JP1 concept            -> local course equivalent
+#   net (ajsnet)          -> scripts/run.sh (one nightly net per day)
+#   job (unit)            -> jobs/jobNNN-*.sh
+#   start condition       -> job marker state/<JOB>.done (dependency)
+#   "judgement of end"    -> RC policy in lib/common.sh (0/4 pass, 8/12 stop)
+#   macro variables       -> --business-date, --run-id, --db, env overrides
+#   rerun / restart       -> stage recovery driven by markers + ledger
+
+[NET]
+net_name = BANK-NIGHT
+macro    = {BDATE}, {RUNID}, {DBDIR}
+
+[UNITS]
+BANK001  script=job001-receive.sh     next=BANK002
+BANK002  script=job002-validate.sh    next=BANK003  cond=rc0|rc4
+BANK003  script=job003-sort.sh        next=BANK004
+BANK004  script=job004-db-snapshot.sh next=BANK005
+BANK005  script=job005-match.sh       next=BANK006  cond=rc0|rc4
+BANK006  script=job006-db-apply.sh    next=BANK007
+BANK007  script=job007-control.sh     next=BANK008
+BANK008  script=job008-publish.sh     next=BANK009
+BANK009  script=job009-complete.sh    next=END
+
+[END]
+on_rc0 = net normal end
+on_rc4 = net warning end (downstream released)
+on_rc8 = net business abort (no publish)
+on_rc12= net system abort (no publish)

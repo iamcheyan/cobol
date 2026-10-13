@@ -1,0 +1,22 @@
+{
+  "scope": "GNUCOBOL binary byte-order primitive probe, not B04 layout acceptance",
+  "source": "       identification division.\n       program-id. binary-probe.\n       data division.\n       working-storage section.\n       01 comp-value pic s9(9) comp.\n       01 comp-raw redefines comp-value pic x(4).\n       01 native-value pic s9(9) comp-5.\n       01 native-raw redefines native-value pic x(4).\n       01 byte-number binary-long.\n       01 byte-value pic 999.\n       procedure division.\n           move 16909060 to comp-value native-value\n           perform varying byte-number from 1 by 1\n               until byte-number > 4\n               compute byte-value =\n                   function ord(comp-raw(byte-number:1)) - 1\n               display \"COMP:\" byte-value\n               compute byte-value =\n                   function ord(native-raw(byte-number:1)) - 1\n               display \"COMP5:\" byte-value\n           end-perform\n           goback.\n",
+  "value": 16909060,
+  "observed_bytes": {
+    "COMP": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "COMP5": [
+      4,
+      3,
+      2,
+      1
+    ]
+  },
+  "raw_rc": 0,
+  "stdout": "COMP:001\nCOMP5:004\nCOMP:002\nCOMP5:003\nCOMP:003\nCOMP5:002\nCOMP:004\nCOMP5:001\n",
+  "compiler": "cobc (GnuCOBOL) 3.2.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nLicense GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\nWritten by Keisuke Nishida, Roger While, Ron Norman, Simon Sobisch, Edward Hart\nBuilt     Sep 09 2024 19:57:37\nPackaged  Jul 28 2023 17:02:56 UTC\nC version \"14.2.0\"\n"
+}

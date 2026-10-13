@@ -1,0 +1,72 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. M06-INDEXED-PROBE.
+      *> Lesson 06.4: GnuCOBOL BDB indexed WRITE / READ / REWRITE /
+      *> DELETE and the status codes for duplicate key, missing key,
+      *> in-process re-open lock and open failure. Reading lab only.
+       ENVIRONMENT DIVISION.
+       INPUT-OUTPUT SECTION.
+       FILE-CONTROL.
+           SELECT IX-FILE ASSIGN TO DYNAMIC IX-PATH
+               ORGANIZATION IS INDEXED ACCESS MODE IS DYNAMIC
+               RECORD KEY IS IX-KEY FILE STATUS IS IX-STATUS.
+           SELECT MISS-FILE ASSIGN TO DYNAMIC MISS-PATH
+               ORGANIZATION IS INDEXED ACCESS MODE IS DYNAMIC
+               RECORD KEY IS MISS-KEY FILE STATUS IS MISS-STATUS.
+       DATA DIVISION.
+       FILE SECTION.
+       FD IX-FILE.
+       01 IX-RECORD.
+          05 IX-KEY PIC X(4).
+          05 IX-VALUE PIC X(4).
+       FD MISS-FILE.
+       01 MISS-RECORD.
+          05 MISS-KEY PIC X(4).
+          05 MISS-VALUE PIC X(4).
+       WORKING-STORAGE SECTION.
+       01 IX-PATH PIC X(4096).
+       01 MISS-PATH PIC X(4096).
+       01 IX-STATUS PIC XX.
+       01 MISS-STATUS PIC XX.
+       PROCEDURE DIVISION.
+       1000-MAIN.
+           ACCEPT IX-PATH FROM ENVIRONMENT 'IX_PATH'
+           ACCEPT MISS-PATH FROM ENVIRONMENT 'IX_MISSING_PATH'
+           OPEN OUTPUT IX-FILE
+           DISPLAY 'CREATE=' IX-STATUS
+           IF IX-STATUS NOT = '00' MOVE 12 TO RETURN-CODE GOBACK END-IF
+           MOVE 'K1' TO IX-KEY
+           MOVE 'V1' TO IX-VALUE
+           WRITE IX-RECORD
+           DISPLAY 'WRITE1=' IX-STATUS
+           WRITE IX-RECORD
+           DISPLAY 'DUPLICATE=' IX-STATUS
+           CLOSE IX-FILE
+           DISPLAY 'CLOSE=' IX-STATUS
+           OPEN I-O IX-FILE
+           DISPLAY 'IO=' IX-STATUS
+           MOVE 'K1' TO IX-KEY
+           READ IX-FILE KEY IS IX-KEY
+           DISPLAY 'READ=' IX-VALUE
+           MOVE 'V2' TO IX-VALUE
+           REWRITE IX-RECORD
+           DISPLAY 'REWRITE=' IX-STATUS
+           MOVE 'K9' TO IX-KEY
+           READ IX-FILE KEY IS IX-KEY
+           DISPLAY 'MISSING=' IX-STATUS
+           MOVE 'K1' TO IX-KEY
+           DELETE IX-FILE
+           DISPLAY 'DELETE=' IX-STATUS
+           MOVE 'K1' TO IX-KEY
+           READ IX-FILE KEY IS IX-KEY
+           DISPLAY 'DELETED-READ=' IX-STATUS
+           OPEN INPUT IX-FILE
+           DISPLAY 'REOPEN=' IX-STATUS
+           CLOSE IX-FILE
+           OPEN INPUT MISS-FILE
+           DISPLAY 'MISS-OPEN=' MISS-STATUS
+           IF MISS-STATUS NOT = '35'
+             MOVE 12 TO RETURN-CODE
+           ELSE
+             MOVE 0 TO RETURN-CODE
+           END-IF
+           GOBACK.

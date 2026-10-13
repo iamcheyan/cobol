@@ -1,0 +1,4 @@
+JOB001 INFO: start
+JOB001 ERROR: checksum mismatch for 'transaction.dat'
+JOB001 ERROR: system failure rc=12
+nightly failed rc=12; forensic scene preserved at /tmp/m11-scenes/INC-2026-003-out

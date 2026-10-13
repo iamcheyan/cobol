@@ -1,0 +1,5 @@
+# A04 module acceptance (curriculum/modules/11-incidents/scripts/check.sh) — 2026-10-10T01:35:01Z
+# command: bash curriculum/modules/11-incidents/scripts/check.sh
+
+PASS: module 11 snapshot, 6 incidents, RED->GREEN, lock/no-clobber
+raw_rc=0

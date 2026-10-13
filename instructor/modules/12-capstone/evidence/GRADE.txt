@@ -1,0 +1,14 @@
+cmd: python3 instructor/modules/12-capstone/grading/grade.py
+=== module 12 capstone grade ===
+submission: /home/tetsuya/development/cobol/curriculum/modules/12-capstone
+rubric total: 100/100 (threshold 80)
+hard gates:
+  [PASS] G6 investigation precedes modification
+  [PASS] G4 version compatibility evidence
+  [PASS] G1 no double debit
+  [PASS] G2 amounts/counts reconcile
+  [PASS] G3 failure publishes nothing
+  [PASS] G5 incident root cause reproducible
+RESULT: PASS
+grade_rc=0
+note: re-run after the CUSTOMER-status / enterprise-classification contract fix

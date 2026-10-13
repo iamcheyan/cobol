@@ -1,0 +1,113 @@
+# A06 post-fix rerun evidence (R08 / R12 / R14, module 11) — 2026-10-10
+# platform: Linux x86_64 | cobc (GnuCOBOL) 3.2.0 | python3 3.13.5
+# purpose: after-fix reruns proving the R08/R12/R14 counter-examples (A05)
+#          are resolved without lowering the original specifications.
+
+## R14 · student incident material no longer names the root cause
+
+$ ls -1 curriculum/modules/11-incidents | grep -E 'INC-2026'
+INC-2026-001
+INC-2026-002
+INC-2026-003
+INC-2026-004
+INC-2026-005
+INC-2026-006
+INC-2026-007
+
+# Event-ID ↔ instructor-code ↔ root-cause mapping now lives only in the
+# instructor pack (INSTRUCTOR.md §2); the student README/DESIGN/fixtures/
+# evidence/expected tables give symptoms only.  Investigation sources and
+# business evidence are unchanged (scene/ logs, source/, copybooks/, input/).
+
+$ grep -rn 'inc-0' curriculum/modules/11-incidents --include='README.md' --include='DESIGN.md'
+# (no root-cause incident slug in student docs)
+
+## R08 · enterprise layout has a distinct name; offsets/PIC/golden verified
+
+# module 11 no longer declares a record called ENTERPRISE-CUSTOMER-V1; the
+# 23/24-byte lab layout is ENTERPRISE-CLASS-V{1,2}.  The canonical
+# 175-field/1778-byte module 07 L4 ENTERPRISE-CUSTOMER-V1 is only referenced.
+
+$ python3 instructor/modules/11-incidents/maintenance/verify-layout.py
+  CUSTOMER v1 (27B, byte 27 = status): PIC/offsets (copybook) OK, width 27B, golden decode OK
+  CUSTOMER v1 (27B, byte 27 = status): GnuCOBOL ADDRESS OF offsets + LENGTH OF OK
+  ENTERPRISE-CLASS v1 (23B): PIC/offsets (copybook) OK, width 23B, golden decode OK
+  ENTERPRISE-CLASS v1 (23B): GnuCOBOL ADDRESS OF offsets + LENGTH OF OK
+  ENTERPRISE-CLASS v2 (24B): PIC/offsets (copybook) OK, width 24B, golden decode OK
+  ENTERPRISE-CLASS v2 (24B): GnuCOBOL ADDRESS OF offsets + LENGTH OF OK
+  canonical module 07 L4 record: * ENTERPRISE-CUSTOMER-V1: 175 leaf fields, fixed 1778 bytes
+  canonical CUSTOMER-CLASSIFICATION X(1): present (same semantics, distinct name)
+PASS: 11.5 layout offsets/PIC/golden bytes and CUSTOMER v1 27B status
+raw_rc=0
+
+## R12 · maintenance README runs the Python migration with python3
+
+$ python3 instructor/modules/11-incidents/maintenance/migrate-customer.py \
+    to-v2 curriculum/modules/11-incidents/fixtures/enterprise-customer/customer.v1 /tmp/ent.v2
+raw_rc=0
+00200000001AALICE     A1
+00200000002ABOB       B1
+$ M11CUST_INPUT=/tmp/ent.v2 M11CUST_EXTRACT=/tmp/class.v2 M11CUST_REPORT=/tmp/rep.v2 /tmp/m11cust2
+raw_rc=0
+CLASS|00000001|A1
+CLASS|00000002|B1
+$ M11CUST_INPUT=.../fixtures/normal/customer_seed.dat ... /tmp/m11cust
+raw_rc=0
+STATUS|00000001|A
+STATUS|00000002|D
+
+# The README no longer uses `bash <python>` (that gave raw_rc=2 / 127).
+
+## R12 · coverage gap filled: INC-2026-007 record length/misalignment
+
+$ awk '{print NR": "length($0)}' INC-2026-007/student/input/transaction.dat
+1: 54
+2: 55
+3: 55
+4: 55
+$ bash curriculum/modules/11-incidents/INC-2026-007/student/run.sh /tmp/inc007-scene /tmp/inc007-db
+JOB001 INFO: start
+JOB002 INFO: start
+JOB002 ERROR: validator failed rc=8
+JOB002 ERROR: business failure rc=8
+nightly failed rc=8; forensic scene preserved at /tmp/inc007-scene
+reproduced rc=8  (logs under /tmp/inc007-scene/logs)
+raw_rc=8 ; publish/as-found exists = no (expected: no publish)
+$ grep 'record length' /tmp/inc007-scene/logs/JOB002.log
+BANKVAL: record length 0054 is not 55
+
+# Syllabus 11.1–11.5 correspondence matrix: instructor/modules/11-incidents/COVERAGE.md
+
+## Module 11 acceptance entry point
+
+$ bash curriculum/modules/11-incidents/scripts/check.sh
+PASS: module 11 snapshot, incidents, layout offsets/PIC/golden, RED->GREEN, lock/no-clobber
+raw_rc=0
+
+## Maintenance 11.5 acceptance (adds offset/PIC/golden step)
+
+$ bash instructor/modules/11-incidents/maintenance/check.sh
+  ... (verify-layout.py PASS; migration/rollback/parallel/exception checks) ...
+PASS: maintenance 11.5 enterprise v1/v2 migration, rollback, parallel
+      validation and CUSTOMER v1 status regression
+raw_rc=0
+
+## RED->GREEN after the rename (instructor codes inc-02 / inc-06)
+
+$ bash instructor/modules/11-incidents/tools/red-green.sh /tmp/m11-rg
+--- RED: as-found snapshot (defect) --- rc=0 publish=yes
+--- GREEN: apply inc-02 fix (lib/db.py) --- rc=8 publish=no
+--- RED: as-found snapshot (defect) --- rc=0 publish=yes (wrong closing_total=1025)
+--- GREEN: apply inc-06 fix (lib/control.py) --- rc=8 publish=no
+PASS: RED reproduced and GREEN blocks publication for both gaps
+raw_rc=0
+
+## Remaining uncertainty / not verified
+
+- No real PostgreSQL/DB2: module 11 is an offline file-checkpoint model;
+  all DB evidence is marked real_db_verified=false.
+- Only Linux x86-64 (GnuCOBOL 3.2) verified; other platforms/ABIs unverified.
+- The canonical 1778-byte ENTERPRISE-CUSTOMER-V1 large-record maintenance
+  itself lives in module 07 L4 / module 12, outside this module's file
+  ownership; module 11 now has a distinct-named lab layout that only
+  shares the CUSTOMER-CLASSIFICATION semantics.

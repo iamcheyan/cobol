@@ -1,0 +1,22 @@
+# Incident INC-2026-002 DB/SQL log (excerpt, offline checkpoint store)
+
+# The offline store is NOT a real DB.  The DBA-supplied PostgreSQL DDL
+# (db-schema.sql) declares UNIQUE(business_date, transaction_id).  The
+# JOB006 excerpt below is what the as-found run wrote to the store; the
+# same logical key appears twice, so the declared constraint is violated
+# while the run still reported success.
+
+source           = offline-file-checkpoint (real PostgreSQL NOT verified)
+business_date    = 20261009
+job              = JOB006 db apply
+ledger.dat rows  = 4
+
+20261009|A000000000000001|0000000001|C|0000000000500|e73f7a405a659b6e
+20261009|A000000000000001|0000000001|C|0000000000500|e73f7a405a659b6e
+20261009|B000000000000001|0000000002|C|0000000000100|e73f7a405a659b6e
+20261009|C000000000000001|0000000003|C|0000000000025|e73f7a405a659b6e
+
+# account.table after JOB006 (as-found):
+000000000100000001JPY+0000000002000A20261009001
+000000000200000001JPY+0000000000150A20261009001
+000000000300000002JPY+0000000000025A20261009001

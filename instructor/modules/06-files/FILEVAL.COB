@@ -1,0 +1,290 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. BANK-FILEVAL.
+       ENVIRONMENT DIVISION.
+       INPUT-OUTPUT SECTION.
+       FILE-CONTROL.
+           SELECT A-FILE ASSIGN TO DYNAMIC A-PATH
+               ORGANIZATION IS SEQUENTIAL FILE STATUS IS A-STAT.
+           SELECT OK-FILE ASSIGN TO DYNAMIC OK-PATH
+               ORGANIZATION IS LINE SEQUENTIAL FILE STATUS IS OK-STAT.
+           SELECT RJ-FILE ASSIGN TO DYNAMIC RJ-PATH
+               ORGANIZATION IS LINE SEQUENTIAL FILE STATUS IS RJ-STAT.
+           SELECT LOG-FILE ASSIGN TO DYNAMIC LG-PATH
+               ORGANIZATION IS LINE SEQUENTIAL FILE STATUS IS LG-STAT.
+       DATA DIVISION.
+       FILE SECTION.
+       FD A-FILE.
+       01 A-BYTE PIC X.
+       FD OK-FILE.
+       01 OK-REC PIC X(47).
+       FD RJ-FILE RECORD IS VARYING IN SIZE FROM 54 TO 80 CHARACTERS
+           DEPENDING ON RJ-LENGTH.
+       01 RJ-REC PIC X(80).
+       FD LOG-FILE.
+       01 LOG-REC PIC X(40).
+       WORKING-STORAGE SECTION.
+       01 A-PATH PIC X(4096).
+       01 OK-PATH PIC X(4096).
+       01 RJ-PATH PIC X(4096).
+       01 LG-PATH PIC X(4096).
+       01 A-STAT PIC XX.
+       01 OK-STAT PIC XX.
+       01 RJ-STAT PIC XX.
+       01 LG-STAT PIC XX.
+       01 RJ-LENGTH BINARY-LONG.
+       01 RJ-POINTER BINARY-LONG.
+       01 RAW-BUF PIC X(47).
+       01 RAW-SIZE BINARY-LONG.
+       01 EOF-FLAG PIC 9 VALUE 0.
+       01 DONE-FLAG PIC 9.
+       01 EOF-STAT PIC XX.
+       01 PREV-ID PIC X(10) VALUE LOW-VALUES.
+       01 HAVE-PREV PIC 9 VALUE 0.
+       01 RUN-DATE PIC X(8).
+       01 REASON PIC X(20).
+       01 READ-COUNT PIC 9(9) VALUE 0.
+       01 OK-COUNT PIC 9(9) VALUE 0.
+       01 RJ-COUNT PIC 9(9) VALUE 0.
+       01 BAL-TOTAL PIC S9(18) COMP-3 VALUE 0.
+       01 REC-BAL PIC S9(13) COMP-3 VALUE 0.
+       01 BAL-EDIT PIC 9(18).
+       01 TOTAL-EDIT PIC 9(18).
+       01 TOTAL-SIGN PIC X.
+       01 SIGN-CHAR PIC X.
+       01 STR-BUFFER PIC X(80).
+       01 STR-POINTER BINARY-LONG.
+           COPY "ACCOUNT-V1.CPY".
+       01 CLEAN-REC.
+          05 CLEAN-ID PIC X(10).
+          05 CLEAN-CUST PIC X(8).
+          05 CLEAN-CCY PIC X(3).
+          05 CLEAN-SIGN PIC X.
+          05 CLEAN-BAL PIC X(13).
+          05 CLEAN-ST PIC X.
+          05 CLEAN-DATE PIC X(8).
+          05 CLEAN-LAYOUT PIC X(3).
+       01 STATUS-TABLE.
+          05 STATUS-ENTRY OCCURS 3 TIMES
+             ASCENDING KEY IS STATUS-VALUE
+             INDEXED BY STATUS-IX.
+             10 STATUS-VALUE PIC X.
+             10 STATUS-CLASS PIC X(8).
+       PROCEDURE DIVISION.
+       1000-MAIN.
+           ACCEPT A-PATH FROM ENVIRONMENT 'ACCOUNT_FILE'
+           ACCEPT OK-PATH FROM ENVIRONMENT 'ACCEPT_OUTPUT_FILE'
+           ACCEPT RJ-PATH FROM ENVIRONMENT 'REJECT_OUTPUT_FILE'
+           ACCEPT LG-PATH FROM ENVIRONMENT 'STATUS_LOG_FILE'
+           ACCEPT RUN-DATE FROM ENVIRONMENT 'BUSINESS_DATE'
+           IF RUN-DATE IS NOT NUMERIC OR
+             FUNCTION TEST-DATE-YYYYMMDD(
+               FUNCTION NUMVAL(RUN-DATE)) NOT = 0
+               PERFORM 9000-DATA-FAIL
+           END-IF
+           MOVE 'A' TO STATUS-VALUE(1)
+           MOVE 'ACTIVE' TO STATUS-CLASS(1)
+           MOVE 'C' TO STATUS-VALUE(2)
+           MOVE 'CLOSED' TO STATUS-CLASS(2)
+           MOVE 'F' TO STATUS-VALUE(3)
+           MOVE 'FROZEN' TO STATUS-CLASS(3)
+           OPEN OUTPUT LOG-FILE
+           IF LG-STAT NOT = '00' PERFORM 9100-FAIL END-IF
+           OPEN INPUT A-FILE
+           IF A-STAT NOT = '00' PERFORM 9100-FAIL END-IF
+           MOVE 'OPEN|ACCOUNT|' TO LOG-REC
+           MOVE A-STAT TO LOG-REC(14:2)
+           WRITE LOG-REC
+           IF LG-STAT NOT = '00' PERFORM 9100-FAIL END-IF
+           OPEN OUTPUT OK-FILE
+           IF OK-STAT NOT = '00' PERFORM 9100-FAIL END-IF
+           OPEN OUTPUT RJ-FILE
+           IF RJ-STAT NOT = '00' PERFORM 9100-FAIL END-IF
+           PERFORM 3000-READ-RECORD
+           PERFORM UNTIL EOF-FLAG = 1
+               PERFORM 4000-PROCESS
+               PERFORM 3000-READ-RECORD
+           END-PERFORM
+           CLOSE A-FILE OK-FILE RJ-FILE
+           IF (A-STAT NOT = '00' AND A-STAT NOT = '10') OR
+              OK-STAT NOT = '00' OR RJ-STAT NOT = '00'
+               PERFORM 9100-FAIL
+           END-IF
+           MOVE 'EOF|ACCOUNT|' TO LOG-REC
+           MOVE EOF-STAT TO LOG-REC(13:2)
+           WRITE LOG-REC
+           IF READ-COUNT NOT = OK-COUNT + RJ-COUNT
+               DISPLAY 'CONSERVATION-FAIL' UPON STDERR
+               PERFORM 9100-FAIL
+           END-IF
+           MOVE 0 TO TOTAL-EDIT TOTAL-SIGN
+           IF BAL-TOTAL < 0
+             MOVE '-' TO TOTAL-SIGN
+             COMPUTE TOTAL-EDIT = 0 - BAL-TOTAL
+           ELSE
+             MOVE '+' TO TOTAL-SIGN
+             MOVE BAL-TOTAL TO TOTAL-EDIT
+           END-IF
+           DISPLAY 'CONTROL|BUSINESS-DATE=' RUN-DATE
+             '|READ=' READ-COUNT '|ACCEPT=' OK-COUNT
+             '|REJECT=' RJ-COUNT '|BALANCE=' TOTAL-SIGN TOTAL-EDIT
+           CLOSE LOG-FILE
+           IF LG-STAT NOT = '00' PERFORM 9100-FAIL END-IF
+           MOVE 0 TO RETURN-CODE
+           IF RJ-COUNT > 0 MOVE 4 TO RETURN-CODE END-IF
+           GOBACK.
+       1100-LOG-OPEN.
+           CONTINUE.
+       3000-READ-RECORD.
+           MOVE 0 TO RAW-SIZE DONE-FLAG
+           MOVE SPACES TO RAW-BUF
+           PERFORM UNTIL DONE-FLAG = 1
+             READ A-FILE
+             EVALUATE A-STAT
+               WHEN '10'
+                 IF RAW-SIZE NOT = 0
+                   DISPLAY 'MISSING-FINAL-LF' UPON STDERR
+                   PERFORM 9200-DATA-FAIL
+                 END-IF
+                 MOVE 1 TO EOF-FLAG DONE-FLAG
+                 MOVE A-STAT TO EOF-STAT
+               WHEN '00'
+                 IF A-BYTE = X'0A'
+                   MOVE 1 TO DONE-FLAG
+                 ELSE
+                   IF A-BYTE = X'0D'
+                     DISPLAY 'CRLF-NOT-ALLOWED' UPON STDERR
+                     PERFORM 9200-DATA-FAIL
+                   END-IF
+                   IF RAW-SIZE = 47
+                     DISPLAY 'LONG-RECORD' UPON STDERR
+                     PERFORM 9200-DATA-FAIL
+                   END-IF
+                   ADD 1 TO RAW-SIZE
+                   MOVE A-BYTE TO RAW-BUF(RAW-SIZE:1)
+                 END-IF
+               WHEN OTHER PERFORM 9100-FAIL
+             END-EVALUATE
+           END-PERFORM
+           IF DONE-FLAG = 1 AND EOF-FLAG = 0
+             IF RAW-SIZE NOT = 47
+               DISPLAY 'SHORT-RECORD' UPON STDERR
+               PERFORM 9200-DATA-FAIL
+             END-IF
+             ADD 1 TO READ-COUNT
+               ON SIZE ERROR PERFORM 9100-FAIL
+             END-ADD
+           END-IF.
+       4000-PROCESS.
+           MOVE RAW-BUF TO ACCOUNT-RECORD
+           MOVE SPACES TO REASON
+           IF ACCOUNT-LAYOUT NOT = '001'
+               DISPLAY 'BAD-LAYOUT-VERSION' UPON STDERR
+               PERFORM 9200-DATA-FAIL
+           END-IF
+           IF ACCOUNT-ID IS NOT NUMERIC
+               MOVE 'BAD-ACCOUNT-ID' TO REASON
+           ELSE
+               IF HAVE-PREV = 1
+                   IF ACCOUNT-ID < PREV-ID
+                       DISPLAY 'UNSORTED-INPUT' UPON STDERR
+                       PERFORM 9200-DATA-FAIL
+                   END-IF
+                   IF ACCOUNT-ID = PREV-ID
+                       MOVE 'DUPLICATE-ID' TO REASON
+                   END-IF
+               END-IF
+               MOVE ACCOUNT-ID TO PREV-ID
+               MOVE 1 TO HAVE-PREV
+           END-IF
+           IF REASON = SPACES AND CUSTOMER-ID IS NOT NUMERIC
+               MOVE 'BAD-CUSTOMER-ID' TO REASON
+           END-IF
+           IF REASON = SPACES AND ACCOUNT-CURRENCY NOT = 'JPY'
+               MOVE 'UNKNOWN-CURRENCY' TO REASON
+           END-IF
+           IF REASON = SPACES
+             IF BALANCE-SIGN NOT = '+' AND BALANCE-SIGN NOT = '-'
+               MOVE 'BAD-SIGN' TO REASON
+             END-IF
+           END-IF
+           IF REASON = SPACES
+             IF OPENING-BALANCE IS NOT NUMERIC
+               MOVE 'BAD-BALANCE' TO REASON
+             END-IF
+           END-IF
+           IF REASON = SPACES
+             IF ACCOUNT-DATE IS NOT NUMERIC OR
+               FUNCTION TEST-DATE-YYYYMMDD(
+                 FUNCTION NUMVAL(ACCOUNT-DATE)) NOT = 0
+               MOVE 'BAD-DATE' TO REASON
+             ELSE
+               IF ACCOUNT-DATE NOT = RUN-DATE
+                 MOVE 'DATE-MISMATCH' TO REASON
+               END-IF
+             END-IF
+           END-IF
+           IF REASON = SPACES
+             SEARCH ALL STATUS-ENTRY
+               AT END MOVE 'UNKNOWN-STATUS' TO REASON
+               WHEN STATUS-VALUE(STATUS-IX) = ACCOUNT-STATUS
+                 CONTINUE
+             END-SEARCH
+           END-IF
+           IF REASON = SPACES
+             PERFORM 5000-EMIT-ACCEPT
+           ELSE
+             PERFORM 6000-EMIT-REJECT
+           END-IF.
+       5000-EMIT-ACCEPT.
+           INITIALIZE CLEAN-REC
+           MOVE ACCOUNT-RECORD TO CLEAN-REC
+           MOVE CLEAN-REC TO OK-REC
+           WRITE OK-REC
+           IF OK-STAT NOT = '00' PERFORM 9100-FAIL END-IF
+           COMPUTE REC-BAL = FUNCTION NUMVAL(CLEAN-BAL)
+           IF CLEAN-SIGN = '-'
+             COMPUTE REC-BAL = 0 - REC-BAL
+           END-IF
+           ADD REC-BAL TO BAL-TOTAL
+             ON SIZE ERROR PERFORM 9100-FAIL
+           END-ADD
+           MOVE REC-BAL TO BAL-EDIT
+           MOVE '+' TO SIGN-CHAR
+           IF REC-BAL < 0
+             MOVE '-' TO SIGN-CHAR
+             COMPUTE BAL-EDIT = 0 - REC-BAL
+           END-IF
+           ADD 1 TO OK-COUNT
+             ON SIZE ERROR PERFORM 9100-FAIL
+           END-ADD
+           DISPLAY 'ACCT|' CLEAN-ID '|ACCEPT|' CLEAN-ST '|'
+             SIGN-CHAR BAL-EDIT.
+       6000-EMIT-REJECT.
+           ADD 1 TO RJ-COUNT
+             ON SIZE ERROR PERFORM 9100-FAIL
+           END-ADD
+           DISPLAY 'ACCT|' ACCOUNT-ID '|REJECT|' FUNCTION TRIM(REASON)
+           MOVE SPACES TO STR-BUFFER
+           MOVE 1 TO STR-POINTER
+           STRING RAW-BUF DELIMITED BY SIZE
+                  '|' DELIMITED BY SIZE
+                  FUNCTION TRIM(REASON) DELIMITED BY SIZE
+             INTO STR-BUFFER WITH POINTER STR-POINTER
+           END-STRING
+           COMPUTE RJ-LENGTH = STR-POINTER - 1
+           MOVE STR-BUFFER TO RJ-REC
+           WRITE RJ-REC
+           IF RJ-STAT NOT = '00' PERFORM 9100-FAIL END-IF.
+       9000-DATA-FAIL.
+           DISPLAY 'INVALID-BUSINESS-DATE' UPON STDERR
+           MOVE 8 TO RETURN-CODE
+           STOP RUN.
+       9100-FAIL.
+           DISPLAY 'FILE-STATUS=' A-STAT '/' OK-STAT '/' RJ-STAT
+             '/' LG-STAT UPON STDERR
+           MOVE 12 TO RETURN-CODE
+           STOP RUN.
+       9200-DATA-FAIL.
+           DISPLAY 'INVALID-RECORD-FORMAT' UPON STDERR
+           MOVE 8 TO RETURN-CODE
+           STOP RUN.

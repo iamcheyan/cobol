@@ -1,0 +1,18 @@
+SCHEDULER CONSOLE  (night batch, module 11 incident snapshot)
+business_date : 20261009     run_id : as-found
+engine        : local Bash scheduler (course); not a real JP1/AJS
+================================================================
+JOB001  receive        COMPLETE   rc=0
+JOB002  validate       COMPLETE   rc=0
+JOB003  sort           COMPLETE   rc=0
+JOB004  db-snapshot    COMPLETE   rc=0
+JOB005  match          COMPLETE   rc=0
+JOB006  db-apply       COMPLETE   rc=0
+JOB007  control        COMPLETE   rc=0
+JOB008  publish        COMPLETE   rc=0
+JOB009  complete       COMPLETE   rc=0
+================================================================
+overall            : SUCCESS rc=0
+downstream publish : publish/as-found/ present (run manifest verified)
+NOTE from operations: the desk's independent recomputation of the day's
+                      credit total disagrees with the published report.

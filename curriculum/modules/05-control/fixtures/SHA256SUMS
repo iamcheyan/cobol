@@ -1,0 +1,17 @@
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  ./boundary/empty.dat
+d2b0924bc1e01e9359f657aa90554b2d32dabc852ea2ea66cb6e5eea494f85b7  ./boundary/max-amount.dat
+a6960c5aa832f4de31d28eb6fd7787debd6085817702df34065e17dd6b768850  ./boundary/min-amount.dat
+395f7b1ee43c6214277bab7f0bbd8e79e84268fada566dfca025c8b540b9ade9  ./boundary/single.dat
+30b87a27abbbeb0a8a76b6237a5c7ef52ad5c0299aaf6d96b91a44b4b3cb4eb8  ./invalid/amount-over-cap.dat
+f309c6d79c8a1284cc6d82585f3eec331e042bd10c8d425fd8b76c56c4e5757f  ./invalid/bad-id.dat
+6cfb7c0cd0f5450b66f5eaad77ccbc03b013423292b3d84ed920fc936776345c  ./invalid/crlf.dat
+58e42a2ff02a5461821dcb66cd32079a858ee6e2b8a3b44e03f87609edf3b6f7  ./invalid/duplicate-id.dat
+852abd2e4f9694b0f956698c17654e844aff8e4f0f96d1ee9c6596b5203e07da  ./invalid/long-record.dat
+f6b81d7e6bece3a1dda47879b78d0103c8b201e97d728cd086a7dfa22f1db84f  ./invalid/missing-name.dat
+cc1cdbc07d4d32d676c5f883b0daf58ab982c05960033d0e83b168a00330d364  ./invalid/mixed.dat
+759af71c0537d0d8d9ee8adc07a1e8c2792cdd7f5204c078f17a00f91b21adfb  ./invalid/no-trailing-lf.dat
+3cde558eca1e69501341802b4d8ebc022bbd3b3d0c022389779b2bb35c9a70cc  ./invalid/non-numeric-amount.dat
+8982b0e36eb1bacbb400dea0997b13cce756d7a48dbe0b05c560a13c1973afd0  ./invalid/short-record.dat
+f85223a29082d6ac78702b24a419b967ff2c29f3415aefe99f5ac604e507efe3  ./invalid/unknown-status.dat
+52bc703a1ed61f69056a4eadeea78a3f17860dc64375ec9f9daf30d301d35c4d  ./invalid/unsorted.dat
+76c13a6d91070a5005b37744389ed87c878499574950e85228ac7ddec8212a90  ./normal/clean.dat

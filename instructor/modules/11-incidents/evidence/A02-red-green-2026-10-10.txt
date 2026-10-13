@@ -1,0 +1,33 @@
+# A02 RED->GREEN evidence (inc-02 unique constraint, inc-06 declared control) — 2026-10-10T01:35:16Z
+# platform: Linux x86_64 | cobc (GnuCOBOL) 3.2.0 | python3 3.13.5
+# note: student event IDs are INC-2026-002 / INC-2026-006; inc-02/inc-06 are instructor
+#       code-gap labels.  Post-rename rerun is in A06.
+# command: bash instructor/modules/11-incidents/tools/red-green.sh /tmp/m11-rg
+
+################ inc-02 DB unique constraint ################
+--- RED: as-found snapshot (defect) ---
+rc=0 publish=yes
+ledger lines as-found: 4
+acc1 balance as-found: 000000000100000001JPY+0000000002000
+--- GREEN: apply inc-02 fix (lib/db.py) ---
+JOB006 ERROR: idempotency/balance check failed
+JOB006 ERROR: business failure rc=8
+nightly failed rc=8; forensic scene preserved at /tmp/m11-rg-ev2/inc02-green-out
+rc=8 publish=no
+acc1 balance after fix: 000000000100000001JPY+0000000001000
+db.py: unique constraint violation on (business_date, transaction_id)=(20261009,A000000000000001)
+################ inc-06 RC0 but business error ################
+--- RED: as-found snapshot (defect) ---
+rc=0 publish=yes
+published closing_total as-found: 1025
+declared closing_total: 1475
+--- GREEN: apply inc-06 fix (lib/control.py) ---
+JOB007 ERROR: control totals do not reconcile
+JOB007 ERROR: business failure rc=8
+nightly failed rc=8; forensic scene preserved at /tmp/m11-rg-ev2/inc06-green-out
+rc=8 publish=no
+JOB007 FAIL: declared control_credit_total=625 != computed 175
+JOB007 FAIL: declared control_closing_total=1475 != computed 1025
+################ result ################
+PASS: RED reproduced and GREEN blocks publication for both gaps
+raw_rc=0

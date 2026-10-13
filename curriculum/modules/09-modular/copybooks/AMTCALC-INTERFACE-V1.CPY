@@ -1,0 +1,8 @@
+       01 AMT-CALC-INTERFACE.
+           05 AMT-IFACE-LENGTH PIC 9(4) COMP-5.
+           05 AMT-IFACE-VERSION PIC X(3).
+           05 AMT-IFACE-OP PIC X(3).
+           05 AMT-DIRECTION PIC X.
+           05 AMT-AMOUNT-IN PIC X(13).
+           05 AMT-BALANCE PIC S9(13) COMP-3.
+           05 AMT-REASON PIC X(16).

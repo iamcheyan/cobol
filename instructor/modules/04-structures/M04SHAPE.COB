@@ -1,0 +1,57 @@
+      *> M04SHAPE: module 04 lesson 04.1 structures reference.
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. M04SHAPE.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 WRAP.
+          05 PAYLOAD.
+             10 PL-DATE PIC X(8) VALUE '20261010'.
+             10 PL-AMT PIC 9(5)V99 VALUE 12345.67.
+             10 PL-CODE PIC X(3) VALUE 'JPY'.
+          05 PAYLOAD-RAW REDEFINES PAYLOAD PIC X(18).
+       01 REN-SRC.
+          05 R-A PIC X(3) VALUE 'AAA'.
+          05 R-B PIC X(4) VALUE 'BBBB'.
+          05 R-C PIC X(2) VALUE 'CC'.
+       66 REN-AB RENAMES R-A THRU R-B.
+       01 IDX-REC.
+          05 IDX-ITEM OCCURS 5 TIMES INDEXED BY IDX-POS PIC X(3).
+       01 ODO-REC.
+          05 ODO-COUNT PIC 9(2) VALUE 03.
+          05 ODO-ITEM OCCURS 0 TO 10 TIMES
+             DEPENDING ON ODO-COUNT PIC X(5).
+       01 WS-N PIC 9(3).
+       01 WS-M PIC 9(3).
+       PROCEDURE DIVISION.
+       1000-MAIN.
+           DISPLAY 'LESSON,04.1'
+           MOVE LENGTH OF WRAP TO WS-N
+           DISPLAY 'REDEFINES,WRAP-LEN,' WS-N
+           MOVE LENGTH OF PAYLOAD TO WS-M
+           DISPLAY 'REDEFINES,PAYLOAD-LEN,' WS-M
+           MOVE LENGTH OF PAYLOAD-RAW TO WS-N
+           DISPLAY 'REDEFINES,VIEW-LEN,' WS-N
+           IF WS-N = WS-M
+               DISPLAY 'REDEFINES,NO-DOUBLE-COUNT,OK'
+           ELSE
+               DISPLAY 'REDEFINES,NO-DOUBLE-COUNT,BAD'
+           END-IF
+           MOVE LENGTH OF REN-AB TO WS-N
+           DISPLAY 'RENAMES,R-AB-LEN,' WS-N
+           DISPLAY 'RENAMES,R-AB-VALUE,' REN-AB
+           MOVE 5 TO WS-N
+           DISPLAY 'OCCURS,ITEM-COUNT,' WS-N
+           MOVE 'AAA' TO IDX-ITEM(1)
+           MOVE 'BBB' TO IDX-ITEM(2)
+           MOVE 'CCC' TO IDX-ITEM(3)
+           MOVE 'DDD' TO IDX-ITEM(4)
+           MOVE 'EEE' TO IDX-ITEM(5)
+           SET IDX-POS TO 3
+           DISPLAY 'OCCURS,INDEX-3,' IDX-ITEM(IDX-POS)
+           MOVE 3 TO ODO-COUNT
+           MOVE LENGTH OF ODO-REC TO WS-N
+           DISPLAY 'ODO,COUNT-03,LEN,' WS-N
+           MOVE 7 TO ODO-COUNT
+           MOVE LENGTH OF ODO-REC TO WS-N
+           DISPLAY 'ODO,COUNT-07,LEN,' WS-N
+           GOBACK.

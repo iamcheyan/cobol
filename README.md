@@ -1,356 +1,55 @@
-# COBOL 现代化实战工坊 (COBOL Hands-on Workshop & Modern Tooling)
+# GnuCOBOL 实战课程工作台
 
-> 🚀 从穿孔卡到现代终端：一个现代开发者边学边用的 COBOL 实战演练场与 Neovim 工具链。
+本仓库以 [32 课主课程](lessons/README.md) 为学习入口：从最小 COBOL 程序开始，逐步学习数据描述、流程控制、表格、文件、模块化、数据库和银行对账项目。课程总目录列出每课目标、先修知识、预计时间、项目联系与源码产物：[`lessons/DIRECTORY.md`](lessons/DIRECTORY.md)。
 
-本项目是一个专为现代开发者设计的 **COBOL 语言实战学习与现代化开发工坊**。包含完整的生产级固定格式（Fixed-Format）代码范例、Copybook 模块依赖、编译运行工具链，以及专为 Neovim 打造的 COBOL 现代化增强套件体验指南。
+## 快速开始
 
----
+需要 GNU/Linux、GnuCOBOL（`cobc`）和 Make。Debian/Ubuntu 可安装：
 
-## 目录
-
-- [1. 快速开始 (Quickstart)](#1-快速开始-quickstart)
-- [2. COBOL 核心语法极速入门 (Crash Course)](#2-cobol-核心语法极速入门-crash-course)
-  - [2.1 四大部（Four Divisions）骨架](#21-四大部four-divisions骨架)
-  - [2.2 穿孔卡 80 列固定格式规则](#22-穿孔卡-80-列固定格式规则)
-  - [2.3 变量层级与 88 级条件名 (Enum)](#23-变量层级与-88-级条件名-enum)
-  - [2.4 PIC 图像子句与内存存储模式 (COMP / COMP-3)](#24-pic-图像子句与内存存储模式-comp--comp-3)
-  - [2.5 Copybook 模块化机制](#25-copybook-模块化机制)
-  - [2.6 常用控制流与现代函数](#26-常用控制流与现代函数)
-- [3. 范例代码深度拆解 (`INPUTCSV.COB`)](#3-范例代码深度拆解-inputcsvcob)
-- [4. Neovim 现代化 COBOL 插件使用指南](#4-neovim-现代化-cobol-插件使用指南)
-  - [4.1 快捷键速查表](#41-快捷键速查表)
-  - [4.2 七步实战演练法](#42-七步实战演练法)
-- [5. 边学边建：插件共建路线图 (Roadmap)](#5-边学边建插件共建路线图-roadmap)
-
----
-
-## 1. 快速开始 (Quickstart)
-
-本项目使用开源的 **GnuCOBOL (`cobc`)** 编译器。
-
-### 环境依赖安装
-
-```bash
-# Arch Linux
-sudo pacman -S gnucobol
-
-# Ubuntu / Debian
-sudo apt-get install gnucobol
-
-# macOS (Homebrew)
-brew install gnu-cobol
+```sh
+sudo apt install gnucobol make
+cobc --version
 ```
 
-### 编译与运行
+先进入 [第 01 课](lessons/01/README.md)，按课内说明编译并运行：
 
-项目内置了便捷的 `Makefile`：
-
-```bash
-# 语法静态检查（飞检）
-make check
-
-# 编译并运行转换程序（读取 input.txt 并生成 output.csv）
-make run
-
-# 清理编译产物
-make clean
+```sh
+cd lessons/01
+mkdir -p build
+cobc -fsyntax-only lesson_01.cob
+cobc -x -Wall -o build/lesson_01 lesson_01.cob
+./build/lesson_01
 ```
 
-### 运行结果演示
+后续课程可能包含 Copybook、输入夹具、构建脚本或真实数据库依赖；每课的 README 说明需要的依赖、命令和预期结果。编译产物留在各课的 `build/`，不作为课程源码提交。
 
-输入文件 `input.txt`：
-```text
-00001|Taro Yamada|28|350000
-00002|Hanako Suzuki|31|420000
-00003|Ken Sato|25|280000
+检查 32 课文件齐全并编译运行第 01 课：
+
+```sh
+make course-check
 ```
 
-程序执行输出 `output.csv`：
-```csv
-employee_id,name,age,salary
-00001,"Taro Yamada",28,350000
-00002,"Hanako Suzuki",31,420000
-00003,"Ken Sato",25,280000
+旧版扩展课程另有入口：`make legacy-course-check`。
+
+## 仓库导航
+
+| 路径 | 用途 |
+|---|---|
+| [`lessons/`](lessons/README.md) | CPR #31 主课程，01–32 课；每课保留源码、讲解、练习、答案及所需素材 |
+| [`extensions/README.md`](extensions/README.md) | 可选课程、扩展课程、插件教程和独立示例索引 |
+| [`extensions/legacy-workshop/`](extensions/legacy-workshop/README.md) | 旧版 00–29 课，作为补充讲义与练习素材 |
+| [`curriculum/README.md`](curriculum/README.md) | 企业批处理扩展：12 个模块、银行夜间处理案例及验收入口 |
+| [`docs/`](docs/01-punchcard-and-ruler.md) | `cobol.nvim` 标尺、导航、PIC、诊断、工作流与插件实验教程 |
+| [`Makefile`](Makefile) | 根目录独立 COBOL 示例的语法检查、构建、运行与清理 |
+
+## 独立示例
+
+根目录还保留四个可单独编译的示例：`INPUTCSV.COB`、`FIXEDREC.COB`、`TBLSRCH.COB` 和 `BATCHRPT.COB`。它们演示分隔文本转 CSV、定长记录、表格查找和控制断点报表；相关 Copybook 与输入数据也保留在根目录。
+
+```sh
+make check   # 语法检查四个独立示例
+make run     # 编译并运行示例，展示输出文件
+make clean   # 清理根目录生成的程序和输出
 ```
 
----
-
-## 2. COBOL 核心语法极速入门 (Crash Course)
-
-COBOL（Common Business-Oriented Language）由 Grace Hopper 准将于 1959 年设计，是金融、银行和核心大型机系统的顶梁柱。
-
-### 2.1 四大部（Four Divisions）骨架
-
-每个完整的 COBOL 程序自上而下严格由 4 大 Division 构成：
-
-```text
-IDENTIFICATION DIVISION.  ── 程序名、作者、元数据声明
-ENVIRONMENT DIVISION.     ── 硬件环境与文件 I/O 映射 (FILE-CONTROL)
-DATA DIVISION.            ── 所有内存变量、文件结构 (FD)、工作区 (WORKING-STORAGE)
-PROCEDURE DIVISION.       ── 所有可执行逻辑、段落 (Paragraphs)、循环与控制流
-```
-
-### 2.2 穿孔卡 80 列固定格式规则
-
-COBOL 诞生于穿孔卡片时代，源码严格以 80 字符列对齐：
-
-```text
-列号: 1----6  7   8---11  12---------------------------------------------72  73----80
-区域: SEQ    IND  Area A  Area B (语句主体)                                  IDENT
-刻度: ..SEQ.  *    A...    B............................................72  IDENT...
-代码: 000100      0000-MAIN-LOGIC SECTION.
-```
-
-* **列 1~6（Sequence Number）**：序列号区（用于穿孔卡乱序时重新排卡，现代通常留空或填入行号）。
-* **列 7（Indicator）**：指示符区：
-  * `*` 或 `/`：整行注释；
-  * `-`：字符串或语句跨行续接；
-  * `D`：调试行（开启 Debug 时编译）。
-* **列 8~11（Area A）**：**顶格声明区**。以下内容必须从第 8 列开始：
-  * `IDENTIFICATION / ENVIRONMENT / DATA / PROCEDURE DIVISION.`
-  * 各类 `SECTION.`
-  * 过程段落名（如 `1000-INITIALIZE.`）
-  * 数据部根结构：`01` 级记录、`77` 级独立项、`FD` / `SD` 文件描述符。
-* **列 12~72（Area B）**：**语句执行与子数据区**。
-  * 所有具体操作语句（`MOVE`, `PERFORM`, `IF`, `OPEN`, `CLOSE` 等）必须在第 12 列或之后书写；
-  * 从属数据级别（`05`, `10`, `15`, `88` 等）必须在第 12 列或之后书写。
-* **列 73~80（Identification Area）**：程序库识别区，**编译器完全忽略该区域的所有字符**！
-
-> ⚠️ **新手大坑**：若代码不小心写到了第 73 列以后，编译器会直接当作空白忽略，导致语句神秘截断或变量名不全。
-
----
-
-### 2.3 变量层级与 88 级条件名 (Enum)
-
-COBOL 的变量通过层级编号（Level Numbers）构建树状结构：
-
-```cobol
-01  WS-FLAGS.                          *> 顶层根对象（相当于 C struct 或 JS object）
-    05  WS-EOF-FLAG      PIC X VALUE "N". *> 成员字段
-        88  EOF-YES      VALUE "Y".    *> 88 级：条件名（枚举/布尔别名）
-        88  EOF-NO       VALUE "N".
-```
-
-#### 88 级的神奇用法：
-`88` 级并不占用额外的内存空间，它赋予了底层变量一个**语义化的布尔谓词**：
-* 赋值：`SET EOF-YES TO TRUE` 等价于 `MOVE "Y" TO WS-EOF-FLAG`。
-* 判断：`IF EOF-YES` 等价于 `IF WS-EOF-FLAG = "Y"`。
-
----
-
-### 2.4 PIC 图像子句与内存存储模式 (COMP / COMP-3)
-
-`PIC`（Picture Clause）定义数据的物理呈现与内存字节：
-
-| 语法 | 含义 | 占用字节数 | 示例说明 |
-|---|---|---|---|
-| `PIC X(20)` | 定长文本（空格右填充） | 20 字节 | 存储 ASCII/EBCDIC 字符串 |
-| `PIC 9(5)` | 5 位非负整数（字符形式） | 5 字节 | 例如 `"00123"` |
-| `PIC 9(5)V99` | 隐式小数点（5整数+2小数） | 7 字节 | `V` 不占物理空间，仅做编译器换算 |
-| `PIC S9(7) COMP-3` | 压缩十进制（Packed-Decimal） | **4 字节** | 核心大型机金融标准：`(7+1)/2 = 4B` |
-| `PIC S9(4) COMP` | 二进制整数（半字 Halfword） | **2 字节** | 占用 16 位整型空间 |
-| `PIC S9(9) COMP` | 二进制整数（全字 Fullword） | **4 字节** | 占用 32 位整型空间 |
-
-> 💡 **COMP-3 为什么重要？**
-> 在大型机中，一个字节可以利用高低 4 位分别存储两个十进制数字，末尾 4 位存储正负符号（`C`/`D`/`F`）。这不仅能节省 50% 的磁盘和内存空间，还能彻底消除浮点数精度丢失问题！
-
----
-
-### 2.5 Copybook 模块化机制
-
-大型机时代没有 npm 或 import，依赖管理全部通过 **Copybook（`.CPY`）**：
-
-```cobol
-COPY "EMP-REC.CPY".
-```
-
-在预编译时，编译器会将 `EMP-REC.CPY` 里的数据结构或过程宏原样内联展开到当前代码行中。
-
----
-
-### 2.6 常用控制流与现代函数
-
-* **循环调用**：
-  ```cobol
-  PERFORM UNTIL EOF-YES
-      PERFORM 2100-PROCESS-RECORD
-  END-PERFORM
-  ```
-* **字符串拆分（UNSTRING）**：
-  ```cobol
-  UNSTRING INPUT-RECORD
-      DELIMITED BY "|"
-      INTO IN-EMPLOYEE-ID
-           IN-FULL-NAME
-           IN-AGE
-           IN-SALARY
-      TALLYING IN WS-FIELD-COUNT
-  END-UNSTRING
-  ```
-* **字符串拼接与裁剪（STRING + FUNCTION TRIM）**：
-  ```cobol
-  STRING FUNCTION TRIM(IN-EMPLOYEE-ID) DELIMITED BY SIZE
-         "," DELIMITED BY SIZE
-         QUOTE DELIMITED BY SIZE
-         IN-FULL-NAME DELIMITED BY SIZE
-         QUOTE DELIMITED BY SIZE
-         INTO CSV-LINE
-  END-STRING
-  ```
-
----
-
-## 3. 范例代码深度拆解 (`INPUTCSV.COB`)
-
-整个实战项目分为六大执行阶段，逻辑清晰健壮：
-
-1. **`0000-MAIN`（主控制流）**：
-   - 顺序调度 `1000-INITIALIZE` → `2000-PROCESS-FILE` → `9000-FINALIZE`，最后 `STOP RUN` 退出程序。
-2. **`1000-INITIALIZE`（初始化与打开）**：
-   - 清空标志位，`OPEN INPUT INPUT-FILE` 与 `OPEN OUTPUT OUTPUT-FILE`；
-   - 检查文件状态码（`00` 为成功），并写入 CSV 表头。
-3. **`2000-PROCESS-FILE`（读取主循环）**：
-   - 使用 `READ ... AT END SET EOF-YES TO TRUE` 循环读入每一行。
-4. **`3000-PARSE-RECORD`（字段解构）**：
-   - 借助 `UNSTRING` 按照 `|` 将单行文本拆分为 ID、姓名、年龄、薪资等独立工作区变量。
-5. **`4000-FORMAT-AND-WRITE`（格式化输出）**：
-   - 动态计算名字长度，去除多余前导/后缀空格，为姓名包裹双引号并组合成 CSV 行写盘。
-6. **`9000-FINALIZE`（收尾与统计）**：
-   - `CLOSE` 关闭所有文件，终端打印处理成功与失败计数。
-
----
-
-## 4. Neovim 现代化 COBOL 插件使用指南
-
-配合安装了公开插件 [`iamcheyan/cobol.nvim`](https://github.com/iamcheyan/cobol.nvim) 的
-Neovim，你可以享受现代 IDE 般的编辑体验。Aerial 是一个为 Neovim 提供代码结构
-Outline 侧边栏的插件，`cobol.nvim` 为它提供 COBOL 专用 backend。Aerial 是可选依赖；
-不安装 Aerial 时，
-标尺、导航、计算器、折叠、格式化和 GnuCOBOL 诊断仍然可用。
-
-在插件中打开本仓库的文件时，当前目录就是默认项目根目录，因此 `gf`、`K` 和
-`cobc` 诊断会自动搜索仓库根目录及常见 Copybook 目录。若从其他目录启动 Neovim，
-可以显式设置：
-
-```lua
-{
-  "iamcheyan/cobol.nvim",
-  ft = { "cobol", "cbl", "cob" },
-  opts = {
-    project_root = vim.fn.expand("~/cobol-practice"),
-    copybook_paths = { ".", "./cpy", "./copybooks", "./include" },
-  },
-}
-```
-
-### 4.1 快捷键速查表
-
-| 快捷键 | 模式 | 作用对象 | 功能说明 |
-|---|---|---|---|
-| `<leader>uc` | Normal | 全局 | **一键开关** COBOL 细线标尺与 Winbar 打孔卡刻度 |
-| `<leader>cs` | Normal | 全局 | **呼出/隐藏 Aerial 符号大纲侧边栏**（回车可跳转） |
-| `<leader>cr` | Normal | 01 记录 / 字段 | **计算 01 记录内存排布与字节总和**（居中弹窗展示偏移量表格） |
-| `za` / `zc` / `zo` | Normal | Division / Section / Paragraph | **语法折叠**：折叠、关闭或打开当前 COBOL 结构 |
-| `:CobolFormatCase` | Normal / Visual | 当前行、选区或全文件 | **规范化保留字大小写**，不修改变量、字符串和注释 |
-| `<leader>cl` | Normal | 全局 | **立即触发 GnuCOBOL 语法飞检**（Cobol Lint，状态栏提示结果） |
-| `<leader>cq` | Normal | 全局 | **打开诊断 Quickfix 列表**（集中浏览与跳转所有错误与告警） |
-| `gd` | Normal | 段落 / 变量 / Copybook | **直达定义**（跳到段落定义行、数据字段行或 Copybook 文件） |
-| `<C-o>` | Normal | 全局 | **跳回原位置**（Neovim 原生 Jumplist/Tagstack 回退） |
-| `gf` | Normal | `COPY` 语句 | **打开文件**（直接打开光标处引用的 Copybook 实体文件） |
-| `K` | Normal | `COPY` / `PERFORM` / 变量 | **悬停浮窗预览**（就地预览 Copybook 内容或过程代码，按 `q` 退出） |
-| `g7` | Normal | 当前行 | 光标直跳 **第 7 列**（Indicator 注释指示列） |
-| `g8` | Normal | 当前行 | 光标直跳 **第 8 列**（Area A 起始列） |
-| `g12` | Normal | 当前行 | 光标直跳 **第 12 列**（Area B 起始列） |
-| `g73` | Normal | 当前行 | 光标直跳 **第 73 列**（Identification 识别区起始列） |
-| `<leader>c*` | Normal / Visual | 当前行 / 多选选区 | **在第 7 列切换 `*` 注释**（绝不破坏后续代码缩进） |
-| `<Tab>` | Insert | 行首或前导空白 | **智能吸附**：1~6 列跳 Area A（8列），7~11 列跳 Area B（12列） |
-| `q` 或 `<Esc>` | Normal | 预览/计算浮窗内 | **随手关闭** 悬停预览或内存计算浮窗 |
-
----
-
-### 4.2 十步实战演练法（快速自测）
-
-打开测试文件开始动手练习：
-
-```bash
-nvim INPUTCSV.COB
-```
-
-1. **练习 1：标尺与列穿梭**（`g8` / `g12` / `g7` / `<leader>uc`）
-2. **练习 2：智能 Tab 与智能注释**（行首 `<Tab>` 吸附 / `<leader>c*`）
-3. **练习 3：72 列越界防线**（超 72 列字符标红波浪线警告）
-4. **练习 4：Aerial 层级大纲树**（`<leader>cs` 呼出 3 层符号树并回车跳转）
-5. **练习 5：过程与变量定义直达**（`gd` 秒级跳定义，`<C-o>` 原路跳回）
-6. **练习 6：Copybook 浮窗预览与打开**（`K` 就地浮窗预览结构，`gf` 直接打开文件）
-7. **练习 7：行尾数据层级宿主回溯**（`← 05 PARENT (01 ROOT)` 虚词提示）
-8. **练习 8：PIC 字节计算与 01 结构体内存排布报表**（行尾提示 / `<leader>cr` 弹出内存排布 ASCII 表）
-9. **练习 9：GnuCOBOL 异步实时语法飞检与诊断**（保存/编辑实时波浪线下划线 / `<leader>cl` / `<leader>cq`）
-10. **练习 10：语法折叠与保留字格式化**（在 `DATA DIVISION`、Section、Paragraph 上按 `za`；用 `:CobolFormatCase` 处理小写关键字）
-
----
-
-## 5. 边学边练：分章节详细教程手册 (Modular Tutorials)
-
-下一版企业实战课程的[完整设计与制作要求](docs/curriculum/README.md)已单独建档：12 模块、76 小时，以统一银行夜间系统贯穿数据、突合、DB、JOB、事故和维护。新课程已[开始分阶段制作](curriculum/README.md)，下面旧课程保留为素材；未完成项在新入口明确列出。
-
-面向从零学习到独立完成 GNUCOBOL 批处理项目的系统课程已整理到 [`course/`](course/README.md)。共 30 课，每课一个独立目录，包含概念讲解、可编译示例、运行与修改练习，并穿插 `cobol.nvim` 导航/诊断练习；Bash 编译、批量测试、日志和作业集成也包含在课程中。可从第 00 课开始，或运行 `make course-check` 检查课程示例。
-
-为了方便系统化循序渐进练习，我们已将全部理论与每一步的实操按主题拆分为独立章节教程，可按顺序逐篇学习：
-
-| 章节手册 | 核心内容与实战重点 | 对应插件功能 |
-|---|---|---|
-| 📖 **[第 1 课：穿孔卡 80 列标准与标尺列穿梭](docs/01-punchcard-and-ruler.md)** | 80 列穿孔卡历史、Area A/B 规则、Indicator 列、72 列越界截断防线、标尺开关与智能 Tab 吸附 | 细线标尺、Winbar 刻度、`g7/g8/g12/g73`、`<leader>uc`、`<leader>c*` |
-| 🗺️ **[第 2 课：结构概览、大纲树与代码定义直达](docs/02-structure-and-navigation.md)** | 四大 Division 体系、Winbar 面包屑、Aerial 侧边栏、`PERFORM` 段落与变量跳转、Copybook 浮窗预览 | `<leader>cs`、`gd`、`<C-o>`、`K`、`gf`、行尾宿主回溯 |
-| 🧮 **[第 3 课：数据层级与 PIC 内存计算器](docs/03-pic-and-memory-calculator.md)** | COBOL 数据类型、`COMP-3`（Packed Decimal 压缩十进制）原理与换算、行尾字节提示、`01` 结构体内存排布报表 | 行尾虚拟文本、`<leader>cr`、`:CobolCalcRecord` |
-| 🩺 **[第 4 课：GnuCOBOL 异步实时语法飞检与排错](docs/04-syntax-check-and-diagnostics.md)** | 避开新手三大深坑（句号 `.`、Area 错位、未定义标识符）、实时非阻塞飞检、Diagnostics 红色波浪线、Quickfix 排错 | `<leader>cl`、`<leader>cq`、`:CobolLint`、Neovim Diagnostics |
-| ⚙️ **[第 5 课：GnuCOBOL 构建、批处理测试与工程实战](docs/05-compilation-and-workflow.md)** | `cobc` 编译机制、Makefile 自动化构建、输入输出管道文件处理、端到端跑批与数据校验 | `make check`、`make`、`make run`、`make clean` |
-| 💼 **[第 6 课：四大工程实战范例深度拆解与指南](docs/06-practical-examples-guide.md)** | 涵盖 4 大工业级经典场景（定长无分隔符、REDEFINES 内存复用、二分查表、两级控制中断报表） | 全功能综合演练（内存排布、`88` 状态码、货币编辑符号） |
-| 🧪 **[第 7 课：插件综合练习与回归清单](docs/07-cobol-nvim-plugin-lab.md)** | 把四个示例映射到标尺、Aerial、导航、PIC 计算、实时诊断、折叠和格式化 | 全部插件功能 |
-
----
-
-## 6. 四大实操范例工程源码 (Practical Examples)
-
-仓库内置了 4 个涵盖核心业务场景的完整可编译源码，均配有专属输入与输出：
-
-1. **`INPUTCSV.COB`**（管道文本清洗与 CSV 导出）：`UNSTRING` 拆分、`STRING` 拼接、`TRIM` 裁剪，引用 `EMP-REC.CPY`。
-   - 运行：`make run-csv`
-2. **`FIXEDREC.COB`**（80 列银行定长交易与 `REDEFINES`）：无分隔符按列读取，`REDEFINES` 内存重叠复用，`88` 条件名，引用 `TX-REC.CPY`。
-   - 运行：`make run-fixed`
-3. **`TBLSRCH.COB`**（多币种汇率矩阵与二分查找）：`OCCURS` 数组定义、`INDEXED BY` 专属指针、`SEARCH ALL` 原生二分检索。
-   - 运行：`make run-table`
-4. **`BATCHRPT.COB`**（经典两级控制中断审计报表）：两级 Control Break（部门小计 + 分公司总计 + 全公司总计）、货币编辑符 `PIC $$$,$$$,$$9.99`。
-   - 运行：`make run-report`
-
-> 💡 **一键构建与全量测试**：
-> ```bash
-> make check   # 语法飞检全部 4 个工程
-> make run     # 编译并流水线执行全部 4 个工程
-> ```
-
----
-
-## 7. 边学边建：插件共建路线图 (Roadmap)
-
-我们在实践中一边学习 COBOL 语言特性，一边为其构建现代化的编辑器工具：
-
-- [x] **Phase 1: 穿孔卡标尺与安全边界**（细线标尺、Winbar 打孔卡刻度、72 列越界告警、第 7 列智能注释、智能 Tab 吸附）
-- [x] **Phase 2.1: 结构大纲与层级展示**（Winbar 实时面包屑、01/88 级高亮、行尾宿主回溯、Aerial 3 层符号树）
-- [x] **Phase 2.2: 代码定义直达与 Copybook 预览**（`gd` 段落/变量定义直达、`<C-o>` 原生回跳、`gf` 文件跳转、`K` 悬停浮窗）
-- [x] **Phase 3: 数据层级与 PIC 结构计算器**：
-  - 单项 PIC 字节换算（`PIC S9(7) COMP-3` 换算为 `4B`）；
-  - `01 RECORD` 自动递归向下累加所有子字段字节数，在行尾显示 `/* Total: 398 Bytes (6 fields) */`；
-  - `<leader>cr` / `:CobolCalcRecord` 居中弹窗展示各字段偏移量与内存排布 ASCII 表格。
-- [x] **Phase 4: GnuCOBOL (`cobc`) 异步实时语法飞检**：
-  - 异步在后台调用 `cobc -fsyntax-only`，保存（`BufWritePost`）、内容修改防抖（`TextChanged`）及离开插入模式（`InsertLeave`）时自动飞检；
-  - 将漏写标点 `.`、未定义段落/变量、Area A/B 错位等语法错误直接以 Neovim Diagnostics 红黄波浪线标红；
-  - Copybook 穿透联动与 `<leader>cl` / `<leader>cq` Quickfix 列表。
-- [x] **Phase 5: 原生语法折叠与保留字格式化**：
-  - 支持 `za` 一键折叠庞大的 `DATA DIVISION` 或各个 Section；
-  - 提供 `:CobolFormatCase` 将关键字规范为全大写。
-
----
-
-## License
-
-MIT © 2026 iamcheyan
+Neovim 插件是辅助学习工具，不替代 `cobc` 编译和程序运行。安装与插件练习见 [`docs/07-cobol-nvim-plugin-lab.md`](docs/07-cobol-nvim-plugin-lab.md)。

@@ -1,0 +1,19 @@
+# A03 maintenance 11.5 evidence (enterprise customer v1->v2 migration / rollback / parallel) — 2026-10-10T01:36:54Z
+# command: bash instructor/modules/11-incidents/maintenance/check.sh /tmp/m11-maint
+
+migrate v1->v2 rc                              0 (rows=2 width=24B)
+v1 file untouched                              yes
+v2 enterprise extract vs expected              MATCH
+v1 enterprise baseline vs expected             MATCH
+CUSTOMER v1 status extract vs expected         MATCH
+parallel validation v1<->v2                    PASS
+rollback v2->v1 byte-identical                 yes
+v1 enterprise input to v2 rc                   8 (RC8 as designed)
+CUSTOMER v1 (27B) to v2 extractor rc           8 (RC8)
+empty v2 file                                  RC0, 0 rows
+single v2 row                                  RC0, 1 row
+unknown v1 class (Z) migration rc              8 (no guess)
+wrong v1 version (003) migration rc            8 (no guess)
+PASS: maintenance 11.5 enterprise v1/v2 migration, rollback, parallel
+      validation and CUSTOMER v1 status regression
+raw_rc=0

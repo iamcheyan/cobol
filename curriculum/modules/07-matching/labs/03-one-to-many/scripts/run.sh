@@ -36,7 +36,9 @@ cp -- "$reversal" "$stage/reversal-link.input.dat"
 account="$stage/account.input.dat"
 transaction="$stage/transaction.input.dat"
 reversal="$stage/reversal-link.input.dat"
-source=${COURSE_SOURCE:-"$repo/instructor/modules/07/03-one-to-many/BATCHL2.COB"}
+default_source="$repo/instructor/modules/07/03-one-to-many/BATCHL2.COB"
+[[ -f $default_source ]] || default_source="$here/../starter/BATCHL2.COB"
+source=${COURSE_SOURCE:-"$default_source"}
 cobc -Wall -I "$repo/curriculum/bank/copybooks" -x \
   -o "$stage/batchl2" "$source" || exit 12
 # External sort catches duplicate IDs across distant rows and accounts.

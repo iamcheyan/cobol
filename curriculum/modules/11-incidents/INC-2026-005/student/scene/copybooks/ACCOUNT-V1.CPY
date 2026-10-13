@@ -1,0 +1,9 @@
+       01 ACCOUNT-RECORD.
+          05 ACCOUNT-ID PIC X(10).
+          05 CUSTOMER-ID PIC X(8).
+          05 ACCOUNT-CURRENCY PIC X(3).
+          05 BALANCE-SIGN PIC X.
+          05 OPENING-BALANCE PIC X(13).
+          05 ACCOUNT-STATUS PIC X.
+          05 ACCOUNT-DATE PIC X(8).
+          05 ACCOUNT-LAYOUT PIC X(3).

@@ -1,0 +1,6 @@
+       01 LOG-INTERFACE.
+           05 LOG-IFACE-LENGTH PIC 9(4) COMP-5.
+           05 LOG-IFACE-VERSION PIC X(3).
+           05 LOG-SEVERITY PIC X.
+           05 LOG-EVENT PIC X(8).
+           05 LOG-MESSAGE PIC X(40).

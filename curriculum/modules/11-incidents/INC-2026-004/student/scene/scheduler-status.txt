@@ -1,0 +1,16 @@
+SCHEDULER CONSOLE  (night batch, module 11 incident snapshot)
+business_date : 20261009     run_id : as-found
+engine        : local Bash scheduler (course); not a real JP1/AJS
+================================================================
+JOB001  receive        COMPLETE   rc=0
+JOB002  validate       COMPLETE   rc=0
+JOB003  sort           COMPLETE   rc=0
+JOB004  db-snapshot    COMPLETE   rc=0
+JOB005  match          FAILED     rc=8    <-- net stopped
+JOB006  db-apply       NOT_RUN    rc=-
+JOB007  control        NOT_RUN    rc=-
+JOB008  publish        NOT_RUN    rc=-
+JOB009  complete       NOT_RUN    rc=-
+================================================================
+downstream publish : NONE
+held lock released : yes

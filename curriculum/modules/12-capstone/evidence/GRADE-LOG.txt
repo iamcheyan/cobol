@@ -1,0 +1,20 @@
+=== module 12 capstone grade ===
+submission: /home/tetsuya/development/cobol/curriculum/modules/12-capstone
+rubric total: 100/100 (threshold 80)
+automatic hard gates:
+  [PASS] G4 version compatibility evidence
+  [PASS] G1 no double debit
+  [PASS] G2 amounts/counts reconcile
+  [PASS] G3 failure publishes nothing
+  [PASS] G5 incident root cause reproducible
+  [PASS(substance)/PENDING(manual)] G6 investigation precedes modification
+manual-review learning outcomes (never auto-PASS):
+  [substantive] maintenance/impact-investigation.md -> requires human review
+  [substantive] maintenance/change-list.md -> requires human review
+  [substantive] maintenance/change-policy.md -> requires human review
+  [substantive] maintenance/test-cases.md -> requires human review
+  [substantive] maintenance/evidence-plan.md -> requires human review
+  [substantive] evidence/README.md -> requires human review
+  [substantive] COMPOSITION.md -> requires human review
+signoff: present (/home/tetsuya/development/cobol/instructor/modules/12-capstone/grading/manual-review-signoff.md)
+RESULT: PASS

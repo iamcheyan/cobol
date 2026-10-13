@@ -1,0 +1,7 @@
+business_date=20261010
+layout=v1
+input=curriculum/modules/12-capstone/incidents/incident-01/materials/feed
+output=/var/bank/runs/20261010-incident
+db=/var/bank/db
+run_id=night-20261010-01
+db_layer=offline-file-checkpoint

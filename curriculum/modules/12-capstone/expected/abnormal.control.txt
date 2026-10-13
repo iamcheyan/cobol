@@ -1,0 +1,11 @@
+received=9
+validate_accepted=5
+validate_rejected=4
+match_accepted=4
+match_rejected=1
+ledger_applied=4
+accounts=3
+opening_total=1050
+credit_total=900
+debit_total=200
+closing_total=1750

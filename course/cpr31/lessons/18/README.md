@@ -1,0 +1,90 @@
+# 第 18 课：读取并校验 CSV 客户资料
+
+> 状态：课程草稿。目录已确认；示例源码 235 行固定格式，适用于 GnuCOBOL 3.2.0 默认方言。
+
+## 一、课程目标
+
+学完本课后，你可以：
+
+- 按字段分隔符读取 CSV 客户资料，并检查字段数量。
+- 正确处理带引号的逗号、双引号转义和空字段。
+- 区分字段边界、记录边界和 FD 填充空格。
+- 在字段超长、字段数不正确和引号格式错误时拒绝整行。
+- 用固定 schema 解释每个输入字段的含义和长度限制。
+
+## 二、本课 CSV 约定
+
+[`customers.csv`](./customers.csv) 不带标题行，每条记录固定为五个字段：客户号、姓名、账户号、状态、备注。示例包含未引用字段、姓名中的逗号、双引号转义、显式空字段、少字段行、恰好 20 字符的姓名和超长姓名。
+
+[`lesson_18.cob`](./lesson_18.cob) 用状态标记逐个扫描字符。逗号只有在引号外才结束字段；字段内的 `""` 解析为一个双引号。每个字段最多 20 个字符，且每行必须正好五个字段。无效行整行拒绝并报告原因，不把过长文本静默截断。
+
+GnuCOBOL 的 `UNSTRING` 可按分隔符拆分，也能产生空子串，但它不会自动应用 CSV 的引号状态规则。本例因此显式跟踪“引号内”“刚关闭引号”和“字段起始”状态。
+
+本课实现 RFC 4180 的常见单行字段规则：带逗号或双引号的字段须加双引号，字段内双引号写成两个双引号；空的最后字段写作 `""`，不使用尾随逗号。为保持程序简明，本课 profile 将每个 CSV 记录限制在一个物理行，不支持引号内换行。
+
+## 三、边界与限制
+
+- 输入 FD 最多容纳 200 个字符；必须保证每行不超过该长度。GnuCOBOL 对超过 FD 宽度的行可能截断，本程序无法可靠识别原始超长行。
+- 单字段最多 20 个字符；20 字符接受，21 字符拒绝。
+- 空字段可以出现，包含逗号或双引号的值必须使用引号。
+- 固定长度 FD 的右侧填充空格和行尾真正存在的空格无法区分。行末若空格有意义，应将字段加引号，让空格位于结束引号之前。
+- 本例夹具为 ASCII 数据。真实接口仍需约定字符编码和多字节字符的长度计量方式。
+
+## 四、解析步骤
+
+1. `OPEN INPUT` 打开 `customers.csv`；失败时程序报告文件状态并以返回码 1 结束。
+2. 每次成功的 `READ` 增加行号，并先清空字段表和解析状态。
+3. 字符扫描遇到引号外逗号时开始下一个字段；空字段保留为空值。
+4. 扫描结束后检查未闭合引号、尾随逗号、字段数和字段长度。
+5. 仅当记录结构有效时显示五个字段并增加有效数；否则显示首个解析错误并增加拒绝数。
+6. 到 EOF 后显示汇总。EOF 本身不是一条 CSV 记录。
+
+## 五、编译、运行和预期输出
+
+在本目录运行：
+
+```sh
+scratch_dir=$(mktemp -d)
+trap 'rm -rf "$scratch_dir"' EXIT
+cobc -fsyntax-only lesson_18.cob
+cobc -x -Wall -o "$scratch_dir/lesson_18" lesson_18.cob
+cp customers.csv "$scratch_dir/"
+(cd "$scratch_dir" && ./lesson_18)
+```
+
+程序标准输出：
+
+```text
+ROW=01 STATUS=OK ID=C0001042 NAME=[Ada Lovelace] ACCOUNT=0001234567 STATE=A NOTE=[REGULAR]
+ROW=02 STATUS=OK ID=C0002042 NAME=[Grace, Hopper] ACCOUNT=0002468101 STATE=A NOTE=[]
+ROW=03 STATUS=REJECTED REASON=FIELD_COUNT
+ROW=04 STATUS=OK ID=C0004042 NAME=[A "quote"] ACCOUNT=0009990001 STATE=A NOTE=[NEW]
+ROW=05 STATUS=OK ID=C0005042 NAME=[12345678901234567890] ACCOUNT=0003210001 STATE=A NOTE=[EXACT20]
+ROW=06 STATUS=REJECTED REASON=FIELD_TOO_LONG
+SUMMARY ROWS=06 VALID=04 REJECTED=02
+```
+
+当前环境语法检查、编译和夹具运行均已验证。另验证了字段过多、未闭合引号、未引用字段中的引号、结束引号后的文本、尾随逗号和空引用字段。编译运行时可能显示环境警告 `Warning: program compiled against libxml 212 using older 209`；它不是程序标准输出。
+
+## 六、修改练习（有答案）
+
+1. 从原始夹具出发，在第五行姓名中增加一个字符，使其长度由 20 变为 21。确认该行变为 `FIELD_TOO_LONG`，汇总有效 03、拒绝 03。
+2. 从原始夹具出发，在第一行末尾增加第六个字段 `,EXTRA`。确认该行被拒绝为 `TOO_MANY_FIELDS`，有效数和拒绝数各为 03。
+
+参考答案只覆盖这两项修改练习，见 [`answer.md`](./answer.md)；练习说明见 [`exercise.md`](./exercise.md)。
+
+## 七、举一反三（无答案）
+
+定义一份四字段交易 CSV，支持带引号的收款人姓名、空备注和双引号转义。拒绝缺少或多出的列、未闭合引号以及超长备注；用独立夹具验证每种边界，并说明字段长度依据的是哪种字符编码。
+
+本题不提供答案。不处理跨物理行的引号字段，不连接数据库。
+
+## 八、企业实战补充
+
+CSV 没有一个适用于所有系统的统一 schema。导入前必须确定是否有标题行、列数、引号规则、编码、空值含义和长度上限。生产程序还应把拒绝行保留到可追踪的错误输出；本课聚焦解析规则与边界分类，后续多文件课程会组织输入流。
+
+## 参考资料
+
+- [RFC 4180：CSV 字段、引号与逗号规则](https://www.rfc-editor.org/rfc/rfc4180.html)
+- [GnuCOBOL Programmer’s Guide：UNSTRING](https://superbol.eu/gnucobpg/chapter7.html#unstring)
+- [GnuCOBOL Programmer’s Guide：LINE SEQUENTIAL](https://superbol.eu/gnucobpg/chapter5.html#organization-line-sequential)

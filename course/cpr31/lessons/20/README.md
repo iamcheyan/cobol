@@ -1,0 +1,95 @@
+# 第 20 课：按账户号顺序匹配文件
+
+> 状态：课程草稿。目录已确认；示例源码 199 行固定格式，适用于 GnuCOBOL 3.2.0 默认方言。
+
+## 一、课程目标
+
+学完本课后，你可以：
+
+- 按相同的排序键比较账户主档和交易文件。
+- 在一次顺序扫描中分类匹配记录、只有主档记录和只有交易记录。
+- 在一个输入提前到达 EOF 后，继续归类另一输入中的剩余记录。
+- 解释排序、唯一键和等长字符键比较为何是算法前提。
+- 区分顺序归并与把整份文件装入内存后查找。
+
+## 二、输入记录布局
+
+两个夹具都是按账户号升序排列的行顺序文本文件。每行是定长字段拼接而成，不含字段分隔符。每行结束符只用于分隔物理行，不计入 FD 记录字段。
+
+| 文件 | 字段 | 长度 | 示例值 |
+|---|---|---:|---|
+| `accounts.txt` | 账户号、客户号、余额分 | 10 + 8 + 9 = 27 | `A000000001C0001001000100000` |
+| `transactions.txt` | 账户号、交易类型、金额分 | 10 + 1 + 9 = 20 | `A000000001D000012550` |
+
+金额使用 `PIC 9(7)V99`，`V` 是隐含小数点。例如九位数字 `000012550` 表示 125.50。程序只报告余额和金额，不计算新余额。
+
+## 三、顺序匹配算法
+
+程序先分别读取两边的第一条记录。之后每次比较当前账户号：
+
+1. 主档键较小：该账户没有当前交易，输出 `ACCOUNT_ONLY`，只读取下一条主档记录。
+2. 交易键较小：该交易没有当前账户，输出 `TRANSACTION_ONLY`，只读取下一条交易记录。
+3. 两键相同：输出 `MATCH`，两边各读取下一条。
+4. 一边到 EOF：另一边剩余记录全部归为对应的单边记录。
+5. 两边都到 EOF：结束扫描并输出三类记录计数。
+
+每条记录最多向前读取一次，工作存储不随文件长度增长。由于算法只向前比较，它要求两个文件都按相同键升序排列；本例键均为十字符文本，按固定长度字符顺序比较。输入必须保证每个账户号最多出现一次。
+
+## 四、编译、运行和预期输出
+
+在本目录运行：
+
+```sh
+scratch_dir=$(mktemp -d)
+trap 'rm -rf "$scratch_dir"' EXIT
+cobc -fsyntax-only lesson_20.cob
+cobc -x -Wall -o "$scratch_dir/lesson_20" lesson_20.cob
+cp accounts.txt transactions.txt "$scratch_dir/"
+(cd "$scratch_dir" && ./lesson_20)
+```
+
+标准输出：
+
+```text
+OPEN=ACCOUNT OK OPEN=TRANSACTION OK
+MATCH ACCOUNT=A000000001 CUSTOMER=C0001001 BALANCE=0001000.00 TYPE=D AMOUNT=0000125.50
+ACCOUNT_ONLY ACCOUNT=A000000003 CUSTOMER=C0001003 BALANCE=0000002.00
+TRANSACTION_ONLY ACCOUNT=A000000004 TYPE=D AMOUNT=0000075.00
+MATCH ACCOUNT=A000000005 CUSTOMER=C0001005 BALANCE=0000250.75 TYPE=T AMOUNT=0000040.00
+TRANSACTION_ONLY ACCOUNT=A000000006 TYPE=D AMOUNT=0000020.00
+SUMMARY MATCHED=002 ACCOUNT_ONLY=001 TRANSACTION_ONLY=002
+```
+
+当前环境已验证语法检查、编译、完整夹具运行、交易键小于主档键、主档提前结束和空输入。编译运行时可能显示环境警告 `Warning: program compiled against libxml 212 using older 209`；它不属于程序标准输出。
+
+## 五、正确性前提和文件错误
+
+- 任一输入未排序都会使归并结论失效；先按相同字符排序规则整理两份输入。
+- 本例假设账户号唯一，不处理重复主档行或同一账户的多笔交易。
+- 若一个输入 OPEN 失败，程序不开始匹配；第二个 OPEN 失败时会关闭已打开的主档。
+- `AT END` 处理状态 `10`；其他 READ 状态会报告文件名和状态并以非零返回码结束。
+- 每个 FD 宽度必须与实际行长一致：主档 27 字符、交易 20 字符。
+- 本课没有写出文件，也没有做交易金额累计；这些属于后续批处理练习。
+
+## 六、修改练习（有答案）
+
+1. 从临时副本的 `transactions.txt` 删除账户 `A000000004` 的记录。确认该主档与下一条交易键之间按顺序分别分类，并检查三类计数。
+2. 将该交易键改为主档账户 `A000000003`，其余字段维持 20 字符且排序不变。确认该记录与原来的主档单边记录配对。
+
+参考答案只覆盖这两项修改练习，见 [`answer.md`](./answer.md)；操作步骤见 [`exercise.md`](./exercise.md)。
+
+## 七、举一反三（无答案）
+
+为主档和交易各增加一个重复账户键，设计程序检测重复键并拒绝该键组；给两种文件各加入一个未排序行，说明如何在归并前验证排序。记录排序规则、重复键政策和每个输入的行数。
+
+本题不提供答案。不使用表格把整份文件装入内存，不添加数据库或 SORT 语句。
+
+## 八、企业实战补充
+
+主档对账通常把有序主档和有序业务流做一次归并扫描。上线前必须明确键的编码、排序规则、重复键政策、缺失记录分类和金额存储方式。真实批次还需要保留拒绝/孤立记录、输入文件摘要及批次控制信息；本课只演示顺序键比较与分类。
+
+## 参考资料
+
+- [GnuCOBOL Programmer’s Guide：ORGANIZATION SEQUENTIAL](https://superbol.eu/gnucobpg/chapter5.html#organization-sequential)
+- [GnuCOBOL Programmer’s Guide：LINE SEQUENTIAL](https://superbol.eu/gnucobpg/chapter5.html#organization-line-sequential)
+- [GnuCOBOL Programmer’s Guide：Sequential READ 与 AT END](https://superbol.eu/gnucobpg/chapter7.html#sequential-read)

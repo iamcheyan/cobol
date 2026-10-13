@@ -44,12 +44,21 @@ make course-check
 
 ## 独立示例
 
-根目录还保留四个可单独编译的示例：`INPUTCSV.COB`、`FIXEDREC.COB`、`TBLSRCH.COB` 和 `BATCHRPT.COB`。它们演示分隔文本转 CSV、定长记录、表格查找和控制断点报表；相关 Copybook 与输入数据也保留在根目录。
+仓库还保留四个可单独运行的实战示例，可按主题配合主课阅读：
+
+| 示例 | 对应主课 | 可练习内容 |
+|---|---|---|
+| [`INPUTCSV.COB`](INPUTCSV.COB) | [18 CSV](lessons/18/README.md)、[23 COPYBOOK](lessons/23/README.md) | `UNSTRING`、清洗分隔文本、Copybook 和 CSV 输出 |
+| [`FIXEDREC.COB`](FIXEDREC.COB) | [10 REDEFINES](lessons/10/README.md)、[17 固定长文件](lessons/17/README.md) | 固定宽度记录、`REDEFINES`、状态校验 |
+| [`TBLSRCH.COB`](TBLSRCH.COB) | [11 OCCURS](lessons/11/README.md)、[13 SEARCH](lessons/13/README.md) | `OCCURS`、`INDEXED BY`、`SEARCH ALL` |
+| [`BATCHRPT.COB`](BATCHRPT.COB) | [22 综合文件项目](lessons/22/README.md)、[32 毕业项目](lessons/32/README.md) | 排序输入上的控制断点、小计和审计报表 |
+
+它们的输入、Copybook、语法检查和运行入口由根目录 Makefile 管理：
 
 ```sh
 make check   # 语法检查四个独立示例
-make run     # 编译并运行示例，展示输出文件
-make clean   # 清理根目录生成的程序和输出
+make run     # 编译运行示例并预览输出文件
+make clean   # 清理生成的程序与输出
 ```
 
 Neovim 插件是辅助学习工具，不替代 `cobc` 编译和程序运行。安装与插件练习见 [`docs/07-cobol-nvim-plugin-lab.md`](docs/07-cobol-nvim-plugin-lab.md)。

@@ -1,0 +1,25 @@
+# 第 03 课修改练习参考答案
+
+本答案只覆盖 `exercise.md` 中的两项修改，不提供举一反三练习答案。
+
+修改两条初值：
+
+```cobol
+       01 WS-DEPOSIT PIC 9(7)V99 VALUE 200.65.
+       01 WS-PERIOD-RATE PIC 9(1)V9(4) VALUE 0.0150.
+```
+
+重新运行后，相关输出应为：
+
+```text
+DEPOSIT=0000200.65
+PERIOD-RATE=0.0150
+PRE-INTEREST-BALANCE=0001155.30
+INTEREST-RAW-4DP=00017.3295
+INTEREST-MOVE-2DP=00017.32
+INTEREST-COMPUTE-TRUNC=00017.32
+INTEREST-COMPUTE-ROUNDED=00017.33
+CLOSING-BALANCE=0001172.63
+```
+
+核对：`1000.00 + 200.65 - 40.10 - 5.25 = 1155.30`；`1155.30 × 0.0150 = 17.3295`。目标字段保留两位小数时，未舍入结果为 `17.32`，默认舍入结果为 `17.33`；期末余额按本例规则为 `1155.30 + 17.33 = 1172.63`。

@@ -1,1 +1,3 @@
 **/build/
+!27/expected-batch.log
+!28/expected-batch.log

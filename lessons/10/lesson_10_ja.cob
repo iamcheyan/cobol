@@ -1,0 +1,100 @@
+      * レッスン 10: 共有ストレージ上の 2 つのトランザクション レイアウトについて説明します。
+      * REDEFINES は、2 つの同じレベルのデータ項目に同じ記憶領域を与えます。
+      * トランザクション コードは、どのビューが意味を持つかをプログラムに伝えます。
+      * 入金ペイロード: アカウント、金額、トランザクション参照。
+      * ペイロードの転送: ソースアカウント、ターゲットアカウント、および金額。
+      * この例では、各ペイロードに 27 個の表示文字位置があります。
+      * 代替ビューは自動データ変換ではありません。
+      * 値は、選択した基本フィールドを介して移動されます。
+      * 次にプログラムは、他のビューがそれらの同じバイトをどのように認識するかを示します。
+      * このデモでは、ファイル、外部入力、テーブルは使用されません。
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. REDEF10.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+      * トランザクション コードは、再定義されるペイロードの外にあります。
+       01 WS-TRANSACTION-RECORD.
+          05 WS-TRANSACTION-CODE PIC X.
+      * この主題図では、堆積物の形をしたペイロードについて説明します。
+          05 WS-DEPOSIT-PAYLOAD.
+             10 WS-ACCOUNT-NUMBER PIC X(10).
+             10 WS-DEPOSIT-AMOUNT PIC 9(5)V99.
+             10 WS-REFERENCE PIC X(10).
+      * 再定義ビューは同じ格納位置から始まります。
+          05 WS-TRANSFER-PAYLOAD REDEFINES WS-DEPOSIT-PAYLOAD.
+             10 WS-SOURCE-ACCOUNT PIC X(10).
+             10 WS-TARGET-ACCOUNT PIC X(10).
+             10 WS-TRANSFER-AMOUNT PIC 9(5)V99.
+       PROCEDURE DIVISION.
+      * 最初にペイロードを入金トランザクションとして表示します。
+       0000-MAIN.
+           PERFORM 1000-LOAD-DEPOSIT
+           PERFORM 2000-LOAD-TRANSFER
+           STOP RUN.
+      * 件名レイアウトを通じてフィールドをロードして表示します。
+       1000-LOAD-DEPOSIT.
+           MOVE "D" TO WS-TRANSACTION-CODE
+           MOVE "0001234567" TO WS-ACCOUNT-NUMBER
+           MOVE 125.50 TO WS-DEPOSIT-AMOUNT
+           MOVE "TXN-000001" TO WS-REFERENCE
+           DISPLAY "TYPE=" WS-TRANSACTION-CODE
+           DISPLAY "DEPOSIT ACCOUNT=" WS-ACCOUNT-NUMBER
+           DISPLAY "DEPOSIT AMOUNT=" WS-DEPOSIT-AMOUNT
+           DISPLAY "DEPOSIT REFERENCE=" WS-REFERENCE.
+      * レイアウトを再定義して転送を書き込みます。
+       2000-LOAD-TRANSFER.
+           MOVE "T" TO WS-TRANSACTION-CODE
+           MOVE "0001234567" TO WS-SOURCE-ACCOUNT
+           MOVE "0007654321" TO WS-TARGET-ACCOUNT
+           MOVE 250.75 TO WS-TRANSFER-AMOUNT
+           DISPLAY "TYPE=" WS-TRANSACTION-CODE
+           DISPLAY "TRANSFER SOURCE=" WS-SOURCE-ACCOUNT
+           DISPLAY "TRANSFER TARGET=" WS-TARGET-ACCOUNT
+           DISPLAY "TRANSFER AMOUNT=" WS-TRANSFER-AMOUNT
+      * サブジェクト名は転送ペイロード バイトを読み取るようになりました。
+           DISPLAY "DEPOSIT VIEW OF SAME BYTES:"
+           DISPLAY "ACCOUNT=" WS-ACCOUNT-NUMBER
+           DISPLAY "AMOUNT=" WS-DEPOSIT-AMOUNT
+           DISPLAY "REFERENCE=" WS-REFERENCE.
+      * どちらのレイアウトもレコード内の同じ位置から始まります。
+      * サブジェクトと再定義項目は両方ともレベル 05 グループです。
+      * 再定義兄弟は、サブジェクトの子エントリの後に続きます。
+      * これら 2 つの定義の間にピア レベルの項目は配置されません。
+      * デポジット ペイロードには 10 + 7 + 10 の表示位置が含まれます。
+      * 転送ペイロードには 10 + 10 + 7 の表示位置が含まれます。
+      * したがって、この例では両方のレイアウトで 27 の位置が記述されます。
+      * 基本グループは、REDEFINES によって命名されたサブジェクトです。
+      * 2 番目のグループは再定義オブジェクトです。
+      * どちらの記述もソースプログラムに残ります。
+      * ペイロードには、メモリ内に 1 つの共有バイト セットがあります。
+      * コード フィールドは、どのトランザクション タイプがアクティブであるかをマークします。
+      * ペイロード グループは、01 レコードの下の兄弟です。
+      * 彼らの PIC 条項はさまざまなビジネス分野について説明しています。
+      * 名前付き数値フィールドは、数値画像を使用して表示されます。
+      * 各トランザクション タイプを宣言されたビューと照合して確認します。
+      * GnuCOBOL では、割り当てられたサイズが一致する必要があります。
+      * 再定義グループとその子には VALUE 句がありません。
+      * PROCEDURE DIVISION MOVE は両方のビューを初期化します。
+      * 一方のビューを介して書き込むと、もう一方のビューのバイトが変更されます。
+      * データを 2 番目の独立したレコードにコピーすることはありません。
+      * トランザクション コードは共有ペイロードの外側に残ります。
+      * トランザクション コード コントラクトを使用してビューを選択します。
+      * このサンプルでは、​​入金に D、転送に T を使用しています。
+      * 入金額は最初は 00125.50 と表示されます。
+      * その後、転送金額は 00250.75 と表示されます。
+      * デポジットビューでは、転送対象の数字が金額に似ています。
+      * このビューでは、ターゲットの最初の 7 桁が 00076.54 として表示されます。
+      * 残りの対象桁は転送金額に参考として加わります。
+      * このオーバーレイは有効なデポジットの解釈ではありません。
+      * 両方のビューを独立したトランザクションとして扱わないでください。
+      * REDEFINES はトランザクション コードを検査または検証しません。
+      * REDEFINES はデータ表現を変換しません。
+      * フィールド名は解釈を文書化します。バイトにはタグを付けません。
+      * 正確なレイアウトは、宣言された PIC 句と USAGE 句によって異なります。
+      * これらの表示フィールドは、単純な表示例に使用されます。
+      * パックされたフィールドまたはバイナリ フィールドの場合は、別のレイアウト分析が必要になります。
+      * ファイル交換にはさらにエンコードと記録ルールが必要です。
+      * サイズを比較するには、交互のレイアウトをまとめて保持します。
+      * サイズの不一致は、変換ではなくレイアウト エラーです。
+      * レッスン 14 では、REDEFINE とテーブルおよびルックアップ ロジックを組み合わせます。
+      * STOP RUN は、この固定データ ストレージのデモを終了します。

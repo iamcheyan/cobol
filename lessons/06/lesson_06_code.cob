@@ -1,0 +1,26 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. PERFORM06.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 WS-LAST-SAMPLE PIC 9 VALUE 3.
+       01 WS-SAMPLE-INDEX PIC 9 VALUE ZERO.
+       01 WS-PROCESSED-COUNT PIC 9(3) VALUE ZERO.
+       PROCEDURE DIVISION.
+           DISPLAY "LAST-SAMPLE=" WS-LAST-SAMPLE
+           PERFORM VARYING WS-SAMPLE-INDEX FROM 1 BY 1
+               UNTIL WS-SAMPLE-INDEX > WS-LAST-SAMPLE
+               EVALUATE WS-SAMPLE-INDEX
+                   WHEN 1
+                       DISPLAY "SAMPLE=001 CODE=D AMOUNT=125.50"
+                   WHEN 2
+                       DISPLAY "SAMPLE=002 CODE=W AMOUNT=040.10"
+                   WHEN 3
+                       DISPLAY "SAMPLE=003 CODE=T AMOUNT=075.00"
+                   WHEN OTHER
+                       DISPLAY "SAMPLE=UNMAPPED"
+               END-EVALUATE
+               COMPUTE WS-PROCESSED-COUNT =
+                   WS-PROCESSED-COUNT + 1
+           END-PERFORM
+           DISPLAY "SAMPLES-PROCESSED=" WS-PROCESSED-COUNT
+           STOP RUN.

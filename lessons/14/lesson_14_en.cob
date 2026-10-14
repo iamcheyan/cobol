@@ -1,16 +1,16 @@
-      * Lesson 14: match typed transactions against account records.
-      * Account records are grouped in a hierarchy and kept in a table.
-      * Transaction payloads share storage through REDEFINES.
-      * SEARCH ALL associates transaction account keys with master data.
-      * Deposit and transfer layouts have equal storage size.
-      * Transfers check both accounts before changing any balance.
-      * The master table is actually in ascending account-key order.
-      * This fixed-data batch uses no files or database.
+      *Lesson 14: match typed transactions against account records.
+      *Account records are grouped in a hierarchy and kept in a table.
+      *Transaction payloads share storage through REDEFINES.
+      *SEARCH ALL associates transaction account keys with master data.
+      *Deposit and transfer layouts have equal storage size.
+      *Transfers check both accounts before changing any balance.
+      *The master table is actually in ascending account-key order.
+      *This fixed-data batch uses no files or database.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. MATCH14.
        DATA DIVISION.
        WORKING-STORAGE SECTION.
-      * Account identity and balance form one repeated master record.
+      *Account identity and balance form one repeated master record.
        01 WS-ACCOUNT-TABLE.
           05 WS-ACCOUNT-ENTRY OCCURS 3 TIMES
              ASCENDING KEY IS WS-ACCOUNT-NUMBER
@@ -18,7 +18,7 @@
              10 WS-ACCOUNT-INFO.
                 15 WS-ACCOUNT-NUMBER PIC X(10).
                 15 WS-ACCOUNT-BALANCE PIC 9(7)V99.
-      * Each transaction has a type followed by a shared payload area.
+      *Each transaction has a type followed by a shared payload area.
        01 WS-TRANSACTION-TABLE.
           05 WS-TRANSACTION-ENTRY OCCURS 4 TIMES.
              10 WS-TRANSACTION-CODE PIC X.
@@ -38,7 +38,7 @@
        01 WS-POSTED-COUNT PIC 9(2) VALUE ZERO.
        01 WS-REJECTED-COUNT PIC 9(2) VALUE ZERO.
        PROCEDURE DIVISION.
-      * Load both in-memory data sets before processing any transaction.
+      *Load both in-memory data sets before processing any transaction.
        0000-MAIN.
            PERFORM 1000-LOAD-ACCOUNTS
            PERFORM 1100-LOAD-TRANSACTIONS
@@ -50,7 +50,7 @@
            END-PERFORM
            PERFORM 9000-REPORT
            STOP RUN.
-      * Entries are loaded in the actual ascending key order.
+      *Entries are loaded in the actual ascending key order.
        1000-LOAD-ACCOUNTS.
            MOVE "0001234567" TO WS-ACCOUNT-NUMBER(1)
            MOVE 1000.00 TO WS-ACCOUNT-BALANCE(1)
@@ -58,7 +58,7 @@
            MOVE 200.00 TO WS-ACCOUNT-BALANCE(2)
            MOVE "0007654321" TO WS-ACCOUNT-NUMBER(3)
            MOVE 50.00 TO WS-ACCOUNT-BALANCE(3).
-      * Deposit and transfer payloads occupy the same 27 characters.
+      *Deposit and transfer payloads occupy the same 27 characters.
        1100-LOAD-TRANSACTIONS.
            MOVE "D" TO WS-TRANSACTION-CODE(1)
            MOVE "0001234567" TO WS-DEPOSIT-ACCOUNT(1)
@@ -76,7 +76,7 @@
            MOVE "0007654321" TO WS-SOURCE-ACCOUNT(4)
            MOVE "0009999999" TO WS-TARGET-ACCOUNT(4)
            MOVE 20.00 TO WS-TRANSFER-AMOUNT(4).
-      * The transaction code determines which payload view is active.
+      *The transaction code determines which payload view is active.
        2000-PROCESS-TRANSACTION.
            DISPLAY "TXN=" WS-TRANSACTION-NUMBER
                " TYPE=" WS-TRANSACTION-CODE(WS-TRANSACTION-NUMBER)
@@ -89,7 +89,7 @@
                    DISPLAY "RESULT=REJECTED REASON=UNKNOWN_TYPE"
                    ADD 1 TO WS-REJECTED-COUNT
            END-EVALUATE.
-      * A deposit changes one matched account balance.
+      *A deposit changes one matched account balance.
        2100-POST-DEPOSIT.
            MOVE WS-DEPOSIT-ACCOUNT(WS-TRANSACTION-NUMBER)
                TO WS-SEARCH-KEY
@@ -107,7 +107,7 @@
                DISPLAY "RESULT=REJECTED REASON=ACCOUNT_NOT_FOUND"
                ADD 1 TO WS-REJECTED-COUNT
            END-IF.
-      * Validate both transfer accounts before applying either balance.
+      *Validate both transfer accounts before applying either balance.
        2200-POST-TRANSFER.
            MOVE WS-SOURCE-ACCOUNT(WS-TRANSACTION-NUMBER)
                TO WS-SEARCH-KEY
@@ -148,7 +148,7 @@
                    " REASON=SOURCE_NOT_FOUND"
                ADD 1 TO WS-REJECTED-COUNT
            END-IF.
-      * SEARCH ALL uses the unique ascending account key.
+      *SEARCH ALL uses the unique ascending account key.
        3000-FIND-ACCOUNT.
            MOVE "N" TO WS-ACCOUNT-FOUND
            SEARCH ALL WS-ACCOUNT-ENTRY
@@ -158,7 +158,7 @@
                    = WS-SEARCH-KEY
                    MOVE "Y" TO WS-ACCOUNT-FOUND
            END-SEARCH.
-      * Report each account balance and batch outcome counts.
+      *Report each account balance and batch outcome counts.
        9000-REPORT.
            DISPLAY "BALANCE ACCOUNT=" WS-ACCOUNT-NUMBER(1)
                " VALUE=" WS-ACCOUNT-BALANCE(1)

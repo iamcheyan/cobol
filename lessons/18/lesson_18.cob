@@ -1,3 +1,8 @@
+      * レッスン18：1行1件のCSV顧客レコードを検証して解析します。
+      * 5つのフィールドはID、名前、口座、ステータス、備考です。
+      * 引用符内のカンマと二重引用符は、フィールドの内容として解析されます。
+      * 空フィールドは保持され、20文字を超えるフィールドは拒否されます。
+      * この仕様では、CSVレコード1件が物理行1行を占めます。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. CSV18.
        ENVIRONMENT DIVISION.
@@ -32,6 +37,7 @@
        01 WS-FIELD-NUMBER PIC 9(3) VALUE ZERO.
        01 WS-FIELD-LENGTH PIC 9(3) VALUE ZERO.
        PROCEDURE DIVISION.
+      * CSVの各物理行をファイル順に読み取り、検証します。
        0000-MAIN.
            OPEN INPUT CUSTOMER-CSV
            IF WS-FILE-STATUS NOT = "00"
@@ -53,6 +59,7 @@
                " VALID=" WS-VALID-COUNT
                " REJECTED=" WS-REJECTED-COUNT
            STOP RUN.
+      * 入力行を個別に処理する前に、パーサーの状態をリセットします。
        1000-PARSE-ROW.
            INITIALIZE WS-FIELDS
            MOVE SPACES TO WS-CSV-ERROR
@@ -80,6 +87,7 @@
                PERFORM 2910-SET-FIELD-COUNT-ERROR
            END-IF
            PERFORM 3000-REPORT-ROW.
+      * 現在の文字に対して、引用符とカンマの規則を適用します。
        2000-PARSE-CHARACTER.
            IF WS-IN-QUOTES = "Y"
                IF WS-CURRENT-CHAR = WS-QUOTE
@@ -90,6 +98,7 @@
            ELSE
                PERFORM 2200-HANDLE-UNQUOTED-CHAR
            END-IF.
+      * 二重引用符は、引用符で囲まれた値の中では引用符1文字を表します。
        2100-HANDLE-QUOTE-IN-FIELD.
            IF WS-CHAR-POSITION < WS-LINE-LENGTH
                COMPUTE WS-NEXT-POSITION = WS-CHAR-POSITION + 1
@@ -104,6 +113,7 @@
                MOVE "N" TO WS-IN-QUOTES
                MOVE "Y" TO WS-AFTER-QUOTE
            END-IF.
+      * 引用符の外では、カンマがフィールドを終了し、引用符がフィールドを開始します。
        2200-HANDLE-UNQUOTED-CHAR.
            IF WS-AFTER-QUOTE = "Y"
                IF WS-CURRENT-CHAR = WS-COMMA
@@ -133,6 +143,7 @@
                        MOVE "N" TO WS-FIELD-START
                END-EVALUATE
            END-IF.
+      * 区切り文字は、新しいフィールドを開始します。空フィールドの場合も同様です。
        2300-START-NEXT-FIELD.
            ADD 1 TO WS-FIELD-NUMBER
            MOVE ZERO TO WS-FIELD-LENGTH
@@ -143,6 +154,7 @@
                    MOVE "TOO_MANY_FIELDS" TO WS-CSV-ERROR
                END-IF
            END-IF.
+      * 解析に成功したフィールドを保持し、長すぎる値は拒否します。
        4000-APPEND-CHARACTER.
            ADD 1 TO WS-FIELD-LENGTH
            IF WS-FIELD-NUMBER <= 5
@@ -160,6 +172,7 @@
                    MOVE "TOO_MANY_FIELDS" TO WS-CSV-ERROR
                END-IF
            END-IF.
+      * この入力行で最初に検出した解析エラーを保持します。
        2900-SET-UNCLOSED-QUOTE.
            IF WS-CSV-ERROR = SPACES
                MOVE "UNCLOSED_QUOTE" TO WS-CSV-ERROR
@@ -172,6 +185,7 @@
            IF WS-CSV-ERROR = SPACES
                MOVE "TRAILING_COMMA" TO WS-CSV-ERROR
            END-IF.
+      * 構造と長さの両方が有効な場合に限り、解析した値を表示します。
        3000-REPORT-ROW.
            IF WS-CSV-ERROR = SPACES
                ADD 1 TO WS-VALID-COUNT
@@ -192,3 +206,30 @@
                    " STATUS=REJECTED REASON="
                    FUNCTION TRIM(WS-CSV-ERROR TRAILING)
            END-IF.
+      * 引用符で囲まれたフィールド内のCSVのカンマはデータであり、区切り文字ではありません。
+      * 引用符で囲まれたフィールド内の二重引用符は、引用符1文字を表します。
+      * 引用符の有無にかかわらず、空フィールドの長さは0です。
+      * このCSV仕様では、末尾のカンマを拒否します。
+      * スキーマでは、有効な各行にフィールドがちょうど5個必要です。
+      * 余分な区切り文字があると、領域を超過せずにTOO_MANY_FIELDSになります。
+      * 最後のフィールド走査後、列数が足りない行はFIELD_COUNTになります。
+      * 引用符でフィールドを開始できるのは、そのフィールドの最初の文字位置だけです。
+      * 閉じ引用符の後に区切り文字以外の文字が続く場合、その行は拒否されます。
+      * 閉じ引用符のない開始引用符はUNCLOSED_QUOTEになります。
+      * 最初の解析エラーを、その行の拒否理由として保持します。
+      * 各フィールドに格納できるのは最大20文字です。
+      * 長すぎる値は黙って切り詰めず、拒否します。
+      * 入力行領域に格納できるのは最大200文字です。
+      * これより長い行順次レコードは、ランタイムによって切り詰められる場合があります。
+      * この仕様では、引用符で囲まれたフィールド内の改行をサポートしません。
+      * 閉じ引用符の前の空白は、フィールド値の一部として扱われます。
+      * 最後のフィールドの末尾空白が重要な場合は、そのフィールドを引用符で囲んでください。
+      * 引用符のない末尾空白は、FDのパディングと区別できません。
+      * TRIMは、行の長さを測定して表示する際にFDのパディングを除去します。
+      * フィクスチャには、有効、空、不正形式、境界値の例が含まれます。
+      * このレッスンでは、入力の物理行1行をCSVレコード1件として扱います。
+      * OPENの失敗は、レコードを読み取る前に報告されます。
+      * EOFはCSVの行数に含めません。
+      * このプログラムはCSVを読み取りますが、入力ファイルを変更も書き込みもしません。
+      * 以降のレッスンでは、複数のファイルストリームを連携させます。
+      * STOP RUNは、この1行CSV解析の演習を終了します。

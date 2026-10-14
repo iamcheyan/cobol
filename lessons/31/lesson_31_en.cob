@@ -1,7 +1,9 @@
+      *Program identity and runtime file/database resources.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON31.
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
+      *Assign line-sequential files and capture each operation status.
        FILE-CONTROL.
            SELECT SNAPSHOT-FILE ASSIGN TO "snapshot.txt"
                ORGANIZATION IS LINE SEQUENTIAL
@@ -9,12 +11,16 @@
            SELECT DIFFERENCE-FILE ASSIGN TO "differences.txt"
                ORGANIZATION IS LINE SEQUENTIAL
                FILE STATUS IS WS-OUT-STATUS.
+      *Fixed-width records keep the input layout explicit.
        DATA DIVISION.
        FILE SECTION.
        FD SNAPSHOT-FILE.
        01 SNAPSHOT-RECORD PIC X(27).
        FD DIFFERENCE-FILE.
        01 DIFFERENCE-RECORD PIC X(80).
+      *Working fields separate raw text, numeric values, and run state.
+      *Packed decimal stores cents precisely; counters summarize each
+      *outcome.
        WORKING-STORAGE SECTION.
        01 WS-FILE-STATUS PIC XX.
        01 WS-OUT-STATUS PIC XX.
@@ -39,7 +45,11 @@
        01 WS-EOF PIC X VALUE "N".
        01 WS-FAILED PIC X VALUE "N".
        EXEC SQL INCLUDE SQLCA END-EXEC.
+      *Run in dependency order and stop later stages after an error.
        PROCEDURE DIVISION.
+      *Open files, connect only after successful opens, then reconcile.
+      *Close only resources marked open; disconnect after reporting
+      *totals.
        MAIN-PROCEDURE.
            PERFORM 1000-OPEN-INPUT
            IF WS-FAILED NOT = "Y"
@@ -79,6 +89,7 @@
                END-IF
            END-IF
            GOBACK.
+      *Open the snapshot before processing and retain its file status.
        1000-OPEN-INPUT.
            OPEN INPUT SNAPSHOT-FILE
            IF WS-FILE-STATUS = "00"
@@ -87,6 +98,7 @@
                DISPLAY "ERROR=OPEN INPUT STATUS=" WS-FILE-STATUS
                MOVE "Y" TO WS-FAILED
            END-IF.
+      *Create the differences report; a failed open prevents processing.
        1100-OPEN-OUTPUT.
            OPEN OUTPUT DIFFERENCE-FILE
            IF WS-OUT-STATUS = "00"
@@ -95,6 +107,9 @@
                DISPLAY "ERROR=OPEN OUTPUT STATUS=" WS-OUT-STATUS
                MOVE "Y" TO WS-FAILED
            END-IF.
+      *Read connection settings from DATASRC, DATASRC_USR, and
+      *DATASRC_PWD.
+      *Embedded SQL reports SQLSTATE; credentials are not displayed.
        1200-CONNECT-DATABASE.
            DISPLAY "DATASRC" UPON ENVIRONMENT-NAME
            ACCEPT WS-DATASRC FROM ENVIRONMENT-VALUE
@@ -113,6 +128,7 @@
                DISPLAY "CONNECT=ERROR SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            END-IF.
+      *Read one 27-character record at a time until EOF or failure.
        2000-READ-SNAPSHOT.
            PERFORM UNTIL WS-EOF = "Y" OR WS-FAILED = "Y"
                READ SNAPSHOT-FILE
@@ -128,6 +144,9 @@
                        END-IF
                END-READ
            END-PERFORM.
+      *Slice account (10), customer (8), and cents text (9) by position.
+      *Validate digits before NUMVAL; divide by 100 to obtain currency
+      *units.
        3000-RECONCILE-ROW.
            ADD 1 TO WS-ROW-COUNT
            MOVE SNAPSHOT-RECORD(1:10) TO WS-ACCOUNT
@@ -141,6 +160,11 @@
                DISPLAY "ERROR=INVALID BALANCE ACCOUNT=" WS-ACCOUNT
                MOVE "Y" TO WS-FAILED
            END-IF.
+      *Fetch the database row for this account using a host variable.
+      *SQLCODE 0 compares customer and balance; 100 means no matching
+      *row.
+      *Other SQL errors stop the run instead of inventing a
+      *reconciliation result.
        3100-LOOKUP-ACCOUNT.
            MOVE SPACES TO WS-DB-CUSTOMER
            MOVE ZERO TO WS-DB-BALANCE
@@ -170,6 +194,10 @@
            IF WS-FAILED NOT = "Y"
                PERFORM 4000-WRITE-RESULT
            END-IF.
+      *Persist every classified row in RECON_RESULT first.
+      *Write only non-MATCH rows to differences.txt for focused review.
+      *STRING assembles a fixed-width report; status checks catch write
+      *errors.
        4000-WRITE-RESULT.
            EXEC SQL
                INSERT INTO RECON_RESULT
@@ -201,6 +229,7 @@
                    END-IF
                END-IF
            END-IF.
+      *Reset the SQL connection after file cleanup and report failure.
        9000-DISCONNECT-DATABASE.
            EXEC SQL CONNECT RESET END-EXEC
            IF SQLCODE = 0

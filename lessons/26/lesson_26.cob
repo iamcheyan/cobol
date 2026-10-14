@@ -1,3 +1,4 @@
+      * 日本語：第26課：業務データの不正行とファイル障害を区別する。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. ERROR26.
        ENVIRONMENT DIVISION.
@@ -42,6 +43,7 @@
        01 WS-ACCEPTED-COUNT PIC 9(3) VALUE ZERO.
        01 WS-REJECTED-COUNT PIC 9(3) VALUE ZERO.
        PROCEDURE DIVISION.
+      * 日本語：システム I/O に問題がある場合に限り、メインは失敗を返す。
        0000-MAIN.
            PERFORM 1000-OPEN-FILES
            IF WS-SYSTEM-ERROR = "N"
@@ -56,6 +58,7 @@
                MOVE 1 TO RETURN-CODE
            END-IF
            STOP RUN.
+      * 日本語：どちらかの出力ファイルを作成する前に入力ファイルを開く。
        1000-OPEN-FILES.
            OPEN INPUT TRANSACTION-INPUT
            IF WS-INPUT-STATUS = "00"
@@ -84,6 +87,7 @@
                    MOVE "Y" TO WS-SYSTEM-ERROR
                END-IF
            END-IF.
+      * 日本語：AT END は EOF を処理し、それ以外の状態はシステムエラーとする。
        2000-PROCESS-INPUT.
            PERFORM UNTIL WS-END-OF-FILE = "Y"
                OR WS-SYSTEM-ERROR = "Y"
@@ -105,6 +109,7 @@
                    WS-INPUT-STATUS
                MOVE "Y" TO WS-SYSTEM-ERROR
            END-IF.
+      * 日本語：業務検証で行を拒否しても、バッチ処理は続行する。
        3000-VALIDATE-RECORD.
            MOVE SPACES TO WS-REJECT-REASON
            MOVE FD-TRANSACTION-RECORD(1:6) TO WS-ACCOUNT
@@ -132,6 +137,7 @@
            ELSE
                PERFORM 5000-WRITE-REJECTED
            END-IF.
+      * 日本語：出力の WRITE が成功した後に限り、有効行として数える。
        4000-WRITE-ACCEPTED.
            MOVE FD-TRANSACTION-RECORD(1:12)
                TO WS-ACCEPTED-WORK
@@ -144,6 +150,7 @@
                    WS-ACCEPTED-STATUS
                MOVE "Y" TO WS-SYSTEM-ERROR
            END-IF.
+      * 日本語：形式不正の業務行を記録し、その後も処理を続ける。
        5000-WRITE-REJECTED.
            MOVE SPACES TO WS-REJECTED-WORK
            MOVE WS-ACCOUNT TO WS-REJECTED-WORK(1:6)
@@ -160,6 +167,7 @@
                    WS-REJECTED-STATUS
                MOVE "Y" TO WS-SYSTEM-ERROR
            END-IF.
+      * 日本語：OPEN に成功したすべてのファイルを閉じ、それぞれの状態を確認する。
        8000-CLOSE-FILES.
            IF WS-REJECTED-OPEN = "Y"
                CLOSE REJECTED-OUTPUT

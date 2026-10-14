@@ -5,6 +5,12 @@
        WORKING-STORAGE SECTION.
        COPY "ACCOUNT-REC.CPY".
        01 WS-REPORT-BALANCE PIC 9(7).99 VALUE ZERO.
+      * Build an independent report row using the shared copybook
+      * fields.
+      * Set the account and customer identifiers and store the balance
+      * amount.
+      * Move to the edited display field so the report prints a decimal
+      * point.
        PROCEDURE DIVISION.
        0000-MAIN.
            PERFORM 1000-LOAD-REPORT-ROW

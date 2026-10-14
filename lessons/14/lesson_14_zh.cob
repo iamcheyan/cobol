@@ -1,16 +1,16 @@
-      * 第 14 课：将输入的交易与帐户记录进行匹配。
-      * 帐户记录按层次结构分组并保存在表中。
-      * 交易有效负载通过 REDEFINES 共享存储。
-      * SEARCH ALL 将交易帐户密钥与主数据相关联。
-      * 存款和转账布局具有相同的存储大小。
-      * 在更改任何余额之前，转账会检查两个帐户。
-      * 主表实际上是按帐户密钥升序排列的。
-      * 此固定数据批次不使用文件或数据库。
+      *第 14 课：将输入的交易与帐户记录进行匹配。
+      *帐户记录按层次结构分组并保存在表中。
+      *交易有效负载通过 REDEFINES 共享存储。
+      *SEARCH ALL 将交易帐户密钥与主数据相关联。
+      *存款和转账布局具有相同的存储大小。
+      *在更改任何余额之前，转账会检查两个帐户。
+      *主表实际上是按帐户密钥升序排列的。
+      *此固定数据批次不使用文件或数据库。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. MATCH14.
        DATA DIVISION.
        WORKING-STORAGE SECTION.
-      * 账户身份和余额形成一份重复的主记录。
+      *账户身份和余额形成一份重复的主记录。
        01 WS-ACCOUNT-TABLE.
           05 WS-ACCOUNT-ENTRY OCCURS 3 TIMES
              ASCENDING KEY IS WS-ACCOUNT-NUMBER
@@ -18,7 +18,7 @@
              10 WS-ACCOUNT-INFO.
                 15 WS-ACCOUNT-NUMBER PIC X(10).
                 15 WS-ACCOUNT-BALANCE PIC 9(7)V99.
-      * 每个事务都有一个类型，后跟一个共享有效负载区域。
+      *每个事务都有一个类型，后跟一个共享有效负载区域。
        01 WS-TRANSACTION-TABLE.
           05 WS-TRANSACTION-ENTRY OCCURS 4 TIMES.
              10 WS-TRANSACTION-CODE PIC X.
@@ -38,7 +38,7 @@
        01 WS-POSTED-COUNT PIC 9(2) VALUE ZERO.
        01 WS-REJECTED-COUNT PIC 9(2) VALUE ZERO.
        PROCEDURE DIVISION.
-      * 在处理任何事务之前加载两个内存数据集。
+      *在处理任何事务之前加载两个内存数据集。
        0000-MAIN.
            PERFORM 1000-LOAD-ACCOUNTS
            PERFORM 1100-LOAD-TRANSACTIONS
@@ -50,7 +50,7 @@
            END-PERFORM
            PERFORM 9000-REPORT
            STOP RUN.
-      * 条目按实际的升序键顺序加载。
+      *条目按实际的升序键顺序加载。
        1000-LOAD-ACCOUNTS.
            MOVE "0001234567" TO WS-ACCOUNT-NUMBER(1)
            MOVE 1000.00 TO WS-ACCOUNT-BALANCE(1)
@@ -58,7 +58,7 @@
            MOVE 200.00 TO WS-ACCOUNT-BALANCE(2)
            MOVE "0007654321" TO WS-ACCOUNT-NUMBER(3)
            MOVE 50.00 TO WS-ACCOUNT-BALANCE(3).
-      * 存款和转账有效负载占用相同的 27 个字符。
+      *存款和转账有效负载占用相同的 27 个字符。
        1100-LOAD-TRANSACTIONS.
            MOVE "D" TO WS-TRANSACTION-CODE(1)
            MOVE "0001234567" TO WS-DEPOSIT-ACCOUNT(1)
@@ -76,7 +76,7 @@
            MOVE "0007654321" TO WS-SOURCE-ACCOUNT(4)
            MOVE "0009999999" TO WS-TARGET-ACCOUNT(4)
            MOVE 20.00 TO WS-TRANSFER-AMOUNT(4).
-      * 事务代码确定哪个有效负载视图处于活动状态。
+      *事务代码确定哪个有效负载视图处于活动状态。
        2000-PROCESS-TRANSACTION.
            DISPLAY "TXN=" WS-TRANSACTION-NUMBER
                " TYPE=" WS-TRANSACTION-CODE(WS-TRANSACTION-NUMBER)
@@ -89,7 +89,7 @@
                    DISPLAY "RESULT=REJECTED REASON=UNKNOWN_TYPE"
                    ADD 1 TO WS-REJECTED-COUNT
            END-EVALUATE.
-      * 一笔存款会改变一个匹配的账户余额。
+      *一笔存款会改变一个匹配的账户余额。
        2100-POST-DEPOSIT.
            MOVE WS-DEPOSIT-ACCOUNT(WS-TRANSACTION-NUMBER)
                TO WS-SEARCH-KEY
@@ -107,7 +107,7 @@
                DISPLAY "RESULT=REJECTED REASON=ACCOUNT_NOT_FOUND"
                ADD 1 TO WS-REJECTED-COUNT
            END-IF.
-      * 在应用任一余额之前验证两个转账帐户。
+      *在应用任一余额之前验证两个转账帐户。
        2200-POST-TRANSFER.
            MOVE WS-SOURCE-ACCOUNT(WS-TRANSACTION-NUMBER)
                TO WS-SEARCH-KEY
@@ -148,7 +148,7 @@
                    " REASON=SOURCE_NOT_FOUND"
                ADD 1 TO WS-REJECTED-COUNT
            END-IF.
-      * SEARCH ALL 使用唯一的升序帐户密钥。
+      *SEARCH ALL 使用唯一的升序帐户密钥。
        3000-FIND-ACCOUNT.
            MOVE "N" TO WS-ACCOUNT-FOUND
            SEARCH ALL WS-ACCOUNT-ENTRY
@@ -158,7 +158,7 @@
                    = WS-SEARCH-KEY
                    MOVE "Y" TO WS-ACCOUNT-FOUND
            END-SEARCH.
-      * 报告每个帐户余额和批次结果计数。
+      *报告每个帐户余额和批次结果计数。
        9000-REPORT.
            DISPLAY "BALANCE ACCOUNT=" WS-ACCOUNT-NUMBER(1)
                " VALUE=" WS-ACCOUNT-BALANCE(1)

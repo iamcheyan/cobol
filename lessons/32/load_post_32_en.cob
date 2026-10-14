@@ -1,7 +1,12 @@
+      *LOAD_POST is a called batch module, not the top-level driver.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LOADPOST32.
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
+      *Define account and transaction inputs plus accepted, rejected,
+      *and log outputs.
+      *Line-sequential files use separate status fields for reliable
+      *error handling.
        FILE-CONTROL.
            SELECT ACCOUNT-FILE ASSIGN TO "accounts.txt"
                ORGANIZATION IS LINE SEQUENTIAL
@@ -18,6 +23,8 @@
            SELECT LOG-FILE ASSIGN TO "batch.log"
                ORGANIZATION IS LINE SEQUENTIAL
                FILE STATUS IS WS-LOG-STATUS.
+      *Input records have fixed widths; output records reserve report
+      *space.
        DATA DIVISION.
        FILE SECTION.
        FD ACCOUNT-FILE.
@@ -30,6 +37,11 @@
        01 REJECTED-RECORD PIC X(80).
        FD LOG-FILE.
        01 LOG-RECORD PIC X(100).
+      *TRANSACTION.CPY supplies shared batch state and the in-memory
+      *account table.
+      *Open flags make cleanup safe after partial initialization.
+      *Packed decimal holds monetary values; the reason field carries
+      *reject codes.
        WORKING-STORAGE SECTION.
        COPY "TRANSACTION.CPY".
        01 WS-ACCOUNT-STATUS PIC XX.
@@ -52,9 +64,18 @@
        01 WS-EDITED-BALANCE PIC 9(7).99.
        01 WS-OUTPUT-LINE PIC X(80).
        01 WS-LOG-LINE PIC X(100).
+      *BATCH-INTERFACE.CPY defines caller-owned tables and batch
+      *counters.
+      *USING passes these records by reference across the module
+      *boundary.
        LINKAGE SECTION.
        COPY "BATCH-INTERFACE.CPY".
+      *The caller shares account state and counts; this module returns
+      *through GOBACK.
        PROCEDURE DIVISION USING WS-ACCOUNT-TABLE WS-BATCH-COUNTS.
+      *Open resources, load accounts, then post transactions if no error
+      *occurred.
+      *Always run centralized cleanup before returning to the caller.
        MAIN-LOAD.
            PERFORM 1000-OPEN-FILES
            IF WS-FAILED NOT = "Y"
@@ -65,6 +86,9 @@
            END-IF
            PERFORM 8000-CLOSE-FILES
            GOBACK.
+      *Open inputs before truncating/creating outputs, checking each
+      *status.
+      *Write a start event only after the log is successfully opened.
        1000-OPEN-FILES.
            OPEN INPUT ACCOUNT-FILE
            IF WS-ACCOUNT-STATUS = "00"
@@ -111,6 +135,7 @@
                    MOVE "Y" TO WS-FAILED
                END-IF
            END-IF.
+      *Read the master file to EOF and delegate each valid record.
        1100-LOAD-ACCOUNTS.
            PERFORM UNTIL WS-ACCOUNT-EOF = "Y" OR WS-FAILED = "Y"
                READ ACCOUNT-FILE
@@ -125,6 +150,9 @@
                        END-IF
                END-READ
            END-PERFORM.
+      *Enforce the 20-account table capacity before adding a row.
+      *Parse 10/8/9 columns; numeric cents are divided by 100.
+      *Scan prior entries to reject duplicate account numbers.
        1110-STORE-ACCOUNT.
            IF WS-ACCOUNT-COUNT = 20
                DISPLAY "ERROR=ACCOUNT CAPACITY EXCEEDED"
@@ -152,6 +180,7 @@
                    END-IF
                END-PERFORM
            END-IF.
+      *Process transactions sequentially; a read error ends the batch.
        2000-POST-TRANSACTIONS.
            PERFORM UNTIL WS-TRANSACTION-EOF = "Y" OR WS-FAILED = "Y"
                READ TRANSACTION-FILE
@@ -166,6 +195,14 @@
                        END-IF
                END-READ
            END-PERFORM.
+      *Split the 20-character record into account, type, and amount
+      *fields.
+      *Find the account index, validate cents, and select a reject
+      *reason if invalid.
+      *Apply valid transactions, then route each item to accepted or
+      *rejected output.
+      *Copy the resulting line to the event log for operational
+      *traceability.
        2100-POST-ONE.
            ADD 1 TO WS-TRANSACTION-COUNT
            MOVE TRANSACTION-INPUT(1:10)
@@ -204,6 +241,9 @@
            END-IF
            MOVE WS-OUTPUT-LINE TO WS-LOG-LINE
            PERFORM 8200-WRITE-LOG.
+      *D adds funds; C subtracts only when the balance is sufficient.
+      *Unknown transaction types are rejected without changing the
+      *balance.
        2200-APPLY-TRANSACTION.
            EVALUATE WS-TRANSACTION-TYPE
              WHEN "D"
@@ -218,6 +258,9 @@
              WHEN OTHER
                MOVE "BAD_TYPE" TO WS-REASON
            END-EVALUATE.
+      *Format and display the resulting balance, then write
+      *accepted.txt.
+      *A failed output write marks the shared batch state as failed.
        2300-WRITE-POSTED.
            ADD 1 TO WS-POSTED-COUNT
            MOVE WS-ACCOUNT-BALANCE(WS-INDEX)
@@ -235,6 +278,8 @@
                DISPLAY "ERROR=WRITE ACCEPTED " WS-ACCEPTED-STATUS
                MOVE "Y" TO WS-FAILED
            END-IF.
+      *Record transaction number, account, and validation reason for
+      *review.
        2400-WRITE-REJECTED.
            ADD 1 TO WS-REJECTED-COUNT
            MOVE SPACES TO WS-OUTPUT-LINE
@@ -249,6 +294,9 @@
                DISPLAY "ERROR=WRITE REJECTED " WS-REJECTED-STATUS
                MOVE "Y" TO WS-FAILED
            END-IF.
+      *Close only files whose open flags were set, checking each close
+      *status.
+      *Write the completion event before closing the log stream.
        8000-CLOSE-FILES.
            IF WS-ACCOUNT-OPEN = "Y"
                CLOSE ACCOUNT-FILE
@@ -291,6 +339,7 @@
                    MOVE "Y" TO WS-FAILED
                END-IF
            END-IF.
+      *Centralize log writes so every event uses the same status check.
        8200-WRITE-LOG.
            MOVE WS-LOG-LINE TO LOG-RECORD
            WRITE LOG-RECORD

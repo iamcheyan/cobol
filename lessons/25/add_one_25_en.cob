@@ -6,6 +6,12 @@
        01 WS-EDITED-AMOUNT PIC 9(9) VALUE ZERO.
        LINKAGE SECTION.
        COPY "AMOUNT-INTERFACE.CPY".
+      * Receive the argument according to the caller and callee
+      * contract.
+      * Add directly to the linkage item; BY REFERENCE therefore changes
+      * shared storage.
+      * Display the result through an edited field, then return to the
+      * caller.
        PROCEDURE DIVISION USING AMOUNT-ARGUMENT.
        0000-ADD-ONE.
            ADD 1 TO AMOUNT-ARGUMENT

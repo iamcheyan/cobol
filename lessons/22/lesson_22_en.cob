@@ -1,5 +1,8 @@
+      * Program identity and fixed-width batch reconciliation.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. BATCH22.
+      * File assignments use line-sequential files in the current
+      * directory.
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
@@ -20,6 +23,8 @@
                ORGANIZATION IS LINE SEQUENTIAL
                FILE STATUS IS WS-REJECTED-STATUS.
            SELECT SORT-WORK ASSIGN TO DISK.
+      * Record contracts: transactions are 10+1+9 = 20 bytes; master
+      * rows are 10+8+9 = 27.
        DATA DIVISION.
        FILE SECTION.
        FD TRANSACTION-INPUT.
@@ -35,6 +40,8 @@
           05 SD-TRANSACTION-ACCOUNT PIC X(10).
           05 SD-TRANSACTION-TYPE PIC X.
           05 SD-TRANSACTION-AMOUNT PIC X(9).
+      * Status/EOF/open flags guard I/O; counters track each batch
+      * outcome.
        WORKING-STORAGE SECTION.
        01 WS-INPUT-STATUS PIC XX VALUE SPACES.
        01 WS-M-STATUS PIC XX VALUE SPACES.
@@ -60,7 +67,13 @@
        01 WS-ACCEPTED-COUNT PIC 9(3) VALUE ZERO.
        01 WS-REJECTED-COUNT PIC 9(3) VALUE ZERO.
        01 WS-MASTER-ONLY-COUNT PIC 9(3) VALUE ZERO.
+      * SORT owns the transaction lifecycle: load and RELEASE, then
+      * ordered RETURN.
        PROCEDURE DIVISION.
+      * The key is the ten-character account number; master input must
+      * use the same ascending order.
+      * After SORT, report control totals and return failure if any
+      * guarded operation failed.
        0000-MAIN.
            SORT SORT-WORK ON ASCENDING KEY SD-TRANSACTION-ACCOUNT
                INPUT PROCEDURE 1000-LOAD-TRANSACTIONS
@@ -78,6 +91,8 @@
                MOVE 1 TO RETURN-CODE
            END-IF
            STOP RUN.
+      * Open and drain the unsorted transaction feed; always check CLOSE
+      * status.
        1000-LOAD-TRANSACTIONS.
            OPEN INPUT TRANSACTION-INPUT
            IF WS-INPUT-STATUS NOT = "00"
@@ -94,6 +109,7 @@
                    MOVE "Y" TO WS-IO-ERROR
                END-IF
            END-IF.
+      * Status 10 is normal EOF; other nonzero statuses stop the batch.
        1100-READ-AND-RELEASE.
            READ TRANSACTION-INPUT
                AT END
@@ -107,6 +123,10 @@
                DISPLAY "READ=TXN STATUS=" WS-INPUT-STATUS
                MOVE "Y" TO WS-IO-ERROR
            END-IF.
+      * TRIM measures the physical line; only exactly 20 characters
+      * satisfy the input contract.
+      * Copy the 20-character layout into the SORT record, then RELEASE
+      * it to the sort input procedure.
        1110-VALIDATE-TRANSACTION-WIDTH.
            COMPUTE WS-INPUT-LENGTH = FUNCTION LENGTH(
                FUNCTION TRIM(FD-TRANSACTION-RAW TRAILING))
@@ -123,6 +143,8 @@
                    MOVE "Y" TO WS-IO-ERROR
                END-IF
            END-IF.
+      * Do not reconcile after a load error; close any resources that
+      * were opened.
        2000-RECONCILE-TRANSACTIONS.
            IF WS-IO-ERROR = "N"
                PERFORM 2100-OPEN-OUTPUTS
@@ -141,6 +163,8 @@
                END-PERFORM
            END-IF
            PERFORM 9000-CLOSE-OUTPUTS.
+      * Master is read-only; OPEN OUTPUT truncates both result files for
+      * this run.
        2100-OPEN-OUTPUTS.
            OPEN INPUT ACCOUNT-MASTER
            IF WS-M-STATUS = "00"
@@ -167,6 +191,8 @@
                    MOVE "Y" TO WS-IO-ERROR
                END-IF
            END-IF.
+      * RETURN yields transactions in key order; count only successful
+      * records, with SORT EOF normal.
        4000-RETURN-ONE-TRANSACTION.
            RETURN SORT-WORK
                AT END
@@ -180,6 +206,10 @@
                        MOVE "Y" TO WS-IO-ERROR
                    END-IF
            END-RETURN.
+      * Advance smaller master keys as MASTER_ONLY until keys meet or
+      * master EOF.
+      * A missing master takes NO_ACCOUNT precedence; matched rows are
+      * validated before advancing master.
        4100-MATCH-TRANSACTION.
            PERFORM UNTIL WS-MASTER-EOF = "Y"
                OR WS-IO-ERROR = "Y"
@@ -202,6 +232,8 @@
                    END-IF
                END-IF
            END-IF.
+      * Only matched transactions reach field checks: type D/C, then
+      * numeric amount.
        6000-VALIDATE-MATCHED-TRANSACTION.
            EVALUATE TRUE
                WHEN SD-TRANSACTION-TYPE NOT = "D"
@@ -214,6 +246,9 @@
                WHEN OTHER
                    PERFORM 6200-WRITE-ACCEPTED
            END-EVALUATE.
+      * Rejected layout is account(10), reason(10), type(1), amount(9).
+      * Reason values are fixed-width: NO_ACCOUNT, BAD_TYPE__,
+      * BAD_AMOUNT.
        6100-WRITE-REJECTED.
            MOVE SD-TRANSACTION-ACCOUNT TO WS-REJECTED-RECORD(1:10)
            MOVE WS-REJECT-REASON TO WS-REJECTED-RECORD(11:10)
@@ -228,6 +263,7 @@
                DISPLAY "WRITE=REJECT STATUS=" WS-REJECTED-STATUS
                MOVE "Y" TO WS-IO-ERROR
            END-IF.
+      * Accepted layout is account(10), customer(8), type(1), amount(9).
        6200-WRITE-ACCEPTED.
            MOVE SD-TRANSACTION-ACCOUNT TO WS-ACCEPTED-RECORD(1:10)
            MOVE WS-MASTER-CUSTOMER TO WS-ACCEPTED-RECORD(11:8)
@@ -241,6 +277,8 @@
                DISPLAY "WRITE=ACCEPT STATUS=" WS-ACCEPTED-STATUS
                MOVE "Y" TO WS-IO-ERROR
            END-IF.
+      * Read one row at a time; EOF 10 is expected, while other statuses
+      * signal I/O failure.
        3000-READ-MASTER.
            READ ACCOUNT-MASTER
                AT END
@@ -254,6 +292,8 @@
                DISPLAY "READ=MASTER STATUS=" WS-M-STATUS
                MOVE "Y" TO WS-IO-ERROR
            END-IF.
+      * Enforce the 27-character master contract and numeric
+      * nine-character balance.
        3100-VALIDATE-MASTER.
            COMPUTE WS-MASTER-LENGTH = FUNCTION LENGTH(
                FUNCTION TRIM(FD-MASTER-RAW TRAILING))
@@ -269,10 +309,14 @@
                    MOVE "Y" TO WS-IO-ERROR
                END-IF
            END-IF.
+      * A master key with no transaction is counted once, displayed,
+      * then the next row is read.
        5000-REPORT-MASTER-ONLY.
            ADD 1 TO WS-MASTER-ONLY-COUNT
            DISPLAY "MASTER_ONLY ACCOUNT=" WS-MASTER-ACCOUNT
            PERFORM 3000-READ-MASTER.
+      * Close only files marked open; CLOSE errors also make the batch
+      * unsuccessful.
        9000-CLOSE-OUTPUTS.
            IF WS-MASTER-OPEN = "Y"
                CLOSE ACCOUNT-MASTER

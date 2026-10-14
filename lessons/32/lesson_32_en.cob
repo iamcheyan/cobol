@@ -88,7 +88,8 @@
       * The posting and sync modules own their own files and SQL work.
       * Additional design notes for this integrated batch.
       * The driver converts worker status to the process return code.
-      * Workers receive these tables by reference and update shared state.
+      * Workers receive these tables by reference.
+      * They update the caller-owned shared state.
       * Each counter has a role in the batch arithmetic checks above.
       * Posted and rejected counts partition the transaction input.
       * Sync counts classify every account after successful SQL work.

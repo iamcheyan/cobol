@@ -1,3 +1,5 @@
+      * プログラム識別情報と外部ファイル。
+      * ログを先に開き、各ファイルの状態を確認します。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LOG27.
        ENVIRONMENT DIVISION.
@@ -19,6 +21,9 @@
                ASSIGN TO "rejected.txt"
                ORGANIZATION IS LINE SEQUENTIAL
                FILE STATUS IS WS-REJECTED-STATUS.
+      * ファイルレコードはログ、入力、正常・拒否出力の形式です。
+      * 作業領域では状態フラグ、業務項目、
+      * イベント、操作状態、バッチ件数を分けて管理します。
        DATA DIVISION.
        FILE SECTION.
        FD BATCH-LOG.
@@ -53,6 +58,9 @@
        01 WS-INPUT-COUNT PIC 9(3) VALUE ZERO.
        01 WS-ACCEPTED-COUNT PIC 9(3) VALUE ZERO.
        01 WS-REJECTED-COUNT PIC 9(3) VALUE ZERO.
+      * 主処理：ログを確立し、安全な場合だけ処理します。
+      * 業務ファイルを閉じ、終了イベントとログを記録します。
+      * 障害時は非ゼロの戻りコードを設定します。
        PROCEDURE DIVISION.
        0000-MAIN.
            PERFORM 9000-OPEN-LOG
@@ -85,6 +93,7 @@
                MOVE 1 TO RETURN-CODE
            END-IF
            STOP RUN.
+      * ログを最初に開きます。失敗時はバッチを開始しません。
        9000-OPEN-LOG.
            OPEN OUTPUT BATCH-LOG
            IF WS-LOG-STATUS = "00"
@@ -93,6 +102,8 @@
                DISPLAY "ERROR=OPEN_LOG STATUS=" WS-LOG-STATUS
                MOVE "Y" TO WS-SYSTEM-ERROR
            END-IF.
+      * 業務ファイルを順に開き、状態00の後に開済みにします。
+      * 失敗はシステム障害となり、処理を止めます。
        1000-OPEN-DATA-FILES.
            OPEN INPUT TRANSACTION-INPUT
            IF WS-INPUT-STATUS = "00"
@@ -122,11 +133,14 @@
                    PERFORM 9300-REPORT-SYSTEM-ERROR
                END-IF
            END-IF.
+      * EOFまたはシステム障害で入力処理を終了します。
        2000-PROCESS-INPUT.
            PERFORM UNTIL WS-END-OF-FILE = "Y"
                OR WS-SYSTEM-ERROR = "Y"
                PERFORM 2100-READ-ONE-RECORD
            END-PERFORM.
+      * 正常読込ごとに番号を付け、口座キーを取得します。
+      * 検証前に記録し、EOFと読込障害を区別します。
        2100-READ-ONE-RECORD.
            READ TRANSACTION-INPUT
                AT END
@@ -148,6 +162,7 @@
                MOVE WS-INPUT-STATUS TO WS-ERROR-STATUS
                PERFORM 9300-REPORT-SYSTEM-ERROR
            END-IF.
+      * 読込イベントに番号と口座を含め、組立前に初期化します。
        2200-LOG-RECORD-READ.
            MOVE SPACES TO WS-LOG-MESSAGE
            STRING "EVENT=RECORD_READ NO=" DELIMITED BY SIZE
@@ -157,6 +172,8 @@
                INTO WS-LOG-MESSAGE
            END-STRING
            PERFORM 9100-WRITE-LOG.
+      * 桁数、区切り、金額の数字性、ゼロ以外を検証します。
+      * 違反は業務拒否であり、システム障害ではありません。
        3000-VALIDATE-RECORD.
            MOVE SPACES TO WS-REJECT-REASON
            COMPUTE WS-RECORD-LENGTH = FUNCTION LENGTH(
@@ -183,6 +200,7 @@
            ELSE
                PERFORM 5000-WRITE-REJECTED
            END-IF.
+      * 正常データを書き、状態00の後に件数とイベントを記録します。
        4000-WRITE-ACCEPTED.
            MOVE FD-TRANSACTION-RECORD(1:12)
                TO WS-ACCEPTED-WORK
@@ -196,6 +214,7 @@
                MOVE WS-ACCEPTED-STATUS TO WS-ERROR-STATUS
                PERFORM 9300-REPORT-SYSTEM-ERROR
            END-IF.
+      * 出力WRITE成功後に受付イベントを記録します。
        4100-LOG-ACCEPTED.
            MOVE SPACES TO WS-LOG-MESSAGE
            STRING "EVENT=RECORD_ACCEPTED NO=" DELIMITED BY SIZE
@@ -205,6 +224,8 @@
                INTO WS-LOG-MESSAGE
            END-STRING
            PERFORM 9100-WRITE-LOG.
+      * 拒否ファイルに口座と拒否理由を書きます。
+      * 出力WRITE失敗はシステム障害です。
        5000-WRITE-REJECTED.
            MOVE SPACES TO WS-REJECTED-WORK
            MOVE WS-ACCOUNT TO WS-REJECTED-WORK(1:6)
@@ -222,6 +243,7 @@
                MOVE WS-REJECTED-STATUS TO WS-ERROR-STATUS
                PERFORM 9300-REPORT-SYSTEM-ERROR
            END-IF.
+      * 行番号、口座、業務拒否理由を記録します。
        5100-LOG-REJECTED.
            MOVE SPACES TO WS-LOG-MESSAGE
            STRING "EVENT=BUSINESS_REJECT NO=" DELIMITED BY SIZE
@@ -233,6 +255,8 @@
                INTO WS-LOG-MESSAGE
            END-STRING
            PERFORM 9100-WRITE-LOG.
+      * ログWRITE状態を毎回確認します。失敗後は処理と追記を停止します。
+      * ログ自身の書込障害は記録できません。
        9100-WRITE-LOG.
            IF WS-LOG-FAILED = "N"
                MOVE WS-LOG-MESSAGE TO FD-BATCH-LOG-RECORD
@@ -243,6 +267,7 @@
                    MOVE "Y" TO WS-SYSTEM-ERROR
                END-IF
            END-IF.
+      * 操作と状態を報告し、可能ならログにも記録します。
        9300-REPORT-SYSTEM-ERROR.
            MOVE "Y" TO WS-SYSTEM-ERROR
            DISPLAY "ERROR="
@@ -258,6 +283,8 @@
                END-STRING
                PERFORM 9100-WRITE-LOG
            END-IF.
+      * 開いた業務ファイルだけを閉じ、状態を確認します。
+      * ログ使用中に終了障害を記録します。
        8000-CLOSE-DATA-FILES.
            IF WS-REJECTED-OPEN = "Y"
                CLOSE REJECTED-OUTPUT
@@ -285,6 +312,8 @@
                    PERFORM 9300-REPORT-SYSTEM-ERROR
                END-IF
            END-IF.
+      * 業務ファイル終了後に件数とエラーを記録してログを閉じます。
+      * ログ終了障害は画面にのみ報告できます。
        9200-LOG-BATCH-END.
            MOVE SPACES TO WS-LOG-MESSAGE
            STRING "EVENT=BATCH_END INPUT=" DELIMITED BY SIZE

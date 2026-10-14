@@ -1,7 +1,10 @@
+      *LOAD_POST 是被调用的批处理模块，不是顶层驱动程序。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LOADPOST32.
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
+      *定义账户、交易输入，以及接受、拒绝和日志输出文件。
+      *每个顺序行文件使用独立状态字段，以便准确处理错误。
        FILE-CONTROL.
            SELECT ACCOUNT-FILE ASSIGN TO "accounts.txt"
                ORGANIZATION IS LINE SEQUENTIAL
@@ -18,6 +21,7 @@
            SELECT LOG-FILE ASSIGN TO "batch.log"
                ORGANIZATION IS LINE SEQUENTIAL
                FILE STATUS IS WS-LOG-STATUS.
+      *输入记录采用定长布局；输出记录预留报告空间。
        DATA DIVISION.
        FILE SECTION.
        FD ACCOUNT-FILE.
@@ -30,6 +34,9 @@
        01 REJECTED-RECORD PIC X(80).
        FD LOG-FILE.
        01 LOG-RECORD PIC X(100).
+      *TRANSACTION.CPY 提供共享批次状态和内存账户表。
+      *打开标志让部分初始化失败时也能安全清理。
+      *压缩十进制保存金额；拒绝原因字段保存校验代码。
        WORKING-STORAGE SECTION.
        COPY "TRANSACTION.CPY".
        01 WS-ACCOUNT-STATUS PIC XX.
@@ -52,9 +59,14 @@
        01 WS-EDITED-BALANCE PIC 9(7).99.
        01 WS-OUTPUT-LINE PIC X(80).
        01 WS-LOG-LINE PIC X(100).
+      *BATCH-INTERFACE.CPY 定义由调用方拥有的表和批次计数。
+      *USING 接口让模块边界两侧共享这些记录。
        LINKAGE SECTION.
        COPY "BATCH-INTERFACE.CPY".
+      *调用方传入共享账户状态与计数；模块用 GOBACK 返回。
        PROCEDURE DIVISION USING WS-ACCOUNT-TABLE WS-BATCH-COUNTS.
+      *打开资源、装载账户；无错误时再逐笔入账。
+      *返回调用方之前统一执行资源清理。
        MAIN-LOAD.
            PERFORM 1000-OPEN-FILES
            IF WS-FAILED NOT = "Y"
@@ -65,6 +77,8 @@
            END-IF
            PERFORM 8000-CLOSE-FILES
            GOBACK.
+      *先打开输入，再创建或清空输出，并逐项检查状态。
+      *日志成功打开后才写入批次开始事件。
        1000-OPEN-FILES.
            OPEN INPUT ACCOUNT-FILE
            IF WS-ACCOUNT-STATUS = "00"
@@ -111,6 +125,7 @@
                    MOVE "Y" TO WS-FAILED
                END-IF
            END-IF.
+      *循环读取账户主文件至文件末尾，并处理每条有效记录。
        1100-LOAD-ACCOUNTS.
            PERFORM UNTIL WS-ACCOUNT-EOF = "Y" OR WS-FAILED = "Y"
                READ ACCOUNT-FILE
@@ -125,6 +140,9 @@
                        END-IF
                END-READ
            END-PERFORM.
+      *加入记录前检查内存账户表的20笔容量上限。
+      *解析10/8/9字符字段；数字分以100相除得到金额。
+      *扫描已装载记录，发现重复账号即拒绝本批处理。
        1110-STORE-ACCOUNT.
            IF WS-ACCOUNT-COUNT = 20
                DISPLAY "ERROR=ACCOUNT CAPACITY EXCEEDED"
@@ -152,6 +170,7 @@
                    END-IF
                END-PERFORM
            END-IF.
+      *按顺序处理交易；读取错误会结束本批次。
        2000-POST-TRANSACTIONS.
            PERFORM UNTIL WS-TRANSACTION-EOF = "Y" OR WS-FAILED = "Y"
                READ TRANSACTION-FILE
@@ -166,6 +185,10 @@
                        END-IF
                END-READ
            END-PERFORM.
+      *把20字符记录拆成账号、交易类型和金额字段。
+      *查找账户下标、校验金额；无效数据设置对应拒绝原因。
+      *执行有效交易，再分别写入接受或拒绝文件。
+      *将最终输出行复制到事件日志，保留操作轨迹。
        2100-POST-ONE.
            ADD 1 TO WS-TRANSACTION-COUNT
            MOVE TRANSACTION-INPUT(1:10)
@@ -204,6 +227,8 @@
            END-IF
            MOVE WS-OUTPUT-LINE TO WS-LOG-LINE
            PERFORM 8200-WRITE-LOG.
+      *D 增加余额；C 仅在余额充足时扣款。
+      *未知交易类型会被拒绝，且不会更改账户余额。
        2200-APPLY-TRANSACTION.
            EVALUATE WS-TRANSACTION-TYPE
              WHEN "D"
@@ -218,6 +243,8 @@
              WHEN OTHER
                MOVE "BAD_TYPE" TO WS-REASON
            END-EVALUATE.
+      *格式化并显示新余额，然后写入 accepted.txt。
+      *输出写入失败时，将共享批次状态标记为失败。
        2300-WRITE-POSTED.
            ADD 1 TO WS-POSTED-COUNT
            MOVE WS-ACCOUNT-BALANCE(WS-INDEX)
@@ -235,6 +262,7 @@
                DISPLAY "ERROR=WRITE ACCEPTED " WS-ACCEPTED-STATUS
                MOVE "Y" TO WS-FAILED
            END-IF.
+      *记录交易序号、账号和校验原因，供后续复核。
        2400-WRITE-REJECTED.
            ADD 1 TO WS-REJECTED-COUNT
            MOVE SPACES TO WS-OUTPUT-LINE
@@ -249,6 +277,8 @@
                DISPLAY "ERROR=WRITE REJECTED " WS-REJECTED-STATUS
                MOVE "Y" TO WS-FAILED
            END-IF.
+      *只关闭打开标志已设置的文件，并检查每次关闭状态。
+      *关闭日志流之前写入批次完成事件。
        8000-CLOSE-FILES.
            IF WS-ACCOUNT-OPEN = "Y"
                CLOSE ACCOUNT-FILE
@@ -291,6 +321,7 @@
                    MOVE "Y" TO WS-FAILED
                END-IF
            END-IF.
+      *集中处理日志写入，统一检查文件状态码。
        8200-WRITE-LOG.
            MOVE WS-LOG-LINE TO LOG-RECORD
            WRITE LOG-RECORD

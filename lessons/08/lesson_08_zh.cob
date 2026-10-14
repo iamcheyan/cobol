@@ -4,7 +4,7 @@
       * 五个固定交易执行接受和拒绝路径。
       * 这里不使用文件、数据库、表或终端输入。
       * D 贷记余额；当资金充足时，W 将其记入借方。
-      * 其他交易代码不予审核。
+      * 其他交易代码会被拒绝，以便后续审查。
       * 在此示例中，所有金额均使用两个小数位置。
       * 这是一个学习批次，而不是生产分类帐系统。
       * 它的输入和输出在运行过程中保持确定性。
@@ -18,7 +18,7 @@
       * 样本索引和最后一个索引控制内联 PERFORM 循环。
        01 WS-SAMPLE-INDEX PIC 9(3) VALUE ZERO.
        01 WS-LAST-SAMPLE PIC 9 VALUE 5.
-      * 当前的示例代码和数量会在每次传递时加载。
+      * 当前的示例代码和数量会在每次循环时加载。
        01 WS-TRANSACTION-CODE PIC X VALUE SPACE.
        01 WS-TRANSACTION-AMOUNT PIC S9(5)V99
           SIGN IS LEADING SEPARATE CHARACTER VALUE ZERO.
@@ -50,7 +50,7 @@
                COMPUTE WS-PROCESSED-COUNT =
                    WS-PROCESSED-COUNT + 1
            END-PERFORM.
-      * 加载与每个样品编号相关的代码和数量。
+      * 加载与每个样本编号相关的代码和数量。
        2100-LOAD-SAMPLE.
            EVALUATE WS-SAMPLE-INDEX
                WHEN 1
@@ -121,13 +121,13 @@
                    DISPLAY "RESULT=REJECTED"
                        " REASON=UNKNOWN_TRANSACTION_CODE"
            END-EVALUATE.
-      * 完成样品批次后报告总计和余额。
+      * 完成样本批次后报告总计和余额。
        9000-REPORT.
            DISPLAY "PROCESSED=" WS-PROCESSED-COUNT
            DISPLAY "ACCEPTED=" WS-ACCEPTED-COUNT
            DISPLAY "REJECTED=" WS-REJECTED-COUNT
            DISPLAY "FINAL-BALANCE=" WS-CURRENT-BALANCE.
-      * 主要段落是程序唯一的输入序列。
+      * 主段落是程序唯一的入口执行序列。
       * 每个 PERFORM 返回到其段落调用之后的语句。
       * 该流程段落使用 PERFORM VARYING 进行记录迭代。
       * 加载段落将固定数据与业务规则分开。
@@ -139,13 +139,13 @@
       * 每完成一条记录后，处理的计数就会增加一次。
       * 五个记录产生两个接受的结果和三个拒绝的结果。
       * 信贷将余额从 1000.00 提高到 1125.50。
-      * 有效提款使余额降至 1085.40。
+      * 有效取款使余额降至 1085.40。
       * 巨额提款将被拒绝，且余额不会改变。
       * 在余额更改之前，负存款将被拒绝。
-      * 未知代码被拒绝，且未公布其金额。
+      * 未知代码被拒绝，且不会入账其金额。
       * 计数器报告记录结果，而不是会计分录。
       * 初始化在每个事务处理步骤之前进行。
-      * 处理退货后，报告会读取共享总计。
+      * 处理段落返回后，报告段落读取共享计数和余额。
       * 每个段落的最后一句话都以句号结束。
       * EVALUATE 嵌入示例直到表格课程。
       * 后面的课程将样本存储在可重用的数据结构中。

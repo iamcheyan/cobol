@@ -1,0 +1,9 @@
+# Standalone COBOL example files
+# Keep generated programs and reports out of version control.
+/INPUTCSV
+/FIXEDREC
+/TBLSRCH
+/BATCHRPT
+/output.csv
+/tx_report.txt
+/sales_report.txt

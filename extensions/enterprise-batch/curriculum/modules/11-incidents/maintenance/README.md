@@ -18,7 +18,7 @@ canonical CUSTOMER v1 的第 27 字节（那里是记录状态 A/D，教学接�
 
 > 为什么不能用 CUSTOMER v1 第 27 字节：canonical 约定该字节是**记录状态**
 > （A 有效 / D 停用）。把它当“客户区分”会破坏冻结契约。参见
-> `curriculum/bank/README.md`、`docs/curriculum/BANK-SYSTEM.md` §2。课程
+> `curriculum/bank/README.md`、`../../../../docs/curriculum/BANK-SYSTEM.md` §2。课程
 > canonical 的大记录是模块 07 L4 的 `ENTERPRISE-CUSTOMER-V1`（175 字段 /
 > 1778 字节）；本练习的 23 字节布局**改用独立名称** `ENTERPRISE-CLASS-V1`
 > （见其 Copybook 头注），只保留同一分类字段语义，**不与 canonical 同名**，
@@ -40,8 +40,8 @@ canonical CUSTOMER v1 的第 27 字节（那里是记录状态 A/D，教学接�
 - **注意**：夜间流里的 `system/cobol/M11CUST.COB` 读的是 canonical
   CUSTOMER v1 的**记录状态**，下游发布物是 `publish/<run_id>/customer-status.txt`
   （`STATUS|<id>|<status>`）；它与企业区分是**两回事**，不要改它。
-- 文档：仓库根 `docs/curriculum/BANK-SYSTEM.md`（冻结契约）、
-  `docs/curriculum/AUTHORING-STANDARD.md` §6（变更交付要求）。
+- 文档：仓库根 `../../../../docs/curriculum/BANK-SYSTEM.md`（冻结契约）、
+  `../../../../docs/curriculum/AUTHORING-STANDARD.md` §6（变更交付要求）。
 
 ## 3. 交付物（评审前）
 

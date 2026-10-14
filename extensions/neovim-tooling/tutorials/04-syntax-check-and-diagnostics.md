@@ -45,7 +45,7 @@ COBOL 标识符通常很长且由连字符连接（如 `WS-TOTAL-EMPLOYEE-SALARY
 
 ```bash
 cd /home/tetsuya/development/cobol
-nvim INPUTCSV.COB
+nvim ../../standalone-examples/INPUTCSV.COB
 ```
 
 ### 任务 4.1：体验无错误的正常代码校验

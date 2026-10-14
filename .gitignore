@@ -24,3 +24,9 @@ sales_report.txt
 # Python test/runtime caches
 __pycache__/
 *.py[cod]
+
+# COBOL build products in the legacy root checkout
+/INPUTCSV
+/FIXEDREC
+/TBLSRCH
+/BATCHRPT

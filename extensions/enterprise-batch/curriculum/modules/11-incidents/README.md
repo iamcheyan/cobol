@@ -40,7 +40,7 @@ JOB Log、RC、输入清单建立时间线，区分“没发布”和“发布�
 > **刻意使用独立名称**（不与模块 07 L4 canonical 大记录
 > `ENTERPRISE-CUSTOMER-V1`，1778 字节/175 字段同名），避免同名却布局不同的
 > 版本漂移；两者共享同一 `CUSTOMER-CLASSIFICATION` 语义。对应 canonical
-> 说明见 `curriculum/bank/README.md` 与 `docs/curriculum/BANK-SYSTEM.md` §2。
+> 说明见 `curriculum/bank/README.md` 与 `../../../docs/curriculum/BANK-SYSTEM.md` §2。
 
 已保证：ASCII 合成数据、LF 换行、LF 不计入逻辑长度、营业日不默认取机器
 日期、每条逻辑记录后一个 LF。短/长记录、非法数字、重复交易号、逆序、

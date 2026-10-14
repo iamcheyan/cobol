@@ -9,13 +9,13 @@
 | 主课课号 | 可选补充材料 | 补充主题 |
 |---|---|---|
 | 01–08 | [`legacy-workshop/lessons/00-environment/`](legacy-workshop/lessons/00-environment/)、[`01-program-anatomy/`](legacy-workshop/lessons/01-program-anatomy/)、[`07-conditions-88/`](legacy-workshop/lessons/07-conditions-88/)–[`09-loops-perform/`](legacy-workshop/lessons/09-loops-perform/) | 环境、固定格式、88 级条件名、控制流 |
-| 09–14 | [`legacy-workshop/lessons/10-tables-occurs-search/`](legacy-workshop/lessons/10-tables-occurs-search/)、[`11-strings-unstring-inspect/`](legacy-workshop/lessons/11-strings-unstring-inspect/)、[`14-copybooks-redefines/`](legacy-workshop/lessons/14-copybooks-redefines/)；[`TBLSRCH.COB`](../TBLSRCH.COB) | 表格、字符串处理、Copybook 与重定义 |
+| 09–14 | [`legacy-workshop/lessons/10-tables-occurs-search/`](legacy-workshop/lessons/10-tables-occurs-search/)、[`11-strings-unstring-inspect/`](legacy-workshop/lessons/11-strings-unstring-inspect/)、[`14-copybooks-redefines/`](legacy-workshop/lessons/14-copybooks-redefines/)；[`TBLSRCH.COB`](standalone-examples/TBLSRCH.COB) | 表格、字符串处理、Copybook 与重定义 |
 | 15–22 | [`legacy-workshop/lessons/12-sequential-files/`](legacy-workshop/lessons/12-sequential-files/)、[`13-file-status-errors/`](legacy-workshop/lessons/13-file-status-errors/)、[`17-reports-control-break/`](legacy-workshop/lessons/17-reports-control-break/)、[`18-sort-merge/`](legacy-workshop/lessons/18-sort-merge/)、[`25-project-csv-pipeline/`](legacy-workshop/lessons/25-project-csv-pipeline/)、[`26-project-fixed-records/`](legacy-workshop/lessons/26-project-fixed-records/) | 文件状态、报表、排序，以及端到端 CSV/定长项目 |
 | 23–28 | [`legacy-workshop/lessons/15-subprograms-linkage/`](legacy-workshop/lessons/15-subprograms-linkage/)、[`19-modules-environment/`](legacy-workshop/lessons/19-modules-environment/)、[`20-debugging-diagnostics/`](legacy-workshop/lessons/20-debugging-diagnostics/)、[`21-compiler-options/`](legacy-workshop/lessons/21-compiler-options/)、[`22-bash-build-run/`](legacy-workshop/lessons/22-bash-build-run/)–[`24-bash-pipelines-scheduling/`](legacy-workshop/lessons/24-bash-pipelines-scheduling/) | 子程序、工程调试、构建、自动化和调度 |
 | 29–31 | [`legacy-workshop/lessons/16-intrinsic-functions-dates/`](legacy-workshop/lessons/16-intrinsic-functions-dates/)、[`enterprise-batch/curriculum/modules/08-database/`](enterprise-batch/curriculum/modules/08-database/) | 日期函数与真实 Embedded SQL 进阶 |
 | 32 | [`legacy-workshop/lessons/28-capstone-night-batch/`](legacy-workshop/lessons/28-capstone-night-batch/)、[`29-reference-topic-map/`](legacy-workshop/lessons/29-reference-topic-map/)、[`enterprise-batch/curriculum/modules/11-incidents/`](enterprise-batch/curriculum/modules/11-incidents/)、[`12-capstone/`](enterprise-batch/curriculum/modules/12-capstone/) | 夜间批处理、知识回顾、事故调查和企业级毕业项目 |
 
-Neovim 辅助练习见 [`docs/`](../docs/01-punchcard-and-ruler.md)；四个独立示例及其与主课的对应主题见[项目首页](../README.md#独立示例)。
+Neovim 辅助练习见 [`neovim-tooling/tutorials/`](neovim-tooling/tutorials/01-punchcard-and-ruler.md)；四个独立示例见 [`standalone-examples/`](standalone-examples/README.md)。
 
 ## 旧版基础课程
 
@@ -29,8 +29,8 @@ Neovim 辅助练习见 [`docs/`](../docs/01-punchcard-and-ruler.md)；四个独�
 
 ## Neovim 插件教程
 
-[`docs/`](../docs/01-punchcard-and-ruler.md) 保留七篇 `cobol.nvim` 教程，覆盖固定格式标尺、结构导航、PIC 计算、诊断、编译工作流、实战示例和插件回归练习。它们是编辑器辅助资料，不是主课程的先修要求。
+[`neovim-tooling/tutorials/`](neovim-tooling/tutorials/01-punchcard-and-ruler.md) 保留七篇 `cobol.nvim` 教程，覆盖固定格式标尺、结构导航、PIC 计算、诊断、编译工作流、实战示例和插件回归练习。它们是编辑器辅助资料，不是主课程的先修要求。
 
 ## 独立 COBOL 示例
 
-仓库根目录保留 `INPUTCSV.COB`、`FIXEDREC.COB`、`TBLSRCH.COB` 和 `BATCHRPT.COB` 及其 Copybook/输入数据。通过根目录 Makefile 的 `make check`、`make run` 和 `make clean` 进行语法检查、运行和清理。
+[`standalone-examples/`](standalone-examples/README.md) 保留四个独立 COBOL 程序及其 Copybook 和输入数据。进入该目录后运行 `make check`、`make run` 或 `make clean`。

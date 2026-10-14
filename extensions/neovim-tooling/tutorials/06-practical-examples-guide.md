@@ -46,7 +46,7 @@
   ```
 
 ### 推荐动手实操
-1. 打开文件：`nvim INPUTCSV.COB`；
+1. 打开文件：`nvim ../../standalone-examples/INPUTCSV.COB`；
 2. 光标停在 `COPY "EMP-REC.CPY".`，按 **`K`** 弹出浮窗就地预览结构，按 **`q`** 退出；
 3. 光标停在 `PERFORM 1000-INITIALIZE` 上按 **`gd`** 直达定义，按 **`<C-o>`** 原路跳回；
 4. 运行验证：`make run-csv`，查看终端打印与生成的 `output.csv`。
@@ -97,7 +97,7 @@
    - `TX-DEP-INFO` 的偏移量也是 `+27`！
    - `TX-XFR-INFO` 的偏移量依然是 `+27`！
    - *感悟*：这生动证明了 `REDEFINES` 在物理内存中不额外申请空间，而是与目标字段共享同一段内存！
-4. 打开主程序：`nvim FIXEDREC.COB`；
+4. 打开主程序：`nvim ../../standalone-examples/FIXEDREC.COB`；
 5. 光标停在 `TX-DEPOSIT` 上按 **`gd`**，直达 `TX-REC.CPY` 中的 `88` 级定义，按 **`<C-o>`** 跳回；
 6. 运行验证：`make run-fixed`，查看生成的清算报表 `tx_report.txt`。
 
@@ -130,7 +130,7 @@
   *(注：COBOL 编译器会自动基于 `ASCENDING KEY` 实现 $O(\log N)$ 二分查找，无需手动写折半循环)*
 
 ### 推荐动手实操
-1. 打开文件：`nvim TBLSRCH.COB`；
+1. 打开文件：`nvim ../../standalone-examples/TBLSRCH.COB`；
 2. 观察 `05 CURR-ENTRY OCCURS 10 TIMES...`，行尾自动根据项数与成员大小计算总占用；
 3. 光标停在 `SEARCH ALL CURR-ENTRY` 上，体会 COBOL 原生二分查找语法的简洁；
 4. 运行验证：`make run-table`，观察 EUR, JPY, CNY, GBP 成功换算，以及未知货币 `XYZ` 触发 `AT END` 分支。
@@ -165,7 +165,7 @@
 * `$$$,$$$,$$9.99`：美元符号会自动漂浮（Float）紧贴在第一位非零数字左侧，例如 `12500` 会被格式化为 `   $12,500.00`，自动添加千分位逗号，且前面的零自动抑制为空格！
 
 ### 推荐动手实操
-1. 打开文件：`nvim BATCHRPT.COB`；
+1. 打开文件：`nvim ../../standalone-examples/BATCHRPT.COB`；
 2. 观察 `FMT-AMOUNT PIC $$,$$$,$$9.99.`；
 3. 按下 **`<leader>cs`** 展开大纲，观察 `0000-MAIN`, `1000-INIT`, `2000-PROCESS-DATA`, `2200-DEPT-BREAK`, `2300-BRANCH-BREAK`, `3000-CLOSE-OUT` 的完整生命周期；
 4. 运行验证：`make run-report`，查看格式美观的 `sales_report.txt` 报表！

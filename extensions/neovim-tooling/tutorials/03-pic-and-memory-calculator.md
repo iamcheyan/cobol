@@ -70,7 +70,7 @@ $$\text{总字节数} = \lceil \frac{\text{有效数字位数} + 1}{2} \rceil$$
 
 ```bash
 cd /home/tetsuya/development/cobol
-nvim INPUTCSV.COB
+nvim ../../standalone-examples/INPUTCSV.COB
 ```
 
 ### 任务 3.1：观察单项 PIC 字节实时换算

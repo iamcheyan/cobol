@@ -8,7 +8,7 @@
 
 本文件只提出审查意见和修复验收要求，不修改实现。保留已接受的 B00–B03 成果，不要求推倒重做。P1 是验收阻塞项；P2 应修复，或者逐项提交明确差距供主代理裁定，不能自行降低原规格。
 
-依据：`tasks/enterprise-cobol-implementation-goal.md`、`tasks/prd-enterprise-cobol-course.md`、`tasks/enterprise-cobol-remaining-course-handoff.md`、`docs/curriculum/SYLLABUS.md`、`docs/curriculum/BANK-SYSTEM.md`、`docs/curriculum/AUTHORING-STANDARD.md`、`curriculum/validation/B04-INDEPENDENT-ACCEPTANCE.md`。
+依据：`tasks/enterprise-cobol-implementation-goal.md`、`tasks/prd-enterprise-cobol-course.md`、`tasks/enterprise-cobol-remaining-course-handoff.md`、`../docs/curriculum/SYLLABUS.md`、`../docs/curriculum/BANK-SYSTEM.md`、`../docs/curriculum/AUTHORING-STANDARD.md`、`curriculum/validation/B04-INDEPENDENT-ACCEPTANCE.md`。
 
 ## 已独立执行的验证与边界
 

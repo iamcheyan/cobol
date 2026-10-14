@@ -19,7 +19,7 @@
 
 `fixtures/normal/`、`fixtures/boundary/<case>/`、`fixtures/invalid/<case>/` 下三个定宽文件：
 `customer.dat`(27B)、`account.dat`(47B)、
-`transaction.dat`(55B)，ASCII、LF 结尾。字段与规则见 `docs/curriculum/BANK-SYSTEM.md`；
+`transaction.dat`(55B)，ASCII、LF 结尾。字段与规则见 `../../../docs/curriculum/BANK-SYSTEM.md`；
 营业日由参数给出（夹具用 `20261010`）。前提：上游 JOB 已保证记录定长与 LF；账户升序、
 交易按账户/序号/交易ID 升序，且 `transaction_id` 全局唯一（重复即 RC8，见 DESIGN 第 6 节）。
 本模块不重新实现 07 的突合/冲正，只聚焦 CALL 与共通模块。

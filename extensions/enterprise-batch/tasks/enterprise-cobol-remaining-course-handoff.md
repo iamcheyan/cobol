@@ -21,7 +21,7 @@ B04文件主要位于 `curriculum/modules/07-matching/labs/05-large-record/`，c
 
 ## 必读文件
 
-按顺序阅读 `AGENTS.md`、本交接、`tasks/enterprise-cobol-implementation-goal.md`、`tasks/enterprise-cobol-progress.md`、`tasks/enterprise-cobol-review.md`、`tasks/prd-enterprise-cobol-course.md`、`docs/curriculum/SYLLABUS.md`、`docs/curriculum/BANK-SYSTEM.md`、`docs/curriculum/AUTHORING-STANDARD.md`、`curriculum/README.md` 和数据库验证说明。完整交付合同及模块细项以这些文件为准；本交接不缩减原课程要求。
+按顺序阅读 `AGENTS.md`、本交接、`tasks/enterprise-cobol-implementation-goal.md`、`tasks/enterprise-cobol-progress.md`、`tasks/enterprise-cobol-review.md`、`tasks/prd-enterprise-cobol-course.md`、`../docs/curriculum/SYLLABUS.md`、`../docs/curriculum/BANK-SYSTEM.md`、`../docs/curriculum/AUTHORING-STANDARD.md`、`curriculum/README.md` 和数据库验证说明。完整交付合同及模块细项以这些文件为准；本交接不缩减原课程要求。
 
 ## 工作区保护
 

@@ -10,7 +10,7 @@ Copybook 和编译器反馈。
 
 ```bash
 make check
-nvim INPUTCSV.COB
+nvim ../../standalone-examples/INPUTCSV.COB
 ```
 
 插件通过 lazy.nvim 安装：

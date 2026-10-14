@@ -112,4 +112,4 @@ Neovim 插件是辅助，不是编译器替代品。每个适用课都提供“�
 
 课程按实际开发主题覆盖 COBOL 程序结构、数据描述、运算、条件与循环、表格、字符串、顺序文件、模块化、子程序、报表、排序、编译、诊断和作业自动化。COBOL 标准与厂商方言十分庞大；课程会明确标出 GnuCOBOL 行为，不声称每个历史方言关键字都能在单套教程中穷尽。继续查阅本机 `info gnucobol`、`cobc --help`、GnuCOBOL Programmer's Guide 和 ISO COBOL 标准。
 
-已有实战程序：[`INPUTCSV.COB`](../../INPUTCSV.COB)、[`FIXEDREC.COB`](../../FIXEDREC.COB)、[`TBLSRCH.COB`](../../TBLSRCH.COB)、[`BATCHRPT.COB`](../../BATCHRPT.COB)。已有 COBOL 插件专题练习：[`docs/`](../../docs/)。
+Neovim 编辑器辅助资料见 [`neovim-tooling/`](../neovim-tooling/README.md)，四个独立实战示例见 [`standalone-examples/`](../standalone-examples/README.md)。

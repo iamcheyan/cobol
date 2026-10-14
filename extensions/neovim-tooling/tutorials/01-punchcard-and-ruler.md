@@ -48,7 +48,7 @@ Winbar:..SEQ.  *    A...    B............................................72  IDE
 
 ```bash
 cd /home/tetsuya/development/cobol
-nvim INPUTCSV.COB
+nvim ../../standalone-examples/INPUTCSV.COB
 ```
 
 ### 任务 1.1：观察标尺与刻度对齐

@@ -34,7 +34,7 @@ COBOL 不是脚本解释型语言，它是严谨的**编译型语言**。
 
 ```makefile
 COBC = cobc
-SRC = INPUTCSV.COB
+SRC = ../../standalone-examples/INPUTCSV.COB
 BIN = INPUTCSV
 INPUT = input.txt
 OUTPUT = output.csv
@@ -46,7 +46,7 @@ all: $(BIN)
 check:
 	$(COBC) -fsyntax-only $(SRC)
 
-$(BIN): $(SRC) EMP-REC.CPY
+$(BIN): $(SRC) ../../standalone-examples/EMP-REC.CPY
 	$(COBC) -x -o $(BIN) $(SRC)
 
 run: $(BIN)

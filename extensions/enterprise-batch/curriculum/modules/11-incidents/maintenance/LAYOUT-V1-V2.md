@@ -58,4 +58,4 @@ V2 中区分之前的所有字段偏移不变；但**记录总长变化**会影�
   需评估列宽/迁移，并标注未验证。
 - **不受影响**：canonical CUSTOMER v1（27 字节，第 27 字节为状态）；
   夜间流 `M11CUST.COB` 与 `publish/<run_id>/customer-status.txt`。
-- 文档：`docs/curriculum/BANK-SYSTEM.md`（冻结契约的演进说明）
+- 文档：`../../../../docs/curriculum/BANK-SYSTEM.md`（冻结契约的演进说明）

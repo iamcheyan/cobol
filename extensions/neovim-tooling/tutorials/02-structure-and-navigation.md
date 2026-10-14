@@ -42,7 +42,7 @@ PROCEDURE DIVISION.            <-- 执行逻辑区：各种节（SECTION）与�
 
 ```bash
 cd /home/tetsuya/development/cobol
-nvim INPUTCSV.COB
+nvim ../../standalone-examples/INPUTCSV.COB
 ```
 
 ### 任务 2.1：体验 Winbar 实时动态面包屑

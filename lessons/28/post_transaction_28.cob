@@ -1,4 +1,6 @@
       * Apply one transaction to caller-owned account storage.
+      * 中文：对调用方持有的账户存储应用一笔交易。
+      * 日本語：呼び出し側が所有する口座記憶域に1件の取引を適用する。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. POST-TRANSACTION28.
        DATA DIVISION.

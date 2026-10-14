@@ -1,4 +1,6 @@
       * Read a binary full-word argument passed by value.
+      * 中文：读取按值传递的二进制全字长参数。
+      * 日本語：値渡しされたバイナリ全語長引数を読み取る。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. REPORT-BINARY.
        DATA DIVISION.

@@ -51,6 +51,8 @@
           05 WS-INSERTED-COUNT PIC 999.
           05 WS-FAILED PIC X.
       * GixSQL comments the final linkage field; keep this spare byte.
+      * 中文：GixSQL 会注释掉最后一个链接字段；保留这个备用字节。
+      * 日本語：GixSQL は最後のリンケージ項目をコメント化するため、この予備バイトを残す。
           05 WS-INTERFACE-RESERVED PIC X.
        PROCEDURE DIVISION USING WS-ACCOUNT-TABLE WS-BATCH-COUNTS.
        MAIN-SYNC.
@@ -220,3 +222,5 @@
                STOP RUN RETURNING 1
            END-IF.
       * GixSQL appends its generated cursor footer.
+      * 中文：GixSQL 会附加其生成的游标尾部代码。
+      * 日本語：GixSQL は生成したカーソル用フッターを追加する。

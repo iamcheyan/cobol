@@ -1,4 +1,6 @@
       * Lesson 26: distinguish bad business rows from file failures.
+      * 中文：第26课：区分业务数据错误行与文件故障。
+      * 日本語：第26課：業務データの不正行とファイル障害を区別する。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. ERROR26.
        ENVIRONMENT DIVISION.
@@ -44,6 +46,8 @@
        01 WS-REJECTED-COUNT PIC 9(3) VALUE ZERO.
        PROCEDURE DIVISION.
       * Main returns failure only for a system I/O problem.
+      * 中文：只有发生系统 I/O 问题时，主程序才返回失败。
+      * 日本語：システム I/O に問題がある場合に限り、メインは失敗を返す。
        0000-MAIN.
            PERFORM 1000-OPEN-FILES
            IF WS-SYSTEM-ERROR = "N"
@@ -59,6 +63,8 @@
            END-IF
            STOP RUN.
       * Open input before creating either output file.
+      * 中文：创建任一输出文件前先打开输入文件。
+      * 日本語：どちらかの出力ファイルを作成する前に入力ファイルを開く。
        1000-OPEN-FILES.
            OPEN INPUT TRANSACTION-INPUT
            IF WS-INPUT-STATUS = "00"
@@ -88,6 +94,8 @@
                END-IF
            END-IF.
       * AT END handles EOF; other statuses remain system errors.
+      * 中文：AT END 处理文件结束；其他状态仍视为系统错误。
+      * 日本語：AT END は EOF を処理し、それ以外の状態はシステムエラーとする。
        2000-PROCESS-INPUT.
            PERFORM UNTIL WS-END-OF-FILE = "Y"
                OR WS-SYSTEM-ERROR = "Y"
@@ -110,6 +118,8 @@
                MOVE "Y" TO WS-SYSTEM-ERROR
            END-IF.
       * Business validation rejects a row and continues the batch.
+      * 中文：业务验证会拒绝该行并继续处理批次。
+      * 日本語：業務検証で行を拒否しても、バッチ処理は続行する。
        3000-VALIDATE-RECORD.
            MOVE SPACES TO WS-REJECT-REASON
            MOVE FD-TRANSACTION-RECORD(1:6) TO WS-ACCOUNT
@@ -138,6 +148,8 @@
                PERFORM 5000-WRITE-REJECTED
            END-IF.
       * Count a valid row only after its output WRITE succeeds.
+      * 中文：只有输出 WRITE 成功后才统计有效行。
+      * 日本語：出力の WRITE が成功した後に限り、有効行として数える。
        4000-WRITE-ACCEPTED.
            MOVE FD-TRANSACTION-RECORD(1:12)
                TO WS-ACCEPTED-WORK
@@ -151,6 +163,8 @@
                MOVE "Y" TO WS-SYSTEM-ERROR
            END-IF.
       * A malformed business row is logged and processing continues.
+      * 中文：格式错误的业务行会被记录，处理随后继续。
+      * 日本語：形式不正の業務行を記録し、その後も処理を続ける。
        5000-WRITE-REJECTED.
            MOVE SPACES TO WS-REJECTED-WORK
            MOVE WS-ACCOUNT TO WS-REJECTED-WORK(1:6)
@@ -168,6 +182,8 @@
                MOVE "Y" TO WS-SYSTEM-ERROR
            END-IF.
       * Close every file whose OPEN succeeded, checking each status.
+      * 中文：关闭每个已成功 OPEN 的文件，并检查各自状态。
+      * 日本語：OPEN に成功したすべてのファイルを閉じ、それぞれの状態を確認する。
        8000-CLOSE-FILES.
            IF WS-REJECTED-OPEN = "Y"
                CLOSE REJECTED-OUTPUT

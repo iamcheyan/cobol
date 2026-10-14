@@ -1,4 +1,6 @@
       * Validate an amount and return status to the caller.
+      * 验证金额并向调用方返回状态。
+      * 金額を検証し、呼び出し元にステータスを返します。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. CHECK-AMOUNT.
        DATA DIVISION.

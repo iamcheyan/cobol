@@ -1,4 +1,6 @@
       * A second program imports the same account record definition.
+      * 第二个程序导入相同的账户记录定义。
+      * 2つ目のプログラムは、同じ口座レコード定義をインポートします。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. ACCOUNT-REPORT23.
        DATA DIVISION.

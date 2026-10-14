@@ -1,6 +1,3 @@
-      * Report caller-owned account values and transaction totals.
-      * 中文：报告调用方持有的账户值和交易汇总。
-      * 日本語：呼び出し側が所有する口座値と取引集計を報告する。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. REPORT-ACCOUNT28.
        DATA DIVISION.

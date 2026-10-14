@@ -1,6 +1,3 @@
-      * Mutate a linkage item passed by reference or by content.
-      * 中文：通过引用或内容传递修改链接项。
-      * 日本語：参照渡しまたは値渡しでリンケージ項目を変更する。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. ADD-ONE.
        DATA DIVISION.

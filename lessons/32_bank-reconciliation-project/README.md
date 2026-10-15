@@ -1,17 +1,29 @@
-# 第 32 课：银行账户对账批处理
+# 第 32 课：银行账户对账批处理——毕业项目：文件过账与数据库同步
 
-> 毕业项目：读取账户主档和交易文件，校验并应用交易，写出接受/拒绝明细，再将最终账户状态同步到 SQLite。示例使用 GnuCOBOL 固定格式和第 29 课验证过的 GixSQL 工具链。
+银行日终要把当天的交易文件应用到账户主档，写出接受/拒绝明细，再把最终余额同步回数据库快照，并留下可核对的控制计数。本课把第 20–31 课的文件匹配、模块工程、错误分类、日志与 Embedded SQL 组装成一个可构建、可重跑、可核对的项目，并用 `check.sh` 覆盖正常、重跑、缺文件与 SQL 部分失败等场景。
 
-## 一、课程目标
+## 为什么现在学
 
-完成本课后，能够：
+前面每一课都只验证一个能力：匹配、排序、错误分类、日志、SQL 连接。缺口是“把它们作为同一个批次一起交付”——文件侧与数据库侧必须对得上账，失败要留下可解释的痕迹，重跑不能重复记账。本课就是这条完整链路的收口，也是整套课程的验收对象。
 
-- 把多个 COBOL 程序、Copybook、固定宽度文件和 Embedded SQL 组合成一个可构建的批处理项目。
-- 区分业务拒绝与系统失败。透支、未知交易类型和未知账户进入拒绝文件；文件或 SQL 故障令进程返回非零。
-- 以账户号为键将文件计算结果与数据库快照比较，并分别处理更新、保持不变和插入。
-- 检查批次计数不变量，验证重跑结果，并解释文件与数据库之间的恢复边界。
+## 本课完成后的能力与边界
 
-预备知识：完成第 20、23–31 课；会使用 `cobc`、Bash、SQLite 和 `CALL` / `COPY` / Embedded SQL。预计用时：3–4 小时。
+学完本课后，你可以：
+
+- 把多个 COBOL 程序、Copybook、固定宽度文件和 Embedded SQL 组合成一个可用脚本构建的批处理项目。
+- 区分业务拒绝与系统失败：透支、未知类型与未知账户进入拒绝文件；文件或 SQL 故障令进程返回非零。
+- 以账户号为键把文件计算结果与数据库快照比较，分别处理更新、保持不变与插入。
+- 核对计数不变量并验证重跑结果：`記帳 + 拒否 = 取引`，`更新 + 変更なし + 挿入 = 口座`。
+- 解释文件与数据库之间的恢复边界，包括为什么它**不是**原子提交。
+
+边界：本项目是教学用的单向同步，SQLite 只用于可复现演示；没有分布式事务、批次 ID、输入校验和、并发控制或运维告警。输入重放从固定期初余额重算，因此不会重复累加。生产化还需要的控制见第六节。
+
+## 运行环境
+
+- Linux + GnuCOBOL 3.2.x（`cobc`）、GCC、`sqlite3`。
+- **预编译器与运行库**：GixSQL 1.0.20b（与第 29 课同源）。若尚未安装，先在**第 29 课目录**运行 `../29_embedded-sql/install-toolchain.sh`；本课默认使用 `../29_embedded-sql/build/toolchain/usr`，可用 `GIXSQL_ROOT` 覆盖。
+- 构建与运行产物都落在本课 `build/`（`BUILD_DIR` 可覆盖），已被仓库忽略。
+- 预备知识：完成第 20、23–31 课；会使用 `cobc`、Bash、SQLite 与 `CALL` / `COPY` / Embedded SQL。预计用时 3–4 小时。
 
 ## 二、项目输入与业务规则
 
@@ -36,10 +48,10 @@
 
 ## 三、构建和运行
 
-需要 Linux、GnuCOBOL (`cobc`)、GCC、SQLite (`sqlite3`) 和第 29 课验证过的 GixSQL 1.0.20b precompiler、SQLite driver 与运行库。若尚未安装，先在本课目录运行 `../29/install-toolchain.sh`；默认路径为 `../29/build/toolchain/usr`。自定义安装时设置 `GIXSQL_ROOT`。
+需要 Linux、GnuCOBOL (`cobc`)、GCC、SQLite (`sqlite3`) 和第 29 课验证过的 GixSQL 1.0.20b precompiler、SQLite driver 与运行库。若尚未安装，先在第 29 课目录运行 `../29_embedded-sql/install-toolchain.sh`；默认路径为 `../29_embedded-sql/build/toolchain/usr`。自定义安装时设置 `GIXSQL_ROOT`。
 
 ```sh
-../29/install-toolchain.sh
+../29_embedded-sql/install-toolchain.sh
 ./build.sh check
 ./build.sh build
 ./build.sh run

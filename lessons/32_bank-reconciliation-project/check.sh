@@ -45,7 +45,7 @@ expect_line "$work_dir/insert.out" \
 expect_file "$script_dir/expected/restart.txt" "$work_dir/after-insert.out"
 
 multiarch=$(gcc -print-multiarch)
-gixsql_root=${GIXSQL_ROOT:-"$script_dir/../29/build/toolchain/usr"}
+gixsql_root=${GIXSQL_ROOT:-"$script_dir/../29_embedded-sql/build/toolchain/usr"}
 lib_dir="$gixsql_root/lib"
 runtime_lib_path="$lib_dir:$lib_dir/$multiarch${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
 run_binary() {

@@ -2,21 +2,26 @@
        PROGRAM-ID. DATA02.
        DATA DIVISION.
        WORKING-STORAGE SECTION.
-      * 先頭ゼロを含む識別子にはXが適します。
+      * 契约：账户号等数字标识符不是数量，
+      * 用 X 保存以免丢前导零；金额才用 9。
        01 WS-ACCOUNT-KEY PIC X(12) VALUE "000123456789".
        01 WS-CUSTOMER-NAME PIC A(12) VALUE "ADA LOVELACE".
        01 WS-CUSTOMER-TYPE PIC A(1) VALUE "P".
        01 WS-ACCOUNT-STATUS PIC X(1) VALUE "A".
        01 WS-BRANCH-CODE PIC 9(4) VALUE 2048.
        01 WS-CURRENCY-CODE PIC X(3) VALUE "USD".
-      * 数字で日付形式を表せますが、暦上の妥当性は検証しません。
+      * 契约：PIC 9(8) 只保证日期是八位数字，
+      * 不检查月份、天数和闰年。
        01 WS-OPEN-DATE-DIGITS PIC 9(8) VALUE 20261013.
-      * Xは口座番号キーの先頭ゼロを保持します。
        01 WS-CUSTOMER-NUMBER PIC X(10) VALUE "0002046819".
        01 WS-PRODUCT-CODE PIC X(4) VALUE "SAV1".
+      * V 不占存储字符，只声明小数点位置；
+      * DISPLAY 仍会打印出小数点。
        01 WS-LEDGER-BALANCE PIC 9(7)V99 VALUE 125000.75.
        01 WS-AVAILABLE-BALANCE PIC 9(7)V99 VALUE 123500.25.
        01 WS-OVERDRAFT-LIMIT PIC 9(7)V99 VALUE 2500.00.
+      * SIGN LEADING SEPARATE 另占一个符号字符，
+      * 故该字段比同位数金额多一位。
        01 WS-LAST-CREDIT PIC S9(7)V99 SIGN LEADING SEPARATE
            CHARACTER VALUE 1250.50.
        01 WS-LAST-DEBIT PIC S9(7)V99 SIGN LEADING SEPARATE
@@ -55,7 +60,6 @@
            DISPLAY "月間取引件数=" WS-MONTHLY-TXN-COUNT
            DISPLAY "最終バッチ番号=" WS-LAST-BATCH-SEQ
            DISPLAY "明細日=" WS-STATEMENT-DAY
-      * 残りの項目は業務コードで、演算値ではありません。
            DISPLAY "その他の口座項目："
            DISPLAY "郵便番号=" WS-POSTAL-CODE
            DISPLAY "国コード=" WS-COUNTRY-CODE

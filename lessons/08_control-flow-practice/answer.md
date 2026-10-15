@@ -1,6 +1,12 @@
 # 第 08 课修改练习参考答案
 
-本答案只回答 `exercise.md` 中的两项修改练习，不提供举一反三练习答案。
+本答案只回答 `exercise.md` 中的两项修改练习，不提供举一反三练习答案。两项修改各自从原始 `lesson.cob` 开始，编译运行命令为：
+
+```sh
+cobc -fsyntax-only lesson.cob
+cobc -x -Wall -o build/lesson_08 lesson.cob
+./build/lesson_08
+```
 
 ## 修改期初余额
 
@@ -30,7 +36,7 @@
 前两笔处理后余额为 `1085.40`。取款条件使用 `<= WS-CURRENT-BALANCE`，因此相等边界会接受该笔，并把余额降为零。之后负数存款和未知代码仍然拒绝：
 
 ```text
-レコード=003 コード=W 金額=+01085.40
+レコード=003 符号=W 金額=+01085.40
 結果=ACCEPTED 理由=WITHDRAWAL
 処理件数=005
 承認件数=003

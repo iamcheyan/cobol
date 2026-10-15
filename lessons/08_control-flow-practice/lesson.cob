@@ -1,5 +1,3 @@
-      * D は残高を入金します。資金が十分にある場合は、W から借方に記入されます。
-      * 他のトランザクション コードはレビューのために拒否されます。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. BATCH08.
        DATA DIVISION.
@@ -60,6 +58,8 @@
                " 符号=" WS-TRANSACTION-CODE
                " 金額=" WS-TRANSACTION-AMOUNT.
        2200-CLASSIFY-AND-POST.
+      * 业务规则：D 存入余额；W 在余额足够时取出，恰好相等也允许。
+      * 其余交易码一律拒绝；拒绝路径只增加拒绝计数，不改动余额。
            EVALUATE WS-TRANSACTION-CODE
                WHEN "D"
                    IF WS-TRANSACTION-AMOUNT > ZERO
@@ -105,10 +105,8 @@
                        " 理由=UNKNOWN_TRANSACTION_CODE"
            END-EVALUATE.
        9000-REPORT.
+      * 三个计数反映记录的处理结果，不是会计记账科目。
            DISPLAY "処理件数=" WS-PROCESSED-COUNT
            DISPLAY "承認件数=" WS-ACCEPTED-COUNT
            DISPLAY "拒否件数=" WS-REJECTED-COUNT
            DISPLAY "最終残高=" WS-CURRENT-BALANCE.
-      * 拒否されたレコードの数は増加し、残高は変更されません。
-      * カウンタは会計エントリではなく、記録の結果を報告します。
-      * 実稼働バッチには、ファイル ステータスと再起動処理も必要です。

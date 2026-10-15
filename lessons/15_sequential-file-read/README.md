@@ -36,7 +36,7 @@
 `ORGANIZATION IS LINE SEQUENTIAL` 表示文件按**行**组织：一行的结束符（Linux 上的换行符）就是记录边界，行长可以各不相同。它和“定长记录文件”（每条记录固定 N 字节、没有换行符）是两种不同的输入：
 
 - 行顺序：记录边界由换行符决定，行长可变；本课处理这种。
-- 定长：记录边界由固定字节数决定，没有换行符；记录宽度必须由接口约定，[第 17 课](../17-fixed-length-files/README.md)处理这种。
+- 定长：记录边界由固定字节数决定，没有换行符；记录宽度必须由接口约定，[第 17 课](../17_fixed-length-files/README.md)处理这种。
 
 `FD` 下面的 `01 FD-TRANSACTION-RECORD PIC X(100)` 不是“每行 100 字符”，而是**读入缓冲区的大小**：每次成功的 `READ` 把一整行放进这 100 字节，不足的部分右侧用空格补齐；超过 100 字符的行放不下，会被拆成连续的 100 字符记录读出。所以 `FUNCTION TRIM(... TRAILING)` 只负责显示时去掉补齐的空格，它不改变记录区，也不代表文件里真的存了空格。
 
@@ -228,7 +228,7 @@ rm -f "$scratch_dir/transactions.txt"    # 让当前目录里没有夹具
 
 批处理入口先要回答三件事：文件到底有没有到位、每条记录是否按送达顺序读到、读完与失败能否区分。生产系统还会在此基础上增加最大行长、编码、字段校验、拒绝记录、日志和重复运行策略；本课只建立“打开 → 逐行读取 → 识别 EOF 或打开失败”这段最小输入流程。
 
-本课的产物是后续文件课的共同起点：[第 16 课](../16_file-writing/README.md)把结果写成输出文件，[第 17 课](../17-fixed-length-files/README.md)换成定长记录，[第 19](../19_multiple-files/README.md)、[第 20 课](../20_file-matching/README.md)同时读取多个流并按顺序匹配，[第 22 课](../22_file-processing-practice/README.md)把它们串成端到端批次，[第 26 课](../26_error-handling/README.md)再补齐错误分类与资源清理。本课没有实现这些保证，不能当作生产批次。
+本课的产物是后续文件课的共同起点：[第 16 课](../16_file-writing/README.md)把结果写成输出文件，[第 17 课](../17_fixed-length-files/README.md)换成定长记录，[第 19](../19_multiple-files/README.md)、[第 20 课](../20_file-matching/README.md)同时读取多个流并按顺序匹配，[第 22 课](../22_file-processing-practice/README.md)把它们串成端到端批次，[第 26 课](../26_error-handling/README.md)再补齐错误分类与资源清理。本课没有实现这些保证，不能当作生产批次。
 
 ## 参考资料
 

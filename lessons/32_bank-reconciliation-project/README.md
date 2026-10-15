@@ -84,6 +84,8 @@ SYNC UNCHANGED ACCOUNT=A000000005 BALANCE=0000250.75
 切断=成功
 集計 口座=03 取引=005 記帳=002 拒否=003 更新=001 変更なし=002 挿入=000
 ```
+**输出对照（实际标签 → 含义）：** `POSTED` = 交易已记帐（`TX` 序号、`ACCOUNT` 账户号、`TYPE` 类型、`BALANCE` 记帐后余额）；`REJECTED` = 业务拒绝，`REASON` 取 `INSUFFICIENT`（余额不足）/`BAD_TYPE`（未知类型）/`NO_ACCOUNT`（主档无此账户）；`接続=成功` / `切断=成功` = 数据库连接 / 断开成功；`SYNC UPDATED` / `SYNC UNCHANGED` / `SYNC INSERTED` = 数据库同步结果（更新 / 未变 / 插入）；`集計 口座/取引/記帳/拒否/更新/変更なし/挿入` = 账户数/交易数/记帐数/拒绝数/更新数/未变数/插入数。
+
 GixSQL 运行库在某些环境会把 libxml 版本警告写到标准错误；它不属于程序标准输出，`check.sh` 只比较 stdout。
 
 生成文件位于 `build/run/`：`accepted.txt` 有两条成功入账，`rejected.txt` 有三条业务拒绝，`account-report.txt` 有三条数据库同步结果，`batch.log` 按顺序记录批次开始、交易决定、数据库连接和同步结束。SQLite 表 `ACCOUNT_SNAPSHOT` 的最终账户 A000000001 余额为 1100.25。

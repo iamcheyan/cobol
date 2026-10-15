@@ -122,6 +122,8 @@ EVENT=BATCH_END INPUT=005 ACCEPTED=002 REJECTED=003 SYSTEM_ERROR=N
 - **输入缺失：** 在 `build/` 里删掉 `transactions.txt` 后运行。标准输出以 `エラー=OPEN_INPUT STATUS=35` 开始，`集計` 全为 `000`、`システムエラー=Y`，退出码 `1`；日志仍写出 `BATCH_START`、`SYSTEM_ERROR OP=OPEN_INPUT STATUS=35`、`BATCH_END ... SYSTEM_ERROR=Y` 三行。
 - **日志打不开：** 在 `build/` 里把 `batch.log` 建成目录后运行。标准输出为 `エラー=ログOPEN 状態=37`／`集計 入力=000 受理=000 拒否=000`／`システムエラー=Y`，退出码 `1`，业务文件不会被打开。
 
+**输出对照（实际标签 → 含义）：** `受理口座` = 被接受的账户；`拒否口座` = 被拒绝的账户，`REASON=` 给出原因（`BAD_WIDTH`/`BAD_AMOUNT`/`ZERO_AMOUNT`）；`集計 入力/受理/拒否` = 输入/接受/拒绝计数；`システムエラー` = 系统错误标志（`N` 无、`Y` 有）。日志事件名与字段名是英文接口标记：`EVENT=BATCH_START`/`RECORD_READ`/`RECORD_ACCEPTED`/`BUSINESS_REJECT`/`SYSTEM_ERROR`/`BATCH_END`，字段 `ID`/`NO`/`ACCOUNT`/`REASON`/`OP`/`STATUS`/`INPUT`/`ACCEPTED`/`REJECTED`/`SYSTEM_ERROR` 的含义见上文事件表。
+
 **实际观察到的环境细节：** 在本工作区运行可执行文件时，标准错误会输出 `Warning: program compiled against libxml 212 using older 209`。这是运行环境的链接库版本警告，不是本程序的业务输出；其触发组件尚未定位。
 
 ## 修改练习

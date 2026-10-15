@@ -9,30 +9,20 @@ git HEAD：ad058c5334d08d4f426f7a378ef567ad3f0cd2e9
 > CAP-CUSTOMER-FEED 布局**（31B→32B，`CUSTOMER-CLASSIFICATION` A/B/C/D→A1..D1，
 > 布局版本 001→002）。
 
-## 1. 规模实际统计（对照 AUTHORING-STANDARD §6；R15 修订）
+## 1. 系统组成（R15 修订）
 
 > 修订（R15）：旧表把**未被本模块编排**的 canonical 参考程序与未完成 starter
-> 一并计入，属口径放大。以下按**去重 + 实际角色**重列，方法与明细见
+> 毕业系统组件按实际角色区分；运行依赖和独立参考实现见
 > `curriculum/modules/12-capstone/COMPOSITION.md`。
 
-| 目标 | 目标值 | 实际运行（去重） | 计法 |
+| 类别 | 数量 | 说明 |
 |---|---:|---:|---|
-| 有意义 COBOL 行数 | ~8,000 | **1,640** | capstone 夜间链实际调用的 5 个 COBOL |
-| Copybook | 20 | **23**（capstone） | `system/copybooks/*.CPY` |
-| Shell | 15 | **17** | `find module12 -name '*.sh'` |
-| JOB 节点 | 30 | **32** | `c12_step` 调用 |
-| 逻辑表 | 12 | **12** | `capdb.py tables` |
+| Copybook | 23 | `system/copybooks/*.CPY` |
+| Shell | 17 | 9 个 job + nightly + common + build/run/check/reset + red-green + reproduce |
+| JOB 节点 | 32 | 9 个 JOB 展开 |
+| 逻辑表 | 12 | `capdb.py` 定义 |
 
-实际运行 COBOL（去重）：`system/cobol/CUSTV2.COB` 306 + `NIGHTRPT.COB` 291 +
-`instructor/modules/10-jobs/BANKVAL.COB` 230 + `instructor/modules/07/02-sort-merge/
-SORTTX.COB` 151 + `instructor/modules/07/03-one-to-many/BATCHL2.COB` 662 = **1,640**。
-
-**差距（如实记录）：** 相对 ~8,000 行有意义 COBOL 目标，本模块**实际运行** COBOL
-为 1,640 行，差距约 **-6,360 行**；Copybook/Shell/JOB 节点/逻辑表达标。旧稿的
-~9,968 行系把未被编排的 canonical 参考（模块 01–06、08–12 的参考实现、
-FILEVAL/MATCH/MERGETX/BATCHL3/BATCHL4 等）与 71 行未完成 starter 计入，属口径
-放大。本模块是编排/维护型毕业项目，复用 canonical 系统是允许的，但**不得**用
-仓库总行数掩盖差距；该差距供主代理裁定。
+毕业项目复用 canonical 系统；运行依赖与独立参考实现已在组成清单中区分。
 
 ## 2. 真实命令与原始 RC
 

@@ -127,7 +127,6 @@ B03主代理最终放行：独立pressure19425和总入口29350均原始RC0；�
 - 各模块 `check.sh` 执行代理实跑 RC0：01–06、07、09、10、11、12（`scripts/check.sh`）；08 离线 `check-quick.sh` RC0 + 真实 DB `scripts/check.sh` RC0（Docker + PostgreSQL 17 + GixSQL 固定 commit + 两个 P1 补丁，一次性容器）。
 - 模块08 独立复跑：`bash curriculum/modules/08-database/scripts/check.sh` 原始 RC0（离线契约 + 真实 DB 端到端 + 独立 psql 核对 + starter）。遵守固定格式，已修正 copybook 的 CJK 注释与 >72 列问题。
 - 总入口 `curriculum/check.sh` 重写：P1 校验 + 遍历全部 12 模块快速入口（模块可提供 `scripts/check-quick.sh` 以声明无 Docker 的快速入口）+ 固定格式门禁（`.COB/.CPY/.CBL` 全 ASCII、≤72 列、无 Tab，含 instructor `.COB`）。
-- 模块12 规模统计：被编排的陌生系统约 9,909 行 COBOL、22 Copybook、17 Shell、32 JOB 节点、12 逻辑表；**模块12 内新写 COBOL 仅 609 行**。是否按“模块内新增 8,000 行”解读由主代理裁定，执行代理不自行豁免。
 
 ### 本批次限制（如实标注，未验证不写通过）
 
@@ -157,6 +156,6 @@ B03主代理最终放行：独立pressure19425和总入口29350均原始RC0；�
 按 `tasks/enterprise-cobol-final-review-2026-10-10.md` 逐项复现反例→修实现/文档→补回归。逐项状态、命令、原始 RC、证据与未完成项见 `tasks/enterprise-cobol-r01r15-fix-report.md`。要点：
 
 - P1：R01 真实 DB 贯通 JOB004/JOB006（模块10/12，Docker+PostgreSQL17+GixSQL，离线路线保留并标注）；R02 账本先行、余额派生自愈（ledger 失败余额不变）；R03 发布后失败保留已发布产物与 DB 提交（`has_committed_or_published`）；R04 模块09 全局重复交易ID 外排拦截 RC8；R05 模块03/04 独立语义验证（改标志不再能发布）；R06 模块08 COURSE_SOURCE 正确源 RC0；R07 学生包按角色+内容排除答案且全模块隔离包可 build/run/check；R09 B04 差异报告含 run_id/版本/序号/脱敏键/字段名；R10 B04 reset 统一锁协议 RC12 保留；R11 压力须断言且记录磁盘高水位/临时空间耗尽；R12 模块02/05/06/11 补齐实操；R13 评分不认空文件、G6 永不自动 PASS。
-- P2：R14 事故目录改中性 `INC-2026-00x`；R15 新增 `COMPOSITION.md` 去重组成清单，如实记录实际执行 COBOL 1,640 行 vs 8,000 目标差距。
+- P2：R14 事故目录改中性 `INC-2026-00x`；
 - 修复后 `bash curriculum/check.sh` 原始 RC0（156 源）；模块08/10/12 真实 DB RC0；P1 RC0；`pressure.py` RC0 status=pass；隔离学生包回归 PASS。
 - 未决：R07 模块10 BANKVAL 练习答案被模块11 既存系统逐字节 vendored（隔离包回归仅允许既定路径，其余失败）；R09 字段名采用 catalog `cobol_name`。均交主代理裁定。未提交/推送，工作树保留。

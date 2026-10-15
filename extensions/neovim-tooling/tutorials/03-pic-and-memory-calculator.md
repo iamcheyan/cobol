@@ -74,7 +74,7 @@ nvim ../../standalone-examples/INPUTCSV.COB
 ```
 
 ### 任务 3.1：观察单项 PIC 字节实时换算
-1. 移动光标至第 57 行：
+1. 定位到 `IN-EMPLOYEE-ID` 声明：
    ```cobol
               05  IN-EMPLOYEE-ID         PIC X(20).
    ```
@@ -92,12 +92,12 @@ nvim ../../standalone-examples/INPUTCSV.COB
    **观察行尾**：显示 `/* 2 B COMP */`。
 
 ### 任务 3.2：观察 `01` 顶级结构体总字节递归汇总
-1. 移动光标至第 26 行：
+1. 定位到 `INPUT-RECORD` 声明：
    ```cobol
           01  INPUT-RECORD           PIC X(256).
    ```
    **观察行尾**：自动显示 `/* Total: 256 Bytes (1 fields) */`；
-2. 移动光标至第 56 行：
+2. 定位到 `WS-INPUT-FIELDS` 声明：
    ```cobol
           01  WS-INPUT-FIELDS.
    ```

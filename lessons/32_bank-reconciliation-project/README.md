@@ -86,43 +86,43 @@ GixSQL 运行库在某些环境会把 libxml 版本警告写到标准错误；�
 
 ## 五、源码与内存/控制流解析
 
-源码保持传统固定格式：第 7 列为指示符区，第 8 列起是 Area A，第 12 列起是 Area B，有效文本不超过第 72 列。用下表按声明和段落阅读每条语句；程序中相邻的 `MOVE` / `COMPUTE` / `IF` / `WRITE` 分别完成字段搬运、金额换算、分支决策和持久化。
+源码保持传统固定格式。下表按声明和段落介绍各程序的职责；程序中相邻的 `MOVE` / `COMPUTE` / `IF` / `WRITE` 分别完成字段搬运、金额换算、分支决策和持久化。
 
 ### `lesson.cob`：主程序
 
-- 第 1–8 行声明程序名并引入 `BATCH-INTERFACE.CPY`。`WS-ACCOUNT-TABLE` 是固定 20 行的共享账户表；`WS-BATCH-COUNTS` 保存交易和数据库同步计数；`WS-CHECK-COUNT` 是校验时的临时数值。
-- 第 10–28 行是主流程。`INITIALIZE` 清空表和计数，然后明确把失败标志置为 `N`。`CALL ... BY REFERENCE` 把同一块数据交给 `LOADPOST32`；只有共享失败标志不是 `Y` 才调用 `SYNCDB32`。随后校验计数、打印摘要、设置进程返回码。
-- 第 29–37 行打印固定格式摘要，编辑的 `PIC 99` / `PIC 999` 计数显示前导零。
-- 第 38–44 行把系统失败映射到 `RETURN-CODE` 1；业务拒绝不改变失败标志，因此可返回 0。
-- 第 45–62 行检查两个不变量：`POSTED + REJECTED = TX`；成功同步时 `UPDATED + UNCHANGED + INSERTED = ACCOUNTS`。任一不成立都会报告错误并令进程失败。
-- 第 63–100 行的注释记录文件契约、模块责任、计数不变量、查表成本和恢复边界；第 101 行显式结束主程序。
+- 程序声明区定义程序名并引入 `BATCH-INTERFACE.CPY`。`WS-ACCOUNT-TABLE` 是固定 20 行的共享账户表；`WS-BATCH-COUNTS` 保存交易和数据库同步计数；`WS-CHECK-COUNT` 是校验时的临时数值。
+- 主流程`INITIALIZE` 清空表和计数，然后明确把失败标志置为 `N`。`CALL ... BY REFERENCE` 把同一块数据交给 `LOADPOST32`；只有共享失败标志不是 `Y` 才调用 `SYNCDB32`。随后校验计数、打印摘要、设置进程返回码。
+- 摘要段打印固定格式摘要，编辑的 `PIC 99` / `PIC 999` 计数显示前导零。
+- 失败处理段把系统失败映射到 `RETURN-CODE` 1；业务拒绝不改变失败标志，因此可返回 0。
+- 收尾检查段检查两个不变量：`POSTED + REJECTED = TX`；成功同步时 `UPDATED + UNCHANGED + INSERTED = ACCOUNTS`。任一不成立都会报告错误并令进程失败。
+- 程序注释记录文件契约、模块责任、计数不变量、查表成本和恢复边界；主程序以显式结束语句收尾。
 
 ### `load_post_32.cob`：文件校验与交易过账
 
-- 第 1–32 行声明五个行顺序文件：两个输入、接受输出、拒绝输出和共享批次日志。每个 `FILE STATUS` 都有自己的 `PIC XX` 字段。
-- 第 33–57 行声明交易解析 Copybook、文件状态、EOF/打开标志、查找索引、金额和输出缓冲区。`LINKAGE SECTION` 的两个组与主程序布局相同，子程序通过 `PROCEDURE DIVISION USING` 收到调用方的数据。
-- `1000-OPEN-FILES`（第 68–113 行）按顺序打开文件。每次成功都记录打开标志，以便后续只关闭已打开资源；发生失败后不再继续打开其余文件。
-- `1100-LOAD-ACCOUNTS`（第 114–127 行）逐条读取主档，EOF 时设置标志；有效记录交给 `1110-STORE-ACCOUNT`。
-- `1110-STORE-ACCOUNT`（第 128–154 行）先检查 20 行容量，再把 10 字符账户号、8 字符客户号和 9 位分金额移入表格。余额先通过 `IS NUMERIC` 验证，再用 `NUMVAL(...) / 100` 转成隐含小数格式。循环检查新账户号是否重复；重复属于系统输入错误，设置共享失败标志。
-- `2000-POST-TRANSACTIONS`（第 155–168 行）读取交易文件；每条有效记录交给 `2100-POST-ONE`。
-- `2100-POST-ONE`（第 169–206 行）增加交易序号，按固定位置拆出账户号、类型和金额文本；用 `PERFORM VARYING` 在线性账户表中查找。金额先验数字，再转为 packed decimal。缺少账户、非法金额或业务规则产生的原因进入 `WS-REASON`。无拒绝原因就调用 `2300-WRITE-POSTED`，否则调用 `2400-WRITE-REJECTED`；最后把该条决定复制到日志缓冲区。
-- `2200-APPLY-TRANSACTION`（第 207–220 行）以 `EVALUATE` 分派类型。`D` 加余额；`C` 先比较金额和余额，只有不透支才扣款；其他类型记为 `BAD_TYPE`。
-- `2300-WRITE-POSTED` 和 `2400-WRITE-REJECTED`（第 221–251 行）各自递增对应计数，把账户、序号、结果余额或拒绝原因格式化进 80 字符缓冲区，显示并写入对应输出文件。写失败时设置系统失败标志。
-- `8000-CLOSE-FILES`（第 252–293 行）按打开标志关闭文件；每次关闭都检查状态。日志在关闭前追加 `EVENT=POSTING_COMPLETE`。
-- `8200-WRITE-LOG`（第 294–300 行）把 100 字符日志缓冲区写出，并把写错误升级为系统失败。
+- 文件声明区声明五个行顺序文件：两个输入、接受输出、拒绝输出和共享批次日志。每个 `FILE STATUS` 都有自己的 `PIC XX` 字段。
+- 工作数据区声明交易解析 Copybook、文件状态、EOF/打开标志、查找索引、金额和输出缓冲区。`LINKAGE SECTION` 的两个组与主程序布局相同，子程序通过 `PROCEDURE DIVISION USING` 收到调用方的数据。
+- `1000-OPEN-FILES`按顺序打开文件。每次成功都记录打开标志，以便后续只关闭已打开资源；发生失败后不再继续打开其余文件。
+- `1100-LOAD-ACCOUNTS`逐条读取主档，EOF 时设置标志；有效记录交给 `1110-STORE-ACCOUNT`。
+- `1110-STORE-ACCOUNT`先检查 20 行容量，再把 10 字符账户号、8 字符客户号和 9 位分金额移入表格。余额先通过 `IS NUMERIC` 验证，再用 `NUMVAL(...) / 100` 转成隐含小数格式。循环检查新账户号是否重复；重复属于系统输入错误，设置共享失败标志。
+- `2000-POST-TRANSACTIONS`读取交易文件；每条有效记录交给 `2100-POST-ONE`。
+- `2100-POST-ONE`增加交易序号，按固定位置拆出账户号、类型和金额文本；用 `PERFORM VARYING` 在线性账户表中查找。金额先验数字，再转为 packed decimal。缺少账户、非法金额或业务规则产生的原因进入 `WS-REASON`。无拒绝原因就调用 `2300-WRITE-POSTED`，否则调用 `2400-WRITE-REJECTED`；最后把该条决定复制到日志缓冲区。
+- `2200-APPLY-TRANSACTION`以 `EVALUATE` 分派类型。`D` 加余额；`C` 先比较金额和余额，只有不透支才扣款；其他类型记为 `BAD_TYPE`。
+- `2300-WRITE-POSTED` 和 `2400-WRITE-REJECTED`各自递增对应计数，把账户、序号、结果余额或拒绝原因格式化进 80 字符缓冲区，显示并写入对应输出文件。写失败时设置系统失败标志。
+- `8000-CLOSE-FILES`按打开标志关闭文件；每次关闭都检查状态。日志在关闭前追加 `EVENT=POSTING_COMPLETE`。
+- `8200-WRITE-LOG`把 100 字符日志缓冲区写出，并把写错误升级为系统失败。
 
 ### `sync_db_32.cob`：Embedded SQL 与同步报告
 
-- 第 1–17 行声明报告与日志文件。第 18–37 行声明 GixSQL host variables、数据库连接状态、同步状态和 SQLCA。
-- 第 38–55 行在 linkage 中再次声明与调用方一致的账户表和批次计数布局。保持字段顺序，因为 `CALL ... BY REFERENCE` 按位置传递整块数据。末尾预留字节用于 GixSQL：预处理会把 linkage 最后一项输出为注释；移除预留项后 `WS-FAILED` 会变成未定义字段，编译失败。
-- `MAIN-SYNC`（第 56–102 行）打开报告并追加批次日志；只有文件打开正常才连接数据库。数据库和文件分别关闭，连接成功时执行 `9000-DISCONNECT`。
-- `1000-CONNECT-DATABASE`（第 103–122 行）从环境读取 `DATASRC`、用户和密码，执行 GixSQL `CONNECT`。运行脚本将 SQLite 路径传入环境；程序源代码不包含机器路径或口令。
-- `2000-SYNC-TABLE`（第 123–127 行）逐个处理内存表中的账户，失败时停止后续账户。
-- `2100-SYNC-ACCOUNT`（第 128–157 行）把当前账户字段复制到独立 host variables，再执行 `SELECT ... INTO`。SQLCODE 0 时比较客户号与余额；100 表示无匹配行，转到插入；其他 SQLCODE 设为失败。只有成功分类才写报告和日志。
-- `2200-UPDATE-ACCOUNT`（第 158–171 行）以账户号作为 `WHERE` 键更新客户号和余额；SQLCODE 0 才增加 `UPDATED` 计数。
-- `2300-INSERT-ACCOUNT`（第 172–185 行）插入数据库不存在的账户，并增加 `INSERTED` 计数。
-- `2400-REPORT-SYNC`（第 186–203 行）把决策、账户号和最终余额写入报告文件和批次日志。
-- `8100-WRITE-LOG`（第 204–210 行）检查每条日志写入状态。`9000-DISCONNECT`（第 211–221 行）关闭 GixSQL 连接；SQL 或断开失败以状态 1 结束进程。第 222 行注释标记 GixSQL preprocessor 生成的 cursor footer 边界。
+- 文件声明区声明报告与日志文件。工作数据区还声明 GixSQL host variables、数据库连接状态、同步状态和 SQLCA。
+- LINKAGE SECTION 再次声明与调用方一致的账户表和批次计数布局。保持字段顺序，因为 `CALL ... BY REFERENCE` 按位置传递整块数据。末尾预留字节用于 GixSQL：预处理会把 linkage 最后一项输出为注释；移除预留项后 `WS-FAILED` 会变成未定义字段，编译失败。
+- `MAIN-SYNC`打开报告并追加批次日志；只有文件打开正常才连接数据库。数据库和文件分别关闭，连接成功时执行 `9000-DISCONNECT`。
+- `1000-CONNECT-DATABASE`从环境读取 `DATASRC`、用户和密码，执行 GixSQL `CONNECT`。运行脚本将 SQLite 路径传入环境；程序源代码不包含机器路径或口令。
+- `2000-SYNC-TABLE`逐个处理内存表中的账户，失败时停止后续账户。
+- `2100-SYNC-ACCOUNT`把当前账户字段复制到独立 host variables，再执行 `SELECT ... INTO`。SQLCODE 0 时比较客户号与余额；100 表示无匹配行，转到插入；其他 SQLCODE 设为失败。只有成功分类才写报告和日志。
+- `2200-UPDATE-ACCOUNT`以账户号作为 `WHERE` 键更新客户号和余额；SQLCODE 0 才增加 `UPDATED` 计数。
+- `2300-INSERT-ACCOUNT`插入数据库不存在的账户，并增加 `INSERTED` 计数。
+- `2400-REPORT-SYNC`把决策、账户号和最终余额写入报告文件和批次日志。
+- `8100-WRITE-LOG`检查每条日志写入状态。`9000-DISCONNECT`关闭 GixSQL 连接；SQL 或断开失败以状态 1 结束进程。GixSQL preprocessor 生成的 cursor footer 边界由注释标记。
 
 Java/Python 程序常把账户表写成对象列表、字典或 DataFrame，把 `CALL` 看作函数调用，把 `FILE STATUS` 看作显式 I/O 异常分支。本例的差别在于数据布局由 `PIC` 和层级号定义，`LINKAGE SECTION` 接收调用方内存，文件与 SQL 状态由程序显式检查。不要假设一条 COBOL 记录等同于任意语言对象，也不要把 `BY REFERENCE` 的共享修改误当作值拷贝。
 
@@ -153,11 +153,11 @@ GixSQL/SQLite 在本课中执行的是实际 Embedded SQL；`sqlite3` 负责建�
 
 ## 参考资料
 
-- [第 20 课：有序文件匹配](../20/README.md)
-- [第 26 课：错误处理](../26/README.md)
-- [第 28 课：多模块批处理](../28/README.md)
-- [第 29 课：GixSQL Embedded SQL 环境](../29/README.md)
-- [第 30 课：SQL Cursor](../30/README.md)
-- [第 31 课：文件与数据库快照同步](../31/README.md)
+- [第 20 课：有序文件匹配](../20_file-matching/README.md)
+- [第 26 课：错误处理](../26_error-handling/README.md)
+- [第 28 课：多模块批处理](../28_modular-batch-project/README.md)
+- [第 29 课：GixSQL Embedded SQL 环境](../29_embedded-sql/README.md)
+- [第 30 课：SQL Cursor](../30_sql-cursors/README.md)
+- [第 31 课：文件与数据库快照同步](../31_data-synchronization/README.md)
 - [GixSQL README](https://github.com/mridoni/gixsql/blob/main/README.md)
 - [GnuCOBOL Programmer’s Guide](https://gnucobol.sourceforge.io/HTML/gnucobpg.html)

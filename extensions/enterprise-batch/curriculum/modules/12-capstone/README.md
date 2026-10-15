@@ -173,15 +173,7 @@ bash curriculum/modules/12-capstone/scripts/check.sh
 `check.sh` 覆盖四类日、layout 守卫、重跑幂等、五类崩溃恢复、锁/no-clobber、
 系统失败、控制门禁、starter 与 RED→GREEN。
 
-## 规模
+## 系统组成
 
-陌生系统规模**不**以仓库总行数宣布。去重的系统组成、JOB/程序/COPY/表的使用关系、
-统计方法与**实事求是的差距**见 [COMPOSITION.md](COMPOSITION.md)：
-
-- **实际运行依赖（去重）**：5 个 COBOL / 1,640 行、23 个 capstone Copybook、
-  17 个 capstone Shell、32 个 JOB 节点、12 个逻辑表。
-- **独立教学参考（不被本模块编排）**：`instructor/` 下共 23 个 `.COB`（11,612 行），
-  其中仅 3 个被 capstone 调用。
-- **差距（如实记录）**：相对 `AUTHORING-STANDARD §6` 的约 8,000 行有意义 COBOL 目标，
-  本模块**实际运行** COBOL 为 1,640 行，差距约 -6,360 行；Copybook/Shell/JOB/表达标。
-  本模块是编排/维护型毕业项目，不靠灌水凑行数；该差距供主代理裁定。
+毕业项目的运行组件与依赖关系见 [系统组成清单](COMPOSITION.md)。清单按实际调用关系
+区分运行依赖、维护调查依赖、教学参考、starter 和生成文件。

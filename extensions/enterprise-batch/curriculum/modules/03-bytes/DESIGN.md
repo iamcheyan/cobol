@@ -1,7 +1,6 @@
 # 模块 03 设计：金额的物理表示与非法数据解析
 
-状态：设计基线，仅覆盖模块 03；不改动 CUSTOMER v1=27B、ACCOUNT v1=47B、
-TRANSACTION v1=55B 契约，也不改动模块 07 与既有 P1 实验。
+本设计不改动 CUSTOMER v1=27B、ACCOUNT v1=47B、TRANSACTION v1=55B 契约，也不改动模块 07 与既有 P1 实验。
 
 ## 环境与 ABI 基线
 

@@ -56,7 +56,7 @@ nvim ../../standalone-examples/INPUTCSV.COB
    - 如果存在告警，会提示：`COBOL: 0 error(s), 2 warning(s) detected.`。
 
 ### 任务 4.2：模拟未定义段落排错实操
-1. 移动光标至第 85 行：
+1. 定位到 `OPEN INPUT INPUT-FILE` 语句：
    ```cobol
               OPEN INPUT INPUT-FILE
                    OUTPUT OUTPUT-FILE.
@@ -67,7 +67,7 @@ nvim ../../standalone-examples/INPUTCSV.COB
    ```
 3. 按 `<Esc>` 退出插入模式，并按 `:w` 保存文件；
 4. **观察视觉反馈**：
-   - 第 85 行下方**立即出现醒目的红色波浪下划线**！
+   - 该语句下方**立即出现醒目的红色波浪下划线**！
    - 并且红色波浪线**精准紧贴在 `'9999-NOT-FOUND'` 这个标识符下方**！
 5. 将光标移动到波浪线处，Neovim 浮窗立即弹出编译器真实报错：
    `'9999-NOT-FOUND' is not defined`。
@@ -83,14 +83,14 @@ nvim ../../standalone-examples/INPUTCSV.COB
 4. 输入 `:cclose` 可以关闭 Quickfix 列表。
 
 ### 任务 4.4：体验修改防抖飞检与自动修复
-1. 将光标移回第 85 行，按 `u` 撤销刚才的改动，恢复原来的 `OPEN INPUT INPUT-FILE` 代码；
+1. 将光标移回该语句，按 `u` 撤销刚才的改动，恢复原来的 `OPEN INPUT INPUT-FILE` 代码；
 2. 按 `:w` 保存文件；
-3. **观察效果**：第 85 行的红色波浪线立即**自动彻底消失**！
+3. **观察效果**：该位置的红色波浪线立即**自动彻底消失**！
 4. 再次按下 **`<leader>cl`**，状态栏重新变绿：`COBOL: ✓ No syntax errors or warnings found by cobc.`。
 
 ### 任务 4.5：体验未保存状态下的实时防抖校验
 甚至不需要按 `:w` 保存文件：
-1. 找到第 100 行，在插入模式中故意少写一个参数或拼错保留字：
+1. 在源码的 `MOVE` 语句附近，切换到插入模式并故意少写一个参数或拼错保留字：
    ```cobol
               MOVE 1 TO
    ```

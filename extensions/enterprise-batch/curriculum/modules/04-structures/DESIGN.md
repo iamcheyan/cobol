@@ -1,7 +1,6 @@
 # 模块 04 设计：复杂结构与布局偏移
 
-状态：设计基线，仅覆盖模块 04；**只读复用**模块 07 canonical Copybook，不修改 07/tasks/
-docs/Makefile 等既有文件，也不改动 CUSTOMER v1=27B、ACCOUNT v1=47B、TRANSACTION v1=55B。
+本设计只读复用模块 07 canonical Copybook，不修改 07/tasks/docs/Makefile 等既有文件，也不改动 CUSTOMER v1=27B、ACCOUNT v1=47B、TRANSACTION v1=55B。
 
 ## 结构语义（04.1）
 

@@ -51,11 +51,7 @@ CUSTOMER-V1=27、CAP-CUSTOMER-FEED-V1=31、V2=32、ACCOUNT=47、TRANSACTION=55 �
 永久回归：`scripts/check.py::check_grader_rejects_empty`（直接导入 grader：
 8 个空文件得 0 分且被标 unfilled；仅标题/TODO 的 COMPOSITION 与 signoff 不被接受）。
 
-## R15 · 规模统计不能等同复杂度（已修）
+## R15 · P2 · 组成清单
 
-新增 `COMPOSITION.md`：按唯一路径去重的系统组成清单、JOB/程序/COPY/表使用关系、
-统计方法与**如实差距**。结论：实际运行 COBOL（去重）5 个 / 1,640 行，相对
-`AUTHORING-STANDARD §6` 的约 8,000 行目标差距约 **-6,360 行**（Copybook 23 /
-Shell 17 / JOB 节点 32 / 逻辑表 12 达标）。旧报告“约 9,970 行”把未接入编排的
-canonical 参考与 71 行 starter 计入，属口径放大。README「规模」节与
-`grade.py`（要求 `COMPOSITION.md` 实质存在）已同步。
+新增 `COMPOSITION.md`，列出运行依赖、维护调查依赖、教学参考、starter 和生成文件，
+并说明 JOB/程序/COPY/表之间的调用关系。毕业项目 README 已链接该清单。

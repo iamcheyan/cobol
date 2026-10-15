@@ -1,6 +1,6 @@
 # 第 03 课：MOVE 与 COMPUTE
 
-> 状态：课程草稿。目录已确认；源码采用固定格式并符合 100–300 行范围。本例针对 GnuCOBOL 3.2.0。
+> 示例使用 GnuCOBOL 3.2.0 默认方言与固定格式。
 
 ## 一、课程目标
 
@@ -50,7 +50,7 @@ COMPUTE WS-INTEREST-ROUNDED ROUNDED = WS-INTEREST-RAW
 
 ## 三、完整示例源码
 
-见 [`lesson.cob`](./lesson.cob)，共 100 行。它使用固定样例，不读取外部数据；先计算交易后余额，再比较 `MOVE`、不舍入的 `COMPUTE` 和舍入的 `COMPUTE`。
+见 [`lesson.cob`](./lesson.cob)。它使用固定样例，不读取外部数据；先计算交易后余额，再比较 `MOVE`、不舍入的 `COMPUTE` 和舍入的 `COMPUTE`。
 
 ## 四、源码逐步解析
 

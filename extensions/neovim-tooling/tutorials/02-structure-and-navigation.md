@@ -1,6 +1,6 @@
 # 第 2 课：结构概览、大纲树与代码定义直达 (Structure, Outline & Jumps)
 
-在大型机商业项目中，一个 COBOL 源码文件常常长达几千行甚至几万行。业务流程通过成百上千个 `PERFORM` 段落不断跳跃，数据字典通过大量的 Copybook（`.CPY`）互相引用。
+在大型机商业项目中，COBOL 程序会由多个 `PERFORM` 段落和 Copybook（`.CPY`）共同组成，阅读时需要追踪业务流程与数据定义之间的关系。
 
 如果没有现代 IDE 辅助，老程序员只能靠 `/` 手工搜索段落名，频繁在多个文件中切屏，极易打断思路。本课教你如何像现代开发一样，在 Neovim 中实现秒级大纲浏览、一键跳到定义、无缝原路跳回以及浮窗就地预览。
 
@@ -47,7 +47,7 @@ nvim ../../standalone-examples/INPUTCSV.COB
 
 ### 任务 2.1：体验 Winbar 实时动态面包屑
 1. 观察窗口顶部 Winbar 最右侧的彩色面包屑标签；
-2. 移动光标至第 1 行 `IDENTIFICATION DIVISION`，Winbar 显示 `[ IDENTIFICATION ]`；
+2. 移动光标至 `IDENTIFICATION DIVISION`，Winbar 显示 `[ IDENTIFICATION ]`；
 3. 移动光标至 `WORKING-STORAGE SECTION`，Winbar 变为绿色的 `[ DATA > WORKING-STORAGE ]`；
 4. 移动光标至 `2100-PROCESS-RECORD`，Winbar 变为亮蓝色的 `[ PROCEDURE > 2000-PROCESS-SECTION > 2100-PROCESS-RECORD ]`；
 5. **体验收获**：无论你在代码中如何快速滚动，抬头一眼就能知道当前代码块位于整个系统架构的哪一个分支。
@@ -79,7 +79,7 @@ Aerial 是 Neovim 的代码结构大纲（Outline）侧边栏插件。它不是 
 8. **观察**：光标直飞到 `01  WS-FLAGS.` 变量声明行！
 9. 再次按下 **`<C-o>`** 原路跳回调用处。
 
-> 💡 **技巧**：`gd` 与 `<C-o>` 在 Neovim 中形成完美的“前进-后退”工作流，彻底消除在几千行文件里上下滚动的疲惫。
+> 💡 **技巧**：`gd` 与 `<C-o>` 在 Neovim 中形成完美的“前进-后退”工作流，彻底消除在多个定义间反复搜索的疲惫。
 
 ### 任务 2.4：Copybook 浮窗就地预览（`K`）与文件打开（`gf`）
 COBOL 大量依靠 Copybook（类似 C 语言的 `#include`）复用数据结构。

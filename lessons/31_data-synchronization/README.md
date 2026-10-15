@@ -1,6 +1,6 @@
 # 第 31 课：文件与数据库快照同步
 
-> 状态：课程草稿。主程序固定格式源码 214 行；使用第 29 课的真实 GixSQL/SQLite 工具链。
+> 使用第 29 课的 GixSQL/SQLite 工具链。
 
 ## 一、目标与同步边界
 
@@ -76,8 +76,8 @@ FILE_ONLY ACCOUNT=A000000003 CUSTOMER=C0001003 BALANCE=00025.00
 
 ## 参考资料
 
-- [Lesson 20：有序文件归并](../20/README.md)
-- [Lesson 26：文件状态与错误处理](../26/README.md)
-- [Lesson 29：GixSQL Embedded SQL 和 SQLite 工具链](../29/README.md)
+- [Lesson 20：有序文件归并](../20_file-matching/README.md)
+- [Lesson 26：文件状态与错误处理](../26_error-handling/README.md)
+- [Lesson 29：GixSQL Embedded SQL 和 SQLite 工具链](../29_embedded-sql/README.md)
 - [GixSQL README](https://github.com/mridoni/gixsql/blob/main/README.md)
 - [GnuCOBOL Programmer’s Guide](https://gnucobol.sourceforge.io/HTML/gnucobpg.html)

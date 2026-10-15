@@ -1,3 +1,5 @@
+      * Copybook布局是CALL接口契约，POST-STATUS返回业务判定。
+      * 余额不足的取款会被拒绝，账户余额保持不变。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON28.
        ENVIRONMENT DIVISION.
@@ -12,7 +14,6 @@
        FD BATCH-LOG.
        01 FD-BATCH-LOG-RECORD PIC X(100).
        WORKING-STORAGE SECTION.
-      * 共享记录和计数器在 Copybook 中声明。
        COPY "ACCOUNT-REC.CPY".
        COPY "TRANSACTION-REC.CPY".
        COPY "POST-STATUS.CPY".
@@ -23,8 +24,6 @@
        01 WS-IO-ERROR PIC X VALUE "N".
        01 WS-LOG-MESSAGE PIC X(100) VALUE SPACES.
        01 WS-TRANSACTION-NO PIC 9(3) VALUE ZERO.
-      * 交易记录布局是CALL的输入契约，POST-STATUS用于返回记账判定。
-      * 余额不足的取款会被拒绝，账户余额保持不变。
        01 WS-EDITED-AMOUNT PIC 9(7).99 VALUE ZERO.
        01 WS-UNKNOWN-STATUS PIC X VALUE "N".
        PROCEDURE DIVISION.

@@ -1,3 +1,5 @@
+      * EOF is tracked per input: one exhausted stream
+      * must not stop the other.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. MULTI19.
        ENVIRONMENT DIVISION.

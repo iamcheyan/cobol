@@ -1,3 +1,5 @@
+      * 各入力のEOF状態は独立です。一方がEOFでも他方を読み切ります。
+      * EOF以外のI/O異常は失敗として扱い、開いたファイルを閉じます。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. MULTI19.
        ENVIRONMENT DIVISION.

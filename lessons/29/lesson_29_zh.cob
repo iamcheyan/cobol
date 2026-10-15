@@ -1,3 +1,6 @@
+      * 数据库路径和凭据来自运行环境，不写入源码。
+      * 执行SELECT前清空接收字段，避免无匹配时沿用旧值。
+      * SQLCODE 100表示正常无匹配；其他SQL错误使操作失败。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON29.
        DATA DIVISION.

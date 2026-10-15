@@ -1,4 +1,4 @@
-      * 一个流结束后，另一个仍继续读取。非EOF读取错误会停止循环。正常结束或读取失败后关闭已打开文件，并报告关闭错误。
+      * 每个输入流独立维护EOF；一侧结束后，另一侧仍须读完。非EOF的I/O错误使运行失败，并关闭所有已打开文件。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. MULTI19.
        ENVIRONMENT DIVISION.

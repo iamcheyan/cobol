@@ -1,3 +1,4 @@
+      * 口座キーの重複は記帳開始前に失敗として扱います。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LOADPOST32.
        ENVIRONMENT DIVISION.

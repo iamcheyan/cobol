@@ -1,3 +1,4 @@
+      * 账户键重复会在开始记账前使批次失败。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LOADPOST32.
        ENVIRONMENT DIVISION.

@@ -1,3 +1,6 @@
+      * 凭据从运行环境读取，绝不输出。
+      * SQLCODE 0表示匹配，100表示无记录；其他SQL错误会停止对账。
+      * 仅关闭已打开的资源，并在文件清理后断开数据库。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON31.
        ENVIRONMENT DIVISION.
@@ -128,7 +131,6 @@
                        END-IF
                END-READ
            END-PERFORM.
-      *逐条读取27字符的快照记录，直到EOF或发生故障。
        3000-RECONCILE-ROW.
            ADD 1 TO WS-ROW-COUNT
            MOVE SNAPSHOT-RECORD(1:10) TO WS-ACCOUNT

@@ -1,3 +1,7 @@
+      * The log must open before processing.
+      * If its WRITE fails, stop: the log cannot report its own failure.
+      * Count acceptance only after the accepted-output WRITE succeeds.
+      * Close only files whose OPEN succeeded; propagate close errors.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LOG27.
        ENVIRONMENT DIVISION.
@@ -157,7 +161,6 @@
                INTO WS-LOG-MESSAGE
            END-STRING
            PERFORM 9100-WRITE-LOG.
-      * These are business rejections, not system failures.
        3000-VALIDATE-RECORD.
            MOVE SPACES TO WS-REJECT-REASON
            COMPUTE WS-RECORD-LENGTH = FUNCTION LENGTH(
@@ -184,7 +187,6 @@
            ELSE
                PERFORM 5000-WRITE-REJECTED
            END-IF.
-      * Write accepted data first; count and log only after status 00.
        4000-WRITE-ACCEPTED.
            MOVE FD-TRANSACTION-RECORD(1:12)
                TO WS-ACCEPTED-WORK
@@ -235,7 +237,6 @@
                INTO WS-LOG-MESSAGE
            END-STRING
            PERFORM 9100-WRITE-LOG.
-      * The log cannot report its own write failure.
        9100-WRITE-LOG.
            IF WS-LOG-FAILED = "N"
                MOVE WS-LOG-MESSAGE TO FD-BATCH-LOG-RECORD
@@ -261,7 +262,6 @@
                END-STRING
                PERFORM 9100-WRITE-LOG
            END-IF.
-      * Close only opened data files; check each status.
        8000-CLOSE-DATA-FILES.
            IF WS-REJECTED-OPEN = "Y"
                CLOSE REJECTED-OUTPUT

@@ -1,3 +1,5 @@
+      * 業務ルール違反は拒否として処理を続けます。非EOFのI/O障害だけがバッチ失敗です。
+      * 出力WRITE成功後に受理件数を加算します。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. ERROR26.
        ENVIRONMENT DIVISION.
@@ -42,7 +44,6 @@
        01 WS-ACCEPTED-COUNT PIC 9(3) VALUE ZERO.
        01 WS-REJECTED-COUNT PIC 9(3) VALUE ZERO.
        PROCEDURE DIVISION.
-      * 業務行の拒否では続行し、システムI/O障害がある場合だけ失敗を返します。
        0000-MAIN.
            PERFORM 1000-OPEN-FILES
            IF WS-SYSTEM-ERROR = "N"
@@ -85,7 +86,6 @@
                    MOVE "Y" TO WS-SYSTEM-ERROR
                END-IF
            END-IF.
-      * AT END は EOFを処理し、それ以外の状態はシステ
        2000-PROCESS-INPUT.
            PERFORM UNTIL WS-END-OF-FILE = "Y"
                OR WS-SYSTEM-ERROR = "Y"

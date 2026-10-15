@@ -1,3 +1,6 @@
+      * The Copybook layout is the CALL contract.
+      * POST-STATUS returns the business decision.
+      * Rejected withdrawals leave the balance unchanged.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON28.
        ENVIRONMENT DIVISION.
@@ -22,9 +25,6 @@
        01 WS-IO-ERROR PIC X VALUE "N".
        01 WS-LOG-MESSAGE PIC X(100) VALUE SPACES.
        01 WS-TRANSACTION-NO PIC 9(3) VALUE ZERO.
-      * Transaction layout is the CALL input contract.
-      * POST-STATUS holds the callee's returned decision.
-      * Rejected withdrawals leave the account balance unchanged.
        01 WS-EDITED-AMOUNT PIC 9(7).99 VALUE ZERO.
        01 WS-UNKNOWN-STATUS PIC X VALUE "N".
        PROCEDURE DIVISION.
@@ -81,7 +81,6 @@
            MOVE "D" TO WS-TRANSACTION-TYPE
            MOVE 1.00 TO WS-TRANSACTION-AMOUNT
            PERFORM 2000-CALL-POSTER.
-      * The caller passes three shared fields by reference.
        2000-CALL-POSTER.
            ADD 1 TO WS-TRANSACTION-NO
            MOVE SPACES TO WS-POST-STATUS

@@ -1,3 +1,5 @@
+      * The primary key makes repeated-run ordering stable.
+      * Close the cursor after EOF or FETCH failure.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON30.
        DATA DIVISION.

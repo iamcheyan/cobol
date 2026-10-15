@@ -1,8 +1,11 @@
+      * BY REFERENCE exposes callee changes in caller storage.
+      * BY CONTENT changes a temporary copy.
+      * BY VALUE uses a full-word integer; caller and callee
+      * must agree on BINARY-LONG width and signedness.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON25.
        DATA DIVISION.
        WORKING-STORAGE SECTION.
-      * 符号属性とBINARY-LONGのサイズを一致させ、BY VALUEの受け渡しを安全にします。
        COPY "AMOUNT-INTERFACE.CPY".
        01 WS-EXPECTED USAGE BINARY-LONG VALUE ZERO.
        01 WS-ACTUAL USAGE BINARY-LONG VALUE ZERO.
@@ -25,7 +28,6 @@
            PERFORM 1100-TEST-REFERENCE
            PERFORM 1200-TEST-CONTENT
            PERFORM 1300-TEST-VALUE.
-      * BY REFERENCEは呼び出し側の記憶域をADD-ONEと共有します。
        1100-TEST-REFERENCE.
            MOVE 10 TO AMOUNT-ARGUMENT
            MOVE 11 TO WS-EXPECTED
@@ -33,7 +35,6 @@
            PERFORM 8000-DISPLAY-BEFORE
            CALL "ADD-ONE" USING BY REFERENCE AMOUNT-ARGUMENT
            PERFORM 8100-CHECK-ACTUAL.
-      * BY CONTENTはADD-ONEに一時コピーを渡します。
        1200-TEST-CONTENT.
            MOVE 20 TO AMOUNT-ARGUMENT
            MOVE 20 TO WS-EXPECTED
@@ -41,7 +42,6 @@
            PERFORM 8000-DISPLAY-BEFORE
            CALL "ADD-ONE" USING BY CONTENT AMOUNT-ARGUMENT
            PERFORM 8100-CHECK-ACTUAL.
-      * BY VALUEは全語長整数をREPORT-BINARYへ渡します。
        1300-TEST-VALUE.
            MOVE 30 TO AMOUNT-ARGUMENT
            MOVE 30 TO WS-EXPECTED
@@ -49,7 +49,6 @@
            PERFORM 8000-DISPLAY-BEFORE
            CALL "REPORT-BINARY" USING BY VALUE AMOUNT-ARGUMENT
            PERFORM 8100-CHECK-ACTUAL.
-      * BY VALUEの全語長引数にはBINARY-LONGを使います。
        8000-DISPLAY-BEFORE.
            MOVE AMOUNT-ARGUMENT TO WS-EDITED-ACTUAL
            DISPLAY "呼出側=呼出前 方式="

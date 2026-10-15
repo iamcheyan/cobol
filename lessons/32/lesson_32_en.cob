@@ -1,3 +1,10 @@
+      * Do not sync a partial account table after file failure.
+      * Business rejects are not system failures.
+      * Every read transaction must be posted or rejected.
+      * Duplicate account keys fail before posting.
+      * Identical reruns reapply input from opening balances.
+      * Output files and database changes are not atomic.
+      * Production needs a batch ID and recovery protocol.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON32.
        DATA DIVISION.
@@ -10,7 +17,6 @@
            MOVE "N" TO WS-FAILED
            CALL "LOADPOST32" USING BY REFERENCE
                WS-ACCOUNT-TABLE WS-BATCH-COUNTS
-      * Do not sync a partial account table after a file failure.
            IF WS-FAILED NOT = "Y"
                CALL "SYNCDB32" USING BY REFERENCE
                    WS-ACCOUNT-TABLE WS-BATCH-COUNTS
@@ -20,7 +26,6 @@
            PERFORM 2000-RETURN-STATUS
            GOBACK.
        1000-REPORT-SUMMARY.
-      * Business rejects count as rejects, not system failures.
            DISPLAY "SUMMARY ACCOUNTS=" WS-ACCOUNT-COUNT
                    " TX=" WS-TRANSACTION-COUNT
                    " POSTED=" WS-POSTED-COUNT
@@ -35,7 +40,6 @@
                MOVE 0 TO RETURN-CODE
            END-IF.
        3000-CHECK-COUNTS.
-      * Every read transaction must be either posted or rejected.
            COMPUTE WS-CHECK-COUNT =
                WS-POSTED-COUNT + WS-REJECTED-COUNT
            IF WS-CHECK-COUNT NOT = WS-TRANSACTION-COUNT
@@ -51,13 +55,4 @@
                    MOVE "Y" TO WS-FAILED
                END-IF
            END-IF.
-      * LOADPOST32 reads fixed 27- and 20-character records.
-      * Amount fields contain integer cents with an implied decimal.
-      * Duplicate account keys fail before posting begins.
-      * Overdrafts and unknown types or accounts are business rejects.
-      * Business rejects do not change the final account balance.
-      * It therefore does not apply a deposit twice to database state.
-      * Outputs and database changes do not share an atomic transaction.
-      * It would also define a transaction commit and recovery protocol.
-      * Amount text represents integer cents, not localized decimals.
        END PROGRAM LESSON32.

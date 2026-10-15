@@ -1,3 +1,7 @@
+      * Credentials come from the environment and are never displayed.
+      * SQLCODE 0 means a match; 100 means no row.
+      * Other SQL errors stop reconciliation.
+      * Close only opened resources; disconnect after file cleanup.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON31.
        ENVIRONMENT DIVISION.
@@ -40,7 +44,6 @@
        01 WS-FAILED PIC X VALUE "N".
        EXEC SQL INCLUDE SQLCA END-EXEC.
        PROCEDURE DIVISION.
-      *Close only resources marked open; disconnect after reporting
        MAIN-PROCEDURE.
            PERFORM 1000-OPEN-INPUT
            IF WS-FAILED NOT = "Y"
@@ -96,7 +99,6 @@
                DISPLAY "ERROR=OPEN OUTPUT STATUS=" WS-OUT-STATUS
                MOVE "Y" TO WS-FAILED
            END-IF.
-      *Embedded SQL reports SQLSTATE; credentials are not displayed.
        1200-CONNECT-DATABASE.
            DISPLAY "DATASRC" UPON ENVIRONMENT-NAME
            ACCEPT WS-DATASRC FROM ENVIRONMENT-VALUE
@@ -130,7 +132,6 @@
                        END-IF
                END-READ
            END-PERFORM.
-      *Validate digits before NUMVAL; divide by 100 to obtain currency
        3000-RECONCILE-ROW.
            ADD 1 TO WS-ROW-COUNT
            MOVE SNAPSHOT-RECORD(1:10) TO WS-ACCOUNT
@@ -144,7 +145,6 @@
                DISPLAY "ERROR=INVALID BALANCE ACCOUNT=" WS-ACCOUNT
                MOVE "Y" TO WS-FAILED
            END-IF.
-      *Other SQL errors stop the run instead of inventing a
        3100-LOOKUP-ACCOUNT.
            MOVE SPACES TO WS-DB-CUSTOMER
            MOVE ZERO TO WS-DB-BALANCE

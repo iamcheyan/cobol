@@ -1,7 +1,8 @@
-      * contract is 20. Both inputs must be sorted ascending by the same
-      * ten-character account number; duplicate keys are outside this
-      * It advances only the smaller side; equal keys form a match and
-      * A key present on one side is classified as an orphan. Once one
+      * Both inputs must be ascending by the same ten-character
+      * account key. Duplicate keys are unsupported.
+      * After one stream reaches EOF, classify remaining rows
+      * on the other side as orphans.
+      * Check EOF before accessing a current key.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. MATCH20.
        ENVIRONMENT DIVISION.

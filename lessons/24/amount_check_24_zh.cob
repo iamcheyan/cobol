@@ -1,5 +1,4 @@
-      * 校验调用方传入的金额，并使用调用方提供的结果字段。
-      * 将判定代码写入调用方存储区，并通过GOBACK返回。
+      * 调用契约：通过BY REFERENCE接收PIC 9(7)V99金额和PIC X(15)结果字段。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. CHECK-AMOUNT.
        DATA DIVISION.

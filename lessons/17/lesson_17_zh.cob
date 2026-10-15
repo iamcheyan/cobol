@@ -1,6 +1,5 @@
-      * 每条记录为27字节：账户号10字节、客户号8字节、余额9字节。
-      * 记录之间没有换行；输出记录仍为27字节。
-      * OPEN OUTPUT会覆盖已有文件，请使用可丢弃的输出路径。
+      * 输入为无换行的27字节定长记录：账户10、客户号8、余额9；输出保持宽度并调整字段顺序。
+      * OPEN OUTPUT会替换目标文件，请确认输出路径。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. FIXED17.
        ENVIRONMENT DIVISION.

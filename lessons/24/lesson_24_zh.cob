@@ -1,7 +1,5 @@
-      * 调用独立编译的金额校验子程序，通过调用方字段传入金额并接收结果。
-      * ZERO-AMOUNT表示零金额，LIMIT-EXCEEDED表示超限，VALID表示通过。
-      * 上限1000.00包含在有效范围内；调用方通过BY REFERENCE共享两个字段。
-      * 返回后，调用方显示判定并更新对应计数，最后汇总检查数、通过数和拒绝原因。
+      * 调用契约：金额PIC 9(7)V99、结果PIC X(15)，均按BY REFERENCE传递。
+      * 结果为ZERO-AMOUNT、LIMIT-EXCEEDED或VALID；1000.00包含在有效范围内。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON24.
        DATA DIVISION.

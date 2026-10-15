@@ -1,7 +1,6 @@
-      * Each source row is 27 characters: account number 10, customer ID
-      * key, including leading zeroes.
-      * time. RETURN AT END is normal completion; successful rows are
-      * File errors and nonzero SORT-RETURN produce a failure status.
+      * The sort key is the ten-character account number.
+      * Leading zeroes are significant. Input or SORT failure
+      * returns a nonzero status.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. SORT21.
        ENVIRONMENT DIVISION.

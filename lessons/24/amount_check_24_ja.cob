@@ -1,5 +1,4 @@
-      * 呼出元から金額と結果領域を受け取る金額検証サブプログラムです。
-      * 判定コードを共有領域へ設定し、GOBACKで呼出元へ制御を返します。
+      * 呼出契約：金額PIC 9(7)V99と結果PIC X(15)をBY REFERENCEで受け取ります。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. CHECK-AMOUNT.
        DATA DIVISION.

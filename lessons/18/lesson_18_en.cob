@@ -1,3 +1,8 @@
+      * Parse five-field CSV one physical line at a time.
+      * Quoted commas are data; doubled quotes encode one quote.
+      * Limits: 20 characters per field, 200 per row.
+      * Multiline quoted fields are unsupported.
+      * Reject malformed rows with the first detected reason.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. CSV18.
        ENVIRONMENT DIVISION.

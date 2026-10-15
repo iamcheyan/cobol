@@ -1,3 +1,7 @@
+      * Call the validator with PIC 9(7)V99 amount and PIC X(15) result,
+      * both passed by reference.
+      * Results are ZERO-AMOUNT, LIMIT-EXCEEDED, or VALID.
+      * 1000.00 is the inclusive upper limit.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON24.
        DATA DIVISION.

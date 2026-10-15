@@ -1,4 +1,5 @@
-      * マスターがなければNO_ACCOUNT、照合後は種別D/Cと数字金額を検証します。
+      * 取引は20文字、マスターは27文字で、口座キーの昇順が前提です。
+      * 口座一致・種別D/C・数字金額を満たさない取引は拒否します。OPEN OUTPUTは既存結果を置き換えます。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. BATCH22.
        ENVIRONMENT DIVISION.

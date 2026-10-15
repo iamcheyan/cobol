@@ -1,4 +1,5 @@
-      * 主档契约为27字符，交易契约为20字符。两个输入都须按相同的十字符账户号升序排列；本例不处理重复键。
+      * 两个输入须按相同的十字符账户号升序排列；本例不支持重复键。
+      * 一侧EOF后，另一侧剩余记录全部归为孤立记录；访问当前键前先检查对应流是否已到EOF。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. MATCH20.
        ENVIRONMENT DIVISION.

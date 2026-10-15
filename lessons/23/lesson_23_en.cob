@@ -1,7 +1,6 @@
-      * shared through copybooks.
-      * withdrawal, overdraft, unknown type, and transaction for another
-      * funds suffice. Insufficient funds, an unknown type, or a missing
-      * account leaves the balance unchanged.
+      * Match the account before validating transaction type.
+      * Deposits add to balance; withdrawals post only when
+      * funds suffice. Rejections leave the balance unchanged.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON23.
        DATA DIVISION.

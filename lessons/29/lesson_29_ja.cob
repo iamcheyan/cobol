@@ -1,3 +1,6 @@
+      * 接続先と認証情報はソースに埋め込まず、実行環境から渡します。
+      * SELECT前に受取項目を消去し、該当なしで前回値を使わないようにします。
+      * SQLCODE 100は正常な該当なしです。それ以外のSQL異常は失敗として扱います。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON29.
        DATA DIVISION.
@@ -54,7 +57,6 @@
                  FROM ACCOUNT_SNAPSHOT
                 WHERE ACCOUNT_NO = :WS-LOOKUP-ACCOUNT
            END-EXEC
-      * SQLCODE 100は正常な該当なしで、DB障害ではありません。
            EVALUATE SQLCODE
              WHEN 0
                MOVE WS-BALANCE TO WS-EDITED-BALANCE

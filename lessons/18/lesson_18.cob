@@ -1,3 +1,5 @@
+      * 逐物理行解析五字段CSV；引号内逗号属于数据，双引号转义为一个引号。
+      * 每字段最多20字符、输入区最多200字符；不支持跨行引号字段。格式错误时拒绝该行并保留首个错误原因。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. CSV18.
        ENVIRONMENT DIVISION.

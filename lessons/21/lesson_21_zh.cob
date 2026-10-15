@@ -1,7 +1,4 @@
-      * 每条源记录为27字符：账户号10、客户编号8、余额9。排序键是十字符账户号，前导零有意义。
-      * SORT调用输入过程读取至EOF。每条记录复制到SD记录后RELEASE。装载结束时检查源文件状态并关闭源文件。
-      * 排序完成后，输出过程逐条RETURN。RETURN AT END表示正常结束；成功取出的记录计数后按键升序显示。
-      * 文件错误或非零SORT-RETURN会返回失败状态。比较输入与输出计数有助发现记录丢失。源文件不变，也不创建输出文件。
+      * 排序键为十字符账户号，前导零有意义。输入错误或SORT失败均以非零状态结束。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. SORT21.
        ENVIRONMENT DIVISION.

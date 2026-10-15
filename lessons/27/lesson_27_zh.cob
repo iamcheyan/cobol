@@ -1,3 +1,5 @@
+      * 必须先成功打开日志才启动批次；日志写入失败后停止，因为日志不能记录自身写入故障。
+      * 只有接受文件写入成功后，才计数并记录受理结果。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LOG27.
        ENVIRONMENT DIVISION.
@@ -85,7 +87,6 @@
                MOVE 1 TO RETURN-CODE
            END-IF
            STOP RUN.
-      * 日志必须先打开；否则不得启动批次。
        9000-OPEN-LOG.
            OPEN OUTPUT BATCH-LOG
            IF WS-LOG-STATUS = "00"
@@ -158,7 +159,6 @@
                INTO WS-LOG-MESSAGE
            END-STRING
            PERFORM 9100-WRITE-LOG.
-      * 这些是业务拒绝原因，不是系统故障。
        3000-VALIDATE-RECORD.
            MOVE SPACES TO WS-REJECT-REASON
            COMPUTE WS-RECORD-LENGTH = FUNCTION LENGTH(

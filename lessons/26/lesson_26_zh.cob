@@ -1,3 +1,5 @@
+      * 业务规则违规会作为拒绝继续处理；非EOF的I/O故障才使批次失败。
+      * 仅在输出WRITE成功后增加受理计数。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. ERROR26.
        ENVIRONMENT DIVISION.
@@ -42,7 +44,6 @@
        01 WS-ACCEPTED-COUNT PIC 9(3) VALUE ZERO.
        01 WS-REJECTED-COUNT PIC 9(3) VALUE ZERO.
        PROCEDURE DIVISION.
-      * 只有发生系统 I/O 问题时，主程序才返回失败。
        0000-MAIN.
            PERFORM 1000-OPEN-FILES
            IF WS-SYSTEM-ERROR = "N"

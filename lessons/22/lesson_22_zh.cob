@@ -1,4 +1,5 @@
-      * 受理输出按固定位置写账户、客户、类型和金额。拒绝输出写账户、原因、类型和金额。主档独有记录也会计数。
+      * 交易记录为20字符，主档为27字符；主档须按账户键升序。
+      * 仅受理账户匹配、类型为D/C且金额为数字的交易。OPEN OUTPUT会替换已有结果文件。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. BATCH22.
        ENVIRONMENT DIVISION.

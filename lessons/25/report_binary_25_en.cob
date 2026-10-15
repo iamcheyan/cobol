@@ -1,4 +1,3 @@
-      * Read a binary full-word argument passed by value.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. REPORT-BINARY.
        DATA DIVISION.
@@ -6,7 +5,6 @@
        01 WS-EDITED-AMOUNT PIC 9(9) VALUE ZERO.
        LINKAGE SECTION.
        COPY "AMOUNT-INTERFACE.CPY".
-      * Receive the full-word integer passed by value.
        PROCEDURE DIVISION USING BY VALUE AMOUNT-ARGUMENT.
        0000-REPORT-VALUE.
            MOVE AMOUNT-ARGUMENT TO WS-EDITED-AMOUNT

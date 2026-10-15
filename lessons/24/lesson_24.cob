@@ -1,7 +1,5 @@
-      * 呼出契約は金額PIC 9(7)V99、結果PIC X(15)です。
-      * 結果はZERO-AMOUNT、LIMIT-EXCEEDED、VALIDのいずれかです。
-      * 上限1000.00は有効範囲に含みます。
-      * 結果を呼出元へ返し、呼出元は復帰後に表示して件数を加算します。
+      * 呼出契約：金額PIC 9(7)V99、結果PIC X(15)をBY REFERENCEで渡します。
+      * 結果はZERO-AMOUNT、LIMIT-EXCEEDED、VALID。上限1000.00は有効です。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON24.
        DATA DIVISION.

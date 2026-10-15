@@ -1,3 +1,5 @@
+      * CALL契約はCopybookの共有レコードとPOST-STATUSで定義します。業務拒否は通常結果として返します。
+      * 残高不足の出金は拒否し、残高を変更しません。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON28.
        ENVIRONMENT DIVISION.
@@ -12,7 +14,6 @@
        FD BATCH-LOG.
        01 FD-BATCH-LOG-RECORD PIC X(100).
        WORKING-STORAGE SECTION.
-      * 共有する口座・取引レコードと件数はCopybookで定義します。
        COPY "ACCOUNT-REC.CPY".
        COPY "TRANSACTION-REC.CPY".
        COPY "POST-STATUS.CPY".
@@ -23,7 +24,6 @@
        01 WS-IO-ERROR PIC X VALUE "N".
        01 WS-LOG-MESSAGE PIC X(100) VALUE SPACES.
        01 WS-TRANSACTION-NO PIC 9(3) VALUE ZERO.
-      * POST-STATUSには記帳結果が返ります。業務拒否は通常の判定として扱い、
        01 WS-EDITED-AMOUNT PIC 9(7).99 VALUE ZERO.
        01 WS-UNKNOWN-STATUS PIC X VALUE "N".
        PROCEDURE DIVISION.

@@ -1,7 +1,6 @@
-      * Validate an amount received with a caller-owned result field.
-      * at or below the limit are valid.
-      * Store the decision code in caller storage and return control
-      * with GOBACK.
+      * Caller passes PIC 9(7)V99 amount and PIC X(15) result
+      * fields by reference. The callee returns ZERO-AMOUNT,
+      * LIMIT-EXCEEDED, or VALID.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. CHECK-AMOUNT.
        DATA DIVISION.

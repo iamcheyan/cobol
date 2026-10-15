@@ -1,3 +1,4 @@
+      * Duplicate account keys fail before posting starts.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LOADPOST32.
        ENVIRONMENT DIVISION.
@@ -125,7 +126,6 @@
                        END-IF
                END-READ
            END-PERFORM.
-      *Scan prior entries to reject duplicate account numbers.
        1110-STORE-ACCOUNT.
            IF WS-ACCOUNT-COUNT = 20
                DISPLAY "ERROR=ACCOUNT CAPACITY EXCEEDED"

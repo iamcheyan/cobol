@@ -1,3 +1,8 @@
+      * 文件处理失败时不将部分账户表同步到数据库。
+      * 业务拒绝不算系统故障；每笔读入交易必须归为已记账或已拒绝。
+      * 重复账户键在记账前报错；透支和未知账户/类型被拒绝且不改余额。
+      * 相同输入从声明的期初余额重新应用，因此重跑不会重复累加存款。
+      * 文件输出与数据库更新不是原子操作；生产批次需要持久批次ID及提交/恢复协议。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON32.
        DATA DIVISION.
@@ -10,7 +15,6 @@
            MOVE "N" TO WS-FAILED
            CALL "LOADPOST32" USING BY REFERENCE
                WS-ACCOUNT-TABLE WS-BATCH-COUNTS
-      * 文件处理失败时停止同步，避免将部分账户结果写入数据库。
            IF WS-FAILED NOT = "Y"
                CALL "SYNCDB32" USING BY REFERENCE
                    WS-ACCOUNT-TABLE WS-BATCH-COUNTS
@@ -40,7 +44,6 @@
                DISPLAY "错误=交易数量不匹配"
                MOVE "Y" TO WS-FAILED
            END-IF
-      * 同步成功后，每个账户会归为未变化、已更新或已插入之一。
            IF WS-FAILED NOT = "Y"
                COMPUTE WS-CHECK-COUNT =
                    WS-UPDATED-COUNT + WS-UNCHANGED-COUNT
@@ -50,5 +53,4 @@
                    MOVE "Y" TO WS-FAILED
                END-IF
            END-IF.
-      * 文件输出与数据库写入并非同一原子事务。运行脚本可重建测试数据库；
        END PROGRAM LESSON32.

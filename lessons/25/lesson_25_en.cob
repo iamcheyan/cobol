@@ -1,3 +1,7 @@
+      * BY REFERENCE exposes callee changes in caller storage.
+      * BY CONTENT changes a temporary copy.
+      * BY VALUE passes a full-word integer; caller and callee
+      * must agree on BINARY-LONG width and signedness.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON25.
        DATA DIVISION.
@@ -24,7 +28,6 @@
            PERFORM 1100-TEST-REFERENCE
            PERFORM 1200-TEST-CONTENT
            PERFORM 1300-TEST-VALUE.
-      * BY REFERENCE shares caller storage with ADD-ONE.
        1100-TEST-REFERENCE.
            MOVE 10 TO AMOUNT-ARGUMENT
            MOVE 11 TO WS-EXPECTED
@@ -32,8 +35,6 @@
            PERFORM 8000-DISPLAY-BEFORE
            CALL "ADD-ONE" USING BY REFERENCE AMOUNT-ARGUMENT
            PERFORM 8100-CHECK-ACTUAL.
-      * BY CONTENT gives ADD-ONE a temporary copy to change.
-      * The increment in that temporary cannot change caller storage.
        1200-TEST-CONTENT.
            MOVE 20 TO AMOUNT-ARGUMENT
            MOVE 20 TO WS-EXPECTED
@@ -41,8 +42,6 @@
            PERFORM 8000-DISPLAY-BEFORE
            CALL "ADD-ONE" USING BY CONTENT AMOUNT-ARGUMENT
            PERFORM 8100-CHECK-ACTUAL.
-      * BY VALUE passes a full-word integer to REPORT-BINARY.
-      * The callee reads the value without a caller storage address.
        1300-TEST-VALUE.
            MOVE 30 TO AMOUNT-ARGUMENT
            MOVE 30 TO WS-EXPECTED
@@ -50,7 +49,6 @@
            PERFORM 8000-DISPLAY-BEFORE
            CALL "REPORT-BINARY" USING BY VALUE AMOUNT-ARGUMENT
            PERFORM 8100-CHECK-ACTUAL.
-      * BINARY-LONG provides the full-word type used by BY VALUE here.
        8000-DISPLAY-BEFORE.
            MOVE AMOUNT-ARGUMENT TO WS-EDITED-ACTUAL
            DISPLAY "CALLER=BEFORE MODE="

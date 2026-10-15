@@ -1,3 +1,5 @@
+      * 主键使重复运行的结果顺序稳定。
+      * 即使遇到EOF或FETCH错误，也要关闭游标释放资源。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON30.
        DATA DIVISION.
@@ -15,7 +17,6 @@
        01 WS-DONE PIC X VALUE "N".
        01 WS-FAILED PIC X VALUE "N".
        EXEC SQL INCLUDE SQLCA END-EXEC.
-      * 主键使多次运行中的排序保持稳定。
        EXEC SQL
            DECLARE ACCOUNT-CURSOR CURSOR FOR
                SELECT ACCOUNT_NO, CUSTOMER_ID, BALANCE
@@ -89,7 +90,6 @@
                END-EVALUATE
            END-PERFORM.
        4000-CLOSE-CURSOR.
-      * 即使遇到EOF或获取错误，也要关闭游标以释放资源。
            EXEC SQL CLOSE ACCOUNT-CURSOR END-EXEC
            IF SQLCODE = 0
                MOVE "N" TO WS-CURSOR-OPEN

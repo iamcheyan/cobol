@@ -1,5 +1,7 @@
-      * Each record is 27 bytes: account 10, customer ID 8, balance 9.
-      * Count only successful writes; I/O errors stop the batch.
+      * Input is a fixed 27-byte record with no line endings.
+      * Account 10, customer ID 8, balance 9; output preserves width.
+      * The output moves customer ID first.
+      * OPEN OUTPUT replaces the target.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. FIXED17.
        ENVIRONMENT DIVISION.

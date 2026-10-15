@@ -1,3 +1,5 @@
+      * 両入力は同じ10桁口座キーの昇順で、重複キーは対象外です。
+      * 片側EOF後は他方の残件をすべて孤立レコードとして分類します。キー参照前にEOFを確認します。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. MATCH20.
        ENVIRONMENT DIVISION.

@@ -1,8 +1,8 @@
-      * A transaction is 20 characters: account 10, type 1, amount 9. A
-      * rows whose trimmed width is exactly 20. Status 10 is normal EOF;
-      * NO_ACCOUNT. Matched rows are checked for type D/C and a numeric
-      * and amount. Master-only rows are counted as well.
-      * failures produce a nonzero exit status. OPEN OUTPUT replaces
+      * Transactions are 20 characters; master rows are 27.
+      * The master must be ascending by account key.
+      * Accept only matched rows with type D/C and numeric amount.
+      * OPEN OUTPUT replaces prior results.
+      * I/O or SORT failures return nonzero.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. BATCH22.
        ENVIRONMENT DIVISION.

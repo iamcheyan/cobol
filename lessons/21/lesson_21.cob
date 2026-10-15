@@ -1,4 +1,4 @@
-      * SORT-RETURNまたはファイル状態の異常は失敗として返します。
+      * ソートキーは先頭ゼロを含む10桁の口座番号です。入力またはSORTの異常はバッチ失敗として返します。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. SORT21.
        ENVIRONMENT DIVISION.

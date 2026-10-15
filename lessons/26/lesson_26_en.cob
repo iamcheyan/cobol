@@ -1,3 +1,6 @@
+      * Business-rule violations are rejected; processing continues.
+      * Non-EOF I/O failures fail the batch.
+      * Count acceptance only after its output WRITE succeeds.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. ERROR26.
        ENVIRONMENT DIVISION.
@@ -42,7 +45,6 @@
        01 WS-ACCEPTED-COUNT PIC 9(3) VALUE ZERO.
        01 WS-REJECTED-COUNT PIC 9(3) VALUE ZERO.
        PROCEDURE DIVISION.
-      * Main returns failure only for a system I/O problem.
        0000-MAIN.
            PERFORM 1000-OPEN-FILES
            IF WS-SYSTEM-ERROR = "N"
@@ -85,7 +87,6 @@
                    MOVE "Y" TO WS-SYSTEM-ERROR
                END-IF
            END-IF.
-      * AT END handles EOF; other statuses remain system errors.
        2000-PROCESS-INPUT.
            PERFORM UNTIL WS-END-OF-FILE = "Y"
                OR WS-SYSTEM-ERROR = "Y"
@@ -107,7 +108,6 @@
                    WS-INPUT-STATUS
                MOVE "Y" TO WS-SYSTEM-ERROR
            END-IF.
-      * Business validation rejects a row and continues the batch.
        3000-VALIDATE-RECORD.
            MOVE SPACES TO WS-REJECT-REASON
            MOVE FD-TRANSACTION-RECORD(1:6) TO WS-ACCOUNT
@@ -135,7 +135,6 @@
            ELSE
                PERFORM 5000-WRITE-REJECTED
            END-IF.
-      * Count a valid row only after its output WRITE succeeds.
        4000-WRITE-ACCEPTED.
            MOVE FD-TRANSACTION-RECORD(1:12)
                TO WS-ACCEPTED-WORK

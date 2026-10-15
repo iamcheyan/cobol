@@ -9,7 +9,7 @@
 | [15–22 文件处理](../../lessons/DIRECTORY.md) | [06 文件](curriculum/modules/06-files/README.md)、[07 排序突合](curriculum/modules/07-matching/README.md) | 多流文件、排序合并和银行对账 |
 | [23–28 工程化](../../lessons/DIRECTORY.md) | [09 模块化](curriculum/modules/09-modular/README.md)、[10 JOB](curriculum/modules/10-jobs/README.md)、[11 事故调查](curriculum/modules/11-incidents/README.md) | 作业编排、重跑恢复和既存系统维护 |
 | [29–31 数据库](../../lessons/DIRECTORY.md) | [08 Embedded SQL](curriculum/modules/08-database/README.md) | GixSQL/PostgreSQL 实测游标、事务和幂等处理 |
-| [32 毕业项目](../../lessons/32/README.md) | [12 企业毕业项目](curriculum/modules/12-capstone/README.md) | 多作业银行夜间批次和故障恢复 |
+| [32 毕业项目](../../lessons/32_bank-reconciliation-project/README.md) | [12 企业毕业项目](curriculum/modules/12-capstone/README.md) | 多作业银行夜间批次和故障恢复 |
 
 ## 资料
 

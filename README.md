@@ -11,7 +11,7 @@
    sudo apt install gnucobol make
    cobc --version
    ```
-2. 从[第 01 课](lessons/01/README.md)开始；每课都有讲解、源码、练习和参考答案。
+2. 从[第 01 课](lessons/01_hello-cobol/README.md)开始；每课都有讲解、源码、练习和参考答案。
 3. 打开[课程总目录](lessons/DIRECTORY.md)查看 32 课的顺序、目标和预计时间。
 
 检查课程文件并编译运行第一课：

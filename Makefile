@@ -7,15 +7,15 @@ BINS = INPUTCSV FIXEDREC TBLSRCH BATCHRPT
 # 32 课主课程的快速完整性检查与第一课 smoke test
 course-check:
 	@echo "=== Checking CPR #31 course and Lesson 01 ==="
-	@set -eu; for lesson in lessons/[0-9][0-9]; do \
+	@set -eu; for lesson in lessons/[0-9][0-9]_*; do \
 		test -f "$$lesson/lesson.cob"; \
 		test -f "$$lesson/README.md"; \
 		test -f "$$lesson/exercise.md"; \
 		test -f "$$lesson/answer.md"; \
 	done
 	@tmp=$$(mktemp -d); trap 'rm -rf "$$tmp"' EXIT; \
-		$(COBC) -fsyntax-only lessons/01/lesson.cob; \
-		$(COBC) -x -Wall -o "$$tmp/lesson_01" lessons/01/lesson.cob; \
+		$(COBC) -fsyntax-only lessons/01_hello-cobol/lesson.cob; \
+		$(COBC) -x -Wall -o "$$tmp/lesson_01" lessons/01_hello-cobol/lesson.cob; \
 		output=$$("$$tmp/lesson_01"); \
 		test "$$output" = 'こんにちは、COBOL！'; \
 		printf '%s\n' "$$output"

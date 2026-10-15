@@ -3,9 +3,12 @@
        PROGRAM-ID. LESSON25.
        DATA DIVISION.
        WORKING-STORAGE SECTION.
-      * 共有契約を呼び出し側と呼び出される側のプロ
-      * グラムにコピーする。
-      * 符号属性とバイナリ記憶域のサイズを一致させます。
+      * 共有契約を呼び出し側とサブプログラム側にコピーし、引数の配置を揃えます。
+      * 符号属性とBINARY-LONGのサイズを一致させ、BY VALUEの受け渡しを安全にします。
+      * 3つのソースを同じ宣言でコンパイルし、呼出側の期待値と実際値を比較します。
+      * 比較用の項目に実際値をコピーし、呼び出し側の値を保ったまま検証します。
+      * 編集項目は先行ゼロを表示し、数値幅を揃えて比較しやすくします。
+      * 呼出側がカウンターを保持するため、各呼び出し後も集計が残ります。
        COPY "AMOUNT-INTERFACE.CPY".
       * 3つのソースプログラムはすべてこの宣言を使
       * ってコンパイルする。
@@ -56,9 +59,8 @@
            PERFORM 8000-DISPLAY-BEFORE
            CALL "ADD-ONE" USING BY CONTENT AMOUNT-ARGUMENT
            PERFORM 8100-CHECK-ACTUAL.
-      * BY VALUE は全語長整数を REPORT-BINARY に渡す。
-      * 呼び出される側は呼び出し側の記憶域アドレス
-      * なしで値を読み取る。
+      * BY VALUEは全語長整数をREPORT-BINARYへ渡します。
+      * 呼出先は値そのものを受け取り、呼出側の記憶域を参照しません。
        1300-TEST-VALUE.
            MOVE 30 TO AMOUNT-ARGUMENT
            MOVE 30 TO WS-EXPECTED
@@ -73,10 +75,8 @@
            DISPLAY "CALLER=BEFORE MODE="
                FUNCTION TRIM(WS-MODE TRAILING)
                " VALUE=" WS-EDITED-ACTUAL.
-      * サブプログラムから戻った後、呼び出し側から
-      * 見える値を確認する。
-      * 実際値用の別項目を使い、呼び出し側の項目を
-      * 変更せずに保つ。
+      * サブプログラムから戻った後、呼出側から見える値を確認します。
+      * 別の実際値項目に記録することで、期待値を上書きせず比較できます。
        8100-CHECK-ACTUAL.
            MOVE AMOUNT-ARGUMENT TO WS-ACTUAL
            MOVE WS-ACTUAL TO WS-EDITED-ACTUAL

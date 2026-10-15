@@ -25,13 +25,13 @@
        01 WS-LOG-MESSAGE PIC X(100) VALUE SPACES.
        01 WS-TRANSACTION-NO PIC 9(3) VALUE ZERO.
       * 账户字段由记账和报表两个子程序共享。
-      * 交易记录布局是CALL的输入契约，POST-STATUS用于返回判定结果。
-      * 业务拒绝是正常业务结果；未知状态码才属于调用契约异常。
-      * 金额PIC中的V表示隐含小数点，不占用存储位。
-      * 显示专用字段补出小数点，便于阅读金额。
-      * INITIALIZE将计数器清零；每种交易都先设置账户、类型和金额，
-      * 再通过共用段落CALL。余额不足的取款不会改变账户余额。
-      * 全部交易完成后，报表程序读取共享账户和计数器生成汇总。
+      * 交易记录布局是CALL的输入契约，POST-STATUS用于返回记账判定。
+      * 业务拒绝是正常结果；未知状态码才表示调用契约异常。
+      * 金额PIC中的V表示隐含小数点，不占存储空间。
+      * 显示字段补出小数点，让金额更易辨认。
+      * INITIALIZE清零计数器；每笔交易设置账户、类型和金额后再CALL。
+      * 余额不足的取款会被拒绝，账户余额保持不变。
+      * 全部交易结束后，报表程序读取共享账户和计数器生成汇总。
        01 WS-EDITED-AMOUNT PIC 9(7).99 VALUE ZERO.
        01 WS-UNKNOWN-STATUS PIC X VALUE "N".
        PROCEDURE DIVISION.
@@ -65,7 +65,7 @@
            MOVE "A000000001" TO WS-ACCOUNT-NUMBER
            MOVE "C0001001" TO WS-CUSTOMER-ID
            MOVE 1000.00 TO WS-ACCOUNT-BALANCE.
-      * 各段落准备一笔交易，再调用共用的CALL段落。
+      * 各段落准备交易字段，再调用共用段落完成记账。
        1100-POST-DEPOSIT.
            MOVE "A000000001" TO WS-TRANSACTION-ACCOUNT
            MOVE "D" TO WS-TRANSACTION-TYPE

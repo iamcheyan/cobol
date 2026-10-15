@@ -57,8 +57,7 @@
           05 WS-INSERTED-COUNT PIC 999.
           05 WS-FAILED PIC X.
           05 WS-INTERFACE-RESERVED PIC X.
-      * GixSQL
-      * 会注释最后一个链接字段；保留此备用字节。
+      * GixSQL会注释最后一个LINKAGE字段，因此要保留备用字节。
        PROCEDURE DIVISION USING WS-ACCOUNT-TABLE WS-BATCH-COUNTS.
       * 先打开输出文件，成功后才连接数据库并执行同步。
       * 退出前关闭已打开的资源，检查操作状态后再返回调用方。

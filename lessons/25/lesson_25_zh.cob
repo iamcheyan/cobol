@@ -61,9 +61,8 @@
            PERFORM 8000-DISPLAY-BEFORE
            CALL "REPORT-BINARY" USING BY VALUE AMOUNT-ARGUMENT
            PERFORM 8100-CHECK-ACTUAL.
-      * 此处 BY VALUE 使用的全字长类型由 BINARY-LONG
-      * 提供。
-      * 调用方在每次调用前设置预期存储值。
+      * BY VALUE参数使用BINARY-LONG表示全字长整数。
+      * 调用方在每次调用前设置期望值，再将实际值复制到独立字段比较。
        8000-DISPLAY-BEFORE.
            MOVE AMOUNT-ARGUMENT TO WS-EDITED-ACTUAL
            DISPLAY "CALLER=BEFORE MODE="

@@ -1,5 +1,5 @@
       * Reorder fixed-width account rows with customer ID first.
-      * Each record is 27 bytes: account 10, customer 8, balance 9.
+      * Each record is 27 bytes: account 10, customer ID 8, balance 9.
       * Rows have no line endings; output rows remain 27 bytes.
       * Open input, then output. Read rows and reorder each one.
       * If output open fails, close input and return failure.

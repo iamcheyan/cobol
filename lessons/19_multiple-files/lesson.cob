@@ -1,5 +1,5 @@
-      * 各入力のEOF状態は独立です。一方がEOFでも他方を読み切ります。
-      * EOF以外のI/O異常は失敗として扱い、開いたファイルを閉じます。
+      * 每个输入的 EOF 状态互相独立：一个到 EOF 不影响另一个继续读取。
+      * EOF 以外的 I/O 异常按失败处理，并关闭已打开的文件。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. MULTI19.
        ENVIRONMENT DIVISION.

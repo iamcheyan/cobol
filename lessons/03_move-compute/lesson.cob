@@ -1,4 +1,6 @@
-      * ROUNDEDがなければ余分な小数桁は切り捨てられます。
+      * 第03课：MOVE 与 COMPUTE 的金额运算示例。
+      * 数据为程序内演示常量，不是真实账户数据。
+      * 不写 ROUNDED 按截断；写 ROUNDED 按接收字段舍入。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. MOVE03.
        DATA DIVISION.
@@ -7,15 +9,16 @@
        01 WS-DEPOSIT PIC 9(7)V99 VALUE 250.55.
        01 WS-WITHDRAWAL PIC 9(7)V99 VALUE 40.10.
        01 WS-SERVICE-FEE PIC 9(5)V99 VALUE 5.25.
-      * 例では日数調整なしで0.0125を1回適用します。
+      * 演示利率：无日计数规则，仅乘余额一次。
        01 WS-PERIOD-RATE PIC 9(1)V9(4) VALUE 0.0125.
        01 WS-PRE-INTEREST-BALANCE PIC 9(7)V99 VALUE ZERO.
+      * 中间值保留四位小数，便于比较截断与舍入。
        01 WS-INTEREST-RAW PIC 9(5)V9999 VALUE ZERO.
        01 WS-INTEREST-MOVE PIC 9(5)V99 VALUE ZERO.
-      * ここではROUNDEDなしのCOMPUTEも同様に切り捨てます。
        01 WS-INTEREST-TRUNC PIC 9(5)V99 VALUE ZERO.
-      * ROUNDEDは受け取り項目の桁数への算術丸めを指定します。
+      * ROUNDED 按接收字段舍入，默认就近远离零。
        01 WS-INTEREST-ROUNDED PIC 9(5)V99 VALUE ZERO.
+      * 记账规则：本课把舍入后的利息入账。
        01 WS-CLOSING-BALANCE PIC 9(7)V99 VALUE ZERO.
        PROCEDURE DIVISION.
            COMPUTE WS-PRE-INTEREST-BALANCE =
@@ -24,11 +27,9 @@
            COMPUTE WS-INTEREST-RAW =
                WS-PRE-INTEREST-BALANCE * WS-PERIOD-RATE.
            MOVE WS-INTEREST-RAW TO WS-INTEREST-MOVE.
-      * ROUNDEDがなければ余分な小数桁は切り捨てられます。
            COMPUTE WS-INTEREST-TRUNC = WS-INTEREST-RAW.
            COMPUTE WS-INTEREST-ROUNDED ROUNDED =
                WS-INTEREST-RAW.
-      * この例では丸め後の金額を記帳する規則です。
            COMPUTE WS-CLOSING-BALANCE =
                WS-PRE-INTEREST-BALANCE + WS-INTEREST-ROUNDED.
            DISPLAY "期首残高=" WS-OPENING-BALANCE
@@ -44,6 +45,6 @@
            DISPLAY "COMPUTE四捨五入利息="
                WS-INTEREST-ROUNDED
            DISPLAY "期末残高=" WS-CLOSING-BALANCE
-      * 受け取り項目が小さすぎるとサイズエラー条件が発生します。
-      * 実運用のバッチには丸めと記帳規則の文書化が必要です。
+      * 接收字段装不下时不会报错，高位数字被丢弃。
+      * 溢出须由程序显式检查，本课未做（第26课）。
            STOP RUN.

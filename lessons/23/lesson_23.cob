@@ -1,9 +1,10 @@
-      * レッスン23：共有の口座と取引の宣言をインポートします。
+      * 記帳段落は口座番号を照合し、一致時に種別を検証します。
+      * 入金は加算し、残高内の出金は減算します。
+      * 残高不足、不明種別、口座不一致では残高を変更しません。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON23.
        DATA DIVISION.
        WORKING-STORAGE SECTION.
-      * コンパイル時に、COPYがここへ宣言を挿入します。
        COPY "ACCOUNT-REC.CPY".
        COPY "TRANSACTION-REC.CPY".
        01 WS-POST-STATUS PIC X(12) VALUE SPACES.
@@ -12,7 +13,6 @@
        01 WS-EDITED-AMOUNT PIC 9(7).99 VALUE ZERO.
        01 WS-EDITED-BALANCE PIC 9(7).99 VALUE ZERO.
        PROCEDURE DIVISION.
-      * 有効な記帳を2件実行し、その後に拒否される例を3件実行します。
        0000-MAIN.
            PERFORM 1000-INITIALIZE-RECORDS
            PERFORM 1100-POST-DEPOSIT
@@ -22,13 +22,11 @@
            PERFORM 1500-POST-MISSING-ACCOUNT
            PERFORM 3000-DISPLAY-SUMMARY
            STOP RUN.
-      * このバッチでは共有口座レコードを1回だけ初期化します。
        1000-INITIALIZE-RECORDS.
            MOVE "A000000001" TO WS-ACCOUNT-NUMBER
            MOVE "C0001001" TO WS-CUSTOMER-ID
            MOVE 1000.00 TO WS-ACCOUNT-BALANCE
            MOVE WS-ACCOUNT-NUMBER TO WS-TRANSACTION-ACCOUNT.
-      * これらの段落で共有取引レコードを設定します。
        1100-POST-DEPOSIT.
            MOVE "D" TO WS-TRANSACTION-TYPE
            MOVE 125.50 TO WS-TRANSACTION-AMOUNT
@@ -50,7 +48,6 @@
            MOVE "D" TO WS-TRANSACTION-TYPE
            MOVE 1.00 TO WS-TRANSACTION-AMOUNT
            PERFORM 2000-POST-TRANSACTION.
-      * ファイルを読み込まずに、取引を照合、検証、記帳します。
        2000-POST-TRANSACTION.
            MOVE SPACES TO WS-POST-STATUS
            IF WS-TRANSACTION-ACCOUNT NOT = WS-ACCOUNT-NUMBER
@@ -59,7 +56,6 @@
                PERFORM 2100-VALIDATE-AND-POST
            END-IF
            PERFORM 2900-REPORT-TRANSACTION.
-      * タイプコードで残高に対して行う算術演算を選択します。
        2100-VALIDATE-AND-POST.
            EVALUATE WS-TRANSACTION-TYPE
                WHEN "D"
@@ -71,7 +67,6 @@
                WHEN OTHER
                    MOVE "BAD_TYPE" TO WS-POST-STATUS
            END-EVALUATE.
-      * 引き出しに失敗しても口座残高は変わりません。
        2200-CHECK-WITHDRAWAL.
            IF WS-TRANSACTION-AMOUNT <= WS-ACCOUNT-BALANCE
                SUBTRACT WS-TRANSACTION-AMOUNT
@@ -80,7 +75,6 @@
            ELSE
                MOVE "INSUFFICIENT" TO WS-POST-STATUS
            END-IF.
-      * 試行した各取引を、1回だけカウントして表示します。
        2900-REPORT-TRANSACTION.
            MOVE WS-TRANSACTION-AMOUNT TO WS-EDITED-AMOUNT
            IF WS-POST-STATUS = "POSTED"
@@ -92,7 +86,6 @@
                DISPLAY "RESULT=REJECTED STATUS="
                    FUNCTION TRIM(WS-POST-STATUS TRAILING)
            END-IF.
-      * 共有口座フィールドとバッチ合計を報告します。
        3000-DISPLAY-SUMMARY.
            MOVE WS-ACCOUNT-BALANCE TO WS-EDITED-BALANCE
            DISPLAY "ACCOUNT=" WS-ACCOUNT-NUMBER

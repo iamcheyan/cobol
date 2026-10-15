@@ -1,7 +1,12 @@
-      * 批次对账程序：按固定宽度字段读取、排序、匹配并分类交易。
+      * 对交易排序，与账户主档核对，并生成受理和拒绝文件。
+      * 交易记录为20字符：账户号10、类型1、金额9。主档为27字符：账户号10、客户号8、余额9。两流须按相同账户键升序排列。
+      * 装载过程读取交易，仅将长度恰为20的记录RELEASE给SORT。
+      * 状态10表示正常EOF；其他状态和宽度错误会使装载失败。
+      * 受理输出按固定位置写账户、客户、类型和金额。拒绝输出写账户、原因、类型和金额。主档独有记录也会计数。
+      * 只关闭已打开文件。OPEN、READ、WRITE、CLOSE或SORT失败都会以非零状态退出。OPEN
+      * OUTPUT会替换旧结果文件。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. BATCH22.
-      * 文件控制将输入输出绑定到当前目录中的行顺序文件。
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
@@ -22,7 +27,6 @@
                ORGANIZATION IS LINE SEQUENTIAL
                FILE STATUS IS WS-REJECTED-STATUS.
            SELECT SORT-WORK ASSIGN TO DISK.
-      * 记录契约：交易为10+1+9=20字符；主档为10+8+9=27字符。
        DATA DIVISION.
        FILE SECTION.
        FD TRANSACTION-INPUT.
@@ -38,7 +42,6 @@
           05 SD-TRANSACTION-ACCOUNT PIC X(10).
           05 SD-TRANSACTION-TYPE PIC X.
           05 SD-TRANSACTION-AMOUNT PIC X(9).
-      * 状态、EOF与打开标记控制I/O；计数器记录各类批次结果。
        WORKING-STORAGE SECTION.
        01 WS-INPUT-STATUS PIC XX VALUE SPACES.
        01 WS-M-STATUS PIC XX VALUE SPACES.
@@ -64,10 +67,7 @@
        01 WS-ACCEPTED-COUNT PIC 9(3) VALUE ZERO.
        01 WS-REJECTED-COUNT PIC 9(3) VALUE ZERO.
        01 WS-MASTER-ONLY-COUNT PIC 9(3) VALUE ZERO.
-      * SORT管理交易生命周期：装载并RELEASE，随后按序RETURN。
        PROCEDURE DIVISION.
-      * 排序键为十字符账户号；主档输入也必须按相同规则升序排列。
-      * SORT结束后输出控制计数；任一受检操作失败时返回非零码。
        0000-MAIN.
            SORT SORT-WORK ON ASCENDING KEY SD-TRANSACTION-ACCOUNT
                INPUT PROCEDURE 1000-LOAD-TRANSACTIONS
@@ -85,7 +85,6 @@
                MOVE 1 TO RETURN-CODE
            END-IF
            STOP RUN.
-      * 打开并读完未排序交易文件；关闭时也检查文件状态。
        1000-LOAD-TRANSACTIONS.
            OPEN INPUT TRANSACTION-INPUT
            IF WS-INPUT-STATUS NOT = "00"
@@ -102,7 +101,6 @@
                    MOVE "Y" TO WS-IO-ERROR
                END-IF
            END-IF.
-      * 状态10表示正常EOF；其他非零状态会中止批次。
        1100-READ-AND-RELEASE.
            READ TRANSACTION-INPUT
                AT END
@@ -116,8 +114,6 @@
                DISPLAY "READ=TXN STATUS=" WS-INPUT-STATUS
                MOVE "Y" TO WS-IO-ERROR
            END-IF.
-      * TRIM用于测量实际行宽；只有恰好20字符才满足输入契约。
-      * 将20字符布局复制到排序记录，再用RELEASE送入排序输入过程。
        1110-VALIDATE-TRANSACTION-WIDTH.
            COMPUTE WS-INPUT-LENGTH = FUNCTION LENGTH(
                FUNCTION TRIM(FD-TRANSACTION-RAW TRAILING))
@@ -134,7 +130,6 @@
                    MOVE "Y" TO WS-IO-ERROR
                END-IF
            END-IF.
-      * 装载出错后不执行对账；仍需关闭已成功打开的资源。
        2000-RECONCILE-TRANSACTIONS.
            IF WS-IO-ERROR = "N"
                PERFORM 2100-OPEN-OUTPUTS
@@ -153,7 +148,6 @@
                END-PERFORM
            END-IF
            PERFORM 9000-CLOSE-OUTPUTS.
-      * 主档只读；OPEN OUTPUT会覆盖本次运行的两个结果文件。
        2100-OPEN-OUTPUTS.
            OPEN INPUT ACCOUNT-MASTER
            IF WS-M-STATUS = "00"
@@ -180,7 +174,6 @@
                    MOVE "Y" TO WS-IO-ERROR
                END-IF
            END-IF.
-      * RETURN按键顺序取出交易；只统计成功记录，SORT EOF属正常结束。
        4000-RETURN-ONE-TRANSACTION.
            RETURN SORT-WORK
                AT END
@@ -194,8 +187,6 @@
                        MOVE "Y" TO WS-IO-ERROR
                    END-IF
            END-RETURN.
-      * 主档键较小时逐条计为MASTER_ONLY并前进，直到键相等或主档EOF。
-      * 无匹配主档时优先判为NO_ACCOUNT；匹配后先校验交易，再推进主档。
        4100-MATCH-TRANSACTION.
            PERFORM UNTIL WS-MASTER-EOF = "Y"
                OR WS-IO-ERROR = "Y"
@@ -218,7 +209,6 @@
                    END-IF
                END-IF
            END-IF.
-      * 只有匹配交易进入字段校验：类型须为D/C，金额须为数字。
        6000-VALIDATE-MATCHED-TRANSACTION.
            EVALUATE TRUE
                WHEN SD-TRANSACTION-TYPE NOT = "D"
@@ -231,8 +221,6 @@
                WHEN OTHER
                    PERFORM 6200-WRITE-ACCEPTED
            END-EVALUATE.
-      * 拒绝记录布局：账户号(10)、原因(10)、类型(1)、金额(9)。
-      * 原因字段固定10字符：NO_ACCOUNT、BAD_TYPE__、BAD_AMOUNT。
        6100-WRITE-REJECTED.
            MOVE SD-TRANSACTION-ACCOUNT TO WS-REJECTED-RECORD(1:10)
            MOVE WS-REJECT-REASON TO WS-REJECTED-RECORD(11:10)
@@ -247,7 +235,6 @@
                DISPLAY "WRITE=REJECT STATUS=" WS-REJECTED-STATUS
                MOVE "Y" TO WS-IO-ERROR
            END-IF.
-      * 接受记录布局：账户号(10)、客户号(8)、类型(1)、金额(9)。
        6200-WRITE-ACCEPTED.
            MOVE SD-TRANSACTION-ACCOUNT TO WS-ACCEPTED-RECORD(1:10)
            MOVE WS-MASTER-CUSTOMER TO WS-ACCEPTED-RECORD(11:8)
@@ -261,7 +248,6 @@
                DISPLAY "WRITE=ACCEPT STATUS=" WS-ACCEPTED-STATUS
                MOVE "Y" TO WS-IO-ERROR
            END-IF.
-      * 逐条读取主档；EOF状态10正常，其他状态表示I/O失败。
        3000-READ-MASTER.
            READ ACCOUNT-MASTER
                AT END
@@ -275,7 +261,6 @@
                DISPLAY "READ=MASTER STATUS=" WS-M-STATUS
                MOVE "Y" TO WS-IO-ERROR
            END-IF.
-      * 检查主档必须为27字符，且九字符余额字段为数字。
        3100-VALIDATE-MASTER.
            COMPUTE WS-MASTER-LENGTH = FUNCTION LENGTH(
                FUNCTION TRIM(FD-MASTER-RAW TRAILING))
@@ -291,12 +276,10 @@
                    MOVE "Y" TO WS-IO-ERROR
                END-IF
            END-IF.
-      * 没有交易的主档账户计数并显示一次，然后读取下一行。
        5000-REPORT-MASTER-ONLY.
            ADD 1 TO WS-MASTER-ONLY-COUNT
            DISPLAY "MASTER_ONLY ACCOUNT=" WS-MASTER-ACCOUNT
            PERFORM 3000-READ-MASTER.
-      * 只关闭标记为已打开的文件；CLOSE错误同样使批次失败。
        9000-CLOSE-OUTPUTS.
            IF WS-MASTER-OPEN = "Y"
                CLOSE ACCOUNT-MASTER

@@ -2,7 +2,7 @@
        PROGRAM-ID. SYNCDB32.
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
-      * 日本語：呼び出し元から最終口座状態と共有バッチ件数を受け取る。
+      * 呼出側から最終口座状態と共有バッチ件数を受け取ります。
        FILE-CONTROL.
            SELECT REPORT-FILE ASSIGN TO "account-report.txt"
                ORGANIZATION IS LINE SEQUENTIAL
@@ -16,9 +16,9 @@
        01 REPORT-RECORD PIC X(80).
        FD LOG-FILE.
        01 LOG-RECORD PIC X(100).
-      * 日本語：レポートは新規作成し、バッチログは追記する。状態は個別に確認する。
-      * 日本語：オープン済みフラグで部分失敗後に閉じる資源を把握する。
-      * 日本語：ホスト変数で DB 結果を呼び出し元の表から分離する。
+      * レポートは新規作成、ログは追記で開き、それぞれの状態を確認します。
+      * オープン済みフラグを記録し、部分失敗時も開いた資源だけを閉じます。
+      * DB検索結果はホスト変数へ受け取り、呼出側の口座表と分けて扱います。
        WORKING-STORAGE SECTION.
        01 WS-REPORT-STATUS PIC XX.
        01 WS-LOG-STATUS PIC XX.
@@ -39,9 +39,9 @@
        01 WS-LOG-LINE PIC X(100).
        01 WS-INDEX PIC 99.
        EXEC SQL INCLUDE SQLCA END-EXEC.
-      * 日本語：SYNC-STATUS は結果を保持し、OUTPUT-LINE は両出力で共用する。
+      * SYNC-STATUSに判定を保持し、OUTPUT-LINEはレポートとログで共用します。
        LINKAGE SECTION.
-      * 日本語：参照渡しのため LINKAGE は BATCH-INTERFACE.CPY と一致させる。
+      * 参照渡しのLINKAGE項目はBATCH-INTERFACE.CPYと同じ配置にします。
        01 WS-ACCOUNT-TABLE.
           05 WS-ACCOUNT-ROW OCCURS 20 TIMES.
              10 WS-ACCOUNT-NO PIC X(10).
@@ -57,10 +57,10 @@
           05 WS-INSERTED-COUNT PIC 999.
           05 WS-FAILED PIC X.
           05 WS-INTERFACE-RESERVED PIC X.
-      * 日本語：GixSQL は最後のリンケージ項目をコメント化するため予備バイトを残す。
+      * GixSQLが末尾のLINKAGE項目をコメント化するため、予備領域を設けます。
        PROCEDURE DIVISION USING WS-ACCOUNT-TABLE WS-BATCH-COUNTS.
-      * 日本語：出力を先に開き、障害がなければ接続して同期する。
-      * 日本語：開いたファイルを閉じ、戻る前に各状態を確認する。
+      * 出力ファイルを開き、成功した場合だけDBへ接続して同期します。
+      * 終了時は開いた資源を閉じ、各操作の状態を確認して呼出側へ返します。
        MAIN-SYNC.
            OPEN OUTPUT REPORT-FILE
            IF WS-REPORT-STATUS = "00"
@@ -108,8 +108,8 @@
                END-IF
            END-IF
            GOBACK.
-      * 日本語：接続値は環境から読み、ソースに認証情報を書かない。
-      * 日本語：SQLCODE がゼロなら接続成功。それ以外は障害とする。
+      * 接続情報は環境変数から読み、認証情報をソースに埋め込みません。
+      * SQLCODEがゼロなら接続成功です。それ以外はシステム障害として扱います。
        1000-CONNECT-DATABASE.
            DISPLAY "DATASRC" UPON ENVIRONMENT-NAME
            ACCEPT WS-DATASRC FROM ENVIRONMENT-VALUE
@@ -130,14 +130,14 @@
                DISPLAY "CONNECT=ERROR SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            END-IF.
-      * 日本語：宣言件数まで走査し、完了または障害時に停止する。
+      * 口座表を宣言件数まで走査し、全件完了または障害時に終了します。
        2000-SYNC-TABLE.
            PERFORM VARYING WS-INDEX FROM 1 BY 1
              UNTIL WS-INDEX > WS-ACCOUNT-COUNT OR WS-FAILED = "Y"
                PERFORM 2100-SYNC-ACCOUNT
            END-PERFORM.
-      * 日本語：1口座をホスト変数へ移し、SELECT 前に結果を消去する。
-      * 日本語：主キー検索で各口座を未変更、更新、挿入に分類する。
+      * 口座をホスト変数へ移し、SELECT前に結果領域を初期化します。
+      * 主キー検索の結果に応じて未変更・更新・挿入へ振り分けます。
        2100-SYNC-ACCOUNT.
            MOVE WS-ACCOUNT-NO(WS-INDEX) TO WS-SYNC-ACCOUNT
            MOVE WS-CUSTOMER-ID(WS-INDEX) TO WS-SYNC-CUSTOMER
@@ -168,8 +168,8 @@
            IF WS-FAILED NOT = "Y"
                PERFORM 2400-REPORT-SYNC
            END-IF.
-      * 日本語：SQLCODE 100 は INSERT、それ以外の検索エラーは停止する。
-      * 日本語：DB 操作の成功後にだけ結果を報告する。
+      * 検索結果なしのSQLCODE 100ならINSERTし、その他のSQL障害は停止します。
+      * DB操作が成功した後に限り、その口座の判定を報告します。
        2200-UPDATE-ACCOUNT.
            EXEC SQL
                UPDATE ACCOUNT_SNAPSHOT
@@ -184,8 +184,8 @@
                DISPLAY "ERROR=UPDATE SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            END-IF.
-      * 日本語：口座キーで顧客識別子と計算済み残高を更新する。
-      * 日本語：成功した更新だけを加算し、SQL エラーで失敗フラグを立てる。
+      * 口座キーを条件に、顧客IDと計算済み残高を更新します。
+      * 更新成功数だけを加算し、SQL障害はバッチ失敗として記録します。
        2300-INSERT-ACCOUNT.
            EXEC SQL
                INSERT INTO ACCOUNT_SNAPSHOT
@@ -200,8 +200,8 @@
                DISPLAY "ERROR=INSERT SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            END-IF.
-      * 日本語：呼び出し元の計算値から未登録のスナップショットを挿入する。
-      * 日本語：成功した挿入だけを加算し、DB エラーはバッチ失敗とする。
+      * 呼出側の計算結果から、DBにない口座行を挿入します。
+      * 挿入成功数だけを加算し、SQL障害はバッチ失敗として記録します。
        2400-REPORT-SYNC.
            MOVE WS-ACCOUNT-BALANCE(WS-INDEX)
              TO WS-EDITED-BALANCE
@@ -220,8 +220,8 @@
            END-IF
            MOVE WS-OUTPUT-LINE TO WS-LOG-LINE
            PERFORM 8100-WRITE-LOG.
-      * 日本語：結果、口座キー、最終残高を表示用に整形する。
-      * 日本語：決定をレポートとログへ書き、どちらの失敗もバッチ障害とする。
+      * 判定、口座キー、最終残高を出力行に整形します。
+      * 判定をレポートとログに書き、どちらかの失敗もバッチ障害にします。
        8100-WRITE-LOG.
            MOVE WS-LOG-LINE TO LOG-RECORD
            WRITE LOG-RECORD
@@ -229,8 +229,8 @@
                DISPLAY "ERROR=WRITE LOG STATUS=" WS-LOG-STATUS
                MOVE "Y" TO WS-FAILED
            END-IF.
-      * 日本語：ログ書込みを集約し、全イベントで同じ状態確認を行う。
-      * 日本語：同期後に接続をリセットし、切断エラーを呼び出し元へ伝える。
+      * ログ書込みを一か所に集め、全イベントで状態確認を統一します。
+      * 同期後にDBを切断し、切断エラーも呼出側へ返します。
        9000-DISCONNECT.
            EXEC SQL CONNECT RESET END-EXEC
            IF SQLCODE = 0
@@ -242,4 +242,4 @@
            IF WS-FAILED = "Y"
                STOP RUN RETURNING 1
            END-IF.
-      * 日本語：GixSQL は生成したカーソル用フッターを追加する。
+      * GixSQLがカーソルの終了処理を生成するため、明示的な終端は不要です。

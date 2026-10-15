@@ -1,4 +1,4 @@
-      * 中文：第28课：构建一个小型多程序记账项目。
+      * 第28课：构建一个小型多程序记账项目。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON28.
        ENVIRONMENT DIVISION.
@@ -13,7 +13,7 @@
        FD BATCH-LOG.
        01 FD-BATCH-LOG-RECORD PIC X(100).
        WORKING-STORAGE SECTION.
-      * 中文：共享记录和计数器在 Copybook 中声明。
+      * 共享记录和计数器在 Copybook 中声明。
        COPY "ACCOUNT-REC.CPY".
        COPY "TRANSACTION-REC.CPY".
        COPY "POST-STATUS.CPY".
@@ -24,21 +24,18 @@
        01 WS-IO-ERROR PIC X VALUE "N".
        01 WS-LOG-MESSAGE PIC X(100) VALUE SPACES.
        01 WS-TRANSACTION-NO PIC 9(3) VALUE ZERO.
-      * 中文：账户字段由两个被调用程序共同使用。
-      * 中文：交易布局构成 CALL 的输入契约。
-      * 中文：POST-STATUS 保存被调用程序返回的判定结果。
-      * 中文：计数器与报表程序共享。
-      * 中文：V 表示隐含小数点，不占用存储字符。
-      * 中文：编辑字段会添加小数点以供 DISPLAY 显示。
-      * 中文：INITIALIZE 会重置每个批次的计数字段。
-      * 中文：每种情形都在 CALL 前设置账户、类型和金额。
-      * 中文：被拒绝的取款不会改变账户余额。
-      * 中文：未知状态会触发防护，以维护调用方与模块间的契约。
-      * 中文：所有调用完成后，报表模块会读取最终值。
+      * 账户字段由记账和报表两个子程序共享。
+      * 交易记录布局是CALL的输入契约，POST-STATUS用于返回判定结果。
+      * 业务拒绝是正常业务结果；未知状态码才属于调用契约异常。
+      * 金额PIC中的V表示隐含小数点，不占用存储位。
+      * 显示专用字段补出小数点，便于阅读金额。
+      * INITIALIZE将计数器清零；每种交易都先设置账户、类型和金额，
+      * 再通过共用段落CALL。余额不足的取款不会改变账户余额。
+      * 全部交易完成后，报表程序读取共享账户和计数器生成汇总。
        01 WS-EDITED-AMOUNT PIC 9(7).99 VALUE ZERO.
        01 WS-UNKNOWN-STATUS PIC X VALUE "N".
        PROCEDURE DIVISION.
-      * 中文：主程序负责初始化和交易顺序。
+      * 主程序控制初始化和交易处理顺序。
        0000-MAIN.
            PERFORM 9000-OPEN-LOG
            IF WS-LOG-OPEN = "Y"
@@ -62,13 +59,13 @@
                MOVE 1 TO RETURN-CODE
            END-IF
            STOP RUN.
-      * 中文：初始化该账户和批次汇总字段。
+      * 初始化该账户和批次汇总字段。
        1000-INITIALIZE-BATCH.
            INITIALIZE WS-ACCOUNT-RECORD WS-BATCH-COUNTS
            MOVE "A000000001" TO WS-ACCOUNT-NUMBER
            MOVE "C0001001" TO WS-CUSTOMER-ID
            MOVE 1000.00 TO WS-ACCOUNT-BALANCE.
-      * 中文：每个段落准备一笔交易，并共用同一个 CALL 路径。
+      * 各段落准备一笔交易，再调用共用的CALL段落。
        1100-POST-DEPOSIT.
            MOVE "A000000001" TO WS-TRANSACTION-ACCOUNT
            MOVE "D" TO WS-TRANSACTION-TYPE
@@ -94,7 +91,7 @@
            MOVE "D" TO WS-TRANSACTION-TYPE
            MOVE 1.00 TO WS-TRANSACTION-AMOUNT
            PERFORM 2000-CALL-POSTER.
-      * 中文：调用方通过引用传递三个共享字段。
+      * 按引用传递的三个字段由被调用程序直接修改，结果会反映到调用方。
        2000-CALL-POSTER.
            ADD 1 TO WS-TRANSACTION-NO
            MOVE SPACES TO WS-POST-STATUS
@@ -110,7 +107,7 @@
            IF WS-LOG-FAILED = "N"
                PERFORM 2200-LOG-POST-RESULT
            END-IF.
-      * 中文：调用方负责汇总，并检查模块返回的未知结果。
+      * 调用方维护批次计数，并检查模块是否返回未知状态码。
        2100-REPORT-RESULT.
            EVALUATE WS-POST-STATUS
                WHEN "POSTED"

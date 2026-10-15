@@ -2,11 +2,11 @@
        PROGRAM-ID. LESSON30.
        DATA DIVISION.
        WORKING-STORAGE SECTION.
-      * 中文：连接详情来自运行环境。
+      * 连接详情来自运行环境。
        01 WS-DATASRC PIC X(255).
        01 WS-DBUSER PIC X(64).
        01 WS-DBPASS PIC X(64).
-      * 中文：这些字段接收查询选出的数据库列值。
+      * 这些字段接收查询选出的数据库列值。
        01 WS-ACCOUNT PIC X(10).
        01 WS-CUSTOMER PIC X(8).
        01 WS-BALANCE PIC S9(7)V99 COMP-3.
@@ -17,7 +17,7 @@
        01 WS-DONE PIC X VALUE "N".
        01 WS-FAILED PIC X VALUE "N".
        EXEC SQL INCLUDE SQLCA END-EXEC.
-      * 中文：主键使多次运行中的排序保持稳定。
+      * 主键使多次运行中的排序保持稳定。
        EXEC SQL
            DECLARE ACCOUNT-CURSOR CURSOR FOR
                SELECT ACCOUNT_NO, CUSTOMER_ID, BALANCE
@@ -26,7 +26,7 @@
        END-EXEC.
        PROCEDURE DIVISION.
        MAIN-PROCEDURE.
-      * 中文：连接数据库、打开游标、获取数据直至结束，然后关闭游标。
+      * 连接数据库并打开游标，逐行获取结果；到达EOF后关闭游标。
            PERFORM 1000-CONNECT-DATABASE
            IF WS-DB-OPEN = "Y"
                PERFORM 2000-OPEN-CURSOR
@@ -45,7 +45,7 @@
            END-IF
            GOBACK.
        1000-CONNECT-DATABASE.
-      * 中文：构建脚本提供 SQLite 文件和空凭据。
+      * 构建脚本提供 SQLite 文件和空凭据。
            DISPLAY "DATASRC" UPON ENVIRONMENT-NAME
            ACCEPT WS-DATASRC FROM ENVIRONMENT-VALUE
            DISPLAY "DATASRC_USR" UPON ENVIRONMENT-NAME
@@ -64,7 +64,7 @@
                MOVE "Y" TO WS-FAILED
            END-IF.
        2000-OPEN-CURSOR.
-      * 中文：OPEN 会启动结果集，但不会获取记录。
+      * OPEN 会启动结果集，但不会获取记录。
            EXEC SQL OPEN ACCOUNT-CURSOR END-EXEC
            IF SQLCODE = 0
                MOVE "Y" TO WS-CURSOR-OPEN
@@ -74,7 +74,7 @@
                MOVE "Y" TO WS-FAILED
            END-IF.
        3000-FETCH-ROWS.
-      * 中文：每次 FETCH 将一行写入上述主机变量。
+      * 每次 FETCH 将一行写入上述主机变量。
            PERFORM UNTIL WS-DONE = "Y"
                EXEC SQL
                    FETCH ACCOUNT-CURSOR
@@ -95,7 +95,7 @@
                END-EVALUATE
            END-PERFORM.
        4000-CLOSE-CURSOR.
-      * 中文：即使遇到 EOF 或获取错误，也要关闭游标以释放资源。
+      * 即使遇到EOF或获取错误，也要关闭游标以释放资源。
            EXEC SQL CLOSE ACCOUNT-CURSOR END-EXEC
            IF SQLCODE = 0
                MOVE "N" TO WS-CURSOR-OPEN
@@ -105,7 +105,7 @@
                MOVE "Y" TO WS-FAILED
            END-IF.
        9000-DISCONNECT-DATABASE.
-      * 中文：游标处理后，CONNECT RESET 会释放数据库连接。
+      * 游标处理后，CONNECT RESET 会释放数据库连接。
            EXEC SQL CONNECT RESET END-EXEC
            IF SQLCODE = 0
                DISPLAY "DISCONNECT=OK"

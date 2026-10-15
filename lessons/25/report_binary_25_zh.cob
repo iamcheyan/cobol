@@ -1,4 +1,4 @@
-      * 中文：读取按值传递的二进制全字长参数。
+      * 读取按值传递的二进制全字长参数。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. REPORT-BINARY.
        DATA DIVISION.

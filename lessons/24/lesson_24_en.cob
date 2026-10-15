@@ -1,29 +1,37 @@
-      * Lesson 24: CALL a separately compiled amount validator.
+      * Call a separately compiled amount validator and exchange a
+      * result through caller storage.
+      * The calling contract passes PIC 9(7)V99 amount and PIC X(15)
+      * result fields. The callee returns ZERO-AMOUNT, LIMIT-EXCEEDED,
+      * or VALID; the limit of 1000.00 is inclusive.
+      * The main flow prepares eight representative and boundary values,
+      * then calls the same subprogram through a shared paragraph. That
+      * paragraph clears the result field and passes both fields by
+      * reference.
+      * The callee checks zero, then values above the limit, and
+      * classifies all others as valid. It writes the decision into
+      * caller storage and returns with GOBACK. The caller displays the
+      * result and updates the matching counters after return.
+      * After all cases, the summary reports checked, valid, rejected,
+      * and reason-specific totals.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON24.
        DATA DIVISION.
        WORKING-STORAGE SECTION.
-      * The amount uses implied cents in its numeric storage.
        01 WS-AMOUNT PIC 9(7)V99 VALUE ZERO.
-      * The called program writes its decision into this caller field.
        01 WS-CHECK-RESULT PIC X(15) VALUE SPACES.
-      * This edited field adds a decimal point only for DISPLAY.
        01 WS-EDITED-AMOUNT PIC 9(7).99 VALUE ZERO.
-      * Counters belong to this program and persist between calls.
        01 WS-CHECK-COUNT PIC 9(3) VALUE ZERO.
        01 WS-VALID-COUNT PIC 9(3) VALUE ZERO.
        01 WS-REJECT-COUNT PIC 9(3) VALUE ZERO.
        01 WS-ZERO-COUNT PIC 9(3) VALUE ZERO.
        01 WS-LIMIT-COUNT PIC 9(3) VALUE ZERO.
        PROCEDURE DIVISION.
-      * Main stops only after each called program has returned.
        0000-MAIN.
            DISPLAY "CALLER=START"
            PERFORM 1000-RUN-CHECK-CASES
            DISPLAY "CALLER=RESUMED"
            PERFORM 3000-DISPLAY-SUMMARY
            STOP RUN.
-      * Each case prepares a new value, then uses the same CALL.
        1000-RUN-CHECK-CASES.
            PERFORM 1100-CHECK-ORDINARY-AMOUNT
            PERFORM 1200-CHECK-ZERO-AMOUNT
@@ -33,43 +41,30 @@
            PERFORM 1600-CHECK-BELOW-LIMIT
            PERFORM 1700-CHECK-LARGEST-AMOUNT
            PERFORM 1800-CHECK-MIDRANGE-AMOUNT.
-      * This ordinary amount is inside the accepted range.
        1100-CHECK-ORDINARY-AMOUNT.
            MOVE 125.50 TO WS-AMOUNT
            PERFORM 2000-CALL-AMOUNT-CHECK.
-      * Zero is outside the business rule.
        1200-CHECK-ZERO-AMOUNT.
            MOVE ZERO TO WS-AMOUNT
            PERFORM 2000-CALL-AMOUNT-CHECK.
-      * The configured maximum is inclusive.
        1300-CHECK-LIMIT-AMOUNT.
            MOVE 1000.00 TO WS-AMOUNT
            PERFORM 2000-CALL-AMOUNT-CHECK.
-      * One cent above the configured maximum is rejected.
        1400-CHECK-OVER-LIMIT-AMOUNT.
            MOVE 1000.01 TO WS-AMOUNT
            PERFORM 2000-CALL-AMOUNT-CHECK.
-      * The smallest positive amount can be accepted.
        1500-CHECK-SMALL-POSITIVE.
            MOVE 0.01 TO WS-AMOUNT
            PERFORM 2000-CALL-AMOUNT-CHECK.
-      * This value is just below the configured maximum.
        1600-CHECK-BELOW-LIMIT.
            MOVE 999.99 TO WS-AMOUNT
            PERFORM 2000-CALL-AMOUNT-CHECK.
-      * PIC capacity and the business validation limit differ.
        1700-CHECK-LARGEST-AMOUNT.
            MOVE 9999999.99 TO WS-AMOUNT
            PERFORM 2000-CALL-AMOUNT-CHECK.
-      * A midrange amount checks the rule away from both boundaries.
        1800-CHECK-MIDRANGE-AMOUNT.
            MOVE 500.00 TO WS-AMOUNT
            PERFORM 2000-CALL-AMOUNT-CHECK.
-      * CALL transfers control to the named program unit.
-      * This literal matches PROGRAM-ID CHECK-AMOUNT in the callee.
-      * USING passes the amount first and result storage second.
-      * Default BY REFERENCE lets the callee update WS-CHECK-RESULT.
-      * The caller reuses the same storage for every test amount.
        2000-CALL-AMOUNT-CHECK.
            MOVE SPACES TO WS-CHECK-RESULT
            MOVE WS-AMOUNT TO WS-EDITED-AMOUNT
@@ -78,7 +73,6 @@
            DISPLAY "CALL=RETURN STATUS="
                FUNCTION TRIM(WS-CHECK-RESULT TRAILING)
            PERFORM 2100-COUNT-CHECK-RESULT.
-      * Execution resumes here after the subprogram executes GOBACK.
        2100-COUNT-CHECK-RESULT.
            ADD 1 TO WS-CHECK-COUNT
            EVALUATE WS-CHECK-RESULT
@@ -93,7 +87,6 @@
                WHEN OTHER
                    ADD 1 TO WS-REJECT-COUNT
            END-EVALUATE.
-      * The caller displays totals after all eight calls return.
        3000-DISPLAY-SUMMARY.
            DISPLAY "SUMMARY CHECKED=" WS-CHECK-COUNT
                " VALID=" WS-VALID-COUNT

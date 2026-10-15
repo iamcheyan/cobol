@@ -1,7 +1,21 @@
-      * Lesson 20: match two sorted account files by account number.
-      * Master rows are 27 characters; transaction rows are 20.
-      * Each input is sorted ascending by its ten-character key.
-      * The merge classifies matches and records present on one side.
+      * Merge a sorted account master and transaction feed by account
+      * key.
+      * The master contract is 27 characters and the transaction
+      * contract is 20. Both inputs must be sorted ascending by the same
+      * ten-character account number; duplicate keys are outside this
+      * example.
+      * The main flow opens both inputs and compares their current keys.
+      * It advances only the smaller side; equal keys form a match and
+      * advance both streams.
+      * Each read paragraph updates its current row on success and
+      * records status 10 as that stream's EOF. Other I/O errors fail
+      * the run.
+      * A key present on one side is classified as an orphan. Once one
+      * input ends, every remaining row on the other side is classified.
+      * EOF is checked before key access; both inputs are closed before
+      * the classification totals are reported.
+      * The inputs remain unchanged, and the forward merge uses constant
+      * working storage.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. MATCH20.
        ENVIRONMENT DIVISION.
@@ -37,7 +51,6 @@
        01 WS-ACCOUNT-ONLY-COUNT PIC 9(3) VALUE ZERO.
        01 WS-TRANSACTION-ONLY-COUNT PIC 9(3) VALUE ZERO.
        PROCEDURE DIVISION.
-      * Open both sorted inputs before positioning either stream.
        0000-MAIN.
            OPEN INPUT ACCOUNT-MASTER
            IF WS-ACCOUNT-STATUS NOT = "00"
@@ -67,7 +80,6 @@
                MOVE 1 TO RETURN-CODE
            END-IF
            STOP RUN.
-      * Compare current keys and advance the lower or equal stream.
        3000-MATCH-CURRENT-RECORDS.
            EVALUATE TRUE
                WHEN WS-ACCOUNT-EOF = "Y"
@@ -89,7 +101,6 @@
                        PERFORM 2000-READ-TRANSACTION
                    END-IF
            END-EVALUATE.
-      * Read the next master row or mark only this stream at EOF.
        1000-READ-ACCOUNT.
            READ ACCOUNT-MASTER
                AT END
@@ -103,7 +114,6 @@
                    WS-ACCOUNT-STATUS
                MOVE "Y" TO WS-IO-ERROR
            END-IF.
-      * Read the next transaction row or mark only this stream at EOF.
        2000-READ-TRANSACTION.
            READ DAILY-TRANSACTIONS
                AT END
@@ -117,20 +127,17 @@
                    WS-TRANSACTION-STATUS
                MOVE "Y" TO WS-IO-ERROR
            END-IF.
-      * The master key sorts before the current transaction key.
        4000-REPORT-ACCOUNT-ONLY.
            ADD 1 TO WS-ACCOUNT-ONLY-COUNT
            DISPLAY "ACCOUNT_ONLY ACCOUNT=" FD-ACCOUNT-NUMBER
                " CUSTOMER=" FD-CUSTOMER-ID
                " BALANCE=" FD-ACCOUNT-BALANCE.
-      * The transaction key sorts before the current master key.
        4100-REPORT-TRANSACTION-ONLY.
            ADD 1 TO WS-TRANSACTION-ONLY-COUNT
            DISPLAY "TRANSACTION_ONLY ACCOUNT="
                FD-TRANSACTION-ACCOUNT
                " TYPE=" FD-TRANSACTION-TYPE
                " AMOUNT=" FD-TRANSACTION-AMOUNT.
-      * Equal keys identify one account and its daily transaction.
        4200-REPORT-MATCH.
            ADD 1 TO WS-MATCH-COUNT
            DISPLAY "MATCH ACCOUNT=" FD-ACCOUNT-NUMBER
@@ -138,7 +145,6 @@
                " BALANCE=" FD-ACCOUNT-BALANCE
                " TYPE=" FD-TRANSACTION-TYPE
                " AMOUNT=" FD-TRANSACTION-AMOUNT.
-      * Close both inputs and report all three classification counts.
        9000-CLOSE-FILES.
            CLOSE ACCOUNT-MASTER
            IF WS-ACCOUNT-STATUS NOT = "00"
@@ -155,47 +161,3 @@
            DISPLAY "SUMMARY MATCHED=" WS-MATCH-COUNT
                " ACCOUNT_ONLY=" WS-ACCOUNT-ONLY-COUNT
                " TRANSACTION_ONLY=" WS-TRANSACTION-ONLY-COUNT.
-      * Both fixture files are sorted in ascending account-key order.
-      * The master key is the ten-character account number.
-      * The transaction key is the same ten-character account number.
-      * A smaller master key means no transaction key matches it.
-      * A smaller transaction key means no master key matches it.
-      * Equal keys classify one matched pair of records.
-      * After a match, both input streams advance once.
-      * After a one-sided row, only that side advances.
-      * When one side reaches EOF, remaining rows are orphans.
-      * Each stream has its own status and EOF state.
-      * Status 10 is normal EOF; other read errors stop the merge.
-      * AT END handles EOF for the READ it follows.
-      * FILE STATUS is checked to distinguish other read failures.
-      * The account balance and transaction amount use implied cents.
-      * This example reports values but calculates no new balance.
-      * Duplicate keys are outside this lesson's one-row-per-key rule.
-      * Unsorted input invalidates the forward comparison algorithm.
-      * Sort both files by the same account-key collation first.
-      * The key fields have equal length and are compared as text.
-      * Leading zeroes are significant parts of these account keys.
-      * Master and transaction record layouts are fixed-width text rows.
-      * Each physical line contains one record with no delimiter fields.
-      * The FD record lengths match the fixture row lengths.
-      * Both files are required and must open successfully.
-      * If the second OPEN fails, the first input is closed.
-      * A successful READ advances only the file named in that READ.
-      * The merge uses constant working storage regardless of row count.
-      * No OCCURS table stores the complete input files in memory.
-      * This is a sequential merge, not a nested search of both files.
-      * Its run time grows with the total number of input records.
-      * The output labels distinguish match and both orphan directions.
-      * Each input contributes at most one row to a matched pair.
-      * EOF is tested before referencing a current key for comparison.
-      * Empty files produce zero rows on their respective side.
-      * The summary counts classifications, not read attempts.
-      * The program does not write or alter either input fixture.
-      * Later lessons add sorting and complete batch output files.
-      * Run here so both ASSIGN paths find their fixtures.
-      * The program returns a nonzero status after an I/O failure.
-      * The sample contains matches, a master-only row, and orphans.
-      * One transaction-only row sorts between two master keys.
-      * Another transaction-only row remains after master EOF.
-      * The fixtures exercise both key directions and EOF handling.
-      * STOP RUN returns the batch status code to the operating system.

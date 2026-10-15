@@ -1,17 +1,12 @@
-      * 2つ目のプログラムは、同じ口座レコード定義を
-      * インポートします。
+      * 共有口座定義を使って単独の報告行を組み立てます。
+      * 主処理は口座番号、顧客ID、残高を設定し、報告段落を呼びます。
+      * 報告段落は残高を編集表示項目へ移し、小数点付きで口座情報を表示します。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. ACCOUNT-REPORT23.
        DATA DIVISION.
        WORKING-STORAGE SECTION.
        COPY "ACCOUNT-REC.CPY".
        01 WS-REPORT-BALANCE PIC 9(7).99 VALUE ZERO.
-      * 共有COPYBOOKの項目を使い、独立した報告行を組
-      * み立てます。
-      * 口座番号と顧客IDを設定し、残高は金額フィー
-      * ルドに格納します。
-      * 表示用PICへ移して小数点を出力し、口座・顧客
-      * ・残高を報告します。
        PROCEDURE DIVISION.
        0000-MAIN.
            PERFORM 1000-LOAD-REPORT-ROW

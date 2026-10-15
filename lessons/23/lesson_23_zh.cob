@@ -1,9 +1,12 @@
-      * 第23课：导入共享的账户和交易声明。
+      * 使用COPYBOOK共享的账户与交易记录演示记账判断。
+      * 样例从余额1000.00开始，依次尝试存款、取款、透支、未知类型和其他账户交易。不读取输入文件。
+      * 主流程只初始化一次共享账户。每个用例段落设置交易字段，再调用通用记账段落。
+      * 记账先匹配账户号，再检查类型。存款增加余额；只有余额足够时取款才扣减。余额不足、类型未知或账户不存在时余额不变。
+      * 报告段落将每次尝试只计为成功或拒绝一次，并显示结果。最后输出共享账户资料、最终余额和批次汇总。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON23.
        DATA DIVISION.
        WORKING-STORAGE SECTION.
-      * 编译期间，COPY会在此处插入声明。
        COPY "ACCOUNT-REC.CPY".
        COPY "TRANSACTION-REC.CPY".
        01 WS-POST-STATUS PIC X(12) VALUE SPACES.
@@ -12,7 +15,6 @@
        01 WS-EDITED-AMOUNT PIC 9(7).99 VALUE ZERO.
        01 WS-EDITED-BALANCE PIC 9(7).99 VALUE ZERO.
        PROCEDURE DIVISION.
-      * 先运行两个有效入账示例，再运行三个被拒绝的示例。
        0000-MAIN.
            PERFORM 1000-INITIALIZE-RECORDS
            PERFORM 1100-POST-DEPOSIT
@@ -22,13 +24,11 @@
            PERFORM 1500-POST-MISSING-ACCOUNT
            PERFORM 3000-DISPLAY-SUMMARY
            STOP RUN.
-      * 此批次只初始化一次共享账户记录。
        1000-INITIALIZE-RECORDS.
            MOVE "A000000001" TO WS-ACCOUNT-NUMBER
            MOVE "C0001001" TO WS-CUSTOMER-ID
            MOVE 1000.00 TO WS-ACCOUNT-BALANCE
            MOVE WS-ACCOUNT-NUMBER TO WS-TRANSACTION-ACCOUNT.
-      * 这些段落用于填充共享交易记录。
        1100-POST-DEPOSIT.
            MOVE "D" TO WS-TRANSACTION-TYPE
            MOVE 125.50 TO WS-TRANSACTION-AMOUNT
@@ -50,7 +50,6 @@
            MOVE "D" TO WS-TRANSACTION-TYPE
            MOVE 1.00 TO WS-TRANSACTION-AMOUNT
            PERFORM 2000-POST-TRANSACTION.
-      * 无需读取文件即可匹配、验证并入账一笔交易。
        2000-POST-TRANSACTION.
            MOVE SPACES TO WS-POST-STATUS
            IF WS-TRANSACTION-ACCOUNT NOT = WS-ACCOUNT-NUMBER
@@ -59,7 +58,6 @@
                PERFORM 2100-VALIDATE-AND-POST
            END-IF
            PERFORM 2900-REPORT-TRANSACTION.
-      * 类型代码决定对余额执行的算术运算。
        2100-VALIDATE-AND-POST.
            EVALUATE WS-TRANSACTION-TYPE
                WHEN "D"
@@ -71,7 +69,6 @@
                WHEN OTHER
                    MOVE "BAD_TYPE" TO WS-POST-STATUS
            END-EVALUATE.
-      * 取款失败时账户余额保持不变。
        2200-CHECK-WITHDRAWAL.
            IF WS-TRANSACTION-AMOUNT <= WS-ACCOUNT-BALANCE
                SUBTRACT WS-TRANSACTION-AMOUNT
@@ -80,7 +77,6 @@
            ELSE
                MOVE "INSUFFICIENT" TO WS-POST-STATUS
            END-IF.
-      * 每笔尝试处理的交易都只计数并显示一次。
        2900-REPORT-TRANSACTION.
            MOVE WS-TRANSACTION-AMOUNT TO WS-EDITED-AMOUNT
            IF WS-POST-STATUS = "POSTED"
@@ -92,7 +88,6 @@
                DISPLAY "RESULT=REJECTED STATUS="
                    FUNCTION TRIM(WS-POST-STATUS TRAILING)
            END-IF.
-      * 报告共享账户字段和批次总计。
        3000-DISPLAY-SUMMARY.
            MOVE WS-ACCOUNT-BALANCE TO WS-EDITED-BALANCE
            DISPLAY "ACCOUNT=" WS-ACCOUNT-NUMBER

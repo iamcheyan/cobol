@@ -1,4 +1,4 @@
-      * 日本語：第28課：小規模な複数プログラム構成の記帳プロジェクトを作る。
+      * 第28課：記帳と残高報告を別プログラムに分けます。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON28.
        ENVIRONMENT DIVISION.
@@ -13,7 +13,7 @@
        FD BATCH-LOG.
        01 FD-BATCH-LOG-RECORD PIC X(100).
        WORKING-STORAGE SECTION.
-      * 日本語：共有レコードとカウンターを Copybook で宣言する。
+      * 共有する口座・取引レコードと件数はCopybookで定義します。
        COPY "ACCOUNT-REC.CPY".
        COPY "TRANSACTION-REC.CPY".
        COPY "POST-STATUS.CPY".
@@ -24,21 +24,18 @@
        01 WS-IO-ERROR PIC X VALUE "N".
        01 WS-LOG-MESSAGE PIC X(100) VALUE SPACES.
        01 WS-TRANSACTION-NO PIC 9(3) VALUE ZERO.
-      * 日本語：口座フィールドは呼び出される2つのプログラムで共有する。
-      * 日本語：取引レイアウトが CALL の入力契約となる。
-      * 日本語：POST-STATUS は呼び出されたプログラムが返す判定結果を保持する。
-      * 日本語：カウンターをレポートプログラムと共有する。
-      * 日本語：V は暗黙の小数点を表し、記憶文字を使用しない。
-      * 日本語：編集項目は DISPLAY 用に小数点を付ける。
-      * 日本語：INITIALIZE は各バッチのカウント項目をリセットする。
-      * 日本語：各ケースでは CALL の前に口座、種別、金額を設定する。
-      * 日本語：拒否された引き出しでは口座残高は変わらない。
-      * 日本語：未知のステータスを検出して、呼び出し側とモジュール間の契約を守る。
-      * 日本語：すべての呼び出し後に、レポートモジュールが最終値を参照する。
+      * CALLで共有する項目を定義し、引数の意味を呼出側と揃えます。
+      * POST-STATUSには記帳結果が返ります。拒否は業務結果として扱い、
+      * 不明な状態コードだけを呼出契約の異常として検出します。
+      * 金額のVは暗黙小数点で、記憶領域を占有しません。
+      * 表示用項目には小数点を挿入し、金額を読みやすくします。
+      * INITIALIZEで件数をゼロに戻し、各取引の入力を設定してから
+      * 共通段落でCALLします。残高不足の引出しでは残高を変えません。
+      * 全取引が終わったら、共有項目を使って最終残高と件数を報告します。
        01 WS-EDITED-AMOUNT PIC 9(7).99 VALUE ZERO.
        01 WS-UNKNOWN-STATUS PIC X VALUE "N".
        PROCEDURE DIVISION.
-      * 日本語：メインプログラムが初期化と取引の順序を管理する。
+      * メイン段落が初期化と取引順を管理します。
        0000-MAIN.
            PERFORM 9000-OPEN-LOG
            IF WS-LOG-OPEN = "Y"
@@ -62,13 +59,13 @@
                MOVE 1 TO RETURN-CODE
            END-IF
            STOP RUN.
-      * 日本語：口座とバッチ集計項目を初期化する。
+      * 口座とバッチ集計項目を初期化する。
        1000-INITIALIZE-BATCH.
            INITIALIZE WS-ACCOUNT-RECORD WS-BATCH-COUNTS
            MOVE "A000000001" TO WS-ACCOUNT-NUMBER
            MOVE "C0001001" TO WS-CUSTOMER-ID
            MOVE 1000.00 TO WS-ACCOUNT-BALANCE.
-      * 日本語：各段落で取引を準備し、共通の CALL 経路を使う。
+      * 各段落で取引を準備し、共通段落からCALLします。
        1100-POST-DEPOSIT.
            MOVE "A000000001" TO WS-TRANSACTION-ACCOUNT
            MOVE "D" TO WS-TRANSACTION-TYPE
@@ -94,7 +91,8 @@
            MOVE "D" TO WS-TRANSACTION-TYPE
            MOVE 1.00 TO WS-TRANSACTION-AMOUNT
            PERFORM 2000-CALL-POSTER.
-      * 日本語：呼び出し側は共有フィールド3つを参照渡しする。
+      * 参照渡しの3項目は、呼出先の変更が呼出側にも反映されます。
+      * 集計は呼出側が管理し、戻り値の状態コードを確認します。
        2000-CALL-POSTER.
            ADD 1 TO WS-TRANSACTION-NO
            MOVE SPACES TO WS-POST-STATUS
@@ -110,7 +108,7 @@
            IF WS-LOG-FAILED = "N"
                PERFORM 2200-LOG-POST-RESULT
            END-IF.
-      * 日本語：呼び出し側が集計を管理し、モジュールの未知の結果を確認する。
+      * 呼出側が件数を集計し、未知の状態コードを検査します。
        2100-REPORT-RESULT.
            EVALUATE WS-POST-STATUS
                WHEN "POSTED"

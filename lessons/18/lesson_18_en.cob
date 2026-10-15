@@ -1,8 +1,21 @@
-      * Lesson 18: validate and parse one-line CSV customer records.
-      * The five fields are ID, name, account, status, and note.
-      * Quoted commas and doubled quotes are parsed as field content.
-      * Empty fields are preserved; fields longer than 20 are rejected.
-      * Each CSV record occupies one physical line in this profile.
+      * Read customer CSV one physical line at a time and validate its
+      * five-field contract.
+      * Fields are ID, name, account, status, and note. Commas inside
+      * quotes are data; doubled quotes represent one quote. Each field
+      * is limited to 20 characters and the input area to 200.
+      * The main paragraph opens the input and counts each available row
+      * before calling the parser. EOF is normal and is not counted. The
+      * final summary reports valid and rejected rows.
+      * The row parser clears field storage and parser state, then scans
+      * characters in order. Separate paths handle quoted content, a
+      * closing quote, and unquoted text; a comma advances to the next
+      * field.
+      * The parser checks field count, length, quote placement, and a
+      * trailing comma. It keeps the first error found. Only a clean row
+      * with exactly five fields is displayed; other rows are rejected
+      * with a reason.
+      * Quoted fields cannot span physical lines in this profile. The
+      * input file is read-only.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. CSV18.
        ENVIRONMENT DIVISION.
@@ -37,7 +50,6 @@
        01 WS-FIELD-NUMBER PIC 9(3) VALUE ZERO.
        01 WS-FIELD-LENGTH PIC 9(3) VALUE ZERO.
        PROCEDURE DIVISION.
-      * Read and validate all physical CSV lines in file order.
        0000-MAIN.
            OPEN INPUT CUSTOMER-CSV
            IF WS-FILE-STATUS NOT = "00"
@@ -59,7 +71,6 @@
                " VALID=" WS-VALID-COUNT
                " REJECTED=" WS-REJECTED-COUNT
            STOP RUN.
-      * Reset parser state before each independent input row.
        1000-PARSE-ROW.
            INITIALIZE WS-FIELDS
            MOVE SPACES TO WS-CSV-ERROR
@@ -87,7 +98,6 @@
                PERFORM 2910-SET-FIELD-COUNT-ERROR
            END-IF
            PERFORM 3000-REPORT-ROW.
-      * Apply quote and comma rules to the current character.
        2000-PARSE-CHARACTER.
            IF WS-IN-QUOTES = "Y"
                IF WS-CURRENT-CHAR = WS-QUOTE
@@ -98,7 +108,6 @@
            ELSE
                PERFORM 2200-HANDLE-UNQUOTED-CHAR
            END-IF.
-      * A doubled quote contributes one quote to a quoted value.
        2100-HANDLE-QUOTE-IN-FIELD.
            IF WS-CHAR-POSITION < WS-LINE-LENGTH
                COMPUTE WS-NEXT-POSITION = WS-CHAR-POSITION + 1
@@ -113,7 +122,6 @@
                MOVE "N" TO WS-IN-QUOTES
                MOVE "Y" TO WS-AFTER-QUOTE
            END-IF.
-      * Outside quotes, commas end fields and quotes start fields.
        2200-HANDLE-UNQUOTED-CHAR.
            IF WS-AFTER-QUOTE = "Y"
                IF WS-CURRENT-CHAR = WS-COMMA
@@ -143,7 +151,6 @@
                        MOVE "N" TO WS-FIELD-START
                END-EVALUATE
            END-IF.
-      * A delimiter begins a new field, including an empty field.
        2300-START-NEXT-FIELD.
            ADD 1 TO WS-FIELD-NUMBER
            MOVE ZERO TO WS-FIELD-LENGTH
@@ -154,7 +161,6 @@
                    MOVE "TOO_MANY_FIELDS" TO WS-CSV-ERROR
                END-IF
            END-IF.
-      * Preserve valid parsed fields and reject oversized values.
        4000-APPEND-CHARACTER.
            ADD 1 TO WS-FIELD-LENGTH
            IF WS-FIELD-NUMBER <= 5
@@ -172,7 +178,6 @@
                    MOVE "TOO_MANY_FIELDS" TO WS-CSV-ERROR
                END-IF
            END-IF.
-      * Keep the first detected parser error for this input row.
        2900-SET-UNCLOSED-QUOTE.
            IF WS-CSV-ERROR = SPACES
                MOVE "UNCLOSED_QUOTE" TO WS-CSV-ERROR
@@ -185,7 +190,6 @@
            IF WS-CSV-ERROR = SPACES
                MOVE "TRAILING_COMMA" TO WS-CSV-ERROR
            END-IF.
-      * Display parsed values only when structure and sizes are valid.
        3000-REPORT-ROW.
            IF WS-CSV-ERROR = SPACES
                ADD 1 TO WS-VALID-COUNT
@@ -206,30 +210,3 @@
                    " STATUS=REJECTED REASON="
                    FUNCTION TRIM(WS-CSV-ERROR TRAILING)
            END-IF.
-      * CSV commas inside quoted fields are data, not delimiters.
-      * A doubled quote inside a quoted field represents one quote.
-      * An empty unquoted or quoted field has a length of zero.
-      * A trailing comma is rejected by this CSV profile.
-      * The schema requires exactly five fields in every valid row.
-      * An extra delimiter produces TOO_MANY_FIELDS without overflow.
-      * A short row produces FIELD_COUNT after the final field scan.
-      * A quote may only open a field at its first character.
-      * Non-delimiter text after a closing quote is rejected.
-      * An unmatched opening quote produces UNCLOSED_QUOTE.
-      * The first parser error is retained as the row's reject reason.
-      * Each field stores at most 20 characters.
-      * Longer values are rejected rather than silently truncated.
-      * The input line area holds at most 200 characters.
-      * Longer line-sequential records may be truncated by the runtime.
-      * This profile does not support newlines inside quoted fields.
-      * Spaces before a closing quote remain part of the field value.
-      * Quote final fields when their trailing spaces are significant.
-      * Unquoted trailing spaces are indistinguishable from FD padding.
-      * TRIM removes FD padding when measuring and displaying a row.
-      * The fixture has valid, empty, malformed, and boundary examples.
-      * A physical input line is one CSV record for this lesson.
-      * OPEN failure is reported before any record is read.
-      * EOF is not counted as a CSV row.
-      * This program reads CSV but does not change or write the input.
-      * Later lessons will coordinate multiple file streams.
-      * STOP RUN ends the one-line CSV parsing exercise.

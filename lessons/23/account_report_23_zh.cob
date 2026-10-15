@@ -1,13 +1,12 @@
-      * 第二个程序导入相同的账户记录定义。
+      * 使用共享账户定义生成独立的账户报告。
+      * 主流程设置账户号、客户编号和余额，然后调用报告段落。
+      * 报告段落将余额移入编辑显示字段，并以带小数点的格式输出账户资料。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. ACCOUNT-REPORT23.
        DATA DIVISION.
        WORKING-STORAGE SECTION.
        COPY "ACCOUNT-REC.CPY".
        01 WS-REPORT-BALANCE PIC 9(7).99 VALUE ZERO.
-      * 使用共享COPYBOOK字段组装独立的报告记录。
-      * 设置账户和客户标识，并将余额存入金额字段。
-      * 移入编辑显示字段，使报告输出小数点。
        PROCEDURE DIVISION.
        0000-MAIN.
            PERFORM 1000-LOAD-REPORT-ROW

@@ -84,19 +84,11 @@
       * EVALUATE will be introduced separately for multiple code values.
       * Fixed values keep each compile-and-run check deterministic.
       * Change one VALUE clause at a time for the boundary exercise.
-      * Test both sides of every rule before trusting a batch decision.
-      * The amount must be greater than zero to pass the first check.
-      * The exact maximum is allowed by the previous test.
-      * Any amount above the maximum is rejected by the second check.
-      * A valid amount is accepted only when status is active.
-      * Status comparison is a character equality test against A.
-      * Unknown status characters follow the inactive-account branch.
-      * The branch output identifies the first failed rule only.
-      * The first failed nested test determines the reported reason.
-      * Rule ordering must match the business contract.
-      * The program displays only one decision for the one fixed record.
-      * No value is changed while the nested IF statements execute.
-      * DISPLAY statements inside a selected branch run in source order.
-      * Statements in the other branches are skipped for that run.
-      * The final STOP RUN ends this one-record demonstration.
+      * Explicit scope delimits nested IFs; a period ends the sentence.
+      * Compare numeric fields, not formatted display text.
+      * A rejection is a business outcome, not a system I/O failure.
+      * Production rules must define currency, transaction type,
+      * authorization, and duplicate checks.
+      * This lesson evaluates one record; it does not post a balance.
+      * A later lesson uses PERFORM to process multiple transactions.
            STOP RUN.

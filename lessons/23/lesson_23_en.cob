@@ -1,9 +1,22 @@
-      * Lesson 23: import shared account and transaction declarations.
+      * Exercise posting decisions with account and transaction records
+      * shared through copybooks.
+      * The sample starts with a 1000.00 balance and tries a deposit,
+      * withdrawal, overdraft, unknown type, and transaction for another
+      * account. No input file is read.
+      * The main flow initializes the shared account once. Each case
+      * paragraph sets transaction fields and calls the common posting
+      * paragraph.
+      * Posting first matches the account number, then checks the type.
+      * Deposits increase the balance; withdrawals reduce it only when
+      * funds suffice. Insufficient funds, an unknown type, or a missing
+      * account leaves the balance unchanged.
+      * The reporting paragraph counts each attempt once as posted or
+      * rejected and displays its outcome. The final paragraph prints
+      * shared account details, the resulting balance, and batch totals.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON23.
        DATA DIVISION.
        WORKING-STORAGE SECTION.
-      * COPY inserts declarations here during compilation.
        COPY "ACCOUNT-REC.CPY".
        COPY "TRANSACTION-REC.CPY".
        01 WS-POST-STATUS PIC X(12) VALUE SPACES.
@@ -12,7 +25,6 @@
        01 WS-EDITED-AMOUNT PIC 9(7).99 VALUE ZERO.
        01 WS-EDITED-BALANCE PIC 9(7).99 VALUE ZERO.
        PROCEDURE DIVISION.
-      * Run two valid postings followed by three rejected examples.
        0000-MAIN.
            PERFORM 1000-INITIALIZE-RECORDS
            PERFORM 1100-POST-DEPOSIT
@@ -22,13 +34,11 @@
            PERFORM 1500-POST-MISSING-ACCOUNT
            PERFORM 3000-DISPLAY-SUMMARY
            STOP RUN.
-      * Initialize the shared account record once for this batch.
        1000-INITIALIZE-RECORDS.
            MOVE "A000000001" TO WS-ACCOUNT-NUMBER
            MOVE "C0001001" TO WS-CUSTOMER-ID
            MOVE 1000.00 TO WS-ACCOUNT-BALANCE
            MOVE WS-ACCOUNT-NUMBER TO WS-TRANSACTION-ACCOUNT.
-      * These paragraphs populate the shared transaction record.
        1100-POST-DEPOSIT.
            MOVE "D" TO WS-TRANSACTION-TYPE
            MOVE 125.50 TO WS-TRANSACTION-AMOUNT
@@ -50,7 +60,6 @@
            MOVE "D" TO WS-TRANSACTION-TYPE
            MOVE 1.00 TO WS-TRANSACTION-AMOUNT
            PERFORM 2000-POST-TRANSACTION.
-      * Match, validate and post one transaction without reading a file.
        2000-POST-TRANSACTION.
            MOVE SPACES TO WS-POST-STATUS
            IF WS-TRANSACTION-ACCOUNT NOT = WS-ACCOUNT-NUMBER
@@ -59,7 +68,6 @@
                PERFORM 2100-VALIDATE-AND-POST
            END-IF
            PERFORM 2900-REPORT-TRANSACTION.
-      * The type code selects the arithmetic performed on the balance.
        2100-VALIDATE-AND-POST.
            EVALUATE WS-TRANSACTION-TYPE
                WHEN "D"
@@ -71,7 +79,6 @@
                WHEN OTHER
                    MOVE "BAD_TYPE" TO WS-POST-STATUS
            END-EVALUATE.
-      * A failed withdrawal leaves the account balance unchanged.
        2200-CHECK-WITHDRAWAL.
            IF WS-TRANSACTION-AMOUNT <= WS-ACCOUNT-BALANCE
                SUBTRACT WS-TRANSACTION-AMOUNT
@@ -80,7 +87,6 @@
            ELSE
                MOVE "INSUFFICIENT" TO WS-POST-STATUS
            END-IF.
-      * Count and display every attempted transaction exactly once.
        2900-REPORT-TRANSACTION.
            MOVE WS-TRANSACTION-AMOUNT TO WS-EDITED-AMOUNT
            IF WS-POST-STATUS = "POSTED"
@@ -92,7 +98,6 @@
                DISPLAY "RESULT=REJECTED STATUS="
                    FUNCTION TRIM(WS-POST-STATUS TRAILING)
            END-IF.
-      * Report the shared account fields and batch totals.
        3000-DISPLAY-SUMMARY.
            MOVE WS-ACCOUNT-BALANCE TO WS-EDITED-BALANCE
            DISPLAY "ACCOUNT=" WS-ACCOUNT-NUMBER

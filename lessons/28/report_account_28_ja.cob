@@ -1,4 +1,4 @@
-      * 日本語：呼び出し側が所有する口座値と取引集計を報告する。
+      * 呼出側が所有する口座と取引集計を報告します。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. REPORT-ACCOUNT28.
        DATA DIVISION.

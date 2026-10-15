@@ -1,5 +1,4 @@
-      * 日本語：値渡しされたバイナリ全語長引数を読
-      * み取る。
+      * BY VALUEで渡された全語長整数を読み取ります。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. REPORT-BINARY.
        DATA DIVISION.
@@ -7,11 +6,9 @@
        01 WS-EDITED-AMOUNT PIC 9(9) VALUE ZERO.
        LINKAGE SECTION.
        COPY "AMOUNT-INTERFACE.CPY".
-      * BY VALUEで渡された全語長整数を受け取ります。
-      * 受け取った値を表示用フィールドへ移し、呼び
-      * 出し元の値は変更しません。
-      * 診断出力後、GOBACKで呼び出し元へ制御を返しま
-      * す。
+      * BINARY-LONGの引数をLINKAGEで受け取ります。
+      * 値を表示用項目へ移します。BY VALUEのため呼び出し側の記憶域は変わりません。
+      * 診断結果を表示し、GOBACKで呼び出し側へ戻ります。
        PROCEDURE DIVISION USING BY VALUE AMOUNT-ARGUMENT.
        0000-REPORT-VALUE.
            MOVE AMOUNT-ARGUMENT TO WS-EDITED-AMOUNT

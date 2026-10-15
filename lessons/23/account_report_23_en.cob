@@ -1,16 +1,15 @@
-      * A second program imports the same account record definition.
+      * Build a standalone account report using the shared account
+      * definition.
+      * The main flow sets account number, customer ID, and balance,
+      * then calls the report paragraph.
+      * The report paragraph moves the balance to an edited display
+      * field and prints the account details with a decimal point.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. ACCOUNT-REPORT23.
        DATA DIVISION.
        WORKING-STORAGE SECTION.
        COPY "ACCOUNT-REC.CPY".
        01 WS-REPORT-BALANCE PIC 9(7).99 VALUE ZERO.
-      * Build an independent report row using the shared copybook
-      * fields.
-      * Set the account and customer identifiers and store the balance
-      * amount.
-      * Move to the edited display field so the report prints a decimal
-      * point.
        PROCEDURE DIVISION.
        0000-MAIN.
            PERFORM 1000-LOAD-REPORT-ROW

@@ -1,4 +1,4 @@
-      * 中文：通过引用或内容传递修改链接项。
+      * 通过引用或内容传递修改链接项。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. ADD-ONE.
        DATA DIVISION.

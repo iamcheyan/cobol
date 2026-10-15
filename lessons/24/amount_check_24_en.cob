@@ -1,16 +1,14 @@
-      * Validate an amount and return status to the caller.
+      * Validate an amount received with a caller-owned result field.
+      * Classify zero first, then amounts above 1000.00. Positive values
+      * at or below the limit are valid.
+      * Store the decision code in caller storage and return control
+      * with GOBACK.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. CHECK-AMOUNT.
        DATA DIVISION.
        LINKAGE SECTION.
        01 LK-AMOUNT PIC 9(7)V99.
        01 LK-CHECK-RESULT PIC X(15).
-      * Receive the amount and result area through the calling
-      * convention.
-      * Classify zero first, then distinguish an exceeded limit from a
-      * valid value.
-      * Return the result code in caller storage and resume the caller
-      * with GOBACK.
        PROCEDURE DIVISION USING LK-AMOUNT LK-CHECK-RESULT.
        0000-VALIDATE-AMOUNT.
            EVALUATE TRUE

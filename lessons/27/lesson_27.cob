@@ -80,15 +80,15 @@
                PERFORM 9200-LOG-BATCH-END
                CLOSE BATCH-LOG
                IF WS-LOG-STATUS NOT = "00"
-                   DISPLAY "ERROR=CLOSE_LOG STATUS=" WS-LOG-STATUS
+                   DISPLAY "エラー=ログCLOSE 状態=" WS-LOG-STATUS
                    MOVE "Y" TO WS-SYSTEM-ERROR
                END-IF
                MOVE "N" TO WS-LOG-OPEN
            END-IF
-           DISPLAY "SUMMARY INPUT=" WS-INPUT-COUNT
-               " ACCEPTED=" WS-ACCEPTED-COUNT
-               " REJECTED=" WS-REJECTED-COUNT
-           DISPLAY "SYSTEM-ERROR=" WS-SYSTEM-ERROR
+           DISPLAY "集計 入力=" WS-INPUT-COUNT
+               " 受理=" WS-ACCEPTED-COUNT
+               " 拒否=" WS-REJECTED-COUNT
+           DISPLAY "システムエラー=" WS-SYSTEM-ERROR
            IF WS-SYSTEM-ERROR = "Y"
                MOVE 1 TO RETURN-CODE
            END-IF
@@ -99,7 +99,7 @@
            IF WS-LOG-STATUS = "00"
                MOVE "Y" TO WS-LOG-OPEN
            ELSE
-               DISPLAY "ERROR=OPEN_LOG STATUS=" WS-LOG-STATUS
+               DISPLAY "エラー=ログOPEN 状態=" WS-LOG-STATUS
                MOVE "Y" TO WS-SYSTEM-ERROR
            END-IF.
       * 業務ファイルを順に開き、状態00の後に開済みにします。
@@ -207,7 +207,7 @@
            WRITE FD-ACCEPTED-RECORD FROM WS-ACCEPTED-WORK
            IF WS-ACCEPTED-STATUS = "00"
                ADD 1 TO WS-ACCEPTED-COUNT
-               DISPLAY "ACCEPTED ACCOUNT=" WS-ACCOUNT
+               DISPLAY "受理口座=" WS-ACCOUNT
                PERFORM 4100-LOG-ACCEPTED
            ELSE
                MOVE "WRITE_ACCEPTED" TO WS-ERROR-OP
@@ -234,7 +234,7 @@
            WRITE FD-REJECTED-RECORD FROM WS-REJECTED-WORK
            IF WS-REJECTED-STATUS = "00"
                ADD 1 TO WS-REJECTED-COUNT
-               DISPLAY "REJECTED ACCOUNT=" WS-ACCOUNT
+               DISPLAY "拒否口座=" WS-ACCOUNT
                    " REASON="
                    FUNCTION TRIM(WS-REJECT-REASON TRAILING)
                PERFORM 5100-LOG-REJECTED
@@ -262,7 +262,7 @@
                MOVE WS-LOG-MESSAGE TO FD-BATCH-LOG-RECORD
                WRITE FD-BATCH-LOG-RECORD
                IF WS-LOG-STATUS NOT = "00"
-                   DISPLAY "ERROR=WRITE_LOG STATUS=" WS-LOG-STATUS
+                   DISPLAY "エラー=ログWRITE 状態=" WS-LOG-STATUS
                    MOVE "Y" TO WS-LOG-FAILED
                    MOVE "Y" TO WS-SYSTEM-ERROR
                END-IF
@@ -270,7 +270,7 @@
       * 操作と状態を報告し、可能ならログにも記録します。
        9300-REPORT-SYSTEM-ERROR.
            MOVE "Y" TO WS-SYSTEM-ERROR
-           DISPLAY "ERROR="
+           DISPLAY "エラー="
                FUNCTION TRIM(WS-ERROR-OP TRAILING)
                " STATUS=" WS-ERROR-STATUS
            IF WS-LOG-OPEN = "Y" AND WS-LOG-FAILED = "N"

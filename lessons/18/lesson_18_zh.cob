@@ -41,7 +41,7 @@
        0000-MAIN.
            OPEN INPUT CUSTOMER-CSV
            IF WS-FILE-STATUS NOT = "00"
-               DISPLAY "OPEN=FAILED STATUS=" WS-FILE-STATUS
+               DISPLAY "文件打开失败 STATUS=" WS-FILE-STATUS
                MOVE 1 TO RETURN-CODE
                STOP RUN
            END-IF
@@ -55,9 +55,9 @@
                END-READ
            END-PERFORM
            CLOSE CUSTOMER-CSV
-           DISPLAY "SUMMARY ROWS=" WS-ROW-COUNT
-               " VALID=" WS-VALID-COUNT
-               " REJECTED=" WS-REJECTED-COUNT
+           DISPLAY "汇总 行数=" WS-ROW-COUNT
+               " 有效=" WS-VALID-COUNT
+               " 拒绝=" WS-REJECTED-COUNT
            STOP RUN.
        1000-PARSE-ROW.
            INITIALIZE WS-FIELDS
@@ -181,20 +181,20 @@
        3000-REPORT-ROW.
            IF WS-CSV-ERROR = SPACES
                ADD 1 TO WS-VALID-COUNT
-               DISPLAY "ROW=" WS-ROW-COUNT " STATUS=OK"
-                   " ID=" FUNCTION TRIM(
+               DISPLAY "行=" WS-ROW-COUNT " 状态=成功"
+                   " 客户编号=" FUNCTION TRIM(
                        WS-FIELD-VALUE(1) TRAILING)
-                   " NAME=[" FUNCTION TRIM(
+                   " 姓名=[" FUNCTION TRIM(
                        WS-FIELD-VALUE(2) TRAILING) "]"
-                   " ACCOUNT=" FUNCTION TRIM(
+                   " 账户号=" FUNCTION TRIM(
                        WS-FIELD-VALUE(3) TRAILING)
-                   " STATE=" FUNCTION TRIM(
+                   " 状态=" FUNCTION TRIM(
                        WS-FIELD-VALUE(4) TRAILING)
-                   " NOTE=[" FUNCTION TRIM(
+                   " 备注=[" FUNCTION TRIM(
                        WS-FIELD-VALUE(5) TRAILING) "]"
            ELSE
                ADD 1 TO WS-REJECTED-COUNT
-               DISPLAY "ROW=" WS-ROW-COUNT
-                   " STATUS=REJECTED REASON="
+               DISPLAY "行=" WS-ROW-COUNT
+                   " 状态=拒绝 原因="
                    FUNCTION TRIM(WS-CSV-ERROR TRAILING)
            END-IF.

@@ -63,37 +63,37 @@
        01 WS-LANGUAGE-CODE PIC A(2) VALUE "EN".
        PROCEDURE DIVISION.
       * The first output lines identify what this catalog demonstrates.
-           DISPLAY "ACCOUNT FIELD DATA TYPES"
+           DISPLAY "Account field data types"
            DISPLAY "Text keys preserve their declared characters:"
-           DISPLAY "ACCOUNT-KEY=" WS-ACCOUNT-KEY
-           DISPLAY "CUSTOMER-NAME=" WS-CUSTOMER-NAME
-           DISPLAY "CUSTOMER-TYPE=" WS-CUSTOMER-TYPE
-           DISPLAY "ACCOUNT-STATUS=" WS-ACCOUNT-STATUS
-           DISPLAY "BRANCH-CODE=" WS-BRANCH-CODE
-           DISPLAY "CURRENCY-CODE=" WS-CURRENCY-CODE
-           DISPLAY "OPEN-DATE-DIGITS=" WS-OPEN-DATE-DIGITS
-           DISPLAY "CUSTOMER-NUMBER=" WS-CUSTOMER-NUMBER
-           DISPLAY "PRODUCT-CODE=" WS-PRODUCT-CODE
+           DISPLAY "Account key=" WS-ACCOUNT-KEY
+           DISPLAY "Customer name=" WS-CUSTOMER-NAME
+           DISPLAY "Customer type=" WS-CUSTOMER-TYPE
+           DISPLAY "Account status=" WS-ACCOUNT-STATUS
+           DISPLAY "Branch code=" WS-BRANCH-CODE
+           DISPLAY "Currency code=" WS-CURRENCY-CODE
+           DISPLAY "Opening date=" WS-OPEN-DATE-DIGITS
+           DISPLAY "Customer number=" WS-CUSTOMER-NUMBER
+           DISPLAY "Product code=" WS-PRODUCT-CODE
       * V uses no storage position; DISPLAY shows its decimal point.
            DISPLAY "Numeric account amounts and rates:"
-           DISPLAY "LEDGER-BALANCE=" WS-LEDGER-BALANCE
-           DISPLAY "AVAILABLE-BALANCE=" WS-AVAILABLE-BALANCE
-           DISPLAY "OVERDRAFT-LIMIT=" WS-OVERDRAFT-LIMIT
-           DISPLAY "LAST-CREDIT=" WS-LAST-CREDIT
-           DISPLAY "LAST-DEBIT=" WS-LAST-DEBIT
-           DISPLAY "INTEREST-RATE=" WS-INTEREST-RATE
-           DISPLAY "FEE-RATE=" WS-FEE-RATE
-           DISPLAY "MONTHLY-TXN-COUNT=" WS-MONTHLY-TXN-COUNT
-           DISPLAY "LAST-BATCH-SEQ=" WS-LAST-BATCH-SEQ
-           DISPLAY "STATEMENT-DAY=" WS-STATEMENT-DAY
+           DISPLAY "Ledger balance=" WS-LEDGER-BALANCE
+           DISPLAY "Available balance=" WS-AVAILABLE-BALANCE
+           DISPLAY "Overdraft limit=" WS-OVERDRAFT-LIMIT
+           DISPLAY "Last credit=" WS-LAST-CREDIT
+           DISPLAY "Last debit=" WS-LAST-DEBIT
+           DISPLAY "Interest rate=" WS-INTEREST-RATE
+           DISPLAY "Fee rate=" WS-FEE-RATE
+           DISPLAY "Monthly transaction count=" WS-MONTHLY-TXN-COUNT
+           DISPLAY "Last batch sequence=" WS-LAST-BATCH-SEQ
+           DISPLAY "Statement day=" WS-STATEMENT-DAY
       * The remaining fields are business codes, not arithmetic values.
            DISPLAY "Other account reference fields:"
-           DISPLAY "POSTAL-CODE=" WS-POSTAL-CODE
-           DISPLAY "COUNTRY-CODE=" WS-COUNTRY-CODE
-           DISPLAY "TRANSFER-REF=" WS-TRANSFER-REF
-           DISPLAY "BATCH-ID=" WS-BATCH-ID
-           DISPLAY "CUSTOMER-INITIAL=" WS-CUSTOMER-INITIAL
-           DISPLAY "LANGUAGE-CODE=" WS-LANGUAGE-CODE
+           DISPLAY "Postal code=" WS-POSTAL-CODE
+           DISPLAY "Country code=" WS-COUNTRY-CODE
+           DISPLAY "Transfer reference=" WS-TRANSFER-REF
+           DISPLAY "Batch ID=" WS-BATCH-ID
+           DISPLAY "Customer initial=" WS-CUSTOMER-INITIAL
+           DISPLAY "Language code=" WS-LANGUAGE-CODE
       * These sample fields are initialized by VALUE at program start.
       * VALUE is not a substitute for validating external input.
       * PIC 9 describes digit positions, not calendar or business rules.

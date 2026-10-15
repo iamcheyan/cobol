@@ -36,10 +36,10 @@
 ## 四、执行顺序逐步解析
 
 1. 程序到达第一个段落 `0000-MAIN`。
-2. `PERFORM 1000-INITIALIZE` 输出 `STAGE=INITIALIZE`，并把期末余额置零；段落结束后返回主流程。
-3. `PERFORM 2000-PROCESS` 输出 `STAGE=PROCESS`，计算 `1000.00 + 125.50 - 40.10`，输出 `0001085.40`；随后返回主流程。
-4. `PERFORM 9000-FINALIZE` 输出 `STAGE=FINALIZE` 和共享字段 `FINAL-BALANCE=0001085.40`，再返回主流程。
-5. 主流程输出 `BATCH=COMPLETE` 并执行 `STOP RUN.`。没有执行流落入后面的段落定义。
+2. `PERFORM 1000-INITIALIZE` 输出 `段階=INITIALIZE`，并把期末余额置零；段落结束后返回主流程。
+3. `PERFORM 2000-PROCESS` 输出 `段階=PROCESS`，计算 `1000.00 + 125.50 - 40.10`，输出 `0001085.40`；随后返回主流程。
+4. `PERFORM 9000-FINALIZE` 输出 `段階=FINALIZE` 和共享字段 `最終残高=0001085.40`，再返回主流程。
+5. 主流程输出 `バッチ=COMPLETE` 并执行 `STOP RUN.`。没有执行流落入后面的段落定义。
 
 句点结束 COBOL 句子和尚未结束的语句作用域。本例在每个被调用段落的最后一条语句放句点；主段落的句点在 `STOP RUN` 后。
 
@@ -58,12 +58,12 @@ cobc -x -Wall -o "$scratch_dir/lesson_07" lesson_07.cob
 GnuCOBOL 3.2.0 实际标准输出：
 
 ```text
-STAGE=INITIALIZE
-STAGE=PROCESS
-CLOSING-BALANCE=0001085.40
-STAGE=FINALIZE
-FINAL-BALANCE=0001085.40
-BATCH=COMPLETE
+段階=INITIALIZE
+段階=PROCESS
+期末残高=0001085.40
+段階=FINALIZE
+最終残高=0001085.40
+バッチ=COMPLETE
 ```
 
 本工作区语法检查、编译和运行返回码均为 0，输出与上面一致。运行时标准错误另有系统警告 `Warning: program compiled against libxml 212 using older 209`；不是 COBOL 程序输出，触发组件尚未定位。

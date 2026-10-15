@@ -28,13 +28,13 @@
            GOBACK.
        1000-REPORT-SUMMARY.
       * 余额不足或未知代码属于业务拒绝，不代表批处理系统故障。
-           DISPLAY "SUMMARY ACCOUNTS=" WS-ACCOUNT-COUNT
-                   " TX=" WS-TRANSACTION-COUNT
-                   " POSTED=" WS-POSTED-COUNT
-                   " REJECTED=" WS-REJECTED-COUNT
-                   " UPDATED=" WS-UPDATED-COUNT
-                   " UNCHANGED=" WS-UNCHANGED-COUNT
-                   " INSERTED=" WS-INSERTED-COUNT.
+           DISPLAY "汇总 账户=" WS-ACCOUNT-COUNT
+                   " 交易=" WS-TRANSACTION-COUNT
+                   " 已过账=" WS-POSTED-COUNT
+                   " 拒绝=" WS-REJECTED-COUNT
+                   " 已更新=" WS-UPDATED-COUNT
+                   " 未变更=" WS-UNCHANGED-COUNT
+                   " 已插入=" WS-INSERTED-COUNT.
        2000-RETURN-STATUS.
       * 只有文件或数据库等系统故障才会使进程返回非零状态。
            IF WS-FAILED = "Y"
@@ -47,7 +47,7 @@
            COMPUTE WS-CHECK-COUNT =
                WS-POSTED-COUNT + WS-REJECTED-COUNT
            IF WS-CHECK-COUNT NOT = WS-TRANSACTION-COUNT
-               DISPLAY "ERROR=TRANSACTION COUNT MISMATCH"
+               DISPLAY "错误=交易数量不匹配"
                MOVE "Y" TO WS-FAILED
            END-IF
       * 同步成功后，每个账户会归为未变化、已更新或已插入之一。
@@ -56,7 +56,7 @@
                    WS-UPDATED-COUNT + WS-UNCHANGED-COUNT
                    + WS-INSERTED-COUNT
                IF WS-CHECK-COUNT NOT = WS-ACCOUNT-COUNT
-                   DISPLAY "ERROR=SYNC COUNT MISMATCH"
+                   DISPLAY "错误=同步数量不匹配"
                    MOVE "Y" TO WS-FAILED
                END-IF
            END-IF.

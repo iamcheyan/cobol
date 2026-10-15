@@ -13,8 +13,8 @@
 语法检查、编译和运行命令与 README 相同。输出中对应结果为：
 
 ```text
-BRANCH-CODE=3107
-CURRENCY-CODE=EUR
+支店コード=3107
+通貨コード=EUR
 CUSTOMER-NUMBER=0000000042
 ```
 

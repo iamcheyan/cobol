@@ -72,9 +72,9 @@
       * 呼び出し側は各呼び出しの前に期待値を設定します。
        8000-DISPLAY-BEFORE.
            MOVE AMOUNT-ARGUMENT TO WS-EDITED-ACTUAL
-           DISPLAY "CALLER=BEFORE MODE="
+           DISPLAY "呼出側=呼出前 方式="
                FUNCTION TRIM(WS-MODE TRAILING)
-               " VALUE=" WS-EDITED-ACTUAL.
+               " 値=" WS-EDITED-ACTUAL.
       * サブプログラムから戻った後、呼出側から見える値を確認します。
       * 別の実際値項目に記録することで、期待値を上書きせず比較できます。
        8100-CHECK-ACTUAL.
@@ -90,20 +90,20 @@
                    WHEN "BY VALUE"
                        ADD 1 TO WS-VALUE-COUNT
                END-EVALUATE
-               DISPLAY "CALLER=AFTER MODE="
+               DISPLAY "呼出側=呼出後 方式="
                    FUNCTION TRIM(WS-MODE TRAILING)
-                   " VALUE=" WS-EDITED-ACTUAL " CHECK=PASS"
+                   " 値=" WS-EDITED-ACTUAL " 確認=合格"
            ELSE
                ADD 1 TO WS-FAIL-COUNT
-               DISPLAY "CALLER=AFTER MODE="
+               DISPLAY "呼出側=呼出後 方式="
                    FUNCTION TRIM(WS-MODE TRAILING)
-                   " VALUE=" WS-EDITED-ACTUAL " CHECK=FAIL"
+                   " 値=" WS-EDITED-ACTUAL " 確認=失敗"
            END-IF.
       * 最終プロセスステータスは呼び出し側の検証結果を反映します。
       * 不一致があれば、プロセスは失敗ステータスを返します。
       * 方法ごとの集計で、呼び出し規約ごとの成否を確認します。
        9000-DISPLAY-SUMMARY.
-           DISPLAY "SUMMARY PASS=" WS-PASS-COUNT
-               " FAIL=" WS-FAIL-COUNT
-           DISPLAY "MODE REFERENCE=" WS-REFERENCE-COUNT
-               " CONTENT=" WS-CONTENT-COUNT " VALUE=" WS-VALUE-COUNT.
+           DISPLAY "集計 合格=" WS-PASS-COUNT
+               " 不合格=" WS-FAIL-COUNT
+           DISPLAY "方式 BY REFERENCE=" WS-REFERENCE-COUNT
+               " BY CONTENT=" WS-CONTENT-COUNT " 値=" WS-VALUE-COUNT.

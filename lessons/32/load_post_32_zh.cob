@@ -84,7 +84,7 @@
            IF WS-ACCOUNT-STATUS = "00"
                MOVE "Y" TO WS-ACCOUNT-OPEN
            ELSE
-               DISPLAY "ERROR=OPEN ACCOUNTS " WS-ACCOUNT-STATUS
+               DISPLAY "错误=打开账户文件 " WS-ACCOUNT-STATUS
                MOVE "Y" TO WS-FAILED
            END-IF
            IF WS-FAILED NOT = "Y"
@@ -92,7 +92,7 @@
                IF WS-TRANSACTION-STATUS = "00"
                    MOVE "Y" TO WS-TRANSACTION-OPEN
                ELSE
-                   DISPLAY "ERROR=OPEN TX " WS-TRANSACTION-STATUS
+                   DISPLAY "错误=交易OPEN " WS-TRANSACTION-STATUS
                    MOVE "Y" TO WS-FAILED
                END-IF
            END-IF
@@ -101,7 +101,7 @@
                IF WS-ACCEPTED-STATUS = "00"
                    MOVE "Y" TO WS-ACCEPTED-OPEN
                ELSE
-                   DISPLAY "ERROR=OPEN ACCEPTED " WS-ACCEPTED-STATUS
+                   DISPLAY "错误=接受OPEN " WS-ACCEPTED-STATUS
                    MOVE "Y" TO WS-FAILED
                END-IF
            END-IF
@@ -110,7 +110,7 @@
                IF WS-REJECTED-STATUS = "00"
                    MOVE "Y" TO WS-REJECTED-OPEN
                ELSE
-                   DISPLAY "ERROR=OPEN REJECTED " WS-REJECTED-STATUS
+                   DISPLAY "错误=拒绝OPEN " WS-REJECTED-STATUS
                    MOVE "Y" TO WS-FAILED
                END-IF
            END-IF
@@ -121,7 +121,7 @@
                    MOVE "EVENT=BATCH_START" TO WS-LOG-LINE
                    PERFORM 8200-WRITE-LOG
                ELSE
-                   DISPLAY "ERROR=OPEN LOG STATUS=" WS-LOG-STATUS
+                   DISPLAY "错误=打开日志 状态=" WS-LOG-STATUS
                    MOVE "Y" TO WS-FAILED
                END-IF
            END-IF.
@@ -135,7 +135,7 @@
                        IF WS-ACCOUNT-STATUS = "00"
                            PERFORM 1110-STORE-ACCOUNT
                        ELSE
-                           DISPLAY "ERR=READ ACCTS " WS-ACCOUNT-STATUS
+                           DISPLAY "账户READ=" WS-ACCOUNT-STATUS
                            MOVE "Y" TO WS-FAILED
                        END-IF
                END-READ
@@ -145,7 +145,7 @@
       *扫描已装载记录，发现重复账号即拒绝本批处理。
        1110-STORE-ACCOUNT.
            IF WS-ACCOUNT-COUNT = 20
-               DISPLAY "ERROR=ACCOUNT CAPACITY EXCEEDED"
+               DISPLAY "错误=账户容量超限"
                MOVE "Y" TO WS-FAILED
            ELSE
                ADD 1 TO WS-ACCOUNT-COUNT
@@ -157,14 +157,14 @@
                    COMPUTE WS-ACCOUNT-BALANCE(WS-ACCOUNT-COUNT) =
                        FUNCTION NUMVAL(ACCOUNT-INPUT(19:9)) / 100
                ELSE
-                   DISPLAY "ERROR=BAD ACCOUNT BALANCE"
+                   DISPLAY "错误=账户余额无效"
                    MOVE "Y" TO WS-FAILED
                END-IF
                PERFORM VARYING WS-SEARCH-INDEX FROM 1 BY 1
                  UNTIL WS-SEARCH-INDEX >= WS-ACCOUNT-COUNT
                    IF WS-ACCOUNT-NO(WS-SEARCH-INDEX) =
                       WS-ACCOUNT-NO(WS-ACCOUNT-COUNT)
-                       DISPLAY "ERROR=DUPLICATE ACCOUNT="
+                       DISPLAY "错误=账户重复="
                                WS-ACCOUNT-NO(WS-ACCOUNT-COUNT)
                        MOVE "Y" TO WS-FAILED
                    END-IF
@@ -180,7 +180,7 @@
                        IF WS-TRANSACTION-STATUS = "00"
                            PERFORM 2100-POST-ONE
                        ELSE
-                           DISPLAY "ERR=READ TX " WS-TRANSACTION-STATUS
+                           DISPLAY "交易READ=" WS-TRANSACTION-STATUS
                            MOVE "Y" TO WS-FAILED
                        END-IF
                END-READ
@@ -250,23 +250,23 @@
            MOVE WS-ACCOUNT-BALANCE(WS-INDEX)
              TO WS-EDITED-BALANCE
            MOVE SPACES TO WS-OUTPUT-LINE
-           STRING "POSTED TX=" WS-TRANSACTION-COUNT
+           STRING "已过账 交易=" WS-TRANSACTION-COUNT
                   " ACCOUNT=" WS-TRANSACTION-ACCOUNT
-                  " TYPE=" WS-TRANSACTION-TYPE
-                  " BALANCE=" WS-EDITED-BALANCE
+                  " 类型=" WS-TRANSACTION-TYPE
+                  " 余额=" WS-EDITED-BALANCE
                INTO WS-OUTPUT-LINE
            END-STRING
            DISPLAY FUNCTION TRIM(WS-OUTPUT-LINE)
            WRITE ACCEPTED-RECORD FROM WS-OUTPUT-LINE
            IF WS-ACCEPTED-STATUS NOT = "00"
-               DISPLAY "ERROR=WRITE ACCEPTED " WS-ACCEPTED-STATUS
+               DISPLAY "错误=写入接受输出 " WS-ACCEPTED-STATUS
                MOVE "Y" TO WS-FAILED
            END-IF.
       *记录交易序号、账号和校验原因，供后续复核。
        2400-WRITE-REJECTED.
            ADD 1 TO WS-REJECTED-COUNT
            MOVE SPACES TO WS-OUTPUT-LINE
-           STRING "REJECTED TX=" WS-TRANSACTION-COUNT
+           STRING "拒绝 交易=" WS-TRANSACTION-COUNT
                   " ACCOUNT=" WS-TRANSACTION-ACCOUNT
                   " REASON=" FUNCTION TRIM(WS-REASON)
                INTO WS-OUTPUT-LINE
@@ -274,7 +274,7 @@
            DISPLAY FUNCTION TRIM(WS-OUTPUT-LINE)
            WRITE REJECTED-RECORD FROM WS-OUTPUT-LINE
            IF WS-REJECTED-STATUS NOT = "00"
-               DISPLAY "ERROR=WRITE REJECTED " WS-REJECTED-STATUS
+               DISPLAY "错误=写入拒绝输出 " WS-REJECTED-STATUS
                MOVE "Y" TO WS-FAILED
            END-IF.
       *只关闭打开标志已设置的文件，并检查每次关闭状态。
@@ -283,7 +283,7 @@
            IF WS-ACCOUNT-OPEN = "Y"
                CLOSE ACCOUNT-FILE
                IF WS-ACCOUNT-STATUS NOT = "00"
-                   DISPLAY "ERROR=CLOSE ACCOUNTS "
+                   DISPLAY "错误=关闭账户文件 "
                            WS-ACCOUNT-STATUS
                    MOVE "Y" TO WS-FAILED
                END-IF
@@ -291,7 +291,7 @@
            IF WS-TRANSACTION-OPEN = "Y"
                CLOSE TRANSACTION-FILE
                IF WS-TRANSACTION-STATUS NOT = "00"
-                   DISPLAY "ERROR=CLOSE TRANSACTIONS "
+                   DISPLAY "错误=关闭交易文件 "
                            WS-TRANSACTION-STATUS
                    MOVE "Y" TO WS-FAILED
                END-IF
@@ -299,7 +299,7 @@
            IF WS-ACCEPTED-OPEN = "Y"
                CLOSE ACCEPTED-FILE
                IF WS-ACCEPTED-STATUS NOT = "00"
-                   DISPLAY "ERROR=CLOSE ACCEPTED "
+                   DISPLAY "错误=关闭接受输出 "
                            WS-ACCEPTED-STATUS
                    MOVE "Y" TO WS-FAILED
                END-IF
@@ -307,7 +307,7 @@
            IF WS-REJECTED-OPEN = "Y"
                CLOSE REJECTED-FILE
                IF WS-REJECTED-STATUS NOT = "00"
-                   DISPLAY "ERROR=CLOSE REJECTED "
+                   DISPLAY "错误=关闭拒绝输出 "
                            WS-REJECTED-STATUS
                    MOVE "Y" TO WS-FAILED
                END-IF
@@ -317,7 +317,7 @@
                PERFORM 8200-WRITE-LOG
                CLOSE LOG-FILE
                IF WS-LOG-STATUS NOT = "00"
-                   DISPLAY "ERROR=CLOSE LOG STATUS=" WS-LOG-STATUS
+                   DISPLAY "错误=关闭日志 状态=" WS-LOG-STATUS
                    MOVE "Y" TO WS-FAILED
                END-IF
            END-IF.
@@ -326,6 +326,6 @@
            MOVE WS-LOG-LINE TO LOG-RECORD
            WRITE LOG-RECORD
            IF WS-LOG-STATUS NOT = "00"
-               DISPLAY "ERROR=WRITE LOG STATUS=" WS-LOG-STATUS
+               DISPLAY "错误=写入日志 状态=" WS-LOG-STATUS
                MOVE "Y" TO WS-FAILED
            END-IF.

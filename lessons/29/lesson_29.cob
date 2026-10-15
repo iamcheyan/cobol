@@ -57,9 +57,9 @@
            END-EXEC
            IF SQLCODE = 0
                MOVE "Y" TO WS-DB-OPEN
-               DISPLAY "CONNECT=OK"
+               DISPLAY "接続=成功"
            ELSE
-               DISPLAY "CONNECT=ERROR SQLSTATE=" SQLSTATE
+               DISPLAY "接続=エラー SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            END-IF.
        2000-LOOKUP-ACCOUNT.
@@ -80,22 +80,22 @@
            EVALUATE SQLCODE
              WHEN 0
                MOVE WS-BALANCE TO WS-EDITED-BALANCE
-               DISPLAY "LOOKUP=" WS-LOOKUP-ACCOUNT
-                       " STATUS=FOUND CUSTOMER=" WS-CUSTOMER
+               DISPLAY "検索=" WS-LOOKUP-ACCOUNT
+                       " 状態=FOUND 顧客=" WS-CUSTOMER
                        " BALANCE=" WS-EDITED-BALANCE
              WHEN 100
-               DISPLAY "LOOKUP=" WS-LOOKUP-ACCOUNT
-                       " STATUS=NOT_FOUND"
+               DISPLAY "検索=" WS-LOOKUP-ACCOUNT
+                       " 状態=NOT_FOUND"
              WHEN OTHER
-               DISPLAY "LOOKUP=ERROR SQLSTATE=" SQLSTATE
+               DISPLAY "検索=エラー SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            END-EVALUATE.
        9000-DISCONNECT-DATABASE.
       * 接続に成功した場合に限り、対応するCONNECT RESETを実行します。
            EXEC SQL CONNECT RESET END-EXEC
            IF SQLCODE = 0
-               DISPLAY "DISCONNECT=OK"
+               DISPLAY "切断=成功"
            ELSE
-               DISPLAY "DISCONNECT=ERROR SQLSTATE=" SQLSTATE
+               DISPLAY "切断=エラー SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            END-IF.

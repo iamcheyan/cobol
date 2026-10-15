@@ -34,32 +34,32 @@
       * 规则限额不带符号，并有两位小数。
        PROCEDURE DIVISION.
       * 选择业务路径前先显示输入值。
-           DISPLAY "TRANSACTION-REFERENCE="
+           DISPLAY "交易参考号="
                WS-TRANSACTION-REFERENCE
-           DISPLAY "ACCOUNT-STATUS=" WS-ACCOUNT-STATUS
-           DISPLAY "TRANSACTION-AMOUNT=" WS-TRANSACTION-AMOUNT
-           DISPLAY "MAXIMUM-AMOUNT=" WS-MAXIMUM-AMOUNT
+           DISPLAY "账户状态=" WS-ACCOUNT-STATUS
+           DISPLAY "交易金额=" WS-TRANSACTION-AMOUNT
+           DISPLAY "金额上限=" WS-MAXIMUM-AMOUNT
       * 第一条规则处理下边界。
       * 条件为假时继续下一条验证规则。
       * 只有之前的规则均通过，才会执行后续嵌套检查。
       * 检查上限前先拒绝零和负数。
       * 此ELSE属于上方的下界条件。
            IF WS-TRANSACTION-AMOUNT <= ZERO
-               DISPLAY "DECISION=REJECTED"
-               DISPLAY "REASON=AMOUNT_NOT_POSITIVE"
+               DISPLAY "决定=REJECTED"
+               DISPLAY "原因=AMOUNT_NOT_POSITIVE"
            ELSE
       * 恰好等于限额的值会通过此比较。
                IF WS-TRANSACTION-AMOUNT > WS-MAXIMUM-AMOUNT
-                   DISPLAY "DECISION=REJECTED"
-                   DISPLAY "REASON=AMOUNT_OVER_LIMIT"
+                   DISPLAY "决定=REJECTED"
+                   DISPLAY "原因=AMOUNT_OVER_LIMIT"
                ELSE
       * 只有处于两个数值边界内的金额才会到达此检查。
                    IF WS-ACCOUNT-STATUS = "A"
-                       DISPLAY "DECISION=ACCEPTED"
-                       DISPLAY "REASON=WITHIN_RULES"
+                       DISPLAY "决定=ACCEPTED"
+                       DISPLAY "原因=WITHIN_RULES"
                    ELSE
-                       DISPLAY "DECISION=REJECTED"
-                       DISPLAY "REASON=ACCOUNT_INACTIVE"
+                       DISPLAY "决定=REJECTED"
+                       DISPLAY "原因=ACCOUNT_INACTIVE"
                    END-IF
                END-IF
            END-IF

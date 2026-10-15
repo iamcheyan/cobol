@@ -66,7 +66,7 @@
            IF WS-REPORT-STATUS = "00"
                MOVE "Y" TO WS-REPORT-OPEN
            ELSE
-               DISPLAY "ERROR=OPEN REPORT STATUS="
+               DISPLAY "エラー=レポートオープン 状態="
                        WS-REPORT-STATUS
                MOVE "Y" TO WS-FAILED
            END-IF
@@ -74,7 +74,7 @@
            IF WS-LOG-STATUS = "00"
                MOVE "Y" TO WS-LOG-OPEN
            ELSE
-               DISPLAY "ERROR=OPEN LOG STATUS=" WS-LOG-STATUS
+               DISPLAY "エラー=ログOPEN 状態=" WS-LOG-STATUS
                MOVE "Y" TO WS-FAILED
            END-IF
            IF WS-FAILED NOT = "Y"
@@ -88,14 +88,14 @@
                PERFORM 8100-WRITE-LOG
                CLOSE LOG-FILE
                IF WS-LOG-STATUS NOT = "00"
-                   DISPLAY "ERROR=CLOSE LOG STATUS=" WS-LOG-STATUS
+                   DISPLAY "エラー=ログCLOSE 状態=" WS-LOG-STATUS
                    MOVE "Y" TO WS-FAILED
                END-IF
            END-IF
            IF WS-REPORT-OPEN = "Y"
                CLOSE REPORT-FILE
                IF WS-REPORT-STATUS NOT = "00"
-                   DISPLAY "ERROR=CLOSE REPORT STATUS="
+                   DISPLAY "エラー=レポートクローズ 状態="
                            WS-REPORT-STATUS
                    MOVE "Y" TO WS-FAILED
                END-IF
@@ -123,11 +123,11 @@
            END-EXEC
            IF SQLCODE = 0
                MOVE "Y" TO WS-DB-OPEN
-               DISPLAY "CONNECT=OK"
+               DISPLAY "接続=成功"
                MOVE "EVENT=DB_CONNECTED" TO WS-LOG-LINE
                PERFORM 8100-WRITE-LOG
            ELSE
-               DISPLAY "CONNECT=ERROR SQLSTATE=" SQLSTATE
+               DISPLAY "接続=エラー SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            END-IF.
       * 口座表を宣言件数まで走査し、全件完了または障害時に終了します。
@@ -162,7 +162,7 @@
              WHEN 100
                PERFORM 2300-INSERT-ACCOUNT
              WHEN OTHER
-               DISPLAY "ERROR=SYNC LOOKUP SQLSTATE=" SQLSTATE
+               DISPLAY "エラー=同期検索 SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            END-EVALUATE
            IF WS-FAILED NOT = "Y"
@@ -181,7 +181,7 @@
                MOVE "UPDATED" TO WS-SYNC-STATUS
                ADD 1 TO WS-UPDATED-COUNT
            ELSE
-               DISPLAY "ERROR=UPDATE SQLSTATE=" SQLSTATE
+               DISPLAY "エラー=更新 SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            END-IF.
       * 口座キーを条件に、顧客IDと計算済み残高を更新します。
@@ -197,7 +197,7 @@
                MOVE "INSERTED" TO WS-SYNC-STATUS
                ADD 1 TO WS-INSERTED-COUNT
            ELSE
-               DISPLAY "ERROR=INSERT SQLSTATE=" SQLSTATE
+               DISPLAY "エラー=挿入 SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            END-IF.
       * 呼出側の計算結果から、DBにない口座行を挿入します。
@@ -214,7 +214,7 @@
            DISPLAY FUNCTION TRIM(WS-OUTPUT-LINE)
            WRITE REPORT-RECORD FROM WS-OUTPUT-LINE
            IF WS-REPORT-STATUS NOT = "00"
-               DISPLAY "ERROR=WRITE REPORT STATUS="
+               DISPLAY "エラー=レポート書込 状態="
                        WS-REPORT-STATUS
                MOVE "Y" TO WS-FAILED
            END-IF
@@ -226,7 +226,7 @@
            MOVE WS-LOG-LINE TO LOG-RECORD
            WRITE LOG-RECORD
            IF WS-LOG-STATUS NOT = "00"
-               DISPLAY "ERROR=WRITE LOG STATUS=" WS-LOG-STATUS
+               DISPLAY "エラー=ログ書込 状態=" WS-LOG-STATUS
                MOVE "Y" TO WS-FAILED
            END-IF.
       * ログ書込みを一か所に集め、全イベントで状態確認を統一します。
@@ -234,9 +234,9 @@
        9000-DISCONNECT.
            EXEC SQL CONNECT RESET END-EXEC
            IF SQLCODE = 0
-               DISPLAY "DISCONNECT=OK"
+               DISPLAY "切断=成功"
            ELSE
-               DISPLAY "DISCONNECT=ERROR SQLSTATE=" SQLSTATE
+               DISPLAY "切断=エラー SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            END-IF
            IF WS-FAILED = "Y"

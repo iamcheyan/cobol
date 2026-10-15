@@ -63,37 +63,37 @@
        01 WS-LANGUAGE-CODE PIC A(2) VALUE "EN".
        PROCEDURE DIVISION.
       * 出力冒頭で、この一覧が示す内容を説明します。
-           DISPLAY "ACCOUNT FIELD DATA TYPES"
-           DISPLAY "Text keys preserve their declared characters:"
-           DISPLAY "ACCOUNT-KEY=" WS-ACCOUNT-KEY
-           DISPLAY "CUSTOMER-NAME=" WS-CUSTOMER-NAME
-           DISPLAY "CUSTOMER-TYPE=" WS-CUSTOMER-TYPE
-           DISPLAY "ACCOUNT-STATUS=" WS-ACCOUNT-STATUS
-           DISPLAY "BRANCH-CODE=" WS-BRANCH-CODE
-           DISPLAY "CURRENCY-CODE=" WS-CURRENCY-CODE
-           DISPLAY "OPEN-DATE-DIGITS=" WS-OPEN-DATE-DIGITS
-           DISPLAY "CUSTOMER-NUMBER=" WS-CUSTOMER-NUMBER
-           DISPLAY "PRODUCT-CODE=" WS-PRODUCT-CODE
+           DISPLAY "口座データ型"
+           DISPLAY "テキストキーは定義文字を保持："
+           DISPLAY "口座キー=" WS-ACCOUNT-KEY
+           DISPLAY "顧客名=" WS-CUSTOMER-NAME
+           DISPLAY "顧客区分=" WS-CUSTOMER-TYPE
+           DISPLAY "口座状態=" WS-ACCOUNT-STATUS
+           DISPLAY "支店コード=" WS-BRANCH-CODE
+           DISPLAY "通貨コード=" WS-CURRENCY-CODE
+           DISPLAY "口座開設日=" WS-OPEN-DATE-DIGITS
+           DISPLAY "顧客番号=" WS-CUSTOMER-NUMBER
+           DISPLAY "商品コード=" WS-PRODUCT-CODE
       * Vは格納桁を使わず、DISPLAYでは小数点が表示されます。
-           DISPLAY "Numeric account amounts and rates:"
-           DISPLAY "LEDGER-BALANCE=" WS-LEDGER-BALANCE
-           DISPLAY "AVAILABLE-BALANCE=" WS-AVAILABLE-BALANCE
-           DISPLAY "OVERDRAFT-LIMIT=" WS-OVERDRAFT-LIMIT
-           DISPLAY "LAST-CREDIT=" WS-LAST-CREDIT
-           DISPLAY "LAST-DEBIT=" WS-LAST-DEBIT
-           DISPLAY "INTEREST-RATE=" WS-INTEREST-RATE
-           DISPLAY "FEE-RATE=" WS-FEE-RATE
-           DISPLAY "MONTHLY-TXN-COUNT=" WS-MONTHLY-TXN-COUNT
-           DISPLAY "LAST-BATCH-SEQ=" WS-LAST-BATCH-SEQ
-           DISPLAY "STATEMENT-DAY=" WS-STATEMENT-DAY
+           DISPLAY "金額と利率（数値）："
+           DISPLAY "帳簿残高=" WS-LEDGER-BALANCE
+           DISPLAY "利用可能残高=" WS-AVAILABLE-BALANCE
+           DISPLAY "当座貸越限度額=" WS-OVERDRAFT-LIMIT
+           DISPLAY "直近入金額=" WS-LAST-CREDIT
+           DISPLAY "直近出金額=" WS-LAST-DEBIT
+           DISPLAY "利率=" WS-INTEREST-RATE
+           DISPLAY "手数料率=" WS-FEE-RATE
+           DISPLAY "月間取引件数=" WS-MONTHLY-TXN-COUNT
+           DISPLAY "最終バッチ番号=" WS-LAST-BATCH-SEQ
+           DISPLAY "明細日=" WS-STATEMENT-DAY
       * 残りの項目は業務コードで、演算値ではありません。
-           DISPLAY "Other account reference fields:"
-           DISPLAY "POSTAL-CODE=" WS-POSTAL-CODE
-           DISPLAY "COUNTRY-CODE=" WS-COUNTRY-CODE
-           DISPLAY "TRANSFER-REF=" WS-TRANSFER-REF
-           DISPLAY "BATCH-ID=" WS-BATCH-ID
-           DISPLAY "CUSTOMER-INITIAL=" WS-CUSTOMER-INITIAL
-           DISPLAY "LANGUAGE-CODE=" WS-LANGUAGE-CODE
+           DISPLAY "その他の口座項目："
+           DISPLAY "郵便番号=" WS-POSTAL-CODE
+           DISPLAY "国コード=" WS-COUNTRY-CODE
+           DISPLAY "振込参照番号=" WS-TRANSFER-REF
+           DISPLAY "バッチID=" WS-BATCH-ID
+           DISPLAY "顧客イニシャル=" WS-CUSTOMER-INITIAL
+           DISPLAY "言語コード=" WS-LANGUAGE-CODE
       * プログラム開始時にVALUE句で各項目を初期化します。
       * VALUE句は外部入力の検証の代わりになりません。
       * PIC 9は数字桁を示し、暦や業務規則は示しません。

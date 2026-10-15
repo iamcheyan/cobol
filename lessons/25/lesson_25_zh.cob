@@ -65,9 +65,9 @@
       * 调用方在每次调用前设置期望值，再将实际值复制到独立字段比较。
        8000-DISPLAY-BEFORE.
            MOVE AMOUNT-ARGUMENT TO WS-EDITED-ACTUAL
-           DISPLAY "CALLER=BEFORE MODE="
+           DISPLAY "调用方=调用前 模式="
                FUNCTION TRIM(WS-MODE TRAILING)
-               " VALUE=" WS-EDITED-ACTUAL.
+               " 数值=" WS-EDITED-ACTUAL.
       * 子程序返回后检查调用方可见的值。
       * 单独的实际值字段可保持调用方数据项不变。
        8100-CHECK-ACTUAL.
@@ -83,20 +83,20 @@
                    WHEN "BY VALUE"
                        ADD 1 TO WS-VALUE-COUNT
                END-EVALUATE
-               DISPLAY "CALLER=AFTER MODE="
+               DISPLAY "调用方=调用后 模式="
                    FUNCTION TRIM(WS-MODE TRAILING)
-                   " VALUE=" WS-EDITED-ACTUAL " CHECK=PASS"
+                   " 数值=" WS-EDITED-ACTUAL " 校验=通过"
            ELSE
                ADD 1 TO WS-FAIL-COUNT
-               DISPLAY "CALLER=AFTER MODE="
+               DISPLAY "调用方=调用后 模式="
                    FUNCTION TRIM(WS-MODE TRAILING)
-                   " VALUE=" WS-EDITED-ACTUAL " CHECK=FAIL"
+                   " 数值=" WS-EDITED-ACTUAL " 校验=失败"
            END-IF.
       * 最终进程状态反映调用方的验证结果。
       * 值不匹配时会报告失败的进程状态。
       * 各模式的汇总可指出哪种调用约定通过了检查。
        9000-DISPLAY-SUMMARY.
-           DISPLAY "SUMMARY PASS=" WS-PASS-COUNT
-               " FAIL=" WS-FAIL-COUNT
-           DISPLAY "MODE REFERENCE=" WS-REFERENCE-COUNT
+           DISPLAY "汇总 通过=" WS-PASS-COUNT
+               " 失败=" WS-FAIL-COUNT
+           DISPLAY "模式 BY REFERENCE=" WS-REFERENCE-COUNT
                " CONTENT=" WS-CONTENT-COUNT " VALUE=" WS-VALUE-COUNT.

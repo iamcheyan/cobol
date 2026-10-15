@@ -50,7 +50,7 @@
                END-IF
                CLOSE BATCH-LOG
                IF WS-LOG-STATUS NOT = "00"
-                   DISPLAY "ERROR=CLOSE_LOG STATUS=" WS-LOG-STATUS
+                   DISPLAY "エラー=ログCLOSE 状態=" WS-LOG-STATUS
                    MOVE "Y" TO WS-IO-ERROR
                END-IF
                MOVE "N" TO WS-LOG-OPEN
@@ -97,9 +97,9 @@
            ADD 1 TO WS-TRANSACTION-NO
            MOVE SPACES TO WS-POST-STATUS
            MOVE WS-TRANSACTION-AMOUNT TO WS-EDITED-AMOUNT
-           DISPLAY "CALL=POST ACCOUNT=" WS-TRANSACTION-ACCOUNT
+           DISPLAY "呼出=過帳 口座=" WS-TRANSACTION-ACCOUNT
                " TYPE=" WS-TRANSACTION-TYPE
-               " AMOUNT=" WS-EDITED-AMOUNT
+               " 金額=" WS-EDITED-AMOUNT
            CALL "POST-TRANSACTION28" USING BY REFERENCE
                WS-ACCOUNT-RECORD
                WS-TRANSACTION-RECORD
@@ -123,7 +123,7 @@
                    MOVE "Y" TO WS-UNKNOWN-STATUS
                    ADD 1 TO WS-REJECTED-COUNT
            END-EVALUATE
-           DISPLAY "CALL=RETURN STATUS="
+           DISPLAY "呼出=戻り 状態="
                FUNCTION TRIM(WS-POST-STATUS TRAILING).
        1050-RUN-TRANSACTIONS.
            PERFORM 1100-POST-DEPOSIT
@@ -147,7 +147,7 @@
                    TO WS-LOG-MESSAGE
                PERFORM 9100-WRITE-LOG
            ELSE
-               DISPLAY "ERROR=OPEN_LOG STATUS=" WS-LOG-STATUS
+               DISPLAY "エラー=ログOPEN 状態=" WS-LOG-STATUS
                MOVE "Y" TO WS-IO-ERROR
            END-IF.
        9100-WRITE-LOG.
@@ -155,7 +155,7 @@
                MOVE WS-LOG-MESSAGE TO FD-BATCH-LOG-RECORD
                WRITE FD-BATCH-LOG-RECORD
                IF WS-LOG-STATUS NOT = "00"
-                   DISPLAY "ERROR=WRITE_LOG STATUS=" WS-LOG-STATUS
+                   DISPLAY "エラー=ログWRITE 状態=" WS-LOG-STATUS
                    MOVE "Y" TO WS-LOG-FAILED
                    MOVE "Y" TO WS-IO-ERROR
                END-IF

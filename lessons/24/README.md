@@ -52,26 +52,26 @@ cobc -x -Wall -o "$scratch_dir/lesson_24" lesson_24.cob amount_check_24.cob
 标准输出：
 
 ```text
-CALLER=START
-CALL=BEGIN AMOUNT=0000125.50
-CALL=RETURN STATUS=VALID
+调用方：开始
+调用前 金额=0000125.50
+调用返回 状态=VALID
 CALL=BEGIN AMOUNT=0000000.00
-CALL=RETURN STATUS=ZERO-AMOUNT
+调用返回 状态=ZERO-AMOUNT
 CALL=BEGIN AMOUNT=0001000.00
-CALL=RETURN STATUS=VALID
+调用返回 状态=VALID
 CALL=BEGIN AMOUNT=0001000.01
-CALL=RETURN STATUS=LIMIT-EXCEEDED
+调用返回 状态=LIMIT-EXCEEDED
 CALL=BEGIN AMOUNT=0000000.01
-CALL=RETURN STATUS=VALID
+调用返回 状态=VALID
 CALL=BEGIN AMOUNT=0000999.99
-CALL=RETURN STATUS=VALID
+调用返回 状态=VALID
 CALL=BEGIN AMOUNT=9999999.99
-CALL=RETURN STATUS=LIMIT-EXCEEDED
+调用返回 状态=LIMIT-EXCEEDED
 CALL=BEGIN AMOUNT=0000500.00
-CALL=RETURN STATUS=VALID
-CALLER=RESUMED
-SUMMARY CHECKED=008 VALID=005 REJECTED=003
-REJECT ZERO=001 OVER_LIMIT=002
+调用返回 状态=VALID
+调用方：子程序返回后继续
+检查总数=008 有效=005 拒绝=003
+零金额拒绝数=001 超限拒绝数=002
 ```
 
 组合语法检查、`-Wall` 编译链接和运行已实际验证。当前环境可能在标准错误中报告 `Warning: program compiled against libxml 212 using older 209`；它不是程序标准输出。
@@ -83,7 +83,7 @@ REJECT ZERO=001 OVER_LIMIT=002
 3. `CALL` 把控制交给 `CHECK-AMOUNT`，并按顺序提供金额与结果字段。
 4. 子程序的 `LK-AMOUNT` 和 `LK-CHECK-RESULT` 是 LINKAGE 项；它们对应调用方提供的两个参数。
 5. `GOBACK` 结束这次子程序执行。调用方随后显示状态，再把结果归入总计和原因计数。
-6. 最后的 `CALLER=RESUMED` 表明主程序在调用返回后继续执行；程序没有被子程序提前结束。
+6. 最后的 `调用方：子程序返回后继续` 表明主程序在调用返回后继续执行；程序没有被子程序提前结束。
 
 ## 六、修改练习（有答案）
 

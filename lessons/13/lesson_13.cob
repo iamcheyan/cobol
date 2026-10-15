@@ -43,29 +43,29 @@
            MOVE 250.75 TO WS-ACCOUNT-BALANCE(4).
       *SEARCH は、インデックス 1 から順に各エントリをチェックします。
        2000-SEQUENTIAL-SEARCH.
-           DISPLAY "SEARCH=SEQUENTIAL KEY=" WS-SEARCH-KEY
+           DISPLAY "検索=SEQUENTIAL キー=" WS-SEARCH-KEY
            SET WS-ACCOUNT-IDX TO 1
            SEARCH WS-ACCOUNT-ENTRY
                AT END
-                   DISPLAY "SEQUENTIAL=NOT_FOUND"
+                   DISPLAY "逐次検索=NOT_FOUND"
                WHEN WS-ACCOUNT-NUMBER(WS-ACCOUNT-IDX)
                    = WS-SEARCH-KEY
-                   DISPLAY "SEQUENTIAL=FOUND ACCOUNT="
+                   DISPLAY "逐次検索=検出 口座="
                        WS-ACCOUNT-NUMBER(WS-ACCOUNT-IDX)
-                       " BALANCE="
+                       "  残高="
                        WS-ACCOUNT-BALANCE(WS-ACCOUNT-IDX)
            END-SEARCH.
       *SEARCH ALL は、宣言されたキー順序に対して二分検索を実行します。
        3000-BINARY-SEARCH.
-           DISPLAY "SEARCH=BINARY KEY=" WS-SEARCH-KEY
+           DISPLAY "検索=BINARY キー=" WS-SEARCH-KEY
            SEARCH ALL WS-ACCOUNT-ENTRY
                AT END
-                   DISPLAY "BINARY=NOT_FOUND"
+                   DISPLAY "二分検索=NOT_FOUND"
                WHEN WS-ACCOUNT-NUMBER(WS-ACCOUNT-IDX)
                    = WS-SEARCH-KEY
-                   DISPLAY "BINARY=FOUND ACCOUNT="
+                   DISPLAY "二分検索=検出 口座="
                        WS-ACCOUNT-NUMBER(WS-ACCOUNT-IDX)
-                       " BALANCE="
+                       "  残高="
                        WS-ACCOUNT-BALANCE(WS-ACCOUNT-IDX)
            END-SEARCH.
       *SEARCH は現在の検索インデックスから開始されるため、最初に 1 に設定します。

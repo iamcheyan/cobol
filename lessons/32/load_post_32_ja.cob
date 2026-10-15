@@ -84,7 +84,7 @@
            IF WS-ACCOUNT-STATUS = "00"
                MOVE "Y" TO WS-ACCOUNT-OPEN
            ELSE
-               DISPLAY "ERROR=OPEN ACCOUNTS " WS-ACCOUNT-STATUS
+               DISPLAY "エラー=口座OPEN " WS-ACCOUNT-STATUS
                MOVE "Y" TO WS-FAILED
            END-IF
            IF WS-FAILED NOT = "Y"
@@ -92,7 +92,7 @@
                IF WS-TRANSACTION-STATUS = "00"
                    MOVE "Y" TO WS-TRANSACTION-OPEN
                ELSE
-                   DISPLAY "ERROR=OPEN TX " WS-TRANSACTION-STATUS
+                   DISPLAY "エラー=取引OPEN " WS-TRANSACTION-STATUS
                    MOVE "Y" TO WS-FAILED
                END-IF
            END-IF
@@ -101,7 +101,7 @@
                IF WS-ACCEPTED-STATUS = "00"
                    MOVE "Y" TO WS-ACCEPTED-OPEN
                ELSE
-                   DISPLAY "ERROR=OPEN ACCEPTED " WS-ACCEPTED-STATUS
+                   DISPLAY "エラー=受理OPEN " WS-ACCEPTED-STATUS
                    MOVE "Y" TO WS-FAILED
                END-IF
            END-IF
@@ -110,7 +110,7 @@
                IF WS-REJECTED-STATUS = "00"
                    MOVE "Y" TO WS-REJECTED-OPEN
                ELSE
-                   DISPLAY "ERROR=OPEN REJECTED " WS-REJECTED-STATUS
+                   DISPLAY "エラー=拒否OPEN " WS-REJECTED-STATUS
                    MOVE "Y" TO WS-FAILED
                END-IF
            END-IF
@@ -121,7 +121,7 @@
                    MOVE "EVENT=BATCH_START" TO WS-LOG-LINE
                    PERFORM 8200-WRITE-LOG
                ELSE
-                   DISPLAY "ERROR=OPEN LOG STATUS=" WS-LOG-STATUS
+                   DISPLAY "エラー=ログOPEN 状態=" WS-LOG-STATUS
                    MOVE "Y" TO WS-FAILED
                END-IF
            END-IF.
@@ -135,7 +135,7 @@
                        IF WS-ACCOUNT-STATUS = "00"
                            PERFORM 1110-STORE-ACCOUNT
                        ELSE
-                           DISPLAY "ERR=READ ACCTS " WS-ACCOUNT-STATUS
+                           DISPLAY "口座READ=" WS-ACCOUNT-STATUS
                            MOVE "Y" TO WS-FAILED
                        END-IF
                END-READ
@@ -145,7 +145,7 @@
       *既存行を検索し、口座番号の重複を検出します。
        1110-STORE-ACCOUNT.
            IF WS-ACCOUNT-COUNT = 20
-               DISPLAY "ERROR=ACCOUNT CAPACITY EXCEEDED"
+               DISPLAY "エラー=口座容量超過"
                MOVE "Y" TO WS-FAILED
            ELSE
                ADD 1 TO WS-ACCOUNT-COUNT
@@ -157,14 +157,14 @@
                    COMPUTE WS-ACCOUNT-BALANCE(WS-ACCOUNT-COUNT) =
                        FUNCTION NUMVAL(ACCOUNT-INPUT(19:9)) / 100
                ELSE
-                   DISPLAY "ERROR=BAD ACCOUNT BALANCE"
+                   DISPLAY "エラー=口座残高不正"
                    MOVE "Y" TO WS-FAILED
                END-IF
                PERFORM VARYING WS-SEARCH-INDEX FROM 1 BY 1
                  UNTIL WS-SEARCH-INDEX >= WS-ACCOUNT-COUNT
                    IF WS-ACCOUNT-NO(WS-SEARCH-INDEX) =
                       WS-ACCOUNT-NO(WS-ACCOUNT-COUNT)
-                       DISPLAY "ERROR=DUPLICATE ACCOUNT="
+                       DISPLAY "エラー=口座重複="
                                WS-ACCOUNT-NO(WS-ACCOUNT-COUNT)
                        MOVE "Y" TO WS-FAILED
                    END-IF
@@ -180,7 +180,7 @@
                        IF WS-TRANSACTION-STATUS = "00"
                            PERFORM 2100-POST-ONE
                        ELSE
-                           DISPLAY "ERR=READ TX " WS-TRANSACTION-STATUS
+                           DISPLAY "取引READ=" WS-TRANSACTION-STATUS
                            MOVE "Y" TO WS-FAILED
                        END-IF
                END-READ
@@ -259,7 +259,7 @@
            DISPLAY FUNCTION TRIM(WS-OUTPUT-LINE)
            WRITE ACCEPTED-RECORD FROM WS-OUTPUT-LINE
            IF WS-ACCEPTED-STATUS NOT = "00"
-               DISPLAY "ERROR=WRITE ACCEPTED " WS-ACCEPTED-STATUS
+               DISPLAY "エラー=受理WRITE " WS-ACCEPTED-STATUS
                MOVE "Y" TO WS-FAILED
            END-IF.
       *取引番号、口座、検証理由を記録して確認可能にします。
@@ -274,7 +274,7 @@
            DISPLAY FUNCTION TRIM(WS-OUTPUT-LINE)
            WRITE REJECTED-RECORD FROM WS-OUTPUT-LINE
            IF WS-REJECTED-STATUS NOT = "00"
-               DISPLAY "ERROR=WRITE REJECTED " WS-REJECTED-STATUS
+               DISPLAY "エラー=拒否WRITE " WS-REJECTED-STATUS
                MOVE "Y" TO WS-FAILED
            END-IF.
       *オープン済みのファイルだけを閉じ、状態を確認します。
@@ -283,7 +283,7 @@
            IF WS-ACCOUNT-OPEN = "Y"
                CLOSE ACCOUNT-FILE
                IF WS-ACCOUNT-STATUS NOT = "00"
-                   DISPLAY "ERROR=CLOSE ACCOUNTS "
+                   DISPLAY "エラー=口座ファイルクローズ "
                            WS-ACCOUNT-STATUS
                    MOVE "Y" TO WS-FAILED
                END-IF
@@ -291,7 +291,7 @@
            IF WS-TRANSACTION-OPEN = "Y"
                CLOSE TRANSACTION-FILE
                IF WS-TRANSACTION-STATUS NOT = "00"
-                   DISPLAY "ERROR=CLOSE TRANSACTIONS "
+                   DISPLAY "エラー=取引ファイルクローズ "
                            WS-TRANSACTION-STATUS
                    MOVE "Y" TO WS-FAILED
                END-IF
@@ -299,7 +299,7 @@
            IF WS-ACCEPTED-OPEN = "Y"
                CLOSE ACCEPTED-FILE
                IF WS-ACCEPTED-STATUS NOT = "00"
-                   DISPLAY "ERROR=CLOSE ACCEPTED "
+                   DISPLAY "エラー=受理出力クローズ "
                            WS-ACCEPTED-STATUS
                    MOVE "Y" TO WS-FAILED
                END-IF
@@ -307,7 +307,7 @@
            IF WS-REJECTED-OPEN = "Y"
                CLOSE REJECTED-FILE
                IF WS-REJECTED-STATUS NOT = "00"
-                   DISPLAY "ERROR=CLOSE REJECTED "
+                   DISPLAY "エラー=拒否出力クローズ "
                            WS-REJECTED-STATUS
                    MOVE "Y" TO WS-FAILED
                END-IF
@@ -317,7 +317,7 @@
                PERFORM 8200-WRITE-LOG
                CLOSE LOG-FILE
                IF WS-LOG-STATUS NOT = "00"
-                   DISPLAY "ERROR=CLOSE LOG STATUS=" WS-LOG-STATUS
+                   DISPLAY "エラー=ログCLOSE 状態=" WS-LOG-STATUS
                    MOVE "Y" TO WS-FAILED
                END-IF
            END-IF.
@@ -326,6 +326,6 @@
            MOVE WS-LOG-LINE TO LOG-RECORD
            WRITE LOG-RECORD
            IF WS-LOG-STATUS NOT = "00"
-               DISPLAY "ERROR=WRITE LOG STATUS=" WS-LOG-STATUS
+               DISPLAY "エラー=ログ書込 状態=" WS-LOG-STATUS
                MOVE "Y" TO WS-FAILED
            END-IF.

@@ -18,6 +18,6 @@
            MOVE 20.00 TO WS-ACCOUNT-BALANCE.
        2000-DISPLAY-REPORT-ROW.
            MOVE WS-ACCOUNT-BALANCE TO WS-REPORT-BALANCE
-           DISPLAY "ACCOUNT-REPORT NUMBER=" WS-ACCOUNT-NUMBER
-               " CUSTOMER=" WS-CUSTOMER-ID
-               " BALANCE=" WS-REPORT-BALANCE.
+           DISPLAY "口座レポート 口座番号=" WS-ACCOUNT-NUMBER
+               " 顧客番号=" WS-CUSTOMER-ID
+               " 残高=" WS-REPORT-BALANCE.

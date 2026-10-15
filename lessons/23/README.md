@@ -60,19 +60,19 @@ cobc -x -Wall -I copybooks -o "$scratch_dir/account_report_23" account_report_23
 `lesson_23` 标准输出：
 
 ```text
-RESULT=POSTED TYPE=D AMOUNT=0000125.50
-RESULT=POSTED TYPE=C AMOUNT=0000025.25
-RESULT=REJECTED STATUS=INSUFFICIENT
-RESULT=REJECTED STATUS=BAD_TYPE
-RESULT=REJECTED STATUS=NO_ACCOUNT
-ACCOUNT=A000000001 CUSTOMER=C0001001 BALANCE=0001100.25
-SUMMARY POSTED=002 REJECTED=003
+入账成功 类型=D 金额=0000125.50
+入账成功 类型=C 金额=0000025.25
+入账拒绝 原因=INSUFFICIENT
+入账拒绝 原因=BAD_TYPE
+入账拒绝 原因=NO_ACCOUNT
+账户号码=A000000001 客户号码=C0001001 余额=0001100.25
+成功笔数=002 拒绝笔数=003
 ```
 
 `account_report_23` 标准输出：
 
 ```text
-ACCOUNT-REPORT NUMBER=A000000009 CUSTOMER=C0001009 BALANCE=0000020.00
+口座レポート NUMBER=A000000009 CUSTOMER=C0001009 BALANCE=0000020.00
 ```
 
 两份程序都已用指定 `-I copybooks` 的语法检查、`-Wall` 编译并运行验证。编译时本机可能在标准错误输出 `Warning: program compiled against libxml 212 using older 209`；这不是程序标准输出。

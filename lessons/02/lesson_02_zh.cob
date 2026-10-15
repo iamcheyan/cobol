@@ -63,37 +63,37 @@
        01 WS-LANGUAGE-CODE PIC A(2) VALUE "EN".
        PROCEDURE DIVISION.
       * 输出开头说明本目录示例的内容。
-           DISPLAY "ACCOUNT FIELD DATA TYPES"
-           DISPLAY "Text keys preserve their declared characters:"
-           DISPLAY "ACCOUNT-KEY=" WS-ACCOUNT-KEY
-           DISPLAY "CUSTOMER-NAME=" WS-CUSTOMER-NAME
-           DISPLAY "CUSTOMER-TYPE=" WS-CUSTOMER-TYPE
-           DISPLAY "ACCOUNT-STATUS=" WS-ACCOUNT-STATUS
-           DISPLAY "BRANCH-CODE=" WS-BRANCH-CODE
-           DISPLAY "CURRENCY-CODE=" WS-CURRENCY-CODE
-           DISPLAY "OPEN-DATE-DIGITS=" WS-OPEN-DATE-DIGITS
-           DISPLAY "CUSTOMER-NUMBER=" WS-CUSTOMER-NUMBER
-           DISPLAY "PRODUCT-CODE=" WS-PRODUCT-CODE
+           DISPLAY "账户字段类型"
+           DISPLAY "文本键保留定义的字符："
+           DISPLAY "账户键=" WS-ACCOUNT-KEY
+           DISPLAY "客户姓名=" WS-CUSTOMER-NAME
+           DISPLAY "客户类别=" WS-CUSTOMER-TYPE
+           DISPLAY "账户状态=" WS-ACCOUNT-STATUS
+           DISPLAY "分行代码=" WS-BRANCH-CODE
+           DISPLAY "币种代码=" WS-CURRENCY-CODE
+           DISPLAY "开户日期=" WS-OPEN-DATE-DIGITS
+           DISPLAY "客户编号=" WS-CUSTOMER-NUMBER
+           DISPLAY "产品代码=" WS-PRODUCT-CODE
       * V不占存储位；DISPLAY会显示小数点。
-           DISPLAY "Numeric account amounts and rates:"
-           DISPLAY "LEDGER-BALANCE=" WS-LEDGER-BALANCE
-           DISPLAY "AVAILABLE-BALANCE=" WS-AVAILABLE-BALANCE
-           DISPLAY "OVERDRAFT-LIMIT=" WS-OVERDRAFT-LIMIT
-           DISPLAY "LAST-CREDIT=" WS-LAST-CREDIT
-           DISPLAY "LAST-DEBIT=" WS-LAST-DEBIT
-           DISPLAY "INTEREST-RATE=" WS-INTEREST-RATE
-           DISPLAY "FEE-RATE=" WS-FEE-RATE
-           DISPLAY "MONTHLY-TXN-COUNT=" WS-MONTHLY-TXN-COUNT
-           DISPLAY "LAST-BATCH-SEQ=" WS-LAST-BATCH-SEQ
-           DISPLAY "STATEMENT-DAY=" WS-STATEMENT-DAY
+           DISPLAY "金额与利率（数值）："
+           DISPLAY "账面余额=" WS-LEDGER-BALANCE
+           DISPLAY "可用余额=" WS-AVAILABLE-BALANCE
+           DISPLAY "透支额度=" WS-OVERDRAFT-LIMIT
+           DISPLAY "最近存款金额=" WS-LAST-CREDIT
+           DISPLAY "最近取款金额=" WS-LAST-DEBIT
+           DISPLAY "利率=" WS-INTEREST-RATE
+           DISPLAY "手续费率=" WS-FEE-RATE
+           DISPLAY "月交易笔数=" WS-MONTHLY-TXN-COUNT
+           DISPLAY "最后批次序号=" WS-LAST-BATCH-SEQ
+           DISPLAY "账单日=" WS-STATEMENT-DAY
       * 其余字段是业务代码，不用于算术运算。
-           DISPLAY "Other account reference fields:"
-           DISPLAY "POSTAL-CODE=" WS-POSTAL-CODE
-           DISPLAY "COUNTRY-CODE=" WS-COUNTRY-CODE
-           DISPLAY "TRANSFER-REF=" WS-TRANSFER-REF
-           DISPLAY "BATCH-ID=" WS-BATCH-ID
-           DISPLAY "CUSTOMER-INITIAL=" WS-CUSTOMER-INITIAL
-           DISPLAY "LANGUAGE-CODE=" WS-LANGUAGE-CODE
+           DISPLAY "其他账户参考字段："
+           DISPLAY "邮政编码=" WS-POSTAL-CODE
+           DISPLAY "国家代码=" WS-COUNTRY-CODE
+           DISPLAY "转账参考号=" WS-TRANSFER-REF
+           DISPLAY "批次编号=" WS-BATCH-ID
+           DISPLAY "客户首字母=" WS-CUSTOMER-INITIAL
+           DISPLAY "语言代码=" WS-LANGUAGE-CODE
       * 程序启动时，VALUE会初始化这些示例字段。
       * VALUE不能替代对外部输入的验证。
       * PIC 9描述数字位，不描述日历或业务规则。

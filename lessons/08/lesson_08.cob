@@ -39,8 +39,8 @@
            MOVE ZERO TO WS-PROCESSED-COUNT
            MOVE ZERO TO WS-ACCEPTED-COUNT
            MOVE ZERO TO WS-REJECTED-COUNT
-           DISPLAY "BATCH=START"
-           DISPLAY "OPENING-BALANCE=" WS-OPENING-BALANCE.
+           DISPLAY "バッチ=START"
+           DISPLAY "期首残高=" WS-OPENING-BALANCE.
       * 各固定レコードをサンプル番号を使用して順番に処理します。
        2000-PROCESS-BATCH.
            PERFORM VARYING WS-SAMPLE-INDEX FROM 1 BY 1
@@ -72,9 +72,9 @@
                    MOVE "X" TO WS-TRANSACTION-CODE
                    MOVE ZERO TO WS-TRANSACTION-AMOUNT
            END-EVALUATE
-           DISPLAY "RECORD=" WS-SAMPLE-INDEX
-               " CODE=" WS-TRANSACTION-CODE
-               " AMOUNT=" WS-TRANSACTION-AMOUNT.
+           DISPLAY "レコード=" WS-SAMPLE-INDEX
+               " 符号=" WS-TRANSACTION-CODE
+               " 金額=" WS-TRANSACTION-AMOUNT.
       * 現在の記録を分類し、承認された金額のみを適用します。
        2200-CLASSIFY-AND-POST.
            EVALUATE WS-TRANSACTION-CODE
@@ -85,12 +85,12 @@
                                + WS-TRANSACTION-AMOUNT
                        COMPUTE WS-ACCEPTED-COUNT =
                            WS-ACCEPTED-COUNT + 1
-                       DISPLAY "RESULT=ACCEPTED REASON=DEPOSIT"
+                       DISPLAY "結果=ACCEPTED 理由=DEPOSIT"
                    ELSE
                        COMPUTE WS-REJECTED-COUNT =
                            WS-REJECTED-COUNT + 1
-                       DISPLAY "RESULT=REJECTED"
-                           " REASON=AMOUNT_NOT_POSITIVE"
+                       DISPLAY "結果=REJECTED"
+                           " 理由=AMOUNT_NOT_POSITIVE"
                    END-IF
                WHEN "W"
                    IF WS-TRANSACTION-AMOUNT > ZERO
@@ -101,32 +101,32 @@
                                    - WS-TRANSACTION-AMOUNT
                            COMPUTE WS-ACCEPTED-COUNT =
                                WS-ACCEPTED-COUNT + 1
-                           DISPLAY "RESULT=ACCEPTED"
-                               " REASON=WITHDRAWAL"
+                           DISPLAY "結果=ACCEPTED"
+                               " 理由=WITHDRAWAL"
                        ELSE
                            COMPUTE WS-REJECTED-COUNT =
                                WS-REJECTED-COUNT + 1
-                           DISPLAY "RESULT=REJECTED"
-                               " REASON=INSUFFICIENT_FUNDS"
+                           DISPLAY "結果=REJECTED"
+                               " 理由=INSUFFICIENT_FUNDS"
                        END-IF
                    ELSE
                        COMPUTE WS-REJECTED-COUNT =
                            WS-REJECTED-COUNT + 1
-                       DISPLAY "RESULT=REJECTED"
-                           " REASON=AMOUNT_NOT_POSITIVE"
+                       DISPLAY "結果=REJECTED"
+                           " 理由=AMOUNT_NOT_POSITIVE"
                    END-IF
                WHEN OTHER
                    COMPUTE WS-REJECTED-COUNT =
                        WS-REJECTED-COUNT + 1
-                   DISPLAY "RESULT=REJECTED"
-                       " REASON=UNKNOWN_TRANSACTION_CODE"
+                   DISPLAY "結果=REJECTED"
+                       " 理由=UNKNOWN_TRANSACTION_CODE"
            END-EVALUATE.
       * 完全なサンプルバッチ後の合計と残高を報告します。
        9000-REPORT.
-           DISPLAY "PROCESSED=" WS-PROCESSED-COUNT
-           DISPLAY "ACCEPTED=" WS-ACCEPTED-COUNT
-           DISPLAY "REJECTED=" WS-REJECTED-COUNT
-           DISPLAY "FINAL-BALANCE=" WS-CURRENT-BALANCE.
+           DISPLAY "処理件数=" WS-PROCESSED-COUNT
+           DISPLAY "承認件数=" WS-ACCEPTED-COUNT
+           DISPLAY "拒否件数=" WS-REJECTED-COUNT
+           DISPLAY "最終残高=" WS-CURRENT-BALANCE.
       * メイン段落は、プログラムの唯一のエントリ シーケンスです。
       * 各 PERFORM は、段落呼び出しの後にステートメントに戻ります。
       * プロセス段落では、レコードの反復に PERFORM VARYING を使用します。

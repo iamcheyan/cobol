@@ -66,7 +66,7 @@
            IF WS-REPORT-STATUS = "00"
                MOVE "Y" TO WS-REPORT-OPEN
            ELSE
-               DISPLAY "ERROR=OPEN REPORT STATUS="
+               DISPLAY "错误=打开报告 状态="
                        WS-REPORT-STATUS
                MOVE "Y" TO WS-FAILED
            END-IF
@@ -74,7 +74,7 @@
            IF WS-LOG-STATUS = "00"
                MOVE "Y" TO WS-LOG-OPEN
            ELSE
-               DISPLAY "ERROR=OPEN LOG STATUS=" WS-LOG-STATUS
+               DISPLAY "错误=打开日志 状态=" WS-LOG-STATUS
                MOVE "Y" TO WS-FAILED
            END-IF
            IF WS-FAILED NOT = "Y"
@@ -88,14 +88,14 @@
                PERFORM 8100-WRITE-LOG
                CLOSE LOG-FILE
                IF WS-LOG-STATUS NOT = "00"
-                   DISPLAY "ERROR=CLOSE LOG STATUS=" WS-LOG-STATUS
+                   DISPLAY "错误=关闭日志 状态=" WS-LOG-STATUS
                    MOVE "Y" TO WS-FAILED
                END-IF
            END-IF
            IF WS-REPORT-OPEN = "Y"
                CLOSE REPORT-FILE
                IF WS-REPORT-STATUS NOT = "00"
-                   DISPLAY "ERROR=CLOSE REPORT STATUS="
+                   DISPLAY "错误=关闭报告 状态="
                            WS-REPORT-STATUS
                    MOVE "Y" TO WS-FAILED
                END-IF
@@ -123,11 +123,11 @@
            END-EXEC
            IF SQLCODE = 0
                MOVE "Y" TO WS-DB-OPEN
-               DISPLAY "CONNECT=OK"
+               DISPLAY "连接=成功"
                MOVE "EVENT=DB_CONNECTED" TO WS-LOG-LINE
                PERFORM 8100-WRITE-LOG
            ELSE
-               DISPLAY "CONNECT=ERROR SQLSTATE=" SQLSTATE
+               DISPLAY "连接=错误 SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            END-IF.
       * 扫描声明的账户行数，完成或发生故障时停止。
@@ -162,7 +162,7 @@
              WHEN 100
                PERFORM 2300-INSERT-ACCOUNT
              WHEN OTHER
-               DISPLAY "ERROR=SYNC LOOKUP SQLSTATE=" SQLSTATE
+               DISPLAY "错误=同步查询 SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            END-EVALUATE
            IF WS-FAILED NOT = "Y"
@@ -181,7 +181,7 @@
                MOVE "UPDATED" TO WS-SYNC-STATUS
                ADD 1 TO WS-UPDATED-COUNT
            ELSE
-               DISPLAY "ERROR=UPDATE SQLSTATE=" SQLSTATE
+               DISPLAY "错误=更新 SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            END-IF.
       * 按账户键更新客户标识和计算后的余额。
@@ -197,7 +197,7 @@
                MOVE "INSERTED" TO WS-SYNC-STATUS
                ADD 1 TO WS-INSERTED-COUNT
            ELSE
-               DISPLAY "ERROR=INSERT SQLSTATE=" SQLSTATE
+               DISPLAY "错误=插入 SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            END-IF.
       * 从调用方计算出的账户值插入缺失的快照记录。
@@ -206,15 +206,15 @@
            MOVE WS-ACCOUNT-BALANCE(WS-INDEX)
              TO WS-EDITED-BALANCE
            MOVE SPACES TO WS-OUTPUT-LINE
-           STRING "SYNC " FUNCTION TRIM(WS-SYNC-STATUS)
+           STRING "同步 " FUNCTION TRIM(WS-SYNC-STATUS)
                   " ACCOUNT=" WS-ACCOUNT-NO(WS-INDEX)
-                  " BALANCE=" WS-EDITED-BALANCE
+                  " 余额=" WS-EDITED-BALANCE
                INTO WS-OUTPUT-LINE
            END-STRING
            DISPLAY FUNCTION TRIM(WS-OUTPUT-LINE)
            WRITE REPORT-RECORD FROM WS-OUTPUT-LINE
            IF WS-REPORT-STATUS NOT = "00"
-               DISPLAY "ERROR=WRITE REPORT STATUS="
+               DISPLAY "错误=写入报告 状态="
                        WS-REPORT-STATUS
                MOVE "Y" TO WS-FAILED
            END-IF
@@ -226,7 +226,7 @@
            MOVE WS-LOG-LINE TO LOG-RECORD
            WRITE LOG-RECORD
            IF WS-LOG-STATUS NOT = "00"
-               DISPLAY "ERROR=WRITE LOG STATUS=" WS-LOG-STATUS
+               DISPLAY "错误=写入日志 状态=" WS-LOG-STATUS
                MOVE "Y" TO WS-FAILED
            END-IF.
       * 集中写日志，让每个事件共用同一状态检查。
@@ -234,9 +234,9 @@
        9000-DISCONNECT.
            EXEC SQL CONNECT RESET END-EXEC
            IF SQLCODE = 0
-               DISPLAY "DISCONNECT=OK"
+               DISPLAY "断开=成功"
            ELSE
-               DISPLAY "DISCONNECT=ERROR SQLSTATE=" SQLSTATE
+               DISPLAY "断开=错误 SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            END-IF
            IF WS-FAILED = "Y"

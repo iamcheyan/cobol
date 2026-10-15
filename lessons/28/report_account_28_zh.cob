@@ -11,9 +11,9 @@
            WS-ACCOUNT-RECORD WS-BATCH-COUNTS.
        0000-REPORT-ACCOUNT.
            MOVE WS-ACCOUNT-BALANCE TO WS-EDITED-BALANCE
-           DISPLAY "ACCOUNT=" WS-ACCOUNT-NUMBER
-               " CUSTOMER=" WS-CUSTOMER-ID
-               " BALANCE=" WS-EDITED-BALANCE
-           DISPLAY "SUMMARY POSTED=" WS-POSTED-COUNT
-               " REJECTED=" WS-REJECTED-COUNT
+           DISPLAY "账户=" WS-ACCOUNT-NUMBER
+               " 客户=" WS-CUSTOMER-ID
+               " 余额=" WS-EDITED-BALANCE
+           DISPLAY "汇总 已过账=" WS-POSTED-COUNT
+               " 拒绝=" WS-REJECTED-COUNT
            GOBACK.

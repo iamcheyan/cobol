@@ -73,14 +73,14 @@
                INPUT PROCEDURE 1000-LOAD-TRANSACTIONS
                OUTPUT PROCEDURE 2000-RECONCILE-TRANSACTIONS.
            IF SORT-RETURN NOT = ZERO
-               DISPLAY "SORT=FAILED STATUS=" SORT-RETURN
+               DISPLAY "排序失败 STATUS=" SORT-RETURN
                MOVE "Y" TO WS-IO-ERROR
            END-IF
-           DISPLAY "SUMMARY INPUT=" WS-INPUT-COUNT
-               " SORTED=" WS-SORTED-COUNT
-           DISPLAY "ACCEPTED=" WS-ACCEPTED-COUNT
-           DISPLAY "REJECTED=" WS-REJECTED-COUNT
-               " MASTER_ONLY=" WS-MASTER-ONLY-COUNT
+           DISPLAY "汇总 输入记录数=" WS-INPUT-COUNT
+               " 排序记录数=" WS-SORTED-COUNT
+           DISPLAY "接受记录数=" WS-ACCEPTED-COUNT
+           DISPLAY "拒绝记录数=" WS-REJECTED-COUNT
+               " 仅主档记录数=" WS-MASTER-ONLY-COUNT
            IF WS-IO-ERROR = "Y"
                MOVE 1 TO RETURN-CODE
            END-IF
@@ -88,7 +88,7 @@
        1000-LOAD-TRANSACTIONS.
            OPEN INPUT TRANSACTION-INPUT
            IF WS-INPUT-STATUS NOT = "00"
-               DISPLAY "OPEN=TXN STATUS=" WS-INPUT-STATUS
+               DISPLAY "交易文件打开状态=" WS-INPUT-STATUS
                MOVE "Y" TO WS-IO-ERROR
            ELSE
                PERFORM UNTIL WS-INPUT-EOF = "Y"
@@ -97,7 +97,7 @@
                END-PERFORM
                CLOSE TRANSACTION-INPUT
                IF WS-INPUT-STATUS NOT = "00"
-                   DISPLAY "CLOSE=TXN STATUS=" WS-INPUT-STATUS
+                   DISPLAY "交易文件关闭状态=" WS-INPUT-STATUS
                    MOVE "Y" TO WS-IO-ERROR
                END-IF
            END-IF.
@@ -111,14 +111,14 @@
                    END-IF
            END-READ
            IF WS-INPUT-STATUS NOT = "00" AND WS-INPUT-STATUS NOT = "10"
-               DISPLAY "READ=TXN STATUS=" WS-INPUT-STATUS
+               DISPLAY "交易文件读取状态=" WS-INPUT-STATUS
                MOVE "Y" TO WS-IO-ERROR
            END-IF.
        1110-VALIDATE-TRANSACTION-WIDTH.
            COMPUTE WS-INPUT-LENGTH = FUNCTION LENGTH(
                FUNCTION TRIM(FD-TRANSACTION-RAW TRAILING))
            IF WS-INPUT-LENGTH NOT = 20
-               DISPLAY "TRANSACTION=REJECTED REASON=BAD_WIDTH"
+               DISPLAY "交易被拒绝 原因=BAD_WIDTH"
                MOVE "Y" TO WS-IO-ERROR
            ELSE
                MOVE FD-TRANSACTION-RAW(1:20) TO SD-TRANSACTION-RECORD
@@ -126,7 +126,7 @@
                IF SORT-RETURN = ZERO
                    ADD 1 TO WS-INPUT-COUNT
                ELSE
-                   DISPLAY "RELEASE=FAILED STATUS=" SORT-RETURN
+                   DISPLAY "排序释放失败 STATUS=" SORT-RETURN
                    MOVE "Y" TO WS-IO-ERROR
                END-IF
            END-IF.
@@ -153,7 +153,7 @@
            IF WS-M-STATUS = "00"
                MOVE "Y" TO WS-MASTER-OPEN
            ELSE
-               DISPLAY "OPEN=MASTER STATUS=" WS-M-STATUS
+               DISPLAY "主档打开失败 STATUS=" WS-M-STATUS
                MOVE "Y" TO WS-IO-ERROR
            END-IF
            IF WS-IO-ERROR = "N"
@@ -161,7 +161,7 @@
                IF WS-ACCEPTED-STATUS = "00"
                    MOVE "Y" TO WS-ACCEPTED-OPEN
                ELSE
-                   DISPLAY "OPEN=ACCEPTED STATUS=" WS-ACCEPTED-STATUS
+                   DISPLAY "接受OPEN STATUS=" WS-ACCEPTED-STATUS
                    MOVE "Y" TO WS-IO-ERROR
                END-IF
            END-IF
@@ -170,7 +170,7 @@
                IF WS-REJECTED-STATUS = "00"
                    MOVE "Y" TO WS-REJECTED-OPEN
                ELSE
-                   DISPLAY "OPEN=REJECTED STATUS=" WS-REJECTED-STATUS
+                   DISPLAY "拒绝OPEN STATUS=" WS-REJECTED-STATUS
                    MOVE "Y" TO WS-IO-ERROR
                END-IF
            END-IF.
@@ -183,7 +183,7 @@
                        ADD 1 TO WS-SORTED-COUNT
                        PERFORM 4100-MATCH-TRANSACTION
                    ELSE
-                       DISPLAY "RETURN=FAILED STATUS=" SORT-RETURN
+                       DISPLAY "排序返回失败 STATUS=" SORT-RETURN
                        MOVE "Y" TO WS-IO-ERROR
                    END-IF
            END-RETURN.
@@ -229,10 +229,10 @@
            WRITE FD-REJECTED-RECORD FROM WS-REJECTED-RECORD
            IF WS-REJECTED-STATUS = "00"
                ADD 1 TO WS-REJECTED-COUNT
-               DISPLAY "REJECTED ACCOUNT=" SD-TRANSACTION-ACCOUNT
-                   " REASON=" WS-REJECT-REASON
+               DISPLAY "已拒绝 账户号=" SD-TRANSACTION-ACCOUNT
+                   " 原因=" WS-REJECT-REASON
            ELSE
-               DISPLAY "WRITE=REJECT STATUS=" WS-REJECTED-STATUS
+               DISPLAY "拒绝写入 STATUS=" WS-REJECTED-STATUS
                MOVE "Y" TO WS-IO-ERROR
            END-IF.
        6200-WRITE-ACCEPTED.
@@ -243,9 +243,9 @@
            WRITE FD-ACCEPTED-RECORD FROM WS-ACCEPTED-RECORD
            IF WS-ACCEPTED-STATUS = "00"
                ADD 1 TO WS-ACCEPTED-COUNT
-               DISPLAY "ACCEPTED ACCOUNT=" SD-TRANSACTION-ACCOUNT
+               DISPLAY "已接受 账户号=" SD-TRANSACTION-ACCOUNT
            ELSE
-               DISPLAY "WRITE=ACCEPT STATUS=" WS-ACCEPTED-STATUS
+               DISPLAY "接受写入 STATUS=" WS-ACCEPTED-STATUS
                MOVE "Y" TO WS-IO-ERROR
            END-IF.
        3000-READ-MASTER.
@@ -258,33 +258,33 @@
                    END-IF
            END-READ
            IF WS-M-STATUS NOT = "00" AND WS-M-STATUS NOT = "10"
-               DISPLAY "READ=MASTER STATUS=" WS-M-STATUS
+               DISPLAY "主档读取失败 STATUS=" WS-M-STATUS
                MOVE "Y" TO WS-IO-ERROR
            END-IF.
        3100-VALIDATE-MASTER.
            COMPUTE WS-MASTER-LENGTH = FUNCTION LENGTH(
                FUNCTION TRIM(FD-MASTER-RAW TRAILING))
            IF WS-MASTER-LENGTH NOT = 27
-               DISPLAY "MASTER=FAILED REASON=BAD_WIDTH"
+               DISPLAY "MASTER=FAILED 原因=BAD_WIDTH"
                MOVE "Y" TO WS-IO-ERROR
            ELSE
                MOVE FD-MASTER-RAW(1:10) TO WS-MASTER-ACCOUNT
                MOVE FD-MASTER-RAW(11:8) TO WS-MASTER-CUSTOMER
                MOVE FD-MASTER-RAW(19:9) TO WS-MASTER-BALANCE
                IF WS-MASTER-BALANCE IS NOT NUMERIC
-                   DISPLAY "MASTER=FAILED REASON=BAD_BALANCE"
+                   DISPLAY "MASTER=FAILED 原因=BAD_BALANCE"
                    MOVE "Y" TO WS-IO-ERROR
                END-IF
            END-IF.
        5000-REPORT-MASTER-ONLY.
            ADD 1 TO WS-MASTER-ONLY-COUNT
-           DISPLAY "MASTER_ONLY ACCOUNT=" WS-MASTER-ACCOUNT
+           DISPLAY "仅主档 账户号=" WS-MASTER-ACCOUNT
            PERFORM 3000-READ-MASTER.
        9000-CLOSE-OUTPUTS.
            IF WS-MASTER-OPEN = "Y"
                CLOSE ACCOUNT-MASTER
                IF WS-M-STATUS NOT = "00"
-                   DISPLAY "CLOSE=MASTER STATUS=" WS-M-STATUS
+                   DISPLAY "主档关闭失败 STATUS=" WS-M-STATUS
                    MOVE "Y" TO WS-IO-ERROR
                END-IF
                MOVE "N" TO WS-MASTER-OPEN
@@ -292,7 +292,7 @@
            IF WS-ACCEPTED-OPEN = "Y"
                CLOSE ACCEPTED-FILE
                IF WS-ACCEPTED-STATUS NOT = "00"
-                   DISPLAY "CLOSE=ACCEPTED STATUS=" WS-ACCEPTED-STATUS
+                   DISPLAY "接受CLOSE STATUS=" WS-ACCEPTED-STATUS
                    MOVE "Y" TO WS-IO-ERROR
                END-IF
                MOVE "N" TO WS-ACCEPTED-OPEN
@@ -300,7 +300,7 @@
            IF WS-REJECTED-OPEN = "Y"
                CLOSE REJECTED-FILE
                IF WS-REJECTED-STATUS NOT = "00"
-                   DISPLAY "CLOSE=REJECTED STATUS=" WS-REJECTED-STATUS
+                   DISPLAY "拒绝CLOSE STATUS=" WS-REJECTED-STATUS
                    MOVE "Y" TO WS-IO-ERROR
                END-IF
                MOVE "N" TO WS-REJECTED-OPEN

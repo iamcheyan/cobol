@@ -27,20 +27,20 @@
        0000-MAIN.
            OPEN INPUT TRANSACTION-FILE
            IF WS-FILE-STATUS NOT = "00"
-               DISPLAY "OPEN=FAILED STATUS=" WS-FILE-STATUS
+               DISPLAY "オープン=FAILED STATUS=" WS-FILE-STATUS
                MOVE 1 TO RETURN-CODE
                STOP RUN
            END-IF
-           DISPLAY "OPEN=OK"
+           DISPLAY "オープン=OK"
            PERFORM UNTIL WS-END-OF-FILE = "Y"
                PERFORM 1000-READ-ONE-RECORD
            END-PERFORM
-           DISPLAY "EOF=YES RECORDS=" WS-RECORD-COUNT
+           DISPLAY "EOF=はい レコード数=" WS-RECORD-COUNT
            CLOSE TRANSACTION-FILE
            IF WS-FILE-STATUS = "00"
-               DISPLAY "CLOSE=OK"
+               DISPLAY "クローズ=OK"
            ELSE
-               DISPLAY "CLOSE=FAILED STATUS=" WS-FILE-STATUS
+               DISPLAY "クローズ=FAILED STATUS=" WS-FILE-STATUS
                MOVE 1 TO RETURN-CODE
            END-IF
            STOP RUN.
@@ -51,7 +51,7 @@
                    MOVE "Y" TO WS-END-OF-FILE
                NOT AT END
                    ADD 1 TO WS-RECORD-COUNT
-                   DISPLAY "RECORD="
+                   DISPLAY "レコード="
                        FUNCTION TRIM(FD-TRANSACTION-RECORD TRAILING)
            END-READ.
       *OPEN INPUT は、既存のファイルを読み取り用に準備します。

@@ -28,7 +28,7 @@
       * 这些 PIC 9 字段是无符号整数计数器。
        PROCEDURE DIVISION.
       * 显示配置的包含最终样本数。
-           DISPLAY "LAST-SAMPLE=" WS-LAST-SAMPLE
+           DISPLAY "最后样例编号=" WS-LAST-SAMPLE
       * 将样本编号从 1 迭代到配置的最后一个。
       * 循环之前的显示还公开了零迭代运行。
       * FROM 为本次执行提供索引的初始值。
@@ -39,16 +39,16 @@
                EVALUATE WS-SAMPLE-INDEX
       * 示例之一是存款交易。
                    WHEN 1
-                       DISPLAY "SAMPLE=001 CODE=D AMOUNT=125.50"
+                       DISPLAY "样例=001 代码=D 金额=125.50"
       * 示例二是取款交易。
                    WHEN 2
-                       DISPLAY "SAMPLE=002 CODE=W AMOUNT=040.10"
+                       DISPLAY "样例=002 代码=W 金额=040.10"
       * 样本三是一笔转账交易。
                    WHEN 3
-                       DISPLAY "SAMPLE=003 CODE=T AMOUNT=075.00"
+                       DISPLAY "样例=003 代码=T 金额=075.00"
       * 在样本三之后，更高的限制到达此分支。
                    WHEN OTHER
-                       DISPLAY "SAMPLE=UNMAPPED"
+                       DISPLAY "样例=UNMAPPED"
                END-EVALUATE
       * 样本分支完成后进行计数。
                COMPUTE WS-PROCESSED-COUNT =
@@ -59,7 +59,7 @@
       * COMPUTE 在样本分支之后递增计数。
       * END-PERFORM 报告最终计数后的 DISPLAY。
       * 显示实际通过 UNTIL 测试的迭代次数。
-           DISPLAY "SAMPLES-PROCESSED=" WS-PROCESSED-COUNT
+           DISPLAY "已处理样例数=" WS-PROCESSED-COUNT
       * 索引在第一个大于 LAST-SAMPLE 的值处停止。
       * 超过三的限制也会执行未映射的样本分支。
       * 此循环不使用表或文件作为其输入源。

@@ -1,7 +1,7 @@
       * SORTは入力手続きを呼び、ソースをEOFまで読み込みます。
       * 各行をSDレコードへ移してRELEASEし、状態を確認してソースを閉じます。
       * SORT-RETURNまたはファイル状態の異常は失敗として返します。
-      * 入力・出力件数の一致で欠落を確認できます。入力は変更せず、
+      * 入力・出力レコード数の一致で欠落を確認できます。入力は変更せず、
       * 出力ファイルも作成しません。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. SORT21.
@@ -38,8 +38,8 @@
                DISPLAY "SORT=FAILED STATUS=" SORT-RETURN
                MOVE "Y" TO WS-IO-ERROR
            END-IF
-           DISPLAY "SUMMARY INPUT=" WS-INPUT-COUNT
-               " OUTPUT=" WS-OUTPUT-COUNT
+           DISPLAY "入力レコード数=" WS-INPUT-COUNT
+               " 出力レコード数=" WS-OUTPUT-COUNT
            IF WS-IO-ERROR = "Y"
                MOVE 1 TO RETURN-CODE
            END-IF
@@ -47,7 +47,7 @@
        1000-LOAD-INPUT.
            OPEN INPUT UNSORTED-INPUT
            IF WS-INPUT-STATUS NOT = "00"
-               DISPLAY "OPEN=INPUT FAILED STATUS=" WS-INPUT-STATUS
+               DISPLAY "入力OPEN失敗 STATUS=" WS-INPUT-STATUS
                MOVE "Y" TO WS-IO-ERROR
            ELSE
                PERFORM UNTIL WS-INPUT-EOF = "Y"
@@ -56,7 +56,7 @@
                END-PERFORM
                CLOSE UNSORTED-INPUT
                IF WS-INPUT-STATUS NOT = "00"
-                   DISPLAY "CLOSE=INPUT FAILED STATUS="
+                   DISPLAY "入力CLOSE失敗 STATUS="
                        WS-INPUT-STATUS
                    MOVE "Y" TO WS-IO-ERROR
                END-IF
@@ -80,7 +80,7 @@
            END-READ
            IF WS-INPUT-STATUS NOT = "00"
                AND WS-INPUT-STATUS NOT = "10"
-               DISPLAY "READ=INPUT FAILED STATUS=" WS-INPUT-STATUS
+               DISPLAY "入力READ失敗 STATUS=" WS-INPUT-STATUS
                MOVE "Y" TO WS-IO-ERROR
            END-IF.
        2000-RETURN-SORTED.
@@ -92,10 +92,10 @@
                    NOT AT END
                        IF SORT-RETURN = ZERO
                            ADD 1 TO WS-OUTPUT-COUNT
-                           DISPLAY "SORTED ACCOUNT="
+                           DISPLAY "ソート済み 口座番号="
                                SD-ACCOUNT-NUMBER
-                               " CUSTOMER=" SD-CUSTOMER-ID
-                               " BALANCE=" SD-ACCOUNT-BALANCE
+                               " 顧客番号=" SD-CUSTOMER-ID
+                               " 残高=" SD-ACCOUNT-BALANCE
                        ELSE
                            DISPLAY "RETURN=FAILED STATUS="
                                SORT-RETURN

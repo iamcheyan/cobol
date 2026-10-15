@@ -79,17 +79,17 @@
            MOVE WS-TRANSACTION-AMOUNT TO WS-EDITED-AMOUNT
            IF WS-POST-STATUS = "POSTED"
                ADD 1 TO WS-POSTED-COUNT
-               DISPLAY "RESULT=POSTED TYPE=" WS-TRANSACTION-TYPE
-                   " AMOUNT=" WS-EDITED-AMOUNT
+               DISPLAY "入账成功 类型=" WS-TRANSACTION-TYPE
+                   " 金额=" WS-EDITED-AMOUNT
            ELSE
                ADD 1 TO WS-REJECTED-COUNT
-               DISPLAY "RESULT=REJECTED STATUS="
+               DISPLAY "入账拒绝 原因="
                    FUNCTION TRIM(WS-POST-STATUS TRAILING)
            END-IF.
        3000-DISPLAY-SUMMARY.
            MOVE WS-ACCOUNT-BALANCE TO WS-EDITED-BALANCE
-           DISPLAY "ACCOUNT=" WS-ACCOUNT-NUMBER
-               " CUSTOMER=" WS-CUSTOMER-ID
-               " BALANCE=" WS-EDITED-BALANCE
-           DISPLAY "SUMMARY POSTED=" WS-POSTED-COUNT
-               " REJECTED=" WS-REJECTED-COUNT.
+           DISPLAY "账户号码=" WS-ACCOUNT-NUMBER
+               " 客户号码=" WS-CUSTOMER-ID
+               " 余额=" WS-EDITED-BALANCE
+           DISPLAY "成功笔数=" WS-POSTED-COUNT
+               " 拒绝笔数=" WS-REJECTED-COUNT.

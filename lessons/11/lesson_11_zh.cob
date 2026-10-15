@@ -47,29 +47,29 @@
            END-PERFORM.
       *读取当前表项中的代码和金额。
        2100-PROCESS-ENTRY.
-           DISPLAY "ENTRY=" WS-SAMPLE-INDEX
-               " CODE=" WS-TXN-CODE(WS-SAMPLE-INDEX)
-               " AMOUNT=" WS-TXN-AMOUNT(WS-SAMPLE-INDEX)
+           DISPLAY "条目=" WS-SAMPLE-INDEX
+               " 代码=" WS-TXN-CODE(WS-SAMPLE-INDEX)
+               " 金额=" WS-TXN-AMOUNT(WS-SAMPLE-INDEX)
            EVALUATE WS-TXN-CODE(WS-SAMPLE-INDEX)
                WHEN "C"
                    COMPUTE WS-ACCOUNT-BALANCE =
                        WS-ACCOUNT-BALANCE
                            + WS-TXN-AMOUNT(WS-SAMPLE-INDEX)
-                   DISPLAY "ACTION=CREDIT"
+                   DISPLAY "动作=贷记"
                WHEN "D"
                    COMPUTE WS-ACCOUNT-BALANCE =
                        WS-ACCOUNT-BALANCE
                            - WS-TXN-AMOUNT(WS-SAMPLE-INDEX)
-                   DISPLAY "ACTION=DEBIT"
+                   DISPLAY "动作=借记"
                WHEN OTHER
-                   DISPLAY "ACTION=IGNORED_UNKNOWN_CODE"
+                   DISPLAY "动作=忽略未知代码"
            END-EVALUATE
            COMPUTE WS-PROCESSED-COUNT =
                WS-PROCESSED-COUNT + 1.
       *报告已处理的条目以及由此产生的帐户余额。
        9000-REPORT.
-           DISPLAY "PROCESSED=" WS-PROCESSED-COUNT
-           DISPLAY "FINAL-BALANCE=" WS-ACCOUNT-BALANCE.
+           DISPLAY "已处理=" WS-PROCESSED-COUNT
+           DISPLAY "最终余额=" WS-ACCOUNT-BALANCE.
       *WS-TRANSACTION-TABLE 是所有表条目的父组。
       *OCCURS 4 TIMES 在此固定表中定义四个表项。
       *每个表项都包含 WS-TXN-CODE 和 WS-TXN-AMOUNT。

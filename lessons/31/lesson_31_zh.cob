@@ -64,7 +64,7 @@
            IF WS-OUTPUT-OPEN = "Y"
                CLOSE DIFFERENCE-FILE
                IF WS-OUT-STATUS NOT = "00"
-                   DISPLAY "ERROR=CLOSE OUTPUT STATUS="
+                   DISPLAY "错误=关闭输出 状态="
                            WS-OUT-STATUS
                    MOVE "Y" TO WS-FAILED
                END-IF
@@ -72,15 +72,15 @@
            IF WS-INPUT-OPEN = "Y"
                CLOSE SNAPSHOT-FILE
                IF WS-FILE-STATUS NOT = "00"
-                   DISPLAY "ERROR=CLOSE INPUT STATUS="
+                   DISPLAY "错误=关闭输入 状态="
                            WS-FILE-STATUS
                    MOVE "Y" TO WS-FAILED
                END-IF
            END-IF
-           DISPLAY "SUMMARY ROWS=" WS-ROW-COUNT
-                   " MATCH=" WS-MATCH-COUNT
-                   " CHANGED=" WS-CHANGE-COUNT
-                   " FILE_ONLY=" WS-FILE-ONLY-COUNT
+           DISPLAY "汇总 行数=" WS-ROW-COUNT
+                   " 匹配=" WS-MATCH-COUNT
+                   " 已变更=" WS-CHANGE-COUNT
+                   " 仅文件=" WS-FILE-ONLY-COUNT
            IF WS-DB-OPEN = "Y"
                PERFORM 9000-DISCONNECT-DATABASE
            ELSE
@@ -95,7 +95,7 @@
            IF WS-FILE-STATUS = "00"
                MOVE "Y" TO WS-INPUT-OPEN
            ELSE
-               DISPLAY "ERROR=OPEN INPUT STATUS=" WS-FILE-STATUS
+               DISPLAY "错误=打开输入 状态=" WS-FILE-STATUS
                MOVE "Y" TO WS-FAILED
            END-IF.
       *创建差异报告；若无法打开输出文件，就停止处理。
@@ -104,7 +104,7 @@
            IF WS-OUT-STATUS = "00"
                MOVE "Y" TO WS-OUTPUT-OPEN
            ELSE
-               DISPLAY "ERROR=OPEN OUTPUT STATUS=" WS-OUT-STATUS
+               DISPLAY "错误=打开输出 状态=" WS-OUT-STATUS
                MOVE "Y" TO WS-FAILED
            END-IF.
       *从DATASRC、DATASRC_USR以及
@@ -123,9 +123,9 @@
            END-EXEC
            IF SQLCODE = 0
                MOVE "Y" TO WS-DB-OPEN
-               DISPLAY "CONNECT=OK"
+               DISPLAY "连接=成功"
            ELSE
-               DISPLAY "CONNECT=ERROR SQLSTATE=" SQLSTATE
+               DISPLAY "连接=错误 SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            END-IF.
       *输入的数据库凭据。
@@ -138,7 +138,7 @@
                        IF WS-FILE-STATUS = "00"
                            PERFORM 3000-RECONCILE-ROW
                        ELSE
-                           DISPLAY "ERROR=READ INPUT STATUS="
+                           DISPLAY "错误=读取输入 状态="
                                    WS-FILE-STATUS
                            MOVE "Y" TO WS-FAILED
                        END-IF
@@ -157,7 +157,7 @@
                    FUNCTION NUMVAL(WS-BALANCE-TEXT) / 100
                PERFORM 3100-LOOKUP-ACCOUNT
            ELSE
-               DISPLAY "ERROR=INVALID BALANCE ACCOUNT=" WS-ACCOUNT
+               DISPLAY "错误=余额无效 账户=" WS-ACCOUNT
                MOVE "Y" TO WS-FAILED
            END-IF.
       *100，将分转换为货币单位。
@@ -188,7 +188,7 @@
                MOVE "FILE_ONLY" TO WS-STATUS
                ADD 1 TO WS-FILE-ONLY-COUNT
              WHEN OTHER
-               DISPLAY "ERROR=LOOKUP SQLSTATE=" SQLSTATE
+               DISPLAY "错误=查询 SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            END-EVALUATE
            IF WS-FAILED NOT = "Y"
@@ -207,23 +207,23 @@
                        :WS-BALANCE)
            END-EXEC
            IF SQLCODE NOT = 0
-               DISPLAY "ERROR=INSERT SQLSTATE=" SQLSTATE
+               DISPLAY "错误=插入 SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            ELSE
                MOVE WS-BALANCE TO WS-EDITED-BALANCE
                MOVE SPACES TO DIFFERENCE-RECORD
                STRING FUNCTION TRIM(WS-STATUS) " ACCOUNT="
-                      WS-ACCOUNT " CUSTOMER=" WS-CUSTOMER
+                      WS-ACCOUNT " 客户=" WS-CUSTOMER
                       " BALANCE=" WS-EDITED-BALANCE
                    INTO DIFFERENCE-RECORD
                END-STRING
                DISPLAY FUNCTION TRIM(WS-STATUS)
-                       " ACCOUNT=" WS-ACCOUNT " CUSTOMER="
+                       " ACCOUNT=" WS-ACCOUNT " 客户="
                        WS-CUSTOMER " BALANCE=" WS-EDITED-BALANCE
                IF WS-STATUS NOT = "MATCH"
                    WRITE DIFFERENCE-RECORD
                    IF WS-OUT-STATUS NOT = "00"
-                       DISPLAY "ERROR=WRITE OUTPUT STATUS="
+                       DISPLAY "错误=写入输出 状态="
                                WS-OUT-STATUS
                        MOVE "Y" TO WS-FAILED
                    END-IF
@@ -233,9 +233,9 @@
        9000-DISCONNECT-DATABASE.
            EXEC SQL CONNECT RESET END-EXEC
            IF SQLCODE = 0
-               DISPLAY "DISCONNECT=OK"
+               DISPLAY "断开=成功"
            ELSE
-               DISPLAY "DISCONNECT=ERROR SQLSTATE=" SQLSTATE
+               DISPLAY "断开=错误 SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            END-IF
            IF WS-FAILED = "Y"

@@ -45,22 +45,22 @@
              10 WS-STATUS PIC X(7) VALUE "PENDING".
        PROCEDURE DIVISION.
       *各基本フィールドをビジネス ラベルとともに表示します。
-           DISPLAY "CUSTOMER ID="
+           DISPLAY "顧客ID="
                WS-CUSTOMER-ID OF WS-CUSTOMER-INFO
-           DISPLAY "CUSTOMER NAME="
+           DISPLAY "顧客名="
                WS-CUSTOMER-NAME OF WS-CUSTOMER-INFO
-           DISPLAY "ACCOUNT NUMBER="
+           DISPLAY "口座番号="
                WS-ACCOUNT-NUMBER OF WS-ACCOUNT-INFO
       *修飾子は、目的の STATUS 基本項目を選択します。
-           DISPLAY "ACCOUNT STATUS=" WS-STATUS OF WS-ACCOUNT-INFO
-           DISPLAY "TRANSACTION ID=" WS-TXN-ID OF WS-TXN-INFO
-           DISPLAY "TRANSACTION CODE=" WS-TXN-CODE OF WS-TXN-INFO
-           DISPLAY "TRANSACTION AMOUNT="
+           DISPLAY "口座状態=" WS-STATUS OF WS-ACCOUNT-INFO
+           DISPLAY "取引ID=" WS-TXN-ID OF WS-TXN-INFO
+           DISPLAY "取引コード=" WS-TXN-CODE OF WS-TXN-INFO
+           DISPLAY "取引金額="
                WS-TXN-AMOUNT OF WS-TXN-INFO
-           DISPLAY "TRANSACTION STATUS=" WS-STATUS OF WS-TXN-INFO
+           DISPLAY "取引状態=" WS-STATUS OF WS-TXN-INFO
       *グループ表示では、その連続した従属コンテンツが公開されます。
       *フィールド間に区切り文字は追加されず、暗黙の V が省略されます。
-           DISPLAY "GROUP DATA=[" WS-TRANSACTION-RECORD "]"
+           DISPLAY "グループデータ=[" WS-TRANSACTION-RECORD "]"
            STOP RUN.
       *WS-TRANSACTION-RECORD は最上位のレコード グループです。
       *WS-CUSTOMER-INFO、WS-ACCOUNT-INFO、および WS-TXN-INFO はグループです。

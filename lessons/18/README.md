@@ -55,13 +55,13 @@ cp customers.csv "$scratch_dir/"
 程序标准输出：
 
 ```text
-ROW=01 STATUS=OK ID=C0001042 NAME=[Ada Lovelace] ACCOUNT=0001234567 STATE=A NOTE=[REGULAR]
-ROW=02 STATUS=OK ID=C0002042 NAME=[Grace, Hopper] ACCOUNT=0002468101 STATE=A NOTE=[]
-ROW=03 STATUS=REJECTED REASON=FIELD_COUNT
-ROW=04 STATUS=OK ID=C0004042 NAME=[A "quote"] ACCOUNT=0009990001 STATE=A NOTE=[NEW]
-ROW=05 STATUS=OK ID=C0005042 NAME=[12345678901234567890] ACCOUNT=0003210001 STATE=A NOTE=[EXACT20]
-ROW=06 STATUS=REJECTED REASON=FIELD_TOO_LONG
-SUMMARY ROWS=06 VALID=04 REJECTED=02
+行=01 状态=成功 客户编号=C0001042 姓名=[Ada Lovelace] 账户号=0001234567 状态=A 备注=[REGULAR]
+行=02 状态=成功 客户编号=C0002042 姓名=[Grace, Hopper] 账户号=0002468101 状态=A 备注=[]
+行=03 状态=拒绝 原因=FIELD_COUNT
+行=04 状态=成功 客户编号=C0004042 姓名=[A "quote"] 账户号=0009990001 状态=A 备注=[NEW]
+行=05 状态=成功 客户编号=C0005042 姓名=[12345678901234567890] 账户号=0003210001 状态=A 备注=[EXACT20]
+行=06 状态=拒绝 原因=FIELD_TOO_LONG
+汇总 行数=06 有效=04 拒绝=02
 ```
 
 当前环境语法检查、编译和夹具运行均已验证。另验证了字段过多、未闭合引号、未引用字段中的引号、结束引号后的文本、尾随逗号和空引用字段。编译运行时可能显示环境警告 `Warning: program compiled against libxml 212 using older 209`；它不是程序标准输出。

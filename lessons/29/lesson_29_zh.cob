@@ -60,9 +60,9 @@
            END-EXEC
            IF SQLCODE = 0
                MOVE "Y" TO WS-DB-OPEN
-               DISPLAY "CONNECT=OK"
+               DISPLAY "连接=成功"
            ELSE
-               DISPLAY "CONNECT=ERROR SQLSTATE=" SQLSTATE
+               DISPLAY "连接=错误 SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            END-IF.
        2000-LOOKUP-ACCOUNT.
@@ -85,22 +85,22 @@
            EVALUATE SQLCODE
              WHEN 0
                MOVE WS-BALANCE TO WS-EDITED-BALANCE
-               DISPLAY "LOOKUP=" WS-LOOKUP-ACCOUNT
-                       " STATUS=FOUND CUSTOMER=" WS-CUSTOMER
-                       " BALANCE=" WS-EDITED-BALANCE
+               DISPLAY "查询=" WS-LOOKUP-ACCOUNT
+                       " 状态=FOUND 客户=" WS-CUSTOMER
+                       " 余额=" WS-EDITED-BALANCE
              WHEN 100
-               DISPLAY "LOOKUP=" WS-LOOKUP-ACCOUNT
-                       " STATUS=NOT_FOUND"
+               DISPLAY "查询=" WS-LOOKUP-ACCOUNT
+                       " 状态=NOT_FOUND"
              WHEN OTHER
-               DISPLAY "LOOKUP=ERROR SQLSTATE=" SQLSTATE
+               DISPLAY "查询=错误 SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            END-EVALUATE.
        9000-DISCONNECT-DATABASE.
       * 连接成功后会配对执行 CONNECT RESET。
            EXEC SQL CONNECT RESET END-EXEC
            IF SQLCODE = 0
-               DISPLAY "DISCONNECT=OK"
+               DISPLAY "断开=成功"
            ELSE
-               DISPLAY "DISCONNECT=ERROR SQLSTATE=" SQLSTATE
+               DISPLAY "断开=错误 SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            END-IF.

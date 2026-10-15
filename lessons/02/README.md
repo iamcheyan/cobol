@@ -104,35 +104,35 @@ cobc -x -Wall -o "$scratch_dir/lesson_02" lesson_02.cob
 GnuCOBOL 3.2.0 的标准输出：
 
 ```text
-ACCOUNT FIELD DATA TYPES
-Text keys preserve their declared characters:
-ACCOUNT-KEY=000123456789
-CUSTOMER-NAME=ADA LOVELACE
-CUSTOMER-TYPE=P
-ACCOUNT-STATUS=A
-BRANCH-CODE=2048
-CURRENCY-CODE=USD
-OPEN-DATE-DIGITS=20261013
-CUSTOMER-NUMBER=0002046819
-PRODUCT-CODE=SAV1
-Numeric account amounts and rates:
-LEDGER-BALANCE=0125000.75
-AVAILABLE-BALANCE=0123500.25
-OVERDRAFT-LIMIT=0002500.00
-LAST-CREDIT=+0001250.50
-LAST-DEBIT=-0000075.25
-INTEREST-RATE=00.0125
-FEE-RATE=00.0030
-MONTHLY-TXN-COUNT=0018
-LAST-BATCH-SEQ=000521
-STATEMENT-DAY=25
-Other account reference fields:
-POSTAL-CODE=00100-200
-COUNTRY-CODE=JP
-TRANSFER-REF=TRF-20261013-01
-BATCH-ID=BATCH-20261013
-CUSTOMER-INITIAL=A
-LANGUAGE-CODE=EN
+口座データ型
+テキストキーは定義文字を保持：
+口座キー=000123456789
+顧客名=ADA LOVELACE
+顧客区分=P
+口座状態=A
+支店コード=2048
+通貨コード=USD
+口座開設日=20261013
+顧客番号=0002046819
+商品コード=SAV1
+金額と利率（数値）：
+帳簿残高=0125000.75
+利用可能残高=0123500.25
+当座貸越限度額=0002500.00
+直近入金額=+0001250.50
+直近出金額=-0000075.25
+利率=00.0125
+手数料率=00.0030
+月間取引件数=0018
+最終バッチ番号=000521
+明細日=25
+その他の口座項目：
+郵便番号=00100-200
+国コード=JP
+振込参照番号=TRF-20261013-01
+バッチID=BATCH-20261013
+顧客イニシャル=A
+言語コード=EN
 ```
 
 本工作区执行时，语法检查与编译返回码均为 0，程序返回码为 0，标准输出与上面一致。运行时标准错误另有系统警告 `Warning: program compiled against libxml 212 using older 209`；这条警告不是 COBOL 程序输出，触发组件尚未定位。

@@ -41,7 +41,7 @@ GnuCOBOL Programmer’s Guide 的 `PERFORM VARYING` 示例也使用 `FROM 1 BY 1
 | `WS-SAMPLE-INDEX` | `9` / `0` | `PERFORM VARYING` 控制字段；执行时从 1 起步 |
 | `WS-PROCESSED-COUNT` | `9(3)` / `0` | 每轮执行后递增，最后用于报告实际次数 |
 
-固定样例与索引的对应关系：1 是 `D` / `125.50`；2 是 `W` / `040.10`；3 是 `T` / `075.00`。若把最后序号改成 4，循环仍会执行第四轮，`EVALUATE` 的 `WHEN OTHER` 会显示 `SAMPLE=UNMAPPED`。这说明循环边界由 `WS-LAST-SAMPLE` 控制，并不会自动检查样例是否存在。
+固定样例与索引的对应关系：1 是 `D` / `125.50`；2 是 `W` / `040.10`；3 是 `T` / `075.00`。若把最后序号改成 4，循环仍会执行第四轮，`EVALUATE` 的 `WHEN OTHER` 会显示 `例=UNMAPPED`。这说明循环边界由 `WS-LAST-SAMPLE` 控制，并不会自动检查样例是否存在。
 
 ## 四、程序逐步解析
 
@@ -68,11 +68,11 @@ cobc -x -Wall -o "$scratch_dir/lesson_06" lesson_06.cob
 默认 `WS-LAST-SAMPLE` 为 3，实际标准输出：
 
 ```text
-LAST-SAMPLE=3
-SAMPLE=001 CODE=D AMOUNT=125.50
-SAMPLE=002 CODE=W AMOUNT=040.10
-SAMPLE=003 CODE=T AMOUNT=075.00
-SAMPLES-PROCESSED=003
+最終サンプル番号=3
+例=001 符号=D 額=125.50
+例=002 符号=W 額=040.10
+例=003 符号=T 額=075.00
+処理件数=003
 ```
 
 本工作区语法检查、编译和运行返回码均为 0，标准输出与上面一致。运行时标准错误另有系统警告 `Warning: program compiled against libxml 212 using older 209`，不是 COBOL 程序输出，触发组件尚未定位。

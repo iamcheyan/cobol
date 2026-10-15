@@ -43,15 +43,15 @@ cat "$scratch_dir/rejected.txt"
 程序标准输出：
 
 ```text
-OPEN=ACCEPTED OK
-OPEN=REJECTED OK
-WRITE=ACCEPTED TXN=000001
-WRITE=ACCEPTED TXN=000002
-WRITE=REJECTED TXN=000003
-WRITE=REJECTED TXN=000004
-CLOSE=ACCEPTED OK
-CLOSE=REJECTED OK
-SUMMARY ACCEPTED=02 REJECTED=02
+オープン=受理 成功
+オープン=拒否 成功
+書込=受理 取引=000001
+書込=受理 取引=000002
+書込=拒否 取引=000003
+書込=拒否 取引=000004
+クローズ=受理 成功
+クローズ=拒否 成功
+SUMMARY 受理=02 拒否=02
 ```
 
 `accepted.txt`：

@@ -48,18 +48,18 @@ cp transactions.txt "$scratch_dir/"
 标准输出与第 26 课相同：
 
 ```text
-ACCEPTED ACCOUNT=A00001
-REJECTED ACCOUNT=A00002 REASON=BAD_AMOUNT
-REJECTED ACCOUNT=A00003 REASON=ZERO_AMOUNT
-ACCEPTED ACCOUNT=A00004
-REJECTED ACCOUNT=A00005 REASON=BAD_WIDTH
-SUMMARY INPUT=005 ACCEPTED=002 REJECTED=003
-SYSTEM-ERROR=N
+受理口座=A00001
+拒否口座=A00002 REASON=BAD_AMOUNT
+拒否口座=A00003 REASON=ZERO_AMOUNT
+受理口座=A00004
+拒否口座=A00005 REASON=BAD_WIDTH
+集計 入力=005 受理=002 拒否=003
+システムエラー=N
 ```
 
 `batch.log` 应与 [`expected-batch.log`](./expected-batch.log) 逐行一致。`accepted.txt` 包含 `A00001|00125` 与 `A00004|00999`；`rejected.txt` 包含 `A00002|BAD_AMOUNT`、`A00003|ZERO_AMOUNT` 和 `A00005|BAD_WIDTH`。
 
-缺失输入场景：在运行目录不复制 `transactions.txt`。预期标准输出以 `ERROR=OPEN_INPUT STATUS=35` 开始，进程返回 1；日志仍记录批次开始、输入错误和批次结束（系统错误为 `Y`）。日志无法打开场景：创建目录 `batch.log`，进程输出 `ERROR=OPEN_LOG STATUS=37` 并返回 1，不会打开业务文件。
+缺失输入场景：在运行目录不复制 `transactions.txt`。预期标准输出以 `ERROR=OPEN_INPUT STATUS=35` 开始，进程返回 1；日志仍记录批次开始、输入错误和批次结束（系统错误为 `Y`）。日志无法打开场景：创建目录 `batch.log`，进程输出 `エラー=ログオープン 状態=37` 并返回 1，不会打开业务文件。
 
 ## 五、逐步读代码
 

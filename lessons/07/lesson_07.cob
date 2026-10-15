@@ -37,23 +37,23 @@
       * この表示は、制御がメインの段落に戻ったことを証明します。
       * STOP RUN は、段落定義への通常の流れを防ぎます。
       * Main は、このスタンドアロン プログラムによって使用されるエントリ パスです。
-           DISPLAY "BATCH=COMPLETE"
+           DISPLAY "バッチ=COMPLETE"
       * STOP RUN は、実行が定義に入る前に main を終了します。
            STOP RUN.
       * 初期化ステージでは、出力フィールドの処理を準備します。
        1000-INITIALIZE.
-           DISPLAY "STAGE=INITIALIZE"
+           DISPLAY "段階=INITIALIZE"
            MOVE ZERO TO WS-CLOSING-BALANCE.
       * プロセス ステージでは、固定入力から結果を計算します。
        2000-PROCESS.
-           DISPLAY "STAGE=PROCESS"
+           DISPLAY "段階=PROCESS"
            COMPUTE WS-CLOSING-BALANCE =
                WS-OPENING-BALANCE + WS-DEPOSIT - WS-WITHDRAWAL
-           DISPLAY "CLOSING-BALANCE=" WS-CLOSING-BALANCE.
+           DISPLAY "期末残高=" WS-CLOSING-BALANCE.
       * Finalize ステージでは、完了したバッチ結果がレポートされます。
        9000-FINALIZE.
-           DISPLAY "STAGE=FINALIZE"
-           DISPLAY "FINAL-BALANCE=" WS-CLOSING-BALANCE.
+           DISPLAY "段階=FINALIZE"
+           DISPLAY "最終残高=" WS-CLOSING-BALANCE.
       * 各 PERFORM は、このプログラム内の 1 つの名前付き段落を対象としています。
       * 段落は次の名前または手続き部の終わりで終了します。
       * 段落の終わりに到達すると、呼び出し元に制御が戻ります。

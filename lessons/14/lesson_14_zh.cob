@@ -36,13 +36,13 @@
        01 WS-SOURCE-INDEX USAGE INDEX.
        01 WS-PROCESSED-COUNT PIC 9(2) VALUE ZERO.
        01 WS-POSTED-COUNT PIC 9(2) VALUE ZERO.
-       01 WS-REJECTED-COUNT PIC 9(2) VALUE ZERO.
+       01 WS-拒绝-COUNT PIC 9(2) VALUE ZERO.
        PROCEDURE DIVISION.
       *在处理任何事务之前加载两个内存数据集。
        0000-MAIN.
            PERFORM 1000-LOAD-ACCOUNTS
            PERFORM 1100-LOAD-TRANSACTIONS
-           DISPLAY "BATCH=START ACCOUNTS=3 TRANSACTIONS=4"
+           DISPLAY "批次=START 账户数=3交易数=4"
            PERFORM VARYING WS-TRANSACTION-NUMBER FROM 1 BY 1
                UNTIL WS-TRANSACTION-NUMBER > 4
                PERFORM 2000-PROCESS-TRANSACTION
@@ -78,16 +78,16 @@
            MOVE 20.00 TO WS-TRANSFER-AMOUNT(4).
       *事务代码确定哪个有效负载视图处于活动状态。
        2000-PROCESS-TRANSACTION.
-           DISPLAY "TXN=" WS-TRANSACTION-NUMBER
-               " TYPE=" WS-TRANSACTION-CODE(WS-TRANSACTION-NUMBER)
+           DISPLAY "交易=" WS-TRANSACTION-NUMBER
+               " 类型=" WS-TRANSACTION-CODE(WS-TRANSACTION-NUMBER)
            EVALUATE WS-TRANSACTION-CODE(WS-TRANSACTION-NUMBER)
                WHEN "D"
                    PERFORM 2100-POST-DEPOSIT
                WHEN "T"
                    PERFORM 2200-POST-TRANSFER
                WHEN OTHER
-                   DISPLAY "RESULT=REJECTED REASON=UNKNOWN_TYPE"
-                   ADD 1 TO WS-REJECTED-COUNT
+                   DISPLAY "结果=拒绝 REASON=UNKNOWN_TYPE"
+                   ADD 1 TO WS-拒绝-COUNT
            END-EVALUATE.
       *一笔存款会改变一个匹配的账户余额。
        2100-POST-DEPOSIT.
@@ -98,14 +98,14 @@
                COMPUTE WS-ACCOUNT-BALANCE(WS-ACCOUNT-IDX) =
                    WS-ACCOUNT-BALANCE(WS-ACCOUNT-IDX)
                        + WS-DEPOSIT-AMOUNT(WS-TRANSACTION-NUMBER)
-               DISPLAY "RESULT=POSTED DEPOSIT ACCOUNT="
+               DISPLAY "结果=POSTED 存款账户="
                    WS-DEPOSIT-ACCOUNT(WS-TRANSACTION-NUMBER)
-                   " AMOUNT="
+                   " 金额="
                    WS-DEPOSIT-AMOUNT(WS-TRANSACTION-NUMBER)
                ADD 1 TO WS-POSTED-COUNT
            ELSE
-               DISPLAY "RESULT=REJECTED REASON=ACCOUNT_NOT_FOUND"
-               ADD 1 TO WS-REJECTED-COUNT
+               DISPLAY "结果=拒绝 REASON=ACCOUNT_NOT_FOUND"
+               ADD 1 TO WS-拒绝-COUNT
            END-IF.
       *在应用任一余额之前验证两个转账帐户。
        2200-POST-TRANSFER.
@@ -128,25 +128,25 @@
                            WS-ACCOUNT-BALANCE(WS-ACCOUNT-IDX)
                                + WS-TRANSFER-AMOUNT(
                                    WS-TRANSACTION-NUMBER)
-                       DISPLAY "RESULT=POSTED TRANSFER SOURCE="
+                       DISPLAY "结果=POSTED 转账来源账户="
                            WS-SOURCE-ACCOUNT(WS-TRANSACTION-NUMBER)
-                           " TARGET="
+                           " 转账目标账户="
                            WS-TARGET-ACCOUNT(WS-TRANSACTION-NUMBER)
                        ADD 1 TO WS-POSTED-COUNT
                    ELSE
-                       DISPLAY "RESULT=REJECTED"
+                       DISPLAY "结果=拒绝"
                            " REASON=INSUFFICIENT_FUNDS"
-                       ADD 1 TO WS-REJECTED-COUNT
+                       ADD 1 TO WS-拒绝-COUNT
                    END-IF
                ELSE
-                   DISPLAY "RESULT=REJECTED"
+                   DISPLAY "结果=拒绝"
                        " REASON=TARGET_NOT_FOUND"
-                   ADD 1 TO WS-REJECTED-COUNT
+                   ADD 1 TO WS-拒绝-COUNT
                END-IF
            ELSE
-               DISPLAY "RESULT=REJECTED"
+               DISPLAY "结果=拒绝"
                    " REASON=SOURCE_NOT_FOUND"
-               ADD 1 TO WS-REJECTED-COUNT
+               ADD 1 TO WS-拒绝-COUNT
            END-IF.
       *SEARCH ALL 使用唯一的升序帐户密钥。
        3000-FIND-ACCOUNT.
@@ -160,12 +160,12 @@
            END-SEARCH.
       *报告每个帐户余额和批次结果计数。
        9000-REPORT.
-           DISPLAY "BALANCE ACCOUNT=" WS-ACCOUNT-NUMBER(1)
-               " VALUE=" WS-ACCOUNT-BALANCE(1)
-           DISPLAY "BALANCE ACCOUNT=" WS-ACCOUNT-NUMBER(2)
-               " VALUE=" WS-ACCOUNT-BALANCE(2)
-           DISPLAY "BALANCE ACCOUNT=" WS-ACCOUNT-NUMBER(3)
-               " VALUE=" WS-ACCOUNT-BALANCE(3)
-           DISPLAY "SUMMARY PROCESSED=" WS-PROCESSED-COUNT
-               " POSTED=" WS-POSTED-COUNT
-               " REJECTED=" WS-REJECTED-COUNT.
+           DISPLAY "账户余额 账户=" WS-ACCOUNT-NUMBER(1)
+               " 余额=" WS-ACCOUNT-BALANCE(1)
+           DISPLAY "账户余额 账户=" WS-ACCOUNT-NUMBER(2)
+               " 余额=" WS-ACCOUNT-BALANCE(2)
+           DISPLAY "账户余额 账户=" WS-ACCOUNT-NUMBER(3)
+               " 余额=" WS-ACCOUNT-BALANCE(3)
+           DISPLAY "汇总 已处理=" WS-PROCESSED-COUNT
+               " 入账=" WS-POSTED-COUNT
+               " 拒绝=" WS-拒绝-COUNT.

@@ -34,32 +34,32 @@
       * The policy limit is unsigned and has two decimal positions.
        PROCEDURE DIVISION.
       * Show the input values before selecting a business path.
-           DISPLAY "TRANSACTION-REFERENCE="
+           DISPLAY "Transaction reference="
                WS-TRANSACTION-REFERENCE
-           DISPLAY "ACCOUNT-STATUS=" WS-ACCOUNT-STATUS
-           DISPLAY "TRANSACTION-AMOUNT=" WS-TRANSACTION-AMOUNT
-           DISPLAY "MAXIMUM-AMOUNT=" WS-MAXIMUM-AMOUNT
+           DISPLAY "name=" WS-ACCOUNT-STATUS
+           DISPLAY "Transaction amount=" WS-TRANSACTION-AMOUNT
+           DISPLAY "Maximum amount=" WS-MAXIMUM-AMOUNT
       * The first rule handles the lower boundary.
       * Its false path continues to the next validation rule.
       * Nested tests run only while each earlier rule has passed.
       * Reject zero and negative values before testing the upper limit.
       * This ELSE belongs to the lower-bound condition above.
            IF WS-TRANSACTION-AMOUNT <= ZERO
-               DISPLAY "DECISION=REJECTED"
-               DISPLAY "REASON=AMOUNT_NOT_POSITIVE"
+               DISPLAY "Decision=REJECTED"
+               DISPLAY "Reason=AMOUNT_NOT_POSITIVE"
            ELSE
       * A value exactly equal to the limit passes this comparison.
                IF WS-TRANSACTION-AMOUNT > WS-MAXIMUM-AMOUNT
-                   DISPLAY "DECISION=REJECTED"
-                   DISPLAY "REASON=AMOUNT_OVER_LIMIT"
+                   DISPLAY "Decision=REJECTED"
+                   DISPLAY "Reason=AMOUNT_OVER_LIMIT"
                ELSE
       * Only an amount within both numeric boundaries reaches this test.
                    IF WS-ACCOUNT-STATUS = "A"
-                       DISPLAY "DECISION=ACCEPTED"
-                       DISPLAY "REASON=WITHIN_RULES"
+                       DISPLAY "Decision=ACCEPTED"
+                       DISPLAY "Reason=WITHIN_RULES"
                    ELSE
-                       DISPLAY "DECISION=REJECTED"
-                       DISPLAY "REASON=ACCOUNT_INACTIVE"
+                       DISPLAY "Decision=REJECTED"
+                       DISPLAY "Reason=ACCOUNT_INACTIVE"
                    END-IF
                END-IF
            END-IF

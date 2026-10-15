@@ -59,7 +59,7 @@
            END-PERFORM.
       *在帐户条目的两个字段中使用当前索引。
        2100-DISPLAY-ONE-ACCOUNT.
-           DISPLAY "ACCOUNT="
+           DISPLAY "账户="
                WS-ACCOUNT-NUMBER(WS-ACCOUNT-IDX)
                " BALANCE="
                WS-ACCOUNT-BALANCE(WS-ACCOUNT-IDX)
@@ -67,7 +67,7 @@
                WS-PROCESSED-COUNT + 1.
       *报告索引循环访问了多少加载条目。
        9000-REPORT.
-           DISPLAY "PROCESSED=" WS-PROCESSED-COUNT.
+           DISPLAY "处理条数=" WS-PROCESSED-COUNT.
       *INDEXED BY 声明与此 OCCURS 表关联的索引。
       *WS-ACCOUNT-IDX 不是 PIC 数字工作存储字段。
       *SET WS-ACCOUNT-IDX TO 1 选择第一个表项。

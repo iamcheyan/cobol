@@ -42,20 +42,20 @@
        0000-MAIN.
            OPEN INPUT ACCOUNT-FILE
            IF WS-ACCOUNT-STATUS NOT = "00"
-               DISPLAY "OPEN=INPUT FAILED STATUS="
+               DISPLAY "入力ファイルを開けません STATUS="
                    WS-ACCOUNT-STATUS
                MOVE 1 TO RETURN-CODE
                STOP RUN
            END-IF
            OPEN OUTPUT BALANCE-FILE
            IF WS-BALANCE-STATUS NOT = "00"
-               DISPLAY "OPEN=OUTPUT FAILED STATUS="
+               DISPLAY "出力ファイルを開けません STATUS="
                    WS-BALANCE-STATUS
                CLOSE ACCOUNT-FILE
                MOVE 1 TO RETURN-CODE
                STOP RUN
            END-IF
-           DISPLAY "OPEN=INPUT OK OPEN=OUTPUT OK"
+           DISPLAY "ファイルを開きました"
            PERFORM UNTIL WS-END-OF-FILE = "Y"
                OR WS-IO-ERROR = "Y"
                PERFORM 1000-READ-AND-WRITE
@@ -79,24 +79,24 @@
            WRITE FD-BALANCE-RECORD
            IF WS-BALANCE-STATUS = "00"
                ADD 1 TO WS-RECORD-COUNT
-               DISPLAY "WROTE ACCOUNT=" FD-OUT-ACCOUNT-NUMBER
-                   " CUSTOMER=" FD-OUT-CUSTOMER-ID
-                   " BALANCE=" FD-OUT-BALANCE
+               DISPLAY "出力 口座番号=" FD-OUT-ACCOUNT-NUMBER
+                   " 顧客番号=" FD-OUT-CUSTOMER-ID
+                   " 残高=" FD-OUT-BALANCE
            ELSE
-               DISPLAY "WRITE=FAILED STATUS=" WS-BALANCE-STATUS
+               DISPLAY "書き込み失敗 STATUS=" WS-BALANCE-STATUS
                MOVE "Y" TO WS-IO-ERROR
            END-IF.
        9000-CLOSE-FILES.
            CLOSE ACCOUNT-FILE
            IF WS-ACCOUNT-STATUS NOT = "00"
-               DISPLAY "CLOSE=INPUT FAILED STATUS="
+               DISPLAY "入力ファイルのクローズ失敗 STATUS="
                    WS-ACCOUNT-STATUS
                MOVE "Y" TO WS-IO-ERROR
            END-IF
            CLOSE BALANCE-FILE
            IF WS-BALANCE-STATUS NOT = "00"
-               DISPLAY "CLOSE=OUTPUT FAILED STATUS="
+               DISPLAY "出力ファイルのクローズ失敗 STATUS="
                    WS-BALANCE-STATUS
                MOVE "Y" TO WS-IO-ERROR
            END-IF
-           DISPLAY "CLOSE=OK RECORDS=" WS-RECORD-COUNT.
+           DISPLAY "クローズ完了 件数=" WS-RECORD-COUNT.

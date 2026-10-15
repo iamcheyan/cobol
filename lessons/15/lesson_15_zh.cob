@@ -27,20 +27,20 @@
        0000-MAIN.
            OPEN INPUT TRANSACTION-FILE
            IF WS-FILE-STATUS NOT = "00"
-               DISPLAY "OPEN=FAILED STATUS=" WS-FILE-STATUS
+               DISPLAY "打开=FAILED STATUS=" WS-FILE-STATUS
                MOVE 1 TO RETURN-CODE
                STOP RUN
            END-IF
-           DISPLAY "OPEN=OK"
+           DISPLAY "打开=OK"
            PERFORM UNTIL WS-END-OF-FILE = "Y"
                PERFORM 1000-READ-ONE-RECORD
            END-PERFORM
-           DISPLAY "EOF=YES RECORDS=" WS-RECORD-COUNT
+           DISPLAY "EOF=是 记录数=" WS-RECORD-COUNT
            CLOSE TRANSACTION-FILE
            IF WS-FILE-STATUS = "00"
-               DISPLAY "CLOSE=OK"
+               DISPLAY "关闭=OK"
            ELSE
-               DISPLAY "CLOSE=FAILED STATUS=" WS-FILE-STATUS
+               DISPLAY "关闭=FAILED STATUS=" WS-FILE-STATUS
                MOVE 1 TO RETURN-CODE
            END-IF
            STOP RUN.
@@ -51,7 +51,7 @@
                    MOVE "Y" TO WS-END-OF-FILE
                NOT AT END
                    ADD 1 TO WS-RECORD-COUNT
-                   DISPLAY "RECORD="
+                   DISPLAY "记录="
                        FUNCTION TRIM(FD-TRANSACTION-RECORD TRAILING)
            END-READ.
       *OPEN INPUT 准备现有文件以供读取。

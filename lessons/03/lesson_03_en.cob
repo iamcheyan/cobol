@@ -69,21 +69,21 @@
            COMPUTE WS-CLOSING-BALANCE =
                WS-PRE-INTEREST-BALANCE + WS-INTEREST-ROUNDED.
       * Display original inputs before the calculated values.
-           DISPLAY "OPENING-BALANCE=" WS-OPENING-BALANCE
-           DISPLAY "DEPOSIT=" WS-DEPOSIT
-           DISPLAY "WITHDRAWAL=" WS-WITHDRAWAL
-           DISPLAY "SERVICE-FEE=" WS-SERVICE-FEE
-           DISPLAY "PERIOD-RATE=" WS-PERIOD-RATE
+           DISPLAY "Opening balance=" WS-OPENING-BALANCE
+           DISPLAY "Deposit=" WS-DEPOSIT
+           DISPLAY "Withdrawal=" WS-WITHDRAWAL
+           DISPLAY "Service fee=" WS-SERVICE-FEE
+           DISPLAY "Period rate=" WS-PERIOD-RATE
       * Compare the pre-interest balance and full-scale interest result.
-           DISPLAY "PRE-INTEREST-BALANCE="
+           DISPLAY "Pre-interest balance="
                WS-PRE-INTEREST-BALANCE
-           DISPLAY "INTEREST-RAW-4DP=" WS-INTEREST-RAW
+           DISPLAY "Raw interest (4dp)=" WS-INTEREST-RAW
       * These next lines show MOVE and COMPUTE with two-place receivers.
-           DISPLAY "INTEREST-MOVE-2DP=" WS-INTEREST-MOVE
-           DISPLAY "INTEREST-COMPUTE-TRUNC=" WS-INTEREST-TRUNC
-           DISPLAY "INTEREST-COMPUTE-ROUNDED="
+           DISPLAY "Interest after MOVE (2dp)=" WS-INTEREST-MOVE
+           DISPLAY "Truncated interest=" WS-INTEREST-TRUNC
+           DISPLAY "Interest after rounded COMPUTE="
                WS-INTEREST-ROUNDED
-           DISPLAY "CLOSING-BALANCE=" WS-CLOSING-BALANCE
+           DISPLAY "Closing balance=" WS-CLOSING-BALANCE
       * Every displayed amount has a declared receiving-field scale.
       * DISPLAY shows the implied point; PIC V uses no storage position.
       * The source amounts are unchanged by COMPUTE expressions here.

@@ -37,23 +37,23 @@
       * This display proves control returned to the main paragraph.
       * STOP RUN prevents ordinary flow into paragraph definitions.
       * Main is the entry path used by this standalone program.
-           DISPLAY "BATCH=COMPLETE"
+           DISPLAY "Batch=COMPLETE"
       * STOP RUN ends main before execution can fall into definitions.
            STOP RUN.
       * Initialize stage prepares the output field for processing.
        1000-INITIALIZE.
-           DISPLAY "STAGE=INITIALIZE"
+           DISPLAY "Stage=INITIALIZE"
            MOVE ZERO TO WS-CLOSING-BALANCE.
       * Process stage calculates the result from the fixed inputs.
        2000-PROCESS.
-           DISPLAY "STAGE=PROCESS"
+           DISPLAY "Stage=PROCESS"
            COMPUTE WS-CLOSING-BALANCE =
                WS-OPENING-BALANCE + WS-DEPOSIT - WS-WITHDRAWAL
-           DISPLAY "CLOSING-BALANCE=" WS-CLOSING-BALANCE.
+           DISPLAY "Closing balance=" WS-CLOSING-BALANCE.
       * Finalize stage reports the completed batch result.
        9000-FINALIZE.
-           DISPLAY "STAGE=FINALIZE"
-           DISPLAY "FINAL-BALANCE=" WS-CLOSING-BALANCE.
+           DISPLAY "Stage=FINALIZE"
+           DISPLAY "Final balance=" WS-CLOSING-BALANCE.
       * Each PERFORM targets one named paragraph in this program.
       * A paragraph ends at the next name or end of procedure division.
       * Reaching the paragraph end returns control to the caller.

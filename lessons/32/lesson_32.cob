@@ -31,13 +31,13 @@
        1000-REPORT-SUMMARY.
       * 残高不足や未知コードは業務上の拒否として集計します。
       * ファイルやSQLの失敗とは区別し、処理可能な取引を続けます。
-           DISPLAY "SUMMARY ACCOUNTS=" WS-ACCOUNT-COUNT
-                   " TX=" WS-TRANSACTION-COUNT
-                   " POSTED=" WS-POSTED-COUNT
-                   " REJECTED=" WS-REJECTED-COUNT
-                   " UPDATED=" WS-UPDATED-COUNT
-                   " UNCHANGED=" WS-UNCHANGED-COUNT
-                   " INSERTED=" WS-INSERTED-COUNT.
+           DISPLAY "集計 口座=" WS-ACCOUNT-COUNT
+                   " 取引=" WS-TRANSACTION-COUNT
+                   " 記帳=" WS-POSTED-COUNT
+                   " 拒否=" WS-REJECTED-COUNT
+                   " 更新=" WS-UPDATED-COUNT
+                   " 変更なし=" WS-UNCHANGED-COUNT
+                   " 挿入=" WS-INSERTED-COUNT.
        2000-RETURN-STATUS.
       * 業務拒否だけなら正常終了し、システム障害時は非ゼロを返します。
            IF WS-FAILED = "Y"
@@ -50,7 +50,7 @@
            COMPUTE WS-CHECK-COUNT =
                WS-POSTED-COUNT + WS-REJECTED-COUNT
            IF WS-CHECK-COUNT NOT = WS-TRANSACTION-COUNT
-               DISPLAY "ERROR=TRANSACTION COUNT MISMATCH"
+               DISPLAY "エラー=取引件数不一致"
                MOVE "Y" TO WS-FAILED
            END-IF
       * DB同期後、各口座は未変更・更新・挿入のいずれかに分類されます。
@@ -59,7 +59,7 @@
                    WS-UPDATED-COUNT + WS-UNCHANGED-COUNT
                    + WS-INSERTED-COUNT
                IF WS-CHECK-COUNT NOT = WS-ACCOUNT-COUNT
-                   DISPLAY "ERROR=SYNC COUNT MISMATCH"
+                   DISPLAY "エラー=同期件数不一致"
                    MOVE "Y" TO WS-FAILED
                END-IF
            END-IF.

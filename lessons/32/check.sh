@@ -40,7 +40,7 @@ sqlite3 "$db" \
 expect_line "$work_dir/insert.out" \
     'SYNC INSERTED ACCOUNT=A000000005 BALANCE=0000250.75'
 expect_line "$work_dir/insert.out" \
-    'SUMMARY ACCOUNTS=03 TX=005 POSTED=002 REJECTED=003 UPDATED=000 UNCHANGED=002 INSERTED=001'
+    '集計 口座=03 取引=005 記帳=002 拒否=003 更新=000 変更なし=002 挿入=001'
 ./build.sh run-existing >"$work_dir/after-insert.out" 2>"$work_dir/after-insert.err"
 expect_file "$script_dir/expected/restart.txt" "$work_dir/after-insert.out"
 
@@ -64,8 +64,8 @@ rm -- "$run_dir/accounts.txt"
 if run_binary >"$work_dir/missing-account.out" 2>"$work_dir/missing-account.err"; then
     fail 'missing account master returned success'
 fi
-expect_line "$work_dir/missing-account.out" 'ERROR=OPEN ACCOUNTS '
-if grep -Fq 'CONNECT=OK' "$work_dir/missing-account.out"; then
+expect_line "$work_dir/missing-account.out" 'エラー=口座OPEN '
+if grep -Fq '接続=成功' "$work_dir/missing-account.out"; then
     fail 'database sync ran after the account master open failed'
 fi
 cp -- "$script_dir/fixtures/accounts.txt" "$run_dir/accounts.txt"
@@ -84,7 +84,7 @@ SQL
 if run_binary >"$work_dir/sql-failure.out" 2>"$work_dir/sql-failure.err"; then
     fail 'injected SQL update failure returned success'
 fi
-expect_line "$work_dir/sql-failure.out" 'ERROR=UPDATE SQLSTATE='
+expect_line "$work_dir/sql-failure.out" 'エラー=更新 SQLSTATE='
 sqlite3 -noheader -separator '|' "$db" \
     "SELECT ACCOUNT_NO, printf('%.2f', BALANCE) FROM ACCOUNT_SNAPSHOT WHERE ACCOUNT_NO IN ('A000000001', 'A000000005') ORDER BY ACCOUNT_NO" \
     >"$work_dir/partial-database.out"
@@ -95,7 +95,7 @@ expect_file "$work_dir/partial-database.expected" \
 sqlite3 "$db" 'DROP TRIGGER reject_late_update'
 run_binary >"$work_dir/recovery.out" 2>"$work_dir/recovery.err"
 expect_line "$work_dir/recovery.out" \
-    'SUMMARY ACCOUNTS=03 TX=005 POSTED=002 REJECTED=003 UPDATED=001 UNCHANGED=002 INSERTED=000'
+    '集計 口座=03 取引=005 記帳=002 拒否=003 更新=001 変更なし=002 挿入=000'
 sqlite3 -noheader -separator '|' "$db" \
     "SELECT ACCOUNT_NO, printf('%.2f', BALANCE) FROM ACCOUNT_SNAPSHOT WHERE ACCOUNT_NO IN ('A000000001', 'A000000005') ORDER BY ACCOUNT_NO" \
     >"$work_dir/recovered-balances.out"

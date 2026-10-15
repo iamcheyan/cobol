@@ -41,18 +41,18 @@ cobc -x -Wall -o "$scratch_dir/lesson_15" lesson_15.cob
 GnuCOBOL 3.2.0 的程序标准输出：
 
 ```text
-OPEN=OK
-RECORD=DAY-20261013|TXN-000001|D|0001234567|125.50
-RECORD=DAY-20261013|TXN-000002|T|0001234567|0007654321|40.00
-RECORD=DAY-20261013|TXN-000003|D|0002468101|75.00
-RECORD=DAY-20261013|TXN-000004|T|0007654321|0009999999|20.00
-EOF=YES RECORDS=04
-CLOSE=OK
+オープン=OK
+レコード=DAY-20261013|TXN-000001|D|0001234567|125.50
+レコード=DAY-20261013|TXN-000002|T|0001234567|0007654321|40.00
+レコード=DAY-20261013|TXN-000003|D|0002468101|75.00
+レコード=DAY-20261013|TXN-000004|T|0007654321|0009999999|20.00
+EOF=はい レコード数=04
+クローズ=OK
 ```
 
 当前环境语法检查、编译和上述运行均返回 0。编译运行时可能显示环境警告 `Warning: program compiled against libxml 212 using older 209`；它不属于程序标准输出。
 
-缺失文件场景：在不含 `transactions.txt` 的目录运行编译好的程序，输出 `OPEN=FAILED STATUS=35` 并返回 1。空文件场景输出 `OPEN=OK`、`EOF=YES RECORDS=00` 和 `CLOSE=OK`。
+缺失文件场景：在不含 `transactions.txt` 的目录运行编译好的程序，输出 `オープン=FAILED STATUS=35` 并返回 1。空文件场景输出 `オープン=OK`、`EOF=はい レコード数=00` 和 `クローズ=OK`。
 
 ## 五、修改练习（有答案）
 

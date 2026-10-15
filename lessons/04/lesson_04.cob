@@ -34,32 +34,32 @@
       * 規則上限は符号なしで、小数2桁です。
        PROCEDURE DIVISION.
       * 業務経路を選ぶ前に入力値を表示します。
-           DISPLAY "TRANSACTION-REFERENCE="
+           DISPLAY "取引参照番号="
                WS-TRANSACTION-REFERENCE
-           DISPLAY "ACCOUNT-STATUS=" WS-ACCOUNT-STATUS
-           DISPLAY "TRANSACTION-AMOUNT=" WS-TRANSACTION-AMOUNT
-           DISPLAY "MAXIMUM-AMOUNT=" WS-MAXIMUM-AMOUNT
+           DISPLAY "口座状態=" WS-ACCOUNT-STATUS
+           DISPLAY "取引金額=" WS-TRANSACTION-AMOUNT
+           DISPLAY "上限金額=" WS-MAXIMUM-AMOUNT
       * 最初の規則は下限を扱います。
       * 偽の場合は次の検証規則へ進みます。
       * 前の規則を通過した場合だけ、次の入れ子検査を行います。
       * 上限を調べる前にゼロと負数を却下します。
       * このELSEは上の下限条件に対応します。
            IF WS-TRANSACTION-AMOUNT <= ZERO
-               DISPLAY "DECISION=REJECTED"
-               DISPLAY "REASON=AMOUNT_NOT_POSITIVE"
+               DISPLAY "判定=REJECTED"
+               DISPLAY "理由=AMOUNT_NOT_POSITIVE"
            ELSE
       * 上限と等しい値はこの比較を通過します。
                IF WS-TRANSACTION-AMOUNT > WS-MAXIMUM-AMOUNT
-                   DISPLAY "DECISION=REJECTED"
-                   DISPLAY "REASON=AMOUNT_OVER_LIMIT"
+                   DISPLAY "判定=REJECTED"
+                   DISPLAY "理由=AMOUNT_OVER_LIMIT"
                ELSE
       * 数値の上下限内の金額だけがこの検査に到達します。
                    IF WS-ACCOUNT-STATUS = "A"
-                       DISPLAY "DECISION=ACCEPTED"
-                       DISPLAY "REASON=WITHIN_RULES"
+                       DISPLAY "判定=ACCEPTED"
+                       DISPLAY "理由=WITHIN_RULES"
                    ELSE
-                       DISPLAY "DECISION=REJECTED"
-                       DISPLAY "REASON=ACCOUNT_INACTIVE"
+                       DISPLAY "判定=REJECTED"
+                       DISPLAY "理由=ACCOUNT_INACTIVE"
                    END-IF
                END-IF
            END-IF

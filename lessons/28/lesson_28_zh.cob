@@ -50,7 +50,7 @@
                END-IF
                CLOSE BATCH-LOG
                IF WS-LOG-STATUS NOT = "00"
-                   DISPLAY "ERROR=CLOSE_LOG STATUS=" WS-LOG-STATUS
+                   DISPLAY "错误=关闭日志 状态=" WS-LOG-STATUS
                    MOVE "Y" TO WS-IO-ERROR
                END-IF
                MOVE "N" TO WS-LOG-OPEN
@@ -96,9 +96,9 @@
            ADD 1 TO WS-TRANSACTION-NO
            MOVE SPACES TO WS-POST-STATUS
            MOVE WS-TRANSACTION-AMOUNT TO WS-EDITED-AMOUNT
-           DISPLAY "CALL=POST ACCOUNT=" WS-TRANSACTION-ACCOUNT
-               " TYPE=" WS-TRANSACTION-TYPE
-               " AMOUNT=" WS-EDITED-AMOUNT
+           DISPLAY "调用=过账 账户=" WS-TRANSACTION-ACCOUNT
+               " 类型=" WS-TRANSACTION-TYPE
+               " 金额=" WS-EDITED-AMOUNT
            CALL "POST-TRANSACTION28" USING BY REFERENCE
                WS-ACCOUNT-RECORD
                WS-TRANSACTION-RECORD
@@ -122,7 +122,7 @@
                    MOVE "Y" TO WS-UNKNOWN-STATUS
                    ADD 1 TO WS-REJECTED-COUNT
            END-EVALUATE
-           DISPLAY "CALL=RETURN STATUS="
+           DISPLAY "调用=返回 状态="
                FUNCTION TRIM(WS-POST-STATUS TRAILING).
        1050-RUN-TRANSACTIONS.
            PERFORM 1100-POST-DEPOSIT
@@ -146,7 +146,7 @@
                    TO WS-LOG-MESSAGE
                PERFORM 9100-WRITE-LOG
            ELSE
-               DISPLAY "ERROR=OPEN_LOG STATUS=" WS-LOG-STATUS
+               DISPLAY "错误=打开日志 状态=" WS-LOG-STATUS
                MOVE "Y" TO WS-IO-ERROR
            END-IF.
        9100-WRITE-LOG.
@@ -154,7 +154,7 @@
                MOVE WS-LOG-MESSAGE TO FD-BATCH-LOG-RECORD
                WRITE FD-BATCH-LOG-RECORD
                IF WS-LOG-STATUS NOT = "00"
-                   DISPLAY "ERROR=WRITE_LOG STATUS=" WS-LOG-STATUS
+                   DISPLAY "错误=写入日志 状态=" WS-LOG-STATUS
                    MOVE "Y" TO WS-LOG-FAILED
                    MOVE "Y" TO WS-IO-ERROR
                END-IF
@@ -163,7 +163,7 @@
            MOVE SPACES TO WS-LOG-MESSAGE
            STRING "EVENT=BATCH_END POSTED=" DELIMITED BY SIZE
                WS-POSTED-COUNT DELIMITED BY SIZE
-               " REJECTED=" DELIMITED BY SIZE
+               " 拒绝=" DELIMITED BY SIZE
                WS-REJECTED-COUNT DELIMITED BY SIZE
                " IO_ERROR=" DELIMITED BY SIZE
                WS-IO-ERROR DELIMITED BY SIZE
@@ -176,9 +176,9 @@
                WS-TRANSACTION-NO DELIMITED BY SIZE
                " ACCOUNT=" DELIMITED BY SIZE
                WS-TRANSACTION-ACCOUNT DELIMITED BY SIZE
-               " TYPE=" DELIMITED BY SIZE
+               " 类型=" DELIMITED BY SIZE
                WS-TRANSACTION-TYPE DELIMITED BY SIZE
-               " STATUS=" DELIMITED BY SIZE
+               " 状态=" DELIMITED BY SIZE
                WS-POST-STATUS DELIMITED BY SPACE
                INTO WS-LOG-MESSAGE
            END-STRING

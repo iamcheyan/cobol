@@ -59,7 +59,7 @@
            END-PERFORM.
       *アカウントエントリの両方のフィールドで現在のインデックスを使用します。
        2100-DISPLAY-ONE-ACCOUNT.
-           DISPLAY "ACCOUNT="
+           DISPLAY "口座="
                WS-ACCOUNT-NUMBER(WS-ACCOUNT-IDX)
                " BALANCE="
                WS-ACCOUNT-BALANCE(WS-ACCOUNT-IDX)
@@ -67,7 +67,7 @@
                WS-PROCESSED-COUNT + 1.
       *インデックス付きループが訪問したロードされたエントリの数を報告します。
        9000-REPORT.
-           DISPLAY "PROCESSED=" WS-PROCESSED-COUNT.
+           DISPLAY "処理件数=" WS-PROCESSED-COUNT.
       *INDEXED BY は、この OCCURS テーブルに関連付けられたインデックスを宣言します。
       *WS-ACCOUNT-IDX は、PIC 数値作業記憶フィールドではありません。
       *SET WS-ACCOUNT-IDX TO 1 は、最初の出現を選択します。

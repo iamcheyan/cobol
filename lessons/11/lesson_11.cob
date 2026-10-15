@@ -47,29 +47,29 @@
            END-PERFORM.
       *現在のオカレンスからコードと金額を読み取ります。
        2100-PROCESS-ENTRY.
-           DISPLAY "ENTRY=" WS-SAMPLE-INDEX
-               " CODE=" WS-TXN-CODE(WS-SAMPLE-INDEX)
-               " AMOUNT=" WS-TXN-AMOUNT(WS-SAMPLE-INDEX)
+           DISPLAY "明細=" WS-SAMPLE-INDEX
+               " コード=" WS-TXN-CODE(WS-SAMPLE-INDEX)
+               " 金額=" WS-TXN-AMOUNT(WS-SAMPLE-INDEX)
            EVALUATE WS-TXN-CODE(WS-SAMPLE-INDEX)
                WHEN "C"
                    COMPUTE WS-ACCOUNT-BALANCE =
                        WS-ACCOUNT-BALANCE
                            + WS-TXN-AMOUNT(WS-SAMPLE-INDEX)
-                   DISPLAY "ACTION=CREDIT"
+                   DISPLAY "処理=入金"
                WHEN "D"
                    COMPUTE WS-ACCOUNT-BALANCE =
                        WS-ACCOUNT-BALANCE
                            - WS-TXN-AMOUNT(WS-SAMPLE-INDEX)
-                   DISPLAY "ACTION=DEBIT"
+                   DISPLAY "処理=出金"
                WHEN OTHER
-                   DISPLAY "ACTION=IGNORED_UNKNOWN_CODE"
+                   DISPLAY "処理=未知コードを無視"
            END-EVALUATE
            COMPUTE WS-PROCESSED-COUNT =
                WS-PROCESSED-COUNT + 1.
       *処理されたエントリとその結果のアカウント残高をレポートします。
        9000-REPORT.
-           DISPLAY "PROCESSED=" WS-PROCESSED-COUNT
-           DISPLAY "FINAL-BALANCE=" WS-ACCOUNT-BALANCE.
+           DISPLAY "処理件数=" WS-PROCESSED-COUNT
+           DISPLAY "最終残高=" WS-ACCOUNT-BALANCE.
       *WS-TRANSACTION-TABLE は、すべてのテーブル エントリの親グループです。
       *OCCURS 4 TIMES は、この固定テーブルに 4 つのオカレンスを割り当てます。
       *各オカレンスには、WS-TXN-CODE と WS-TXN-AMOUNT の両方が含まれます。

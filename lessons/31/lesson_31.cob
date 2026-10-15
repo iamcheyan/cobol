@@ -62,7 +62,7 @@
            IF WS-OUTPUT-OPEN = "Y"
                CLOSE DIFFERENCE-FILE
                IF WS-OUT-STATUS NOT = "00"
-                   DISPLAY "ERROR=CLOSE OUTPUT STATUS="
+                   DISPLAY "エラー=出力クローズ 状態="
                            WS-OUT-STATUS
                    MOVE "Y" TO WS-FAILED
                END-IF
@@ -70,15 +70,15 @@
            IF WS-INPUT-OPEN = "Y"
                CLOSE SNAPSHOT-FILE
                IF WS-FILE-STATUS NOT = "00"
-                   DISPLAY "ERROR=CLOSE INPUT STATUS="
+                   DISPLAY "エラー=入力クローズ 状態="
                            WS-FILE-STATUS
                    MOVE "Y" TO WS-FAILED
                END-IF
            END-IF
-           DISPLAY "SUMMARY ROWS=" WS-ROW-COUNT
-                   " MATCH=" WS-MATCH-COUNT
-                   " CHANGED=" WS-CHANGE-COUNT
-                   " FILE_ONLY=" WS-FILE-ONLY-COUNT
+           DISPLAY "集計 行数=" WS-ROW-COUNT
+                   " 一致=" WS-MATCH-COUNT
+                   " 変更=" WS-CHANGE-COUNT
+                   " ファイルのみ=" WS-FILE-ONLY-COUNT
            IF WS-DB-OPEN = "Y"
                PERFORM 9000-DISCONNECT-DATABASE
            ELSE
@@ -93,7 +93,7 @@
            IF WS-FILE-STATUS = "00"
                MOVE "Y" TO WS-INPUT-OPEN
            ELSE
-               DISPLAY "ERROR=OPEN INPUT STATUS=" WS-FILE-STATUS
+               DISPLAY "エラー=入力OPEN 状態=" WS-FILE-STATUS
                MOVE "Y" TO WS-FAILED
            END-IF.
       *差異レポートを作成し、失敗時は後続処理を行いません。
@@ -102,7 +102,7 @@
            IF WS-OUT-STATUS = "00"
                MOVE "Y" TO WS-OUTPUT-OPEN
            ELSE
-               DISPLAY "ERROR=OPEN OUTPUT STATUS=" WS-OUT-STATUS
+               DISPLAY "エラー=出力OPEN 状態=" WS-OUT-STATUS
                MOVE "Y" TO WS-FAILED
            END-IF.
       *DATASRC、DATASRC_USR、DATASRC_PWDから接続情報を取得します。
@@ -120,9 +120,9 @@
            END-EXEC
            IF SQLCODE = 0
                MOVE "Y" TO WS-DB-OPEN
-               DISPLAY "CONNECT=OK"
+               DISPLAY "接続=成功"
            ELSE
-               DISPLAY "CONNECT=ERROR SQLSTATE=" SQLSTATE
+               DISPLAY "接続=エラー SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            END-IF.
       *EOFまたはエラーまで、27文字のレコードを1件ずつ読みます。
@@ -135,7 +135,7 @@
                        IF WS-FILE-STATUS = "00"
                            PERFORM 3000-RECONCILE-ROW
                        ELSE
-                           DISPLAY "ERROR=READ INPUT STATUS="
+                           DISPLAY "エラー=入力読取 状態="
                                    WS-FILE-STATUS
                            MOVE "Y" TO WS-FAILED
                        END-IF
@@ -153,7 +153,7 @@
                    FUNCTION NUMVAL(WS-BALANCE-TEXT) / 100
                PERFORM 3100-LOOKUP-ACCOUNT
            ELSE
-               DISPLAY "ERROR=INVALID BALANCE ACCOUNT=" WS-ACCOUNT
+               DISPLAY "エラー=不正残高 口座=" WS-ACCOUNT
                MOVE "Y" TO WS-FAILED
            END-IF.
       *ホスト変数を使い、口座番号でDBレコードを検索します。
@@ -182,7 +182,7 @@
                MOVE "FILE_ONLY" TO WS-STATUS
                ADD 1 TO WS-FILE-ONLY-COUNT
              WHEN OTHER
-               DISPLAY "ERROR=LOOKUP SQLSTATE=" SQLSTATE
+               DISPLAY "エラー=検索 SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            END-EVALUATE
            IF WS-FAILED NOT = "Y"
@@ -200,7 +200,7 @@
                        :WS-BALANCE)
            END-EXEC
            IF SQLCODE NOT = 0
-               DISPLAY "ERROR=INSERT SQLSTATE=" SQLSTATE
+               DISPLAY "エラー=挿入 SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            ELSE
                MOVE WS-BALANCE TO WS-EDITED-BALANCE
@@ -216,7 +216,7 @@
                IF WS-STATUS NOT = "MATCH"
                    WRITE DIFFERENCE-RECORD
                    IF WS-OUT-STATUS NOT = "00"
-                       DISPLAY "ERROR=WRITE OUTPUT STATUS="
+                       DISPLAY "エラー=出力書込 状態="
                                WS-OUT-STATUS
                        MOVE "Y" TO WS-FAILED
                    END-IF
@@ -226,9 +226,9 @@
        9000-DISCONNECT-DATABASE.
            EXEC SQL CONNECT RESET END-EXEC
            IF SQLCODE = 0
-               DISPLAY "DISCONNECT=OK"
+               DISPLAY "切断=成功"
            ELSE
-               DISPLAY "DISCONNECT=ERROR SQLSTATE=" SQLSTATE
+               DISPLAY "切断=エラー SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            END-IF
            IF WS-FAILED = "Y"

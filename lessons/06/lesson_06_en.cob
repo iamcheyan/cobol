@@ -28,7 +28,7 @@
       * These PIC 9 fields are unsigned whole-number counters.
        PROCEDURE DIVISION.
       * Show the configured inclusive final sample number.
-           DISPLAY "LAST-SAMPLE=" WS-LAST-SAMPLE
+           DISPLAY "Last sample=" WS-LAST-SAMPLE
       * Iterate the sample numbers from one through the configured last.
       * The display before the loop also exposes zero-iteration runs.
       * FROM supplies the index's initial value for this execution.
@@ -39,16 +39,16 @@
                EVALUATE WS-SAMPLE-INDEX
       * Sample one is a deposit transaction.
                    WHEN 1
-                       DISPLAY "SAMPLE=001 CODE=D AMOUNT=125.50"
+                       DISPLAY "Sample=001 CODE=D AMOUNT=125.50"
       * Sample two is a withdrawal transaction.
                    WHEN 2
-                       DISPLAY "SAMPLE=002 CODE=W AMOUNT=040.10"
+                       DISPLAY "Sample=002 CODE=W AMOUNT=040.10"
       * Sample three is a transfer transaction.
                    WHEN 3
-                       DISPLAY "SAMPLE=003 CODE=T AMOUNT=075.00"
+                       DISPLAY "Sample=003 CODE=T AMOUNT=075.00"
       * A higher limit reaches this branch after sample three.
                    WHEN OTHER
-                       DISPLAY "SAMPLE=UNMAPPED"
+                       DISPLAY "Sample=UNMAPPED"
                END-EVALUATE
       * Count after the sample branch has completed.
                COMPUTE WS-PROCESSED-COUNT =
@@ -59,7 +59,7 @@
       * COMPUTE increments the count after the sample branch.
       * DISPLAY after END-PERFORM reports the final count.
       * Show how many iterations actually passed the UNTIL test.
-           DISPLAY "SAMPLES-PROCESSED=" WS-PROCESSED-COUNT
+           DISPLAY "Samples processed=" WS-PROCESSED-COUNT
       * Index stops at the first value greater than LAST-SAMPLE.
       * A limit above three also exercises the unmapped sample branch.
       * This loop does not use a table or a file as its input source.

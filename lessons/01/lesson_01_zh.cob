@@ -1,5 +1,5 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. HELLO01.
        PROCEDURE DIVISION.
-           DISPLAY "Hello, COBOL!".
+           DISPLAY "你好，COBOL！".
            STOP RUN.

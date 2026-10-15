@@ -37,25 +37,25 @@
            MOVE "0001234567" TO WS-ACCOUNT-NUMBER
            MOVE 125.50 TO WS-DEPOSIT-AMOUNT
            MOVE "TXN-000001" TO WS-REFERENCE
-           DISPLAY "TYPE=" WS-TRANSACTION-CODE
-           DISPLAY "DEPOSIT ACCOUNT=" WS-ACCOUNT-NUMBER
-           DISPLAY "DEPOSIT AMOUNT=" WS-DEPOSIT-AMOUNT
-           DISPLAY "DEPOSIT REFERENCE=" WS-REFERENCE.
+           DISPLAY "取引種別=" WS-TRANSACTION-CODE
+           DISPLAY "入金口座=" WS-ACCOUNT-NUMBER
+           DISPLAY "入金額=" WS-DEPOSIT-AMOUNT
+           DISPLAY "入金参照番号=" WS-REFERENCE.
       *レイアウトを再定義して転送を書き込みます。
        2000-LOAD-TRANSFER.
            MOVE "T" TO WS-TRANSACTION-CODE
            MOVE "0001234567" TO WS-SOURCE-ACCOUNT
            MOVE "0007654321" TO WS-TARGET-ACCOUNT
            MOVE 250.75 TO WS-TRANSFER-AMOUNT
-           DISPLAY "TYPE=" WS-TRANSACTION-CODE
-           DISPLAY "TRANSFER SOURCE=" WS-SOURCE-ACCOUNT
-           DISPLAY "TRANSFER TARGET=" WS-TARGET-ACCOUNT
-           DISPLAY "TRANSFER AMOUNT=" WS-TRANSFER-AMOUNT
+           DISPLAY "取引種別=" WS-TRANSACTION-CODE
+           DISPLAY "振込元口座=" WS-SOURCE-ACCOUNT
+           DISPLAY "振込先口座=" WS-TARGET-ACCOUNT
+           DISPLAY "振込金額=" WS-TRANSFER-AMOUNT
       *サブジェクト名は転送ペイロード バイトを読み取るようになりました。
-           DISPLAY "DEPOSIT VIEW OF SAME BYTES:"
-           DISPLAY "ACCOUNT=" WS-ACCOUNT-NUMBER
-           DISPLAY "AMOUNT=" WS-DEPOSIT-AMOUNT
-           DISPLAY "REFERENCE=" WS-REFERENCE.
+           DISPLAY "同じバイト列の入金ビュー:"
+           DISPLAY "口座=" WS-ACCOUNT-NUMBER
+           DISPLAY "金額=" WS-DEPOSIT-AMOUNT
+           DISPLAY "参照番号=" WS-REFERENCE.
       *どちらのレイアウトもレコード内の同じ位置から始まります。
       *サブジェクトと再定義項目は両方ともレベル 05 グループです。
       *再定義兄弟は、サブジェクトの子エントリの後に続きます。

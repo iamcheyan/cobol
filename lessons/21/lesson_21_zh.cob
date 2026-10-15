@@ -35,11 +35,11 @@
                INPUT PROCEDURE 1000-LOAD-INPUT
                OUTPUT PROCEDURE 2000-RETURN-SORTED.
            IF SORT-RETURN NOT = ZERO
-               DISPLAY "SORT=FAILED STATUS=" SORT-RETURN
+               DISPLAY "排序失败 STATUS=" SORT-RETURN
                MOVE "Y" TO WS-IO-ERROR
            END-IF
-           DISPLAY "SUMMARY INPUT=" WS-INPUT-COUNT
-               " OUTPUT=" WS-OUTPUT-COUNT
+           DISPLAY "输入记录数=" WS-INPUT-COUNT
+               " 出力记录数=" WS-OUTPUT-COUNT
            IF WS-IO-ERROR = "Y"
                MOVE 1 TO RETURN-CODE
            END-IF
@@ -47,7 +47,7 @@
        1000-LOAD-INPUT.
            OPEN INPUT UNSORTED-INPUT
            IF WS-INPUT-STATUS NOT = "00"
-               DISPLAY "OPEN=INPUT FAILED STATUS=" WS-INPUT-STATUS
+               DISPLAY "输入OPEN失败 STATUS=" WS-INPUT-STATUS
                MOVE "Y" TO WS-IO-ERROR
            ELSE
                PERFORM UNTIL WS-INPUT-EOF = "Y"
@@ -56,7 +56,7 @@
                END-PERFORM
                CLOSE UNSORTED-INPUT
                IF WS-INPUT-STATUS NOT = "00"
-                   DISPLAY "CLOSE=INPUT FAILED STATUS="
+                   DISPLAY "输入关闭失败 STATUS="
                        WS-INPUT-STATUS
                    MOVE "Y" TO WS-IO-ERROR
                END-IF
@@ -72,7 +72,7 @@
                        IF SORT-RETURN = ZERO
                            ADD 1 TO WS-INPUT-COUNT
                        ELSE
-                           DISPLAY "RELEASE=FAILED STATUS="
+                           DISPLAY "释放失败 STATUS="
                                SORT-RETURN
                            MOVE "Y" TO WS-IO-ERROR
                        END-IF
@@ -80,7 +80,7 @@
            END-READ
            IF WS-INPUT-STATUS NOT = "00"
                AND WS-INPUT-STATUS NOT = "10"
-               DISPLAY "READ=INPUT FAILED STATUS=" WS-INPUT-STATUS
+               DISPLAY "输入读取失败 STATUS=" WS-INPUT-STATUS
                MOVE "Y" TO WS-IO-ERROR
            END-IF.
        2000-RETURN-SORTED.
@@ -92,12 +92,12 @@
                    NOT AT END
                        IF SORT-RETURN = ZERO
                            ADD 1 TO WS-OUTPUT-COUNT
-                           DISPLAY "SORTED ACCOUNT="
+                           DISPLAY "排序结果 账户号="
                                SD-ACCOUNT-NUMBER
-                               " CUSTOMER=" SD-CUSTOMER-ID
-                               " BALANCE=" SD-ACCOUNT-BALANCE
+                               " 客户号=" SD-CUSTOMER-ID
+                               " 余额=" SD-ACCOUNT-BALANCE
                        ELSE
-                           DISPLAY "RETURN=FAILED STATUS="
+                           DISPLAY "返回失败 STATUS="
                                SORT-RETURN
                            MOVE "Y" TO WS-IO-ERROR
                        END-IF

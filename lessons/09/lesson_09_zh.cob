@@ -45,22 +45,22 @@
              10 WS-STATUS PIC X(7) VALUE "PENDING".
        PROCEDURE DIVISION.
       *显示每个基本字段及其业务标签。
-           DISPLAY "CUSTOMER ID="
+           DISPLAY "客户编号="
                WS-CUSTOMER-ID OF WS-CUSTOMER-INFO
-           DISPLAY "CUSTOMER NAME="
+           DISPLAY "客户姓名="
                WS-CUSTOMER-NAME OF WS-CUSTOMER-INFO
-           DISPLAY "ACCOUNT NUMBER="
+           DISPLAY "账户号码="
                WS-ACCOUNT-NUMBER OF WS-ACCOUNT-INFO
       *限定符选择预期的 STATUS 基本项。
-           DISPLAY "ACCOUNT STATUS=" WS-STATUS OF WS-ACCOUNT-INFO
-           DISPLAY "TRANSACTION ID=" WS-TXN-ID OF WS-TXN-INFO
-           DISPLAY "TRANSACTION CODE=" WS-TXN-CODE OF WS-TXN-INFO
-           DISPLAY "TRANSACTION AMOUNT="
+           DISPLAY "账户状态=" WS-STATUS OF WS-ACCOUNT-INFO
+           DISPLAY "交易编号=" WS-TXN-ID OF WS-TXN-INFO
+           DISPLAY "交易类型=" WS-TXN-CODE OF WS-TXN-INFO
+           DISPLAY "交易金额="
                WS-TXN-AMOUNT OF WS-TXN-INFO
-           DISPLAY "TRANSACTION STATUS=" WS-STATUS OF WS-TXN-INFO
+           DISPLAY "交易状态=" WS-STATUS OF WS-TXN-INFO
       *组显示公开其连续的从属内容。
       *它在字段之间不添加分隔符并省略隐含的 V。
-           DISPLAY "GROUP DATA=[" WS-TRANSACTION-RECORD "]"
+           DISPLAY "组记录=[" WS-TRANSACTION-RECORD "]"
            STOP RUN.
       *WS-TRANSACTION-RECORD 是顶级记录组。
       *WS-CUSTOMER-INFO、WS-ACCOUNT-INFO 和 WS-TXN-INFO 是组。

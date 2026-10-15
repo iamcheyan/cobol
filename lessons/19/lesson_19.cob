@@ -33,20 +33,20 @@
        0000-MAIN.
            OPEN INPUT ACCOUNT-INPUT
            IF WS-ACCOUNT-STATUS NOT = "00"
-               DISPLAY "OPEN=ACCOUNT FAILED STATUS="
+               DISPLAY "账户文件打开失败 STATUS="
                    WS-ACCOUNT-STATUS
                MOVE 1 TO RETURN-CODE
                STOP RUN
            END-IF
            OPEN INPUT TRANSACTION-INPUT
            IF WS-TRANSACTION-STATUS NOT = "00"
-               DISPLAY "OPEN=TRANSACTION FAILED STATUS="
+               DISPLAY "交易文件打开失败 STATUS="
                    WS-TRANSACTION-STATUS
                CLOSE ACCOUNT-INPUT
                MOVE 1 TO RETURN-CODE
                STOP RUN
            END-IF
-           DISPLAY "OPEN=ACCOUNT OK OPEN=TRANSACTION OK"
+           DISPLAY "账户与交易文件已打开"
            PERFORM UNTIL WS-ACCOUNT-EOF = "Y"
                AND WS-TRANSACTION-EOF = "Y"
                OR WS-IO-ERROR = "Y"
@@ -62,11 +62,13 @@
            CLOSE TRANSACTION-INPUT
            IF WS-ACCOUNT-STATUS = "00"
                AND WS-TRANSACTION-STATUS = "00"
-               DISPLAY "CLOSE=OK ACCOUNTS=" WS-ACCOUNT-COUNT
-                   " TRANSACTIONS=" WS-TRANSACTION-COUNT
+               DISPLAY "关闭完成 账户记录数=" WS-ACCOUNT-COUNT
+                   " 交易记录数=" WS-TRANSACTION-COUNT
            ELSE
-               DISPLAY "CLOSE=FAILED ACCOUNT=" WS-ACCOUNT-STATUS
-                   " TRANSACTION=" WS-TRANSACTION-STATUS
+               DISPLAY "关闭时账户文件异常 STATUS="
+                   WS-ACCOUNT-STATUS
+                   "交易文件异常 STATUS="
+                   WS-TRANSACTION-STATUS
                MOVE 1 TO RETURN-CODE
            END-IF
            IF WS-IO-ERROR = "Y"
@@ -80,14 +82,14 @@
                NOT AT END
                    IF WS-ACCOUNT-STATUS = "00"
                        ADD 1 TO WS-ACCOUNT-COUNT
-                       DISPLAY "ACCOUNT="
+                       DISPLAY "账户主档："
                            FUNCTION TRIM(
                                FD-ACCOUNT-RECORD TRAILING)
                    END-IF
            END-READ
            IF WS-ACCOUNT-STATUS NOT = "00"
                AND WS-ACCOUNT-STATUS NOT = "10"
-               DISPLAY "READ=ACCOUNT FAILED STATUS="
+               DISPLAY "读取账户文件失败 STATUS="
                    WS-ACCOUNT-STATUS
                MOVE "Y" TO WS-IO-ERROR
            END-IF.
@@ -98,14 +100,14 @@
                NOT AT END
                    IF WS-TRANSACTION-STATUS = "00"
                        ADD 1 TO WS-TRANSACTION-COUNT
-                       DISPLAY "TRANSACTION="
+                       DISPLAY "交易："
                            FUNCTION TRIM(
                                FD-TRANSACTION-RECORD TRAILING)
                    END-IF
            END-READ
            IF WS-TRANSACTION-STATUS NOT = "00"
                AND WS-TRANSACTION-STATUS NOT = "10"
-               DISPLAY "READ=TRANSACTION FAILED STATUS="
+               DISPLAY "读取交易文件失败 STATUS="
                    WS-TRANSACTION-STATUS
                MOVE "Y" TO WS-IO-ERROR
            END-IF.

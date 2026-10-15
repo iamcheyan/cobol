@@ -69,21 +69,21 @@
            COMPUTE WS-CLOSING-BALANCE =
                WS-PRE-INTEREST-BALANCE + WS-INTEREST-ROUNDED.
       * 計算値の前に元の入力値を表示します。
-           DISPLAY "OPENING-BALANCE=" WS-OPENING-BALANCE
-           DISPLAY "DEPOSIT=" WS-DEPOSIT
-           DISPLAY "WITHDRAWAL=" WS-WITHDRAWAL
-           DISPLAY "SERVICE-FEE=" WS-SERVICE-FEE
-           DISPLAY "PERIOD-RATE=" WS-PERIOD-RATE
+           DISPLAY "期首残高=" WS-OPENING-BALANCE
+           DISPLAY "預入額=" WS-DEPOSIT
+           DISPLAY "払戻額=" WS-WITHDRAWAL
+           DISPLAY "手数料=" WS-SERVICE-FEE
+           DISPLAY "期間利率=" WS-PERIOD-RATE
       * 利息計算前の残高と全桁の利息結果を比較します。
-           DISPLAY "PRE-INTEREST-BALANCE="
+           DISPLAY "利息加算前残高="
                WS-PRE-INTEREST-BALANCE
-           DISPLAY "INTEREST-RAW-4DP=" WS-INTEREST-RAW
+           DISPLAY "利息（4桁）=" WS-INTEREST-RAW
       * 続く出力で、2桁の受け取り項目へのMOVEとCOMPUTEを示します。
-           DISPLAY "INTEREST-MOVE-2DP=" WS-INTEREST-MOVE
-           DISPLAY "INTEREST-COMPUTE-TRUNC=" WS-INTEREST-TRUNC
-           DISPLAY "INTEREST-COMPUTE-ROUNDED="
+           DISPLAY "MOVE後利息（2桁）=" WS-INTEREST-MOVE
+           DISPLAY "COMPUTE切捨て利息=" WS-INTEREST-TRUNC
+           DISPLAY "COMPUTE四捨五入利息="
                WS-INTEREST-ROUNDED
-           DISPLAY "CLOSING-BALANCE=" WS-CLOSING-BALANCE
+           DISPLAY "期末残高=" WS-CLOSING-BALANCE
       * 表示する金額には受け取り項目の桁数が宣言されています。
       * DISPLAYは小数点を表示し、PIC Vは格納桁を使いません。
       * ここでのCOMPUTE式は元の金額を変更しません。

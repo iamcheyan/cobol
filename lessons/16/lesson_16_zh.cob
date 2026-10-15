@@ -9,51 +9,51 @@
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
-           SELECT ACCEPTED-FILE
+           SELECT 接受-FILE
                ASSIGN TO "accepted.txt"
                ORGANIZATION IS LINE SEQUENTIAL
-               FILE STATUS IS WS-ACCEPTED-STATUS.
-           SELECT REJECTED-FILE
+               FILE STATUS IS WS-接受-STATUS.
+           SELECT 拒绝-FILE
                ASSIGN TO "rejected.txt"
                ORGANIZATION IS LINE SEQUENTIAL
-               FILE STATUS IS WS-REJECTED-STATUS.
+               FILE STATUS IS WS-拒绝-STATUS.
        DATA DIVISION.
        FILE SECTION.
-       FD ACCEPTED-FILE.
-       01 FD-ACCEPTED-RECORD PIC X(35).
-       FD REJECTED-FILE.
-       01 FD-REJECTED-RECORD PIC X(35).
+       FD 接受-FILE.
+       01 FD-接受-RECORD PIC X(35).
+       FD 拒绝-FILE.
+       01 FD-拒绝-RECORD PIC X(35).
        WORKING-STORAGE SECTION.
        01 WS-RESULT-TABLE.
           05 WS-RESULT-ENTRY OCCURS 4 TIMES.
              10 WS-RESULT-DESTINATION PIC X.
              10 WS-RESULT-TEXT PIC X(35).
        01 WS-RESULT-NUMBER PIC 9 VALUE ZERO.
-       01 WS-ACCEPTED-STATUS PIC XX VALUE SPACES.
-       01 WS-REJECTED-STATUS PIC XX VALUE SPACES.
-       01 WS-ACCEPTED-COUNT PIC 9(2) VALUE ZERO.
-       01 WS-REJECTED-COUNT PIC 9(2) VALUE ZERO.
+       01 WS-接受-STATUS PIC XX VALUE SPACES.
+       01 WS-拒绝-STATUS PIC XX VALUE SPACES.
+       01 WS-接受-COUNT PIC 9(2) VALUE ZERO.
+       01 WS-拒绝-COUNT PIC 9(2) VALUE ZERO.
        01 WS-WRITE-ERROR PIC X VALUE "N".
        PROCEDURE DIVISION.
       *在写入任何结果记录之前打开两个输出。
        0000-MAIN.
-           OPEN OUTPUT ACCEPTED-FILE
-           IF WS-ACCEPTED-STATUS NOT = "00"
-               DISPLAY "OPEN=ACCEPTED FAILED STATUS="
-                   WS-ACCEPTED-STATUS
+           OPEN OUTPUT 接受-FILE
+           IF WS-接受-STATUS NOT = "00"
+               DISPLAY "打开=接受 失败 状态="
+                   WS-接受-STATUS
                MOVE 1 TO RETURN-CODE
                STOP RUN
            END-IF
-           DISPLAY "OPEN=ACCEPTED OK"
-           OPEN OUTPUT REJECTED-FILE
-           IF WS-REJECTED-STATUS NOT = "00"
-               DISPLAY "OPEN=REJECTED FAILED STATUS="
-                   WS-REJECTED-STATUS
-               CLOSE ACCEPTED-FILE
+           DISPLAY "打开=接受 成功"
+           OPEN OUTPUT 拒绝-FILE
+           IF WS-拒绝-STATUS NOT = "00"
+               DISPLAY "打开=拒绝 失败 状态="
+                   WS-拒绝-STATUS
+               CLOSE 接受-FILE
                MOVE 1 TO RETURN-CODE
                STOP RUN
            END-IF
-           DISPLAY "OPEN=REJECTED OK"
+           DISPLAY "打开=拒绝 成功"
            PERFORM 1000-LOAD-RESULTS
            PERFORM VARYING WS-RESULT-NUMBER FROM 1 BY 1
                UNTIL WS-RESULT-NUMBER > 4
@@ -83,55 +83,55 @@
        2000-WRITE-ONE-RESULT.
            EVALUATE WS-RESULT-DESTINATION(WS-RESULT-NUMBER)
                WHEN "A"
-                   WRITE FD-ACCEPTED-RECORD
+                   WRITE FD-接受-RECORD
                        FROM WS-RESULT-TEXT(WS-RESULT-NUMBER)
-                   IF WS-ACCEPTED-STATUS = "00"
-                       ADD 1 TO WS-ACCEPTED-COUNT
-                       DISPLAY "WRITE=ACCEPTED"
-                           " TXN=" WS-RESULT-TEXT(
+                   IF WS-接受-STATUS = "00"
+                       ADD 1 TO WS-接受-COUNT
+                       DISPLAY "写入=接受"
+                           " 交易=" WS-RESULT-TEXT(
                                WS-RESULT-NUMBER)(5:6)
                    ELSE
-                       DISPLAY "WRITE=ACCEPTED FAILED STATUS="
-                           WS-ACCEPTED-STATUS
+                       DISPLAY "写入=接受 失败 状态="
+                           WS-接受-STATUS
                        MOVE "Y" TO WS-WRITE-ERROR
                    END-IF
                WHEN "R"
-                   WRITE FD-REJECTED-RECORD
+                   WRITE FD-拒绝-RECORD
                        FROM WS-RESULT-TEXT(WS-RESULT-NUMBER)
-                   IF WS-REJECTED-STATUS = "00"
-                       ADD 1 TO WS-REJECTED-COUNT
-                       DISPLAY "WRITE=REJECTED"
-                           " TXN=" WS-RESULT-TEXT(
+                   IF WS-拒绝-STATUS = "00"
+                       ADD 1 TO WS-拒绝-COUNT
+                       DISPLAY "写入=拒绝"
+                           " 交易=" WS-RESULT-TEXT(
                                WS-RESULT-NUMBER)(5:6)
                    ELSE
-                       DISPLAY "WRITE=REJECTED FAILED STATUS="
-                           WS-REJECTED-STATUS
+                       DISPLAY "写入=拒绝 失败 状态="
+                           WS-拒绝-STATUS
                        MOVE "Y" TO WS-WRITE-ERROR
                    END-IF
                WHEN OTHER
-                   DISPLAY "WRITE=FAILED REASON=UNKNOWN_DESTINATION"
+                   DISPLAY "写入=FAILED REASON=UNKNOWN_DESTINATION"
                    MOVE "Y" TO WS-WRITE-ERROR
            END-EVALUATE.
       *写循环后关闭两个输出流。
        9000-CLOSE-OUTPUTS.
-           CLOSE ACCEPTED-FILE
-           IF WS-ACCEPTED-STATUS = "00"
-               DISPLAY "CLOSE=ACCEPTED OK"
+           CLOSE 接受-FILE
+           IF WS-接受-STATUS = "00"
+               DISPLAY "关闭=接受 成功"
            ELSE
-               DISPLAY "CLOSE=ACCEPTED FAILED STATUS="
-                   WS-ACCEPTED-STATUS
+               DISPLAY "关闭=接受 失败 状态="
+                   WS-接受-STATUS
                MOVE "Y" TO WS-WRITE-ERROR
            END-IF
-           CLOSE REJECTED-FILE
-           IF WS-REJECTED-STATUS = "00"
-               DISPLAY "CLOSE=REJECTED OK"
+           CLOSE 拒绝-FILE
+           IF WS-拒绝-STATUS = "00"
+               DISPLAY "关闭=拒绝 成功"
            ELSE
-               DISPLAY "CLOSE=REJECTED FAILED STATUS="
-                   WS-REJECTED-STATUS
+               DISPLAY "关闭=拒绝 失败 状态="
+                   WS-拒绝-STATUS
                MOVE "Y" TO WS-WRITE-ERROR
            END-IF
-           DISPLAY "SUMMARY ACCEPTED=" WS-ACCEPTED-COUNT
-               " REJECTED=" WS-REJECTED-COUNT.
+           DISPLAY "SUMMARY 接受=" WS-接受-COUNT
+               " 拒绝=" WS-拒绝-COUNT.
       *OPEN OUTPUT 创建文件或替换其旧内容。
       *LINE SEQUENTIAL 以换行符结束每个写入记录。
       *FD记录大小和源结果大小都是35字节。

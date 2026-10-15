@@ -37,7 +37,7 @@
                    PERFORM 4000-CLOSE-CURSOR
                END-IF
            END-IF
-           DISPLAY "ROWS=" WS-ROW-COUNT
+           DISPLAY "行数=" WS-ROW-COUNT
            IF WS-DB-OPEN = "Y"
                PERFORM 9000-DISCONNECT-DATABASE
            ELSE
@@ -61,9 +61,9 @@
            END-EXEC
            IF SQLCODE = 0
                MOVE "Y" TO WS-DB-OPEN
-               DISPLAY "CONNECT=OK"
+               DISPLAY "接続=成功"
            ELSE
-               DISPLAY "CONNECT=ERROR SQLSTATE=" SQLSTATE
+               DISPLAY "接続=エラー SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            END-IF.
        2000-OPEN-CURSOR.
@@ -71,7 +71,7 @@
            EXEC SQL OPEN ACCOUNT-CURSOR END-EXEC
            IF SQLCODE = 0
                MOVE "Y" TO WS-CURSOR-OPEN
-               DISPLAY "CURSOR=OPEN"
+               DISPLAY "カーソル=オープン"
            ELSE
                DISPLAY "CURSOR=OPEN_ERROR SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
@@ -87,13 +87,13 @@
                  WHEN 0
                    ADD 1 TO WS-ROW-COUNT
                    MOVE WS-BALANCE TO WS-EDITED-BALANCE
-                   DISPLAY "ROW=" WS-ACCOUNT " CUSTOMER="
+                   DISPLAY "行=" WS-ACCOUNT " CUSTOMER="
                            WS-CUSTOMER " BALANCE=" WS-EDITED-BALANCE
                  WHEN 100
-                   DISPLAY "FETCH=EOF SQLCODE=100"
+                   DISPLAY "取得=EOF SQLCODE=100"
                    MOVE "Y" TO WS-DONE
                  WHEN OTHER
-                   DISPLAY "FETCH=ERROR SQLSTATE=" SQLSTATE
+                   DISPLAY "取得=エラー SQLSTATE=" SQLSTATE
                    MOVE "Y" TO WS-FAILED WS-DONE
                END-EVALUATE
            END-PERFORM.
@@ -102,7 +102,7 @@
            EXEC SQL CLOSE ACCOUNT-CURSOR END-EXEC
            IF SQLCODE = 0
                MOVE "N" TO WS-CURSOR-OPEN
-               DISPLAY "CURSOR=CLOSED"
+               DISPLAY "カーソル=クローズ"
            ELSE
                DISPLAY "CURSOR=CLOSE_ERROR SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
@@ -111,9 +111,9 @@
       * カーソル処理後にCONNECT RESETを実行し、DB接続を解放します。
            EXEC SQL CONNECT RESET END-EXEC
            IF SQLCODE = 0
-               DISPLAY "DISCONNECT=OK"
+               DISPLAY "切断=成功"
            ELSE
-               DISPLAY "DISCONNECT=ERROR SQLSTATE=" SQLSTATE
+               DISPLAY "切断=エラー SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            END-IF
            IF WS-FAILED = "Y"

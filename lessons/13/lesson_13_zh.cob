@@ -43,29 +43,29 @@
            MOVE 250.75 TO WS-ACCOUNT-BALANCE(4).
       *SEARCH 从索引 1 开始按顺序检查各个表项。
        2000-SEQUENTIAL-SEARCH.
-           DISPLAY "SEARCH=SEQUENTIAL KEY=" WS-SEARCH-KEY
+           DISPLAY "查找=SEQUENTIAL 键=" WS-SEARCH-KEY
            SET WS-ACCOUNT-IDX TO 1
            SEARCH WS-ACCOUNT-ENTRY
                AT END
-                   DISPLAY "SEQUENTIAL=NOT_FOUND"
+                   DISPLAY "顺序查找=NOT_FOUND"
                WHEN WS-ACCOUNT-NUMBER(WS-ACCOUNT-IDX)
                    = WS-SEARCH-KEY
-                   DISPLAY "SEQUENTIAL=FOUND ACCOUNT="
+                   DISPLAY "顺序查找=找到 账户="
                        WS-ACCOUNT-NUMBER(WS-ACCOUNT-IDX)
-                       " BALANCE="
+                       "  余额="
                        WS-ACCOUNT-BALANCE(WS-ACCOUNT-IDX)
            END-SEARCH.
       *SEARCH ALL 对声明的键顺序执行二分搜索。
        3000-BINARY-SEARCH.
-           DISPLAY "SEARCH=BINARY KEY=" WS-SEARCH-KEY
+           DISPLAY "查找=BINARY 键=" WS-SEARCH-KEY
            SEARCH ALL WS-ACCOUNT-ENTRY
                AT END
-                   DISPLAY "BINARY=NOT_FOUND"
+                   DISPLAY "二分查找=NOT_FOUND"
                WHEN WS-ACCOUNT-NUMBER(WS-ACCOUNT-IDX)
                    = WS-SEARCH-KEY
-                   DISPLAY "BINARY=FOUND ACCOUNT="
+                   DISPLAY "二分查找=找到 账户="
                        WS-ACCOUNT-NUMBER(WS-ACCOUNT-IDX)
-                       " BALANCE="
+                       "  余额="
                        WS-ACCOUNT-BALANCE(WS-ACCOUNT-IDX)
            END-SEARCH.
       *SEARCH 从当前索引开始，因此先将索引设为 1。

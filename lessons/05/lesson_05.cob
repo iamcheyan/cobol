@@ -29,9 +29,9 @@
       * この意図的に小さなコード セットには 1 文字で十分です。
        PROCEDURE DIVISION.
       * コードを分類する前に入力を表示します。
-           DISPLAY "TRANSACTION-REFERENCE="
+           DISPLAY "取引参照番号="
                WS-TRANSACTION-REFERENCE
-           DISPLAY "TRANSACTION-CODE=" WS-TRANSACTION-CODE
+           DISPLAY "取引コード=" WS-TRANSACTION-CODE
       * DISPLAY は、各出力ラベルの後にフィールドの内容を追加します。
       * ラベルが安定しているため、4 つのコード パスを簡単に比較できます。
       * EVALUATE は、1 つのトランザクション コードを WHEN の選択と照合してチェックします。
@@ -40,24 +40,24 @@
            EVALUATE WS-TRANSACTION-CODE
       * 入金により、後の処理ステップで口座残高が増加します。
                WHEN "D"
-                   DISPLAY "CATEGORY=DEPOSIT"
-                   DISPLAY "ACTION=ADD_TO_ACCOUNT"
+                   DISPLAY "分類=DEPOSIT"
+                   DISPLAY "処理=ADD_TO_ACCOUNT"
       * このラベルはバランスを変えずに D を分類します。
       * 引き出しにより、後のステップでアカウント残高が減少します。
                WHEN "W"
-                   DISPLAY "CATEGORY=WITHDRAWAL"
-                   DISPLAY "ACTION=SUBTRACT_FROM_ACCOUNT"
+                   DISPLAY "分類=WITHDRAWAL"
+                   DISPLAY "処理=SUBTRACT_FROM_ACCOUNT"
       * W には D とは異なる分類とアクションがあります。
       * 送金には、送金元と送金先のアカウント処理が必要です。
                WHEN "T"
-                   DISPLAY "CATEGORY=TRANSFER"
-                   DISPLAY "ACTION=PROCESS_BOTH_ACCOUNTS"
+                   DISPLAY "分類=TRANSFER"
+                   DISPLAY "処理=PROCESS_BOTH_ACCOUNTS"
       * T は、両方のアカウント ID を必要とする転送を示します。
       * リストされていない値はすべて、レビュー対象として明示的にマークされています。
       * フォールバックにより、サポートされていないコードが出力に表示されたままになります。
                WHEN OTHER
-                   DISPLAY "CATEGORY=UNKNOWN"
-                   DISPLAY "ACTION=REJECT_FOR_REVIEW"
+                   DISPLAY "分類=UNKNOWN"
+                   DISPLAY "処理=REJECT_FOR_REVIEW"
            END-EVALUATE
       * この制御ステートメントは入力コードを変更しません。
       * アクションラベルは将来の作業を説明します。それは実行しません。

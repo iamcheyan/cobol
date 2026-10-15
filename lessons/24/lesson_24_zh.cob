@@ -19,9 +19,9 @@
        01 WS-LIMIT-COUNT PIC 9(3) VALUE ZERO.
        PROCEDURE DIVISION.
        0000-MAIN.
-           DISPLAY "CALLER=START"
+           DISPLAY "调用方：开始"
            PERFORM 1000-RUN-CHECK-CASES
-           DISPLAY "CALLER=RESUMED"
+           DISPLAY "调用方：子程序返回后继续"
            PERFORM 3000-DISPLAY-SUMMARY
            STOP RUN.
        1000-RUN-CHECK-CASES.
@@ -60,9 +60,9 @@
        2000-CALL-AMOUNT-CHECK.
            MOVE SPACES TO WS-CHECK-RESULT
            MOVE WS-AMOUNT TO WS-EDITED-AMOUNT
-           DISPLAY "CALL=BEGIN AMOUNT=" WS-EDITED-AMOUNT
+           DISPLAY "调用前 金额=" WS-EDITED-AMOUNT
            CALL "CHECK-AMOUNT" USING WS-AMOUNT WS-CHECK-RESULT
-           DISPLAY "CALL=RETURN STATUS="
+           DISPLAY "调用返回 状态="
                FUNCTION TRIM(WS-CHECK-RESULT TRAILING)
            PERFORM 2100-COUNT-CHECK-RESULT.
        2100-COUNT-CHECK-RESULT.
@@ -80,8 +80,8 @@
                    ADD 1 TO WS-REJECT-COUNT
            END-EVALUATE.
        3000-DISPLAY-SUMMARY.
-           DISPLAY "SUMMARY CHECKED=" WS-CHECK-COUNT
-               " VALID=" WS-VALID-COUNT
-               " REJECTED=" WS-REJECT-COUNT
-           DISPLAY "REJECT ZERO=" WS-ZERO-COUNT
-               " OVER_LIMIT=" WS-LIMIT-COUNT.
+           DISPLAY "检查总数=" WS-CHECK-COUNT
+               " 有效=" WS-VALID-COUNT
+               " 拒绝=" WS-REJECT-COUNT
+           DISPLAY "零金额拒绝数=" WS-ZERO-COUNT
+               " 超限拒绝数=" WS-LIMIT-COUNT.

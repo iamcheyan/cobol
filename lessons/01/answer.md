@@ -5,13 +5,13 @@
 将源码中的：
 
 ```cobol
-           DISPLAY "Hello, COBOL!".
+           DISPLAY "こんにちは、COBOL！".
 ```
 
 改为：
 
 ```cobol
-           DISPLAY "Hello, batch team!".
+           DISPLAY "こんにちは、バッチチーム！".
 ```
 
 运行：
@@ -25,5 +25,5 @@ cobc -x -Wall -o build/lesson_01 lesson_01.cob
 预期输出：
 
 ```text
-Hello, batch team!
+こんにちは、バッチチーム！
 ```

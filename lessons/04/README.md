@@ -73,12 +73,12 @@ cobc -x -Wall -o "$scratch_dir/lesson_04" lesson_04.cob
 GnuCOBOL 3.2.0 的标准输出：
 
 ```text
-TRANSACTION-REFERENCE=TXN-00000001
-ACCOUNT-STATUS=A
-TRANSACTION-AMOUNT=+0000125.50
-MAXIMUM-AMOUNT=0001000.00
-DECISION=ACCEPTED
-REASON=WITHIN_RULES
+取引参照番号=TXN-00000001
+口座状態=A
+取引金額=+0000125.50
+上限金額=0001000.00
+判定=ACCEPTED
+理由=WITHIN_RULES
 ```
 
 本工作区实测语法检查、编译和运行返回码均为 0；输出与上面一致。运行时标准错误另有系统警告 `Warning: program compiled against libxml 212 using older 209`，该警告不是 COBOL 程序输出，触发组件尚未定位。

@@ -28,7 +28,7 @@
       * これらの PIC 9 フィールドは、符号なしの整数カウンターです。
        PROCEDURE DIVISION.
       * 設定された包括的な最終サンプル番号を表示します。
-           DISPLAY "LAST-SAMPLE=" WS-LAST-SAMPLE
+           DISPLAY "最終サンプル番号=" WS-LAST-SAMPLE
       * サンプル番号を 1 から構成された最後の番号まで繰り返します。
       * ループ前の表示では、ゼロ反復実行も公開されます。
       * FROM は、この実行のインデックスの初期値を提供します。
@@ -39,16 +39,16 @@
                EVALUATE WS-SAMPLE-INDEX
       * サンプル 1 は入金トランザクションです。
                    WHEN 1
-                       DISPLAY "SAMPLE=001 CODE=D AMOUNT=125.50"
+                       DISPLAY "例=001 符号=D 額=125.50"
       * サンプル 2 は出金トランザクションです。
                    WHEN 2
-                       DISPLAY "SAMPLE=002 CODE=W AMOUNT=040.10"
+                       DISPLAY "例=002 符号=W 額=040.10"
       * サンプル 3 は転送トランザクションです。
                    WHEN 3
-                       DISPLAY "SAMPLE=003 CODE=T AMOUNT=075.00"
+                       DISPLAY "例=003 符号=T 額=075.00"
       * サンプル 3 の後に上限がこの分岐に達します。
                    WHEN OTHER
-                       DISPLAY "SAMPLE=UNMAPPED"
+                       DISPLAY "例=UNMAPPED"
                END-EVALUATE
       * サンプル分岐が完了した後にカウントします。
                COMPUTE WS-PROCESSED-COUNT =
@@ -59,7 +59,7 @@
       * COMPUTE は、サンプル分岐後にカウントをインクリメントします。
       * END-PERFORM 後の DISPLAY は最終カウントを報告します。
       * 実際に UNTIL テストに合格した反復回数を表示します。
-           DISPLAY "SAMPLES-PROCESSED=" WS-PROCESSED-COUNT
+           DISPLAY "処理件数=" WS-PROCESSED-COUNT
       * インデックスは、LAST-SAMPLE より大きい最初の値で停止します。
       * 制限が 3 を超えると、マップされていないサンプル ブランチも適用されます。
       * このループは、入力ソースとしてテーブルやファイルを使用しません。

@@ -17,7 +17,7 @@ course-check:
 		$(COBC) -fsyntax-only lessons/01/lesson_01.cob; \
 		$(COBC) -x -Wall -o "$$tmp/lesson_01" lessons/01/lesson_01.cob; \
 		output=$$("$$tmp/lesson_01"); \
-		test "$$output" = 'Hello, COBOL!'; \
+		test "$$output" = 'こんにちは、COBOL！'; \
 		printf '%s\n' "$$output"
 
 legacy-course-check:

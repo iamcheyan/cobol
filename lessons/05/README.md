@@ -21,11 +21,11 @@
 ```cobol
 EVALUATE WS-TRANSACTION-CODE
     WHEN "D"
-        DISPLAY "CATEGORY=DEPOSIT"
+        DISPLAY "分類=DEPOSIT"
     WHEN "W"
-        DISPLAY "CATEGORY=WITHDRAWAL"
+        DISPLAY "分類=WITHDRAWAL"
     WHEN OTHER
-        DISPLAY "CATEGORY=UNKNOWN"
+        DISPLAY "分類=UNKNOWN"
 END-EVALUATE
 ```
 
@@ -76,10 +76,10 @@ cobc -x -Wall -o "$scratch_dir/lesson_05" lesson_05.cob
 GnuCOBOL 3.2.0 实际标准输出：
 
 ```text
-TRANSACTION-REFERENCE=TXN-00000001
-TRANSACTION-CODE=D
-CATEGORY=DEPOSIT
-ACTION=ADD_TO_ACCOUNT
+取引参照番号=TXN-00000001
+取引コード=D
+分類=DEPOSIT
+処理=ADD_TO_ACCOUNT
 ```
 
 本工作区语法检查、编译和运行返回码均为 0，输出与上面一致。运行时标准错误另有系统警告 `Warning: program compiled against libxml 212 using older 209`，不是 COBOL 程序输出，触发组件尚未定位。

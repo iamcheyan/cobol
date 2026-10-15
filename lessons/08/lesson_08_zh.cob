@@ -39,8 +39,8 @@
            MOVE ZERO TO WS-PROCESSED-COUNT
            MOVE ZERO TO WS-ACCEPTED-COUNT
            MOVE ZERO TO WS-REJECTED-COUNT
-           DISPLAY "BATCH=START"
-           DISPLAY "OPENING-BALANCE=" WS-OPENING-BALANCE.
+           DISPLAY "批次=START"
+           DISPLAY "期初余额=" WS-OPENING-BALANCE.
       * 使用样本编号按顺序处理每个固定记录。
        2000-PROCESS-BATCH.
            PERFORM VARYING WS-SAMPLE-INDEX FROM 1 BY 1
@@ -72,9 +72,9 @@
                    MOVE "X" TO WS-TRANSACTION-CODE
                    MOVE ZERO TO WS-TRANSACTION-AMOUNT
            END-EVALUATE
-           DISPLAY "RECORD=" WS-SAMPLE-INDEX
-               " CODE=" WS-TRANSACTION-CODE
-               " AMOUNT=" WS-TRANSACTION-AMOUNT.
+           DISPLAY "记录=" WS-SAMPLE-INDEX
+               " 代码=" WS-TRANSACTION-CODE
+               " 金额=" WS-TRANSACTION-AMOUNT.
       * 对当前记录进行分类并仅应用接受的金额。
        2200-CLASSIFY-AND-POST.
            EVALUATE WS-TRANSACTION-CODE
@@ -85,12 +85,12 @@
                                + WS-TRANSACTION-AMOUNT
                        COMPUTE WS-ACCEPTED-COUNT =
                            WS-ACCEPTED-COUNT + 1
-                       DISPLAY "RESULT=ACCEPTED REASON=DEPOSIT"
+                       DISPLAY "结果=ACCEPTED 原因=DEPOSIT"
                    ELSE
                        COMPUTE WS-REJECTED-COUNT =
                            WS-REJECTED-COUNT + 1
-                       DISPLAY "RESULT=REJECTED"
-                           " REASON=AMOUNT_NOT_POSITIVE"
+                       DISPLAY "结果=REJECTED"
+                           " 原因=AMOUNT_NOT_POSITIVE"
                    END-IF
                WHEN "W"
                    IF WS-TRANSACTION-AMOUNT > ZERO
@@ -101,32 +101,32 @@
                                    - WS-TRANSACTION-AMOUNT
                            COMPUTE WS-ACCEPTED-COUNT =
                                WS-ACCEPTED-COUNT + 1
-                           DISPLAY "RESULT=ACCEPTED"
-                               " REASON=WITHDRAWAL"
+                           DISPLAY "结果=ACCEPTED"
+                               " 原因=WITHDRAWAL"
                        ELSE
                            COMPUTE WS-REJECTED-COUNT =
                                WS-REJECTED-COUNT + 1
-                           DISPLAY "RESULT=REJECTED"
-                               " REASON=INSUFFICIENT_FUNDS"
+                           DISPLAY "结果=REJECTED"
+                               " 原因=INSUFFICIENT_FUNDS"
                        END-IF
                    ELSE
                        COMPUTE WS-REJECTED-COUNT =
                            WS-REJECTED-COUNT + 1
-                       DISPLAY "RESULT=REJECTED"
-                           " REASON=AMOUNT_NOT_POSITIVE"
+                       DISPLAY "结果=REJECTED"
+                           " 原因=AMOUNT_NOT_POSITIVE"
                    END-IF
                WHEN OTHER
                    COMPUTE WS-REJECTED-COUNT =
                        WS-REJECTED-COUNT + 1
-                   DISPLAY "RESULT=REJECTED"
-                       " REASON=UNKNOWN_TRANSACTION_CODE"
+                   DISPLAY "结果=REJECTED"
+                       " 原因=UNKNOWN_TRANSACTION_CODE"
            END-EVALUATE.
       * 完成样本批次后报告总计和余额。
        9000-REPORT.
-           DISPLAY "PROCESSED=" WS-PROCESSED-COUNT
-           DISPLAY "ACCEPTED=" WS-ACCEPTED-COUNT
-           DISPLAY "REJECTED=" WS-REJECTED-COUNT
-           DISPLAY "FINAL-BALANCE=" WS-CURRENT-BALANCE.
+           DISPLAY "已处理数=" WS-PROCESSED-COUNT
+           DISPLAY "已接受数=" WS-ACCEPTED-COUNT
+           DISPLAY "已拒绝数=" WS-REJECTED-COUNT
+           DISPLAY "最终余额=" WS-CURRENT-BALANCE.
       * 主段落是程序唯一的入口执行序列。
       * 每个 PERFORM 返回到其段落调用之后的语句。
       * 该流程段落使用 PERFORM VARYING 进行记录迭代。

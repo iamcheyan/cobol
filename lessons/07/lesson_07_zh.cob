@@ -37,23 +37,23 @@
       * 此显示证明控制权已返回到主段落。
       * STOP RUN 防止普通流程进入段落定义。
       * Main是这个独立程序使用的入口路径。
-           DISPLAY "BATCH=COMPLETE"
+           DISPLAY "批次=COMPLETE"
       * STOP RUN 在执行进入定义之前结束 main。
            STOP RUN.
       * 初始化阶段准备输出字段以进行处理。
        1000-INITIALIZE.
-           DISPLAY "STAGE=INITIALIZE"
+           DISPLAY "阶段=INITIALIZE"
            MOVE ZERO TO WS-CLOSING-BALANCE.
       * 处理阶段根据固定输入计算结果。
        2000-PROCESS.
-           DISPLAY "STAGE=PROCESS"
+           DISPLAY "阶段=PROCESS"
            COMPUTE WS-CLOSING-BALANCE =
                WS-OPENING-BALANCE + WS-DEPOSIT - WS-WITHDRAWAL
-           DISPLAY "CLOSING-BALANCE=" WS-CLOSING-BALANCE.
+           DISPLAY "期末余额=" WS-CLOSING-BALANCE.
       * Finalize 阶段报告已完成的批次结果。
        9000-FINALIZE.
-           DISPLAY "STAGE=FINALIZE"
-           DISPLAY "FINAL-BALANCE=" WS-CLOSING-BALANCE.
+           DISPLAY "阶段=FINALIZE"
+           DISPLAY "最终余额=" WS-CLOSING-BALANCE.
       * 每个 PERFORM 都针对该程序中的一个指定段落。
       * 段落以下一个名称或程序段结尾处结束。
       * 到达段落末尾将控制权返回给调用者。

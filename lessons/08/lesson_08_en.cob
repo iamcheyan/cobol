@@ -39,8 +39,8 @@
            MOVE ZERO TO WS-PROCESSED-COUNT
            MOVE ZERO TO WS-ACCEPTED-COUNT
            MOVE ZERO TO WS-REJECTED-COUNT
-           DISPLAY "BATCH=START"
-           DISPLAY "OPENING-BALANCE=" WS-OPENING-BALANCE.
+           DISPLAY "Batch=START"
+           DISPLAY "Opening balance=" WS-OPENING-BALANCE.
       * Process each fixed record in sequence using its sample number.
        2000-PROCESS-BATCH.
            PERFORM VARYING WS-SAMPLE-INDEX FROM 1 BY 1
@@ -72,7 +72,7 @@
                    MOVE "X" TO WS-TRANSACTION-CODE
                    MOVE ZERO TO WS-TRANSACTION-AMOUNT
            END-EVALUATE
-           DISPLAY "RECORD=" WS-SAMPLE-INDEX
+           DISPLAY "Record=" WS-SAMPLE-INDEX
                " CODE=" WS-TRANSACTION-CODE
                " AMOUNT=" WS-TRANSACTION-AMOUNT.
       * Classify the current record and apply only accepted amounts.
@@ -85,11 +85,11 @@
                                + WS-TRANSACTION-AMOUNT
                        COMPUTE WS-ACCEPTED-COUNT =
                            WS-ACCEPTED-COUNT + 1
-                       DISPLAY "RESULT=ACCEPTED REASON=DEPOSIT"
+                       DISPLAY "Result=ACCEPTED REASON=DEPOSIT"
                    ELSE
                        COMPUTE WS-REJECTED-COUNT =
                            WS-REJECTED-COUNT + 1
-                       DISPLAY "RESULT=REJECTED"
+                       DISPLAY "Result=REJECTED"
                            " REASON=AMOUNT_NOT_POSITIVE"
                    END-IF
                WHEN "W"
@@ -101,32 +101,32 @@
                                    - WS-TRANSACTION-AMOUNT
                            COMPUTE WS-ACCEPTED-COUNT =
                                WS-ACCEPTED-COUNT + 1
-                           DISPLAY "RESULT=ACCEPTED"
+                           DISPLAY "Result=ACCEPTED"
                                " REASON=WITHDRAWAL"
                        ELSE
                            COMPUTE WS-REJECTED-COUNT =
                                WS-REJECTED-COUNT + 1
-                           DISPLAY "RESULT=REJECTED"
+                           DISPLAY "Result=REJECTED"
                                " REASON=INSUFFICIENT_FUNDS"
                        END-IF
                    ELSE
                        COMPUTE WS-REJECTED-COUNT =
                            WS-REJECTED-COUNT + 1
-                       DISPLAY "RESULT=REJECTED"
+                       DISPLAY "Result=REJECTED"
                            " REASON=AMOUNT_NOT_POSITIVE"
                    END-IF
                WHEN OTHER
                    COMPUTE WS-REJECTED-COUNT =
                        WS-REJECTED-COUNT + 1
-                   DISPLAY "RESULT=REJECTED"
+                   DISPLAY "Result=REJECTED"
                        " REASON=UNKNOWN_TRANSACTION_CODE"
            END-EVALUATE.
       * Report totals and the balance after the complete sample batch.
        9000-REPORT.
-           DISPLAY "PROCESSED=" WS-PROCESSED-COUNT
-           DISPLAY "ACCEPTED=" WS-ACCEPTED-COUNT
-           DISPLAY "REJECTED=" WS-REJECTED-COUNT
-           DISPLAY "FINAL-BALANCE=" WS-CURRENT-BALANCE.
+           DISPLAY "Processed=" WS-PROCESSED-COUNT
+           DISPLAY "Accepted=" WS-ACCEPTED-COUNT
+           DISPLAY "Rejected=" WS-REJECTED-COUNT
+           DISPLAY "Final balance=" WS-CURRENT-BALANCE.
       * The main paragraph is the program's only entry sequence.
       * Each PERFORM returns to the statement after its paragraph call.
       * The process paragraph uses PERFORM VARYING for record iteration.

@@ -35,7 +35,7 @@
                    PERFORM 4000-CLOSE-CURSOR
                END-IF
            END-IF
-           DISPLAY "ROWS=" WS-ROW-COUNT
+           DISPLAY "行数=" WS-ROW-COUNT
            IF WS-DB-OPEN = "Y"
                PERFORM 9000-DISCONNECT-DATABASE
            ELSE
@@ -58,9 +58,9 @@
            END-EXEC
            IF SQLCODE = 0
                MOVE "Y" TO WS-DB-OPEN
-               DISPLAY "CONNECT=OK"
+               DISPLAY "连接=成功"
            ELSE
-               DISPLAY "CONNECT=ERROR SQLSTATE=" SQLSTATE
+               DISPLAY "连接=错误 SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            END-IF.
        2000-OPEN-CURSOR.
@@ -68,9 +68,9 @@
            EXEC SQL OPEN ACCOUNT-CURSOR END-EXEC
            IF SQLCODE = 0
                MOVE "Y" TO WS-CURSOR-OPEN
-               DISPLAY "CURSOR=OPEN"
+               DISPLAY "游标=打开"
            ELSE
-               DISPLAY "CURSOR=OPEN_ERROR SQLSTATE=" SQLSTATE
+               DISPLAY "游标=打开错误 SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            END-IF.
        3000-FETCH-ROWS.
@@ -84,13 +84,13 @@
                  WHEN 0
                    ADD 1 TO WS-ROW-COUNT
                    MOVE WS-BALANCE TO WS-EDITED-BALANCE
-                   DISPLAY "ROW=" WS-ACCOUNT " CUSTOMER="
-                           WS-CUSTOMER " BALANCE=" WS-EDITED-BALANCE
+                   DISPLAY "行=" WS-ACCOUNT " 客户="
+                           WS-CUSTOMER " 余额=" WS-EDITED-BALANCE
                  WHEN 100
-                   DISPLAY "FETCH=EOF SQLCODE=100"
+                   DISPLAY "读取=EOF SQLCODE=100"
                    MOVE "Y" TO WS-DONE
                  WHEN OTHER
-                   DISPLAY "FETCH=ERROR SQLSTATE=" SQLSTATE
+                   DISPLAY "读取=错误 SQLSTATE=" SQLSTATE
                    MOVE "Y" TO WS-FAILED WS-DONE
                END-EVALUATE
            END-PERFORM.
@@ -99,18 +99,18 @@
            EXEC SQL CLOSE ACCOUNT-CURSOR END-EXEC
            IF SQLCODE = 0
                MOVE "N" TO WS-CURSOR-OPEN
-               DISPLAY "CURSOR=CLOSED"
+               DISPLAY "游标=关闭"
            ELSE
-               DISPLAY "CURSOR=CLOSE_ERROR SQLSTATE=" SQLSTATE
+               DISPLAY "游标=关闭错误 SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            END-IF.
        9000-DISCONNECT-DATABASE.
       * 游标处理后，CONNECT RESET 会释放数据库连接。
            EXEC SQL CONNECT RESET END-EXEC
            IF SQLCODE = 0
-               DISPLAY "DISCONNECT=OK"
+               DISPLAY "断开=成功"
            ELSE
-               DISPLAY "DISCONNECT=ERROR SQLSTATE=" SQLSTATE
+               DISPLAY "断开=错误 SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            END-IF
            IF WS-FAILED = "Y"

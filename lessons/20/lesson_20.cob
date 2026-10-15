@@ -40,20 +40,20 @@
        0000-MAIN.
            OPEN INPUT ACCOUNT-MASTER
            IF WS-ACCOUNT-STATUS NOT = "00"
-               DISPLAY "OPEN=ACCOUNT FAILED STATUS="
+               DISPLAY "口座ファイルを開けません STATUS="
                    WS-ACCOUNT-STATUS
                MOVE 1 TO RETURN-CODE
                STOP RUN
            END-IF
            OPEN INPUT DAILY-TRANSACTIONS
            IF WS-TRANSACTION-STATUS NOT = "00"
-               DISPLAY "OPEN=TRANSACTION FAILED STATUS="
+               DISPLAY "取引ファイルを開けません STATUS="
                    WS-TRANSACTION-STATUS
                CLOSE ACCOUNT-MASTER
                MOVE 1 TO RETURN-CODE
                STOP RUN
            END-IF
-           DISPLAY "OPEN=ACCOUNT OK OPEN=TRANSACTION OK"
+           DISPLAY "口座と取引を開きました"
            PERFORM 1000-READ-ACCOUNT
            PERFORM 2000-READ-TRANSACTION
            PERFORM UNTIL WS-ACCOUNT-EOF = "Y"
@@ -96,7 +96,7 @@
            END-READ
            IF WS-ACCOUNT-STATUS NOT = "00"
                AND WS-ACCOUNT-STATUS NOT = "10"
-               DISPLAY "READ=ACCOUNT FAILED STATUS="
+               DISPLAY "口座ファイル読み取り失敗 STATUS="
                    WS-ACCOUNT-STATUS
                MOVE "Y" TO WS-IO-ERROR
            END-IF.
@@ -109,41 +109,41 @@
            END-READ
            IF WS-TRANSACTION-STATUS NOT = "00"
                AND WS-TRANSACTION-STATUS NOT = "10"
-               DISPLAY "READ=TRANSACTION FAILED STATUS="
+               DISPLAY "取引ファイル読み取り失敗 STATUS="
                    WS-TRANSACTION-STATUS
                MOVE "Y" TO WS-IO-ERROR
            END-IF.
        4000-REPORT-ACCOUNT-ONLY.
            ADD 1 TO WS-ACCOUNT-ONLY-COUNT
-           DISPLAY "ACCOUNT_ONLY ACCOUNT=" FD-ACCOUNT-NUMBER
-               " CUSTOMER=" FD-CUSTOMER-ID
-               " BALANCE=" FD-ACCOUNT-BALANCE.
+           DISPLAY "口座のみ 口座番号=" FD-ACCOUNT-NUMBER
+               " 顧客番号=" FD-CUSTOMER-ID
+               " 残高=" FD-ACCOUNT-BALANCE.
        4100-REPORT-TRANSACTION-ONLY.
            ADD 1 TO WS-TRANSACTION-ONLY-COUNT
-           DISPLAY "TRANSACTION_ONLY ACCOUNT="
+           DISPLAY "取引のみ 口座番号="
                FD-TRANSACTION-ACCOUNT
-               " TYPE=" FD-TRANSACTION-TYPE
-               " AMOUNT=" FD-TRANSACTION-AMOUNT.
+               " 種別=" FD-TRANSACTION-TYPE
+               " 金額=" FD-TRANSACTION-AMOUNT.
        4200-REPORT-MATCH.
            ADD 1 TO WS-MATCH-COUNT
-           DISPLAY "MATCH ACCOUNT=" FD-ACCOUNT-NUMBER
-               " CUSTOMER=" FD-CUSTOMER-ID
-               " BALANCE=" FD-ACCOUNT-BALANCE
-               " TYPE=" FD-TRANSACTION-TYPE
-               " AMOUNT=" FD-TRANSACTION-AMOUNT.
+           DISPLAY "一致 口座番号=" FD-ACCOUNT-NUMBER
+               " 顧客番号=" FD-CUSTOMER-ID
+               " 残高=" FD-ACCOUNT-BALANCE
+               " 種別=" FD-TRANSACTION-TYPE
+               " 金額=" FD-TRANSACTION-AMOUNT.
        9000-CLOSE-FILES.
            CLOSE ACCOUNT-MASTER
            IF WS-ACCOUNT-STATUS NOT = "00"
-               DISPLAY "CLOSE=ACCOUNT FAILED STATUS="
+               DISPLAY "口座ファイルクローズ失敗 STATUS="
                    WS-ACCOUNT-STATUS
                MOVE "Y" TO WS-IO-ERROR
            END-IF
            CLOSE DAILY-TRANSACTIONS
            IF WS-TRANSACTION-STATUS NOT = "00"
-               DISPLAY "CLOSE=TRANSACTION FAILED STATUS="
+               DISPLAY "取引ファイルクローズ失敗 STATUS="
                    WS-TRANSACTION-STATUS
                MOVE "Y" TO WS-IO-ERROR
            END-IF
-           DISPLAY "SUMMARY MATCHED=" WS-MATCH-COUNT
-               " ACCOUNT_ONLY=" WS-ACCOUNT-ONLY-COUNT
-               " TRANSACTION_ONLY=" WS-TRANSACTION-ONLY-COUNT.
+           DISPLAY "照合件数=" WS-MATCH-COUNT
+               " 口座のみ=" WS-ACCOUNT-ONLY-COUNT
+               " 取引のみ=" WS-TRANSACTION-ONLY-COUNT.

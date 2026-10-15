@@ -69,21 +69,21 @@
            COMPUTE WS-CLOSING-BALANCE =
                WS-PRE-INTEREST-BALANCE + WS-INTEREST-ROUNDED.
       * 先显示原始输入，再显示计算值。
-           DISPLAY "OPENING-BALANCE=" WS-OPENING-BALANCE
-           DISPLAY "DEPOSIT=" WS-DEPOSIT
-           DISPLAY "WITHDRAWAL=" WS-WITHDRAWAL
-           DISPLAY "SERVICE-FEE=" WS-SERVICE-FEE
-           DISPLAY "PERIOD-RATE=" WS-PERIOD-RATE
+           DISPLAY "期初余额=" WS-OPENING-BALANCE
+           DISPLAY "存款金额=" WS-DEPOSIT
+           DISPLAY "取款金额=" WS-WITHDRAWAL
+           DISPLAY "服务费=" WS-SERVICE-FEE
+           DISPLAY "期间利率=" WS-PERIOD-RATE
       * 比较计息前余额与完整精度的利息结果。
-           DISPLAY "PRE-INTEREST-BALANCE="
+           DISPLAY "计息前余额="
                WS-PRE-INTEREST-BALANCE
-           DISPLAY "INTEREST-RAW-4DP=" WS-INTEREST-RAW
+           DISPLAY "原始利息（4位小数）=" WS-INTEREST-RAW
       * 以下输出展示MOVE和COMPUTE写入两位小数字段的结果。
-           DISPLAY "INTEREST-MOVE-2DP=" WS-INTEREST-MOVE
-           DISPLAY "INTEREST-COMPUTE-TRUNC=" WS-INTEREST-TRUNC
-           DISPLAY "INTEREST-COMPUTE-ROUNDED="
+           DISPLAY "MOVE后利息（2位小数）=" WS-INTEREST-MOVE
+           DISPLAY "COMPUTE截断利息=" WS-INTEREST-TRUNC
+           DISPLAY "COMPUTE四舍五入利息="
                WS-INTEREST-ROUNDED
-           DISPLAY "CLOSING-BALANCE=" WS-CLOSING-BALANCE
+           DISPLAY "期末余额=" WS-CLOSING-BALANCE
       * 每个显示金额都有明确声明的接收字段精度。
       * DISPLAY显示隐含小数点；PIC V不占存储位。
       * 此处COMPUTE表达式不会改变源金额。

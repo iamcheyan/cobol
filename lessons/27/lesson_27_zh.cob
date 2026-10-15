@@ -79,15 +79,15 @@
                PERFORM 9200-LOG-BATCH-END
                CLOSE BATCH-LOG
                IF WS-LOG-STATUS NOT = "00"
-                   DISPLAY "ERROR=CLOSE_LOG STATUS=" WS-LOG-STATUS
+                   DISPLAY "错误=关闭日志 状态=" WS-LOG-STATUS
                    MOVE "Y" TO WS-SYSTEM-ERROR
                END-IF
                MOVE "N" TO WS-LOG-OPEN
            END-IF
-           DISPLAY "SUMMARY INPUT=" WS-INPUT-COUNT
-               " ACCEPTED=" WS-ACCEPTED-COUNT
-               " REJECTED=" WS-REJECTED-COUNT
-           DISPLAY "SYSTEM-ERROR=" WS-SYSTEM-ERROR
+           DISPLAY "汇总 输入=" WS-INPUT-COUNT
+               " 接受=" WS-ACCEPTED-COUNT
+               " 拒绝=" WS-REJECTED-COUNT
+           DISPLAY "系统错误=" WS-SYSTEM-ERROR
            IF WS-SYSTEM-ERROR = "Y"
                MOVE 1 TO RETURN-CODE
            END-IF
@@ -98,7 +98,7 @@
            IF WS-LOG-STATUS = "00"
                MOVE "Y" TO WS-LOG-OPEN
            ELSE
-               DISPLAY "ERROR=OPEN_LOG STATUS=" WS-LOG-STATUS
+               DISPLAY "错误=打开日志 状态=" WS-LOG-STATUS
                MOVE "Y" TO WS-SYSTEM-ERROR
            END-IF.
       * 按序打开业务文件；仅状态 00 时设置打开标志。
@@ -206,7 +206,7 @@
            WRITE FD-ACCEPTED-RECORD FROM WS-ACCEPTED-WORK
            IF WS-ACCEPTED-STATUS = "00"
                ADD 1 TO WS-ACCEPTED-COUNT
-               DISPLAY "ACCEPTED ACCOUNT=" WS-ACCOUNT
+               DISPLAY "接受账户=" WS-ACCOUNT
                PERFORM 4100-LOG-ACCEPTED
            ELSE
                MOVE "WRITE_ACCEPTED" TO WS-ERROR-OP
@@ -233,7 +233,7 @@
            WRITE FD-REJECTED-RECORD FROM WS-REJECTED-WORK
            IF WS-REJECTED-STATUS = "00"
                ADD 1 TO WS-REJECTED-COUNT
-               DISPLAY "REJECTED ACCOUNT=" WS-ACCOUNT
+               DISPLAY "拒绝账户=" WS-ACCOUNT
                    " REASON="
                    FUNCTION TRIM(WS-REJECT-REASON TRAILING)
                PERFORM 5100-LOG-REJECTED
@@ -261,7 +261,7 @@
                MOVE WS-LOG-MESSAGE TO FD-BATCH-LOG-RECORD
                WRITE FD-BATCH-LOG-RECORD
                IF WS-LOG-STATUS NOT = "00"
-                   DISPLAY "ERROR=WRITE_LOG STATUS=" WS-LOG-STATUS
+                   DISPLAY "错误=写入日志 状态=" WS-LOG-STATUS
                    MOVE "Y" TO WS-LOG-FAILED
                    MOVE "Y" TO WS-SYSTEM-ERROR
                END-IF
@@ -269,14 +269,14 @@
       * 报告操作名称和状态；日志可用时记录该事件。
        9300-REPORT-SYSTEM-ERROR.
            MOVE "Y" TO WS-SYSTEM-ERROR
-           DISPLAY "ERROR="
+           DISPLAY "错误="
                FUNCTION TRIM(WS-ERROR-OP TRAILING)
-               " STATUS=" WS-ERROR-STATUS
+               " 状态=" WS-ERROR-STATUS
            IF WS-LOG-OPEN = "Y" AND WS-LOG-FAILED = "N"
                MOVE SPACES TO WS-LOG-MESSAGE
                STRING "EVENT=SYSTEM_ERROR OP=" DELIMITED BY SIZE
                    WS-ERROR-OP DELIMITED BY SPACE
-                   " STATUS=" DELIMITED BY SIZE
+                   " 状态=" DELIMITED BY SIZE
                    WS-ERROR-STATUS DELIMITED BY SIZE
                    INTO WS-LOG-MESSAGE
                END-STRING
@@ -317,9 +317,9 @@
            MOVE SPACES TO WS-LOG-MESSAGE
            STRING "EVENT=BATCH_END INPUT=" DELIMITED BY SIZE
                WS-INPUT-COUNT DELIMITED BY SIZE
-               " ACCEPTED=" DELIMITED BY SIZE
+               " 接受=" DELIMITED BY SIZE
                WS-ACCEPTED-COUNT DELIMITED BY SIZE
-               " REJECTED=" DELIMITED BY SIZE
+               " 拒绝=" DELIMITED BY SIZE
                WS-REJECTED-COUNT DELIMITED BY SIZE
                " SYSTEM_ERROR=" DELIMITED BY SIZE
                WS-SYSTEM-ERROR DELIMITED BY SIZE

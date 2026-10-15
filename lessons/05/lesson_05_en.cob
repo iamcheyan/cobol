@@ -29,9 +29,9 @@
       * One character is enough for this deliberately small code set.
        PROCEDURE DIVISION.
       * Display the input before classifying its code.
-           DISPLAY "TRANSACTION-REFERENCE="
+           DISPLAY "Transaction reference="
                WS-TRANSACTION-REFERENCE
-           DISPLAY "TRANSACTION-CODE=" WS-TRANSACTION-CODE
+           DISPLAY "Transaction code=" WS-TRANSACTION-CODE
       * DISPLAY adds the field contents after each output label.
       * Stable labels make the four code paths easy to compare.
       * EVALUATE checks one transaction code against its WHEN choices.
@@ -40,24 +40,24 @@
            EVALUATE WS-TRANSACTION-CODE
       * Deposits increase an account balance in a later processing step.
                WHEN "D"
-                   DISPLAY "CATEGORY=DEPOSIT"
-                   DISPLAY "ACTION=ADD_TO_ACCOUNT"
+                   DISPLAY "Category=DEPOSIT"
+                   DISPLAY "Action=ADD_TO_ACCOUNT"
       * This label classifies D without changing a balance.
       * Withdrawals decrease an account balance in a later step.
                WHEN "W"
-                   DISPLAY "CATEGORY=WITHDRAWAL"
-                   DISPLAY "ACTION=SUBTRACT_FROM_ACCOUNT"
+                   DISPLAY "Category=WITHDRAWAL"
+                   DISPLAY "Action=SUBTRACT_FROM_ACCOUNT"
       * W has a distinct classification and action from D.
       * Transfers require source and destination account processing.
                WHEN "T"
-                   DISPLAY "CATEGORY=TRANSFER"
-                   DISPLAY "ACTION=PROCESS_BOTH_ACCOUNTS"
+                   DISPLAY "Category=TRANSFER"
+                   DISPLAY "Action=PROCESS_BOTH_ACCOUNTS"
       * T identifies a transfer requiring both account identifiers.
       * Every unlisted value is explicitly marked for review.
       * The fallback keeps unsupported codes visible in output.
                WHEN OTHER
-                   DISPLAY "CATEGORY=UNKNOWN"
-                   DISPLAY "ACTION=REJECT_FOR_REVIEW"
+                   DISPLAY "Category=UNKNOWN"
+                   DISPLAY "Action=REJECT_FOR_REVIEW"
            END-EVALUATE
       * This control statement does not change the input code.
       * The action label describes future work; it does not perform it.

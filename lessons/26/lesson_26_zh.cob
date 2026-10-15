@@ -50,10 +50,10 @@
                PERFORM 2000-PROCESS-INPUT
            END-IF
            PERFORM 8000-CLOSE-FILES
-           DISPLAY "SUMMARY INPUT=" WS-INPUT-COUNT
-               " ACCEPTED=" WS-ACCEPTED-COUNT
-               " REJECTED=" WS-REJECTED-COUNT
-           DISPLAY "SYSTEM-ERROR=" WS-SYSTEM-ERROR
+           DISPLAY "汇总 输入=" WS-INPUT-COUNT
+               " 接受=" WS-ACCEPTED-COUNT
+               " 拒绝=" WS-REJECTED-COUNT
+           DISPLAY "系统错误=" WS-SYSTEM-ERROR
            IF WS-SYSTEM-ERROR = "Y"
                MOVE 1 TO RETURN-CODE
            END-IF
@@ -64,7 +64,7 @@
            IF WS-INPUT-STATUS = "00"
                MOVE "Y" TO WS-INPUT-OPEN
            ELSE
-               DISPLAY "ERROR=OPEN INPUT STATUS=" WS-INPUT-STATUS
+               DISPLAY "错误=打开输入 状态=" WS-INPUT-STATUS
                MOVE "Y" TO WS-SYSTEM-ERROR
            END-IF
            IF WS-SYSTEM-ERROR = "N"
@@ -72,7 +72,7 @@
                IF WS-ACCEPTED-STATUS = "00"
                    MOVE "Y" TO WS-ACCEPTED-OPEN
                ELSE
-                   DISPLAY "ERROR=OPEN ACCEPTED STATUS="
+                   DISPLAY "错误=打开接受输出 状态="
                        WS-ACCEPTED-STATUS
                    MOVE "Y" TO WS-SYSTEM-ERROR
                END-IF
@@ -82,7 +82,7 @@
                IF WS-REJECTED-STATUS = "00"
                    MOVE "Y" TO WS-REJECTED-OPEN
                ELSE
-                   DISPLAY "ERROR=OPEN REJECTED STATUS="
+                   DISPLAY "错误=打开拒绝输出 状态="
                        WS-REJECTED-STATUS
                    MOVE "Y" TO WS-SYSTEM-ERROR
                END-IF
@@ -105,7 +105,7 @@
            END-READ
            IF WS-INPUT-STATUS NOT = "00"
                AND WS-INPUT-STATUS NOT = "10"
-               DISPLAY "ERROR=READ INPUT STATUS="
+               DISPLAY "错误=读取输入 状态="
                    WS-INPUT-STATUS
                MOVE "Y" TO WS-SYSTEM-ERROR
            END-IF.
@@ -144,9 +144,9 @@
            WRITE FD-ACCEPTED-RECORD FROM WS-ACCEPTED-WORK
            IF WS-ACCEPTED-STATUS = "00"
                ADD 1 TO WS-ACCEPTED-COUNT
-               DISPLAY "ACCEPTED ACCOUNT=" WS-ACCOUNT
+               DISPLAY "接受账户=" WS-ACCOUNT
            ELSE
-               DISPLAY "ERROR=WRITE ACCEPTED STATUS="
+               DISPLAY "错误=写入接受输出 状态="
                    WS-ACCEPTED-STATUS
                MOVE "Y" TO WS-SYSTEM-ERROR
            END-IF.
@@ -159,11 +159,11 @@
            WRITE FD-REJECTED-RECORD FROM WS-REJECTED-WORK
            IF WS-REJECTED-STATUS = "00"
                ADD 1 TO WS-REJECTED-COUNT
-               DISPLAY "REJECTED ACCOUNT=" WS-ACCOUNT
+               DISPLAY "拒绝账户=" WS-ACCOUNT
                    " REASON="
                    FUNCTION TRIM(WS-REJECT-REASON TRAILING)
            ELSE
-               DISPLAY "ERROR=WRITE REJECTED STATUS="
+               DISPLAY "错误=写入拒绝输出 状态="
                    WS-REJECTED-STATUS
                MOVE "Y" TO WS-SYSTEM-ERROR
            END-IF.
@@ -172,7 +172,7 @@
            IF WS-REJECTED-OPEN = "Y"
                CLOSE REJECTED-OUTPUT
                IF WS-REJECTED-STATUS NOT = "00"
-                   DISPLAY "ERROR=CLOSE REJECTED STATUS="
+                   DISPLAY "错误=关闭拒绝输出 状态="
                        WS-REJECTED-STATUS
                    MOVE "Y" TO WS-SYSTEM-ERROR
                END-IF
@@ -181,7 +181,7 @@
            IF WS-ACCEPTED-OPEN = "Y"
                CLOSE ACCEPTED-OUTPUT
                IF WS-ACCEPTED-STATUS NOT = "00"
-                   DISPLAY "ERROR=CLOSE ACCEPTED STATUS="
+                   DISPLAY "错误=关闭接受输出 状态="
                        WS-ACCEPTED-STATUS
                    MOVE "Y" TO WS-SYSTEM-ERROR
                END-IF
@@ -190,7 +190,7 @@
            IF WS-INPUT-OPEN = "Y"
                CLOSE TRANSACTION-INPUT
                IF WS-INPUT-STATUS NOT = "00"
-                   DISPLAY "ERROR=CLOSE INPUT STATUS="
+                   DISPLAY "错误=关闭输入 状态="
                        WS-INPUT-STATUS
                    MOVE "Y" TO WS-SYSTEM-ERROR
                END-IF

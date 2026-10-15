@@ -29,9 +29,9 @@
       * 对于这个特意小的代码集来说，一个字符就足够了。
        PROCEDURE DIVISION.
       * 在对其代码进行分类之前显示输入。
-           DISPLAY "TRANSACTION-REFERENCE="
+           DISPLAY "交易参考号="
                WS-TRANSACTION-REFERENCE
-           DISPLAY "TRANSACTION-CODE=" WS-TRANSACTION-CODE
+           DISPLAY "交易代码=" WS-TRANSACTION-CODE
       * DISPLAY 在每个输出标签后添加字段内容。
       * 稳定的标签使四个代码路径易于比较。
       * EVALUATE 根据其 WHEN 选择检查一个事务代码。
@@ -40,24 +40,24 @@
            EVALUATE WS-TRANSACTION-CODE
       * 存款会在后续处理步骤中增加账户余额。
                WHEN "D"
-                   DISPLAY "CATEGORY=DEPOSIT"
-                   DISPLAY "ACTION=ADD_TO_ACCOUNT"
+                   DISPLAY "类别=DEPOSIT"
+                   DISPLAY "操作=ADD_TO_ACCOUNT"
       * 该标签将 D 类分类而不改变天平。
       * 提款会在后续步骤中减少账户余额。
                WHEN "W"
-                   DISPLAY "CATEGORY=WITHDRAWAL"
-                   DISPLAY "ACTION=SUBTRACT_FROM_ACCOUNT"
+                   DISPLAY "类别=WITHDRAWAL"
+                   DISPLAY "操作=SUBTRACT_FROM_ACCOUNT"
       * W 具有与 D 不同的分类和作用。
       * 转账需要源账户和目标账户处理。
                WHEN "T"
-                   DISPLAY "CATEGORY=TRANSFER"
-                   DISPLAY "ACTION=PROCESS_BOTH_ACCOUNTS"
+                   DISPLAY "类别=TRANSFER"
+                   DISPLAY "操作=PROCESS_BOTH_ACCOUNTS"
       * T 标识需要两个账户标识符的转账。
       * 每个未列出的值都被明确标记以供审查。
       * 后备使不支持的代码在输出中可见。
                WHEN OTHER
-                   DISPLAY "CATEGORY=UNKNOWN"
-                   DISPLAY "ACTION=REJECT_FOR_REVIEW"
+                   DISPLAY "类别=UNKNOWN"
+                   DISPLAY "操作=REJECT_FOR_REVIEW"
            END-EVALUATE
       * 此控制语句不会修改输入代码。
       * 行动标签描述了未来的工作；它不执行它。

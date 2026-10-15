@@ -48,13 +48,13 @@ cp transactions.txt "$scratch_dir/"
 标准输出：
 
 ```text
-ACCEPTED ACCOUNT=A00001
-REJECTED ACCOUNT=A00002 REASON=BAD_AMOUNT
-REJECTED ACCOUNT=A00003 REASON=ZERO_AMOUNT
-ACCEPTED ACCOUNT=A00004
-REJECTED ACCOUNT=A00005 REASON=BAD_WIDTH
-SUMMARY INPUT=005 ACCEPTED=002 REJECTED=003
-SYSTEM-ERROR=N
+受理口座=A00001
+拒否口座=A00002 REASON=BAD_AMOUNT
+拒否口座=A00003 REASON=ZERO_AMOUNT
+受理口座=A00004
+拒否口座=A00005 REASON=BAD_WIDTH
+集計 入力=005 受理=002 拒否=003
+システムエラー=N
 ```
 
 `accepted.txt`：
@@ -72,7 +72,7 @@ A00003|ZERO_AMOUNT
 A00005|BAD_WIDTH
 ```
 
-缺失输入验证：在空临时目录运行程序，GnuCOBOL 3.2.0 输出 `ERROR=OPEN INPUT STATUS=35`，摘要显示 `SYSTEM-ERROR=Y`，进程返回 1。输出打开验证：先复制输入，再创建目录 `accepted.txt`；运行输出 `ERROR=OPEN ACCEPTED STATUS=37` 并返回 1。拒绝文件无法打开时也返回 1，并关闭已打开的输入和接受文件。
+缺失输入验证：在空临时目录运行程序，GnuCOBOL 3.2.0 输出 `エラー=入力オープン 状態=35`，摘要显示 `システムエラー=Y`，进程返回 1。输出打开验证：先复制输入，再创建目录 `accepted.txt`；运行输出 `エラー=受理出力オープン 状態=37` 并返回 1。拒绝文件无法打开时也返回 1，并关闭已打开的输入和接受文件。
 
 ## 五、逐步读代码
 

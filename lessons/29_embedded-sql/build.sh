@@ -60,6 +60,8 @@ case ${1:-} in
         ;;
     clean)
         rm -rf -- "$build_dir"
+        # gixpp 把 gixsql.log 写在输入文件旁边（不受 CWD 影响），这里一并清掉
+        rm -f -- "$script_dir/gixsql.log"
         ;;
     *)
         printf 'Usage: %s {check|build|run|clean}\n' "$0" >&2

@@ -59,7 +59,7 @@ echo $?                   # 查看退出码
 | `./build.sh build` 退出码 | `0` |
 | `./build.sh run` 退出码 | `0` |
 | 标准输出 | 4 行，与 [`expected-output.txt`](./expected-output.txt) 逐行一致 |
-| 生成物 | `build/accounts.db`、`build/lesson_29.cbsql`、`build/lesson_29`，以及预编译器日志 `gixsql.log`（写在 `lesson.cob` 旁边，已被 `.gitignore` 覆盖） |
+| 生成物 | `build/accounts.db`、`build/lesson_29.cbsql`、`build/lesson_29`，以及工具链日志 `gixsql.log`（GixSQL 预编译器写在源文件旁、运行库追加到进程工作目录；已被 `.gitignore` 覆盖） |
 
 ```text
 接続=成功
@@ -130,6 +130,6 @@ SQL 中以冒号开头的字段是宿主变量（如 `:WS-LOOKUP-ACCOUNT`），G
 
 - [GnuCOBOL FAQ：SQL 数据库接口](https://gnucobol.sourceforge.io/faq/master.html#does-gnucobol-support-any-sql-databases)
 - [GixSQL README：Embedded SQL、宿主变量与 SQLite 连接](https://github.com/mridoni/gixsql/blob/main/README.md)
-- [GixSQL GnuCOBOL/SQLite 样例](https://github.com/mridoni/gixsql/blob/main/examples/TSQL037A-SQLITE.cbl)
+- [GixSQL GnuCOBOL/SQLite 样例](https://github.com/mridoni/gixsql/blob/main/gixsql-tests-nunit/data/TSQL037A-SQLITE.cbl)
 - [GnuCOBOL Programmer’s Guide](https://gnucobol.sourceforge.io/HTML/gnucobpg.html)
 - 仓库课程主页：[README.md](../../README.md)

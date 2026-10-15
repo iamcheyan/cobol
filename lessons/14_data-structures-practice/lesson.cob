@@ -26,7 +26,7 @@
        01 WS-SOURCE-INDEX USAGE INDEX.
        01 WS-PROCESSED-COUNT PIC 9(2) VALUE ZERO.
        01 WS-POSTED-COUNT PIC 9(2) VALUE ZERO.
-       01 WS-拒否-COUNT PIC 9(2) VALUE ZERO.
+       01 WS-REJECTED-COUNT PIC 9(2) VALUE ZERO.
        PROCEDURE DIVISION.
        0000-MAIN.
            PERFORM 1000-LOAD-ACCOUNTS
@@ -73,9 +73,9 @@
                    PERFORM 2200-POST-TRANSFER
                WHEN OTHER
                    DISPLAY "結果=拒否 REASON=UNKNOWN_TYPE"
-                   ADD 1 TO WS-拒否-COUNT
+                   ADD 1 TO WS-REJECTED-COUNT
            END-EVALUATE.
-      *デポジットにより、一致する 1 つのアカウント残高が変更されます。
+      * 存款契约：只更新找到的那一个账户；找不到则整笔拒绝。
        2100-POST-DEPOSIT.
            MOVE WS-DEPOSIT-ACCOUNT(WS-TRANSACTION-NUMBER)
                TO WS-SEARCH-KEY
@@ -91,8 +91,10 @@
                ADD 1 TO WS-POSTED-COUNT
            ELSE
                DISPLAY "結果=拒否 REASON=ACCOUNT_NOT_FOUND"
-               ADD 1 TO WS-拒否-COUNT
+               ADD 1 TO WS-REJECTED-COUNT
            END-IF.
+      * 转账契约：来源与目标都存在且来源余额足够才更新两边；
+      * 任一条件不满足则两边余额都不变。
        2200-POST-TRANSFER.
            MOVE WS-SOURCE-ACCOUNT(WS-TRANSACTION-NUMBER)
                TO WS-SEARCH-KEY
@@ -121,17 +123,17 @@
                    ELSE
                        DISPLAY "結果=拒否"
                            " REASON=INSUFFICIENT_FUNDS"
-                       ADD 1 TO WS-拒否-COUNT
+                       ADD 1 TO WS-REJECTED-COUNT
                    END-IF
                ELSE
                    DISPLAY "結果=拒否"
                        " REASON=TARGET_NOT_FOUND"
-                   ADD 1 TO WS-拒否-COUNT
+                   ADD 1 TO WS-REJECTED-COUNT
                END-IF
            ELSE
                DISPLAY "結果=拒否"
                    " REASON=SOURCE_NOT_FOUND"
-               ADD 1 TO WS-拒否-COUNT
+               ADD 1 TO WS-REJECTED-COUNT
            END-IF.
        3000-FIND-ACCOUNT.
            MOVE "N" TO WS-ACCOUNT-FOUND
@@ -151,4 +153,4 @@
                " 残高=" WS-ACCOUNT-BALANCE(3)
            DISPLAY "集計 処理件数=" WS-PROCESSED-COUNT
                " 成功=" WS-POSTED-COUNT
-               " 拒否=" WS-拒否-COUNT.
+               " 拒否=" WS-REJECTED-COUNT.

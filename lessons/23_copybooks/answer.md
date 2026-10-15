@@ -31,7 +31,7 @@ copybooks/ACCOUNT-REC.CPY:5: note: 'WS-ACCOUNT-NUMBER' defined here as PIC X(8) 
 account_report_23.cob:16: warning: value size exceeds data size [-Wtruncate]
 ```
 
-注意：README 里不带 `-Wall` 的 `cobc -fsyntax-only` **看不到**这条警告——只有真正编译（或给检查加 `-Wall`）才会暴露。
+注意：不带 `-Wall`/`-Wtruncate` 时，`cobc -fsyntax-only` 和 `cobc -x` **都看不到**这条警告（实测 `cobc -x` 同样沉默）——要看到它得显式打开警告开关。
 
 **`lesson_23` 标准输出**（只有汇总行变了）：
 

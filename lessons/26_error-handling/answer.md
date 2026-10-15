@@ -1,37 +1,54 @@
 # 第 26 课修改练习参考答案
 
-本答案只覆盖 `exercise.md` 的两项修改练习，不回答举一反三题。
+本答案只覆盖 `exercise.md` 中的**修改练习**（修正 `A00002` 的金额），不回答举一反三迁移练习。所有数字来自本工作区 GnuCOBOL 3.2.0/Linux 的实际运行。
 
-## 1. 修正金额字段
+## 修正 A00002 的金额字段
 
-把 `transactions.txt` 的第二行改为：
+**基线：** `build/transactions.txt`，即原始夹具 `transactions.txt` 的副本（5 行、62 字节）。
+
+**改动：** 只把第 2 行 `A00002|00X50` 改成 `A00002|00150`，该行仍为 12 字节，其余四行不动。
+
+```sh
+(cd build && ./lesson_26); echo "rc=$?"
+```
+
+**进程返回码：** `0`。
+
+**标准输出（实测，7 行）：**
 
 ```text
+受理口座=A00001
+受理口座=A00002
+拒否口座=A00003 REASON=ZERO_AMOUNT
+受理口座=A00004
+拒否口座=A00005 REASON=BAD_WIDTH
+集計 入力=005 受理=003 拒否=002
+システムエラー=N
+```
+
+与基线相比，第 2 行由 `拒否口座=A00002 REASON=BAD_AMOUNT` 变为 `受理口座=A00002`，其余行与记录顺序不变；汇总由 `受理=002 拒否=003` 变为 `受理=003 拒否=002`。`システムエラー` 仍为 `N`。
+
+**`build/accepted.txt`（3 行、13 字节/行 = 39 字节）：**
+
+```text
+A00001|00125
 A00002|00150
+A00004|00999
 ```
 
-此行现在通过金额校验并进入 `accepted.txt`。预期标准输出：
+`A00002|00150` 出现在**第 2 行**：程序按输入顺序写出，`A00001` 在前、`A00004` 在后，而 `A00002` 是夹具第 2 行且本次被受理。
+
+**`build/rejected.txt`（2 行：19 + 17 = 36 字节）：**
 
 ```text
-ACCEPTED ACCOUNT=A00001
-ACCEPTED ACCOUNT=A00002
-REJECTED ACCOUNT=A00003 REASON=ZERO_AMOUNT
-ACCEPTED ACCOUNT=A00004
-REJECTED ACCOUNT=A00005 REASON=BAD_WIDTH
-SUMMARY INPUT=005 ACCEPTED=003 REJECTED=002
-SYSTEM-ERROR=N
+A00003|ZERO_AMOUNT
+A00005|BAD_WIDTH
 ```
 
-接受文件新增 `A00002|00150`；拒绝文件保留零金额和短记录。进程返回 0，因为所有文件操作成功，坏业务数据已按约定写入拒绝文件。
+基线的 `A00002|BAD_AMOUNT` 一行消失，拒绝文件只剩零金额与短记录两条。
 
-## 2. 让接受输出无法打开
+**原因与自查：**
 
-在独立临时运行目录中复制 `transactions.txt`，再执行 `mkdir accepted.txt`。在本课验证的 GnuCOBOL 3.2.0/Linux 环境中，程序输出：
-
-```text
-ERROR=OPEN ACCEPTED STATUS=37
-SUMMARY INPUT=000 ACCEPTED=000 REJECTED=000
-SYSTEM-ERROR=Y
-```
-
-进程返回 1。输入已打开并由清理段落关闭；拒绝输出尚未打开，因此程序不会尝试关闭它。状态码 `37` 表示权限拒绝，包括当前目录项无法按输出文件打开的情况。
+- `00150` 是 5 位纯数字且非零，依次通过宽度（12 字节）、分隔符（第 7 列 `|`）与金额三项检查，因此不再落入 `BAD_AMOUNT`，转而写入接受文件。
+- 拒绝计数从 3 降到 2，但返回码仍是 0：业务拒绝只决定记录去向，**不改变批次返回码**；本次所有文件操作状态都是 `00`，所以 `WS-SYSTEM-ERROR` 保持 `N`、`RETURN-CODE` 保持 0。
+- 计数不变量自查：`输入 005 = 受理 003 + 拒绝 002`，且 `accepted.txt` 3 行、`rejected.txt` 2 行与两个计数逐一对应——每条记录只有一个去向。

@@ -1,18 +1,3 @@
-      * Call a separately compiled amount validator and exchange a
-      * result through caller storage.
-      * The calling contract passes PIC 9(7)V99 amount and PIC X(15)
-      * result fields. The callee returns ZERO-AMOUNT, LIMIT-EXCEEDED,
-      * or VALID; the limit of 1000.00 is inclusive.
-      * The main flow prepares eight representative and boundary values,
-      * then calls the same subprogram through a shared paragraph. That
-      * paragraph clears the result field and passes both fields by
-      * reference.
-      * The callee checks zero, then values above the limit, and
-      * classifies all others as valid. It writes the decision into
-      * caller storage and returns with GOBACK. The caller displays the
-      * result and updates the matching counters after return.
-      * After all cases, the summary reports checked, valid, rejected,
-      * and reason-specific totals.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON24.
        DATA DIVISION.

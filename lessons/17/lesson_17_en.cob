@@ -1,12 +1,5 @@
-      * Reorder fixed-width account rows with customer ID first.
       * Each record is 27 bytes: account 10, customer ID 8, balance 9.
-      * Rows have no line endings; output rows remain 27 bytes.
-      * Open input, then output. Read rows and reorder each one.
-      * If output open fails, close input and return failure.
-      * READ AT END marks normal EOF; EOF writes no output row.
       * Count only successful writes; I/O errors stop the batch.
-      * V in the balance PIC is implied and uses no byte.
-      * OPEN OUTPUT replaces the file; use a disposable output path.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. FIXED17.
        ENVIRONMENT DIVISION.

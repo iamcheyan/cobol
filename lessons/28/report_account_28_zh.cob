@@ -1,4 +1,3 @@
-      * 报告调用方持有的账户值和交易汇总。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. REPORT-ACCOUNT28.
        DATA DIVISION.

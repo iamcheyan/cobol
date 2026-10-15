@@ -2,11 +2,9 @@
        PROGRAM-ID. LESSON30.
        DATA DIVISION.
        WORKING-STORAGE SECTION.
-      * The connection details come from the run environment.
        01 WS-DATASRC PIC X(255).
        01 WS-DBUSER PIC X(64).
        01 WS-DBPASS PIC X(64).
-      * These fields receive the selected database columns.
        01 WS-ACCOUNT PIC X(10).
        01 WS-CUSTOMER PIC X(8).
        01 WS-BALANCE PIC S9(7)V99 COMP-3.
@@ -17,7 +15,6 @@
        01 WS-DONE PIC X VALUE "N".
        01 WS-FAILED PIC X VALUE "N".
        EXEC SQL INCLUDE SQLCA END-EXEC.
-      * The primary key makes ordering stable across repeated runs.
        EXEC SQL
            DECLARE ACCOUNT-CURSOR CURSOR FOR
                SELECT ACCOUNT_NO, CUSTOMER_ID, BALANCE
@@ -26,7 +23,6 @@
        END-EXEC.
        PROCEDURE DIVISION.
        MAIN-PROCEDURE.
-      * Connect, open the cursor, fetch to end-of-data, then close it.
            PERFORM 1000-CONNECT-DATABASE
            IF WS-DB-OPEN = "Y"
                PERFORM 2000-OPEN-CURSOR
@@ -45,7 +41,6 @@
            END-IF
            GOBACK.
        1000-CONNECT-DATABASE.
-      * The build script supplies an SQLite file and empty credentials.
            DISPLAY "DATASRC" UPON ENVIRONMENT-NAME
            ACCEPT WS-DATASRC FROM ENVIRONMENT-VALUE
            DISPLAY "DATASRC_USR" UPON ENVIRONMENT-NAME
@@ -64,7 +59,6 @@
                MOVE "Y" TO WS-FAILED
            END-IF.
        2000-OPEN-CURSOR.
-      * OPEN starts the result set; it does not fetch a row.
            EXEC SQL OPEN ACCOUNT-CURSOR END-EXEC
            IF SQLCODE = 0
                MOVE "Y" TO WS-CURSOR-OPEN
@@ -74,7 +68,6 @@
                MOVE "Y" TO WS-FAILED
            END-IF.
        3000-FETCH-ROWS.
-      * Each FETCH writes one row into the host variables above.
            PERFORM UNTIL WS-DONE = "Y"
                EXEC SQL
                    FETCH ACCOUNT-CURSOR
@@ -95,7 +88,6 @@
                END-EVALUATE
            END-PERFORM.
        4000-CLOSE-CURSOR.
-      * Close even after EOF or a fetch error to release resources.
            EXEC SQL CLOSE ACCOUNT-CURSOR END-EXEC
            IF SQLCODE = 0
                MOVE "N" TO WS-CURSOR-OPEN
@@ -105,7 +97,6 @@
                MOVE "Y" TO WS-FAILED
            END-IF.
        9000-DISCONNECT-DATABASE.
-      * CONNECT RESET releases the database connection after the cursor.
            EXEC SQL CONNECT RESET END-EXEC
            IF SQLCODE = 0
                DISPLAY "DISCONNECT=OK"

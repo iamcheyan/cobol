@@ -2,11 +2,9 @@
        PROGRAM-ID. LESSON30.
        DATA DIVISION.
        WORKING-STORAGE SECTION.
-      * 连接详情来自运行环境。
        01 WS-DATASRC PIC X(255).
        01 WS-DBUSER PIC X(64).
        01 WS-DBPASS PIC X(64).
-      * 这些字段接收查询选出的数据库列值。
        01 WS-ACCOUNT PIC X(10).
        01 WS-CUSTOMER PIC X(8).
        01 WS-BALANCE PIC S9(7)V99 COMP-3.
@@ -26,7 +24,6 @@
        END-EXEC.
        PROCEDURE DIVISION.
        MAIN-PROCEDURE.
-      * 连接数据库并打开游标，逐行获取结果；到达EOF后关闭游标。
            PERFORM 1000-CONNECT-DATABASE
            IF WS-DB-OPEN = "Y"
                PERFORM 2000-OPEN-CURSOR
@@ -45,7 +42,6 @@
            END-IF
            GOBACK.
        1000-CONNECT-DATABASE.
-      * 构建脚本提供 SQLite 文件和空凭据。
            DISPLAY "DATASRC" UPON ENVIRONMENT-NAME
            ACCEPT WS-DATASRC FROM ENVIRONMENT-VALUE
            DISPLAY "DATASRC_USR" UPON ENVIRONMENT-NAME
@@ -64,7 +60,6 @@
                MOVE "Y" TO WS-FAILED
            END-IF.
        2000-OPEN-CURSOR.
-      * OPEN 会启动结果集，但不会获取记录。
            EXEC SQL OPEN ACCOUNT-CURSOR END-EXEC
            IF SQLCODE = 0
                MOVE "Y" TO WS-CURSOR-OPEN
@@ -74,7 +69,6 @@
                MOVE "Y" TO WS-FAILED
            END-IF.
        3000-FETCH-ROWS.
-      * 每次 FETCH 将一行写入上述主机变量。
            PERFORM UNTIL WS-DONE = "Y"
                EXEC SQL
                    FETCH ACCOUNT-CURSOR
@@ -105,7 +99,6 @@
                MOVE "Y" TO WS-FAILED
            END-IF.
        9000-DISCONNECT-DATABASE.
-      * 游标处理后，CONNECT RESET 会释放数据库连接。
            EXEC SQL CONNECT RESET END-EXEC
            IF SQLCODE = 0
                DISPLAY "断开=成功"

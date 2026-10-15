@@ -1,4 +1,3 @@
-      * Report caller-owned account values and transaction totals.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. REPORT-ACCOUNT28.
        DATA DIVISION.

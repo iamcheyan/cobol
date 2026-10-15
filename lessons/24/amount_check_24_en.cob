@@ -1,5 +1,4 @@
       * Validate an amount received with a caller-owned result field.
-      * Classify zero first, then amounts above 1000.00. Positive values
       * at or below the limit are valid.
       * Store the decision code in caller storage and return control
       * with GOBACK.

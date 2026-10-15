@@ -1,6 +1,3 @@
-      * 使用共享账户定义生成独立的账户报告。
-      * 主流程设置账户号、客户编号和余额，然后调用报告段落。
-      * 报告段落将余额移入编辑显示字段，并以带小数点的格式输出账户资料。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. ACCOUNT-REPORT23.
        DATA DIVISION.

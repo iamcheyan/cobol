@@ -2,7 +2,6 @@
        PROGRAM-ID. SYNCDB32.
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
-      * Caller supplies final account state and shared batch counters.
        FILE-CONTROL.
            SELECT REPORT-FILE ASSIGN TO "account-report.txt"
                ORGANIZATION IS LINE SEQUENTIAL
@@ -16,12 +15,6 @@
        01 REPORT-RECORD PIC X(80).
        FD LOG-FILE.
        01 LOG-RECORD PIC X(100).
-      * Report output is recreated; the batch log is appended. Check
-      * both statuses.
-      * Open flags identify resources safe to close after partial
-      * failure.
-      * Host variables isolate database results from caller table
-      * storage.
        WORKING-STORAGE SECTION.
        01 WS-REPORT-STATUS PIC XX.
        01 WS-LOG-STATUS PIC XX.
@@ -42,10 +35,7 @@
        01 WS-LOG-LINE PIC X(100).
        01 WS-INDEX PIC 99.
        EXEC SQL INCLUDE SQLCA END-EXEC.
-      * SYNC-STATUS holds the outcome; OUTPUT-LINE serves report and
-      * log.
        LINKAGE SECTION.
-      * LINKAGE must match BATCH-INTERFACE.CPY for BY REFERENCE calls.
        01 WS-ACCOUNT-TABLE.
           05 WS-ACCOUNT-ROW OCCURS 20 TIMES.
              10 WS-ACCOUNT-NO PIC X(10).
@@ -61,11 +51,7 @@
           05 WS-INSERTED-COUNT PIC 999.
           05 WS-FAILED PIC X.
           05 WS-INTERFACE-RESERVED PIC X.
-      * GixSQL comments the final linkage field; retain this spare byte.
        PROCEDURE DIVISION USING WS-ACCOUNT-TABLE WS-BATCH-COUNTS.
-      * Open outputs first; connect and sync only when no failure is
-      * flagged.
-      * Close opened files and check each close status before returning.
        MAIN-SYNC.
            OPEN OUTPUT REPORT-FILE
            IF WS-REPORT-STATUS = "00"
@@ -113,9 +99,6 @@
                END-IF
            END-IF
            GOBACK.
-      * Read connection values from the environment, never source
-      * literals.
-      * SQLCODE zero confirms connection; any other value flags failure.
        1000-CONNECT-DATABASE.
            DISPLAY "DATASRC" UPON ENVIRONMENT-NAME
            ACCEPT WS-DATASRC FROM ENVIRONMENT-VALUE
@@ -136,16 +119,11 @@
                DISPLAY "CONNECT=ERROR SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            END-IF.
-      * Scan declared account rows until complete or a failure occurs.
        2000-SYNC-TABLE.
            PERFORM VARYING WS-INDEX FROM 1 BY 1
              UNTIL WS-INDEX > WS-ACCOUNT-COUNT OR WS-FAILED = "Y"
                PERFORM 2100-SYNC-ACCOUNT
            END-PERFORM.
-      * Copy one account to host variables and clear fields before
-      * SELECT.
-      * Classify each primary-key match as unchanged, updated, or
-      * inserted.
        2100-SYNC-ACCOUNT.
            MOVE WS-ACCOUNT-NO(WS-INDEX) TO WS-SYNC-ACCOUNT
            MOVE WS-CUSTOMER-ID(WS-INDEX) TO WS-SYNC-CUSTOMER
@@ -176,8 +154,6 @@
            IF WS-FAILED NOT = "Y"
                PERFORM 2400-REPORT-SYNC
            END-IF.
-      * SQLCODE 100 selects INSERT; other lookup errors stop processing.
-      * Report a decision only after its database operation succeeds.
        2200-UPDATE-ACCOUNT.
            EXEC SQL
                UPDATE ACCOUNT_SNAPSHOT
@@ -192,10 +168,6 @@
                DISPLAY "ERROR=UPDATE SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            END-IF.
-      * Update customer identity and computed balance using the account
-      * key.
-      * Count successful updates only; SQL errors set the shared failure
-      * flag.
        2300-INSERT-ACCOUNT.
            EXEC SQL
                INSERT INTO ACCOUNT_SNAPSHOT
@@ -210,8 +182,6 @@
                DISPLAY "ERROR=INSERT SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            END-IF.
-      * Insert a missing snapshot from caller-computed account values.
-      * Count successful inserts only; database errors fail the batch.
        2400-REPORT-SYNC.
            MOVE WS-ACCOUNT-BALANCE(WS-INDEX)
              TO WS-EDITED-BALANCE
@@ -230,9 +200,6 @@
            END-IF
            MOVE WS-OUTPUT-LINE TO WS-LOG-LINE
            PERFORM 8100-WRITE-LOG.
-      * Format outcome, account key, and final balance for display.
-      * Write each decision to report and log; either failure stops the
-      * batch.
        8100-WRITE-LOG.
            MOVE WS-LOG-LINE TO LOG-RECORD
            WRITE LOG-RECORD
@@ -240,8 +207,6 @@
                DISPLAY "ERROR=WRITE LOG STATUS=" WS-LOG-STATUS
                MOVE "Y" TO WS-FAILED
            END-IF.
-      * Centralize log output so every event shares one status check.
-      * Reset connection after sync and propagate disconnect failures.
        9000-DISCONNECT.
            EXEC SQL CONNECT RESET END-EXEC
            IF SQLCODE = 0
@@ -253,4 +218,3 @@
            IF WS-FAILED = "Y"
                STOP RUN RETURNING 1
            END-IF.
-      * GixSQL appends its generated cursor footer.

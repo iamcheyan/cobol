@@ -1,5 +1,4 @@
       * 校验调用方传入的金额，并使用调用方提供的结果字段。
-      * 先判断零，再判断是否超过1000.00。大于零且不超过上限的金额有效。
       * 将判定代码写入调用方存储区，并通过GOBACK返回。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. CHECK-AMOUNT.

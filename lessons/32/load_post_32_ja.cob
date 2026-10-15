@@ -1,10 +1,7 @@
-      *LOAD_POSTは呼び出されるバッチモジュールで、主ドライバーではありません。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LOADPOST32.
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
-      *口座・取引の入力と、承認・拒否・ログの出力を定義します。
-      *各行順ファイルに個別の状態項目を設け、エラーを確認します。
        FILE-CONTROL.
            SELECT ACCOUNT-FILE ASSIGN TO "accounts.txt"
                ORGANIZATION IS LINE SEQUENTIAL
@@ -21,7 +18,6 @@
            SELECT LOG-FILE ASSIGN TO "batch.log"
                ORGANIZATION IS LINE SEQUENTIAL
                FILE STATUS IS WS-LOG-STATUS.
-      *入力は固定長レコードで、出力には報告用の領域を確保します。
        DATA DIVISION.
        FILE SECTION.
        FD ACCOUNT-FILE.
@@ -34,9 +30,6 @@
        01 REJECTED-RECORD PIC X(80).
        FD LOG-FILE.
        01 LOG-RECORD PIC X(100).
-      *TRANSACTION.CPYが共有バッチ状態と口座テーブルを定義します。
-      *オープン済みフラグにより、途中失敗時も安全に後始末できます。
-      *パック10進数で金額を保持し、理由項目に拒否コードを格納します。
        WORKING-STORAGE SECTION.
        COPY "TRANSACTION.CPY".
        01 WS-ACCOUNT-STATUS PIC XX.
@@ -59,14 +52,9 @@
        01 WS-EDITED-BALANCE PIC 9(7).99.
        01 WS-OUTPUT-LINE PIC X(80).
        01 WS-LOG-LINE PIC X(100).
-      *BATCH-INTERFACE.CPYは呼び出し元が所有する表と件数を定義します。
-      *USINGでモジュール境界を越えてレコードを共有します。
        LINKAGE SECTION.
        COPY "BATCH-INTERFACE.CPY".
-      *呼び出し元と口座状態・件数を共有し、GOBACKで戻ります。
        PROCEDURE DIVISION USING WS-ACCOUNT-TABLE WS-BATCH-COUNTS.
-      *資源を開き、口座を読込み、正常なら取引を計上します。
-      *呼び出し元へ戻る前に共通の後始末を必ず実行します。
        MAIN-LOAD.
            PERFORM 1000-OPEN-FILES
            IF WS-FAILED NOT = "Y"
@@ -77,8 +65,6 @@
            END-IF
            PERFORM 8000-CLOSE-FILES
            GOBACK.
-      *入力を先に開き、その後出力を作成して各状態を確認します。
-      *ログを開けた後にだけバッチ開始イベントを記録します。
        1000-OPEN-FILES.
            OPEN INPUT ACCOUNT-FILE
            IF WS-ACCOUNT-STATUS = "00"
@@ -125,7 +111,6 @@
                    MOVE "Y" TO WS-FAILED
                END-IF
            END-IF.
-      *口座マスタをEOFまで読み、有効な各レコードを処理します。
        1100-LOAD-ACCOUNTS.
            PERFORM UNTIL WS-ACCOUNT-EOF = "Y" OR WS-FAILED = "Y"
                READ ACCOUNT-FILE
@@ -140,9 +125,6 @@
                        END-IF
                END-READ
            END-PERFORM.
-      *追加前に口座テーブルの上限20件を確認します。
-      *10/8/9桁を解析し、数字のセント額を100で割ります。
-      *既存行を検索し、口座番号の重複を検出します。
        1110-STORE-ACCOUNT.
            IF WS-ACCOUNT-COUNT = 20
                DISPLAY "エラー=口座容量超過"
@@ -170,7 +152,6 @@
                    END-IF
                END-PERFORM
            END-IF.
-      *取引を順に処理し、読込みエラーでバッチを終了します。
        2000-POST-TRANSACTIONS.
            PERFORM UNTIL WS-TRANSACTION-EOF = "Y" OR WS-FAILED = "Y"
                READ TRANSACTION-FILE
@@ -185,10 +166,6 @@
                        END-IF
                END-READ
            END-PERFORM.
-      *20文字のレコードを口座、種別、金額に分割します。
-      *口座添字を検索して金額を検証し、不正なら拒否理由を設定します。
-      *有効な取引を適用し、承認または拒否ファイルへ振り分けます。
-      *出力行をイベントログにも渡し、処理の追跡性を保ちます。
        2100-POST-ONE.
            ADD 1 TO WS-TRANSACTION-COUNT
            MOVE TRANSACTION-INPUT(1:10)
@@ -227,8 +204,6 @@
            END-IF
            MOVE WS-OUTPUT-LINE TO WS-LOG-LINE
            PERFORM 8200-WRITE-LOG.
-      *Dは入金、Cは残高が足りる場合だけ出金します。
-      *未知の種別は残高を変更せず拒否します。
        2200-APPLY-TRANSACTION.
            EVALUATE WS-TRANSACTION-TYPE
              WHEN "D"
@@ -243,8 +218,6 @@
              WHEN OTHER
                MOVE "BAD_TYPE" TO WS-REASON
            END-EVALUATE.
-      *更新後残高を整形・表示し、accepted.txtへ書き込みます。
-      *書込み失敗時は共有バッチ状態をエラーにします。
        2300-WRITE-POSTED.
            ADD 1 TO WS-POSTED-COUNT
            MOVE WS-ACCOUNT-BALANCE(WS-INDEX)
@@ -262,7 +235,6 @@
                DISPLAY "エラー=受理WRITE " WS-ACCEPTED-STATUS
                MOVE "Y" TO WS-FAILED
            END-IF.
-      *取引番号、口座、検証理由を記録して確認可能にします。
        2400-WRITE-REJECTED.
            ADD 1 TO WS-REJECTED-COUNT
            MOVE SPACES TO WS-OUTPUT-LINE
@@ -277,8 +249,6 @@
                DISPLAY "エラー=拒否WRITE " WS-REJECTED-STATUS
                MOVE "Y" TO WS-FAILED
            END-IF.
-      *オープン済みのファイルだけを閉じ、状態を確認します。
-      *ログを閉じる前にバッチ完了イベントを記録します。
        8000-CLOSE-FILES.
            IF WS-ACCOUNT-OPEN = "Y"
                CLOSE ACCOUNT-FILE
@@ -321,7 +291,6 @@
                    MOVE "Y" TO WS-FAILED
                END-IF
            END-IF.
-      *ログ書込みを集約し、同じ状態確認を一貫して行います。
        8200-WRITE-LOG.
            MOVE WS-LOG-LINE TO LOG-RECORD
            WRITE LOG-RECORD

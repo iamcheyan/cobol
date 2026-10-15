@@ -1,18 +1,7 @@
-      * Exercise posting decisions with account and transaction records
       * shared through copybooks.
-      * The sample starts with a 1000.00 balance and tries a deposit,
       * withdrawal, overdraft, unknown type, and transaction for another
-      * account. No input file is read.
-      * The main flow initializes the shared account once. Each case
-      * paragraph sets transaction fields and calls the common posting
-      * paragraph.
-      * Posting first matches the account number, then checks the type.
-      * Deposits increase the balance; withdrawals reduce it only when
       * funds suffice. Insufficient funds, an unknown type, or a missing
       * account leaves the balance unchanged.
-      * The reporting paragraph counts each attempt once as posted or
-      * rejected and displays its outcome. The final paragraph prints
-      * shared account details, the resulting balance, and batch totals.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON23.
        DATA DIVISION.

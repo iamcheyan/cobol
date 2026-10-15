@@ -1,7 +1,3 @@
-      * 読取段落は成功時に現在レコードを更新し、状態10を個別に記録します。
-      * EOF以外のI/Oエラーでは処理を失敗させます。
-      * 片側だけのキーは孤立レコードです。一側EOF後は残りをすべて分類します。
-      * 比較前にEOFを確認し、入力を閉じてから分類件数を表示します。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. MATCH20.
        ENVIRONMENT DIVISION.

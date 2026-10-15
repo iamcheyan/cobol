@@ -1,4 +1,3 @@
-      * Lesson 28: build a small multi-program posting project.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON28.
        ENVIRONMENT DIVISION.
@@ -13,7 +12,6 @@
        FD BATCH-LOG.
        01 FD-BATCH-LOG-RECORD PIC X(100).
        WORKING-STORAGE SECTION.
-      * Shared records and counters are declared in Copybooks.
        COPY "ACCOUNT-REC.CPY".
        COPY "TRANSACTION-REC.CPY".
        COPY "POST-STATUS.CPY".
@@ -24,21 +22,12 @@
        01 WS-IO-ERROR PIC X VALUE "N".
        01 WS-LOG-MESSAGE PIC X(100) VALUE SPACES.
        01 WS-TRANSACTION-NO PIC 9(3) VALUE ZERO.
-      * Account fields are shared with both called programs.
       * Transaction layout is the CALL input contract.
       * POST-STATUS holds the callee's returned decision.
-      * Counters are shared with the report program.
-      * V is implied and uses no stored character.
-      * Edited fields add a decimal point for DISPLAY.
-      * INITIALIZE resets each batch's count fields.
-      * Each case sets account, type, and amount before CALL.
       * Rejected withdrawals leave the account balance unchanged.
-      * Unknown statuses protect the caller module contract.
-      * The report module sees final values after all calls.
        01 WS-EDITED-AMOUNT PIC 9(7).99 VALUE ZERO.
        01 WS-UNKNOWN-STATUS PIC X VALUE "N".
        PROCEDURE DIVISION.
-      * The main program owns initialization and transaction order.
        0000-MAIN.
            PERFORM 9000-OPEN-LOG
            IF WS-LOG-OPEN = "Y"
@@ -62,13 +51,11 @@
                MOVE 1 TO RETURN-CODE
            END-IF
            STOP RUN.
-      * Initialize the one account and the batch summary fields.
        1000-INITIALIZE-BATCH.
            INITIALIZE WS-ACCOUNT-RECORD WS-BATCH-COUNTS
            MOVE "A000000001" TO WS-ACCOUNT-NUMBER
            MOVE "C0001001" TO WS-CUSTOMER-ID
            MOVE 1000.00 TO WS-ACCOUNT-BALANCE.
-      * Each paragraph prepares a transaction and shares one CALL path.
        1100-POST-DEPOSIT.
            MOVE "A000000001" TO WS-TRANSACTION-ACCOUNT
            MOVE "D" TO WS-TRANSACTION-TYPE
@@ -110,7 +97,6 @@
            IF WS-LOG-FAILED = "N"
                PERFORM 2200-LOG-POST-RESULT
            END-IF.
-      * The caller owns totals and checks for unknown module results.
        2100-REPORT-RESULT.
            EVALUATE WS-POST-STATUS
                WHEN "POSTED"

@@ -2,12 +2,9 @@
        PROGRAM-ID. LESSON30.
        DATA DIVISION.
        WORKING-STORAGE SECTION.
-      * 接続情報は実行環境から取得する。
        01 WS-DATASRC PIC X(255).
        01 WS-DBUSER PIC X(64).
        01 WS-DBPASS PIC X(64).
-      * これらの項目に選択したデータベース列の値を
-      * 格納する。
        01 WS-ACCOUNT PIC X(10).
        01 WS-CUSTOMER PIC X(8).
        01 WS-BALANCE PIC S9(7)V99 COMP-3.
@@ -18,7 +15,6 @@
        01 WS-DONE PIC X VALUE "N".
        01 WS-FAILED PIC X VALUE "N".
        EXEC SQL INCLUDE SQLCA END-EXEC.
-      * 主キーで並べるため、再実行しても行の順序が安定します。
        EXEC SQL
            DECLARE ACCOUNT-CURSOR CURSOR FOR
                SELECT ACCOUNT_NO, CUSTOMER_ID, BALANCE
@@ -27,8 +23,6 @@
        END-EXEC.
        PROCEDURE DIVISION.
        MAIN-PROCEDURE.
-      * 接続してカーソルを開き、データ末尾まで取得
-      * してから閉じる。
            PERFORM 1000-CONNECT-DATABASE
            IF WS-DB-OPEN = "Y"
                PERFORM 2000-OPEN-CURSOR
@@ -47,8 +41,6 @@
            END-IF
            GOBACK.
        1000-CONNECT-DATABASE.
-      * ビルドスクリプトは SQLite
-      * ファイルと空の認証情報を指定する。
            DISPLAY "DATASRC" UPON ENVIRONMENT-NAME
            ACCEPT WS-DATASRC FROM ENVIRONMENT-VALUE
            DISPLAY "DATASRC_USR" UPON ENVIRONMENT-NAME
@@ -67,7 +59,6 @@
                MOVE "Y" TO WS-FAILED
            END-IF.
        2000-OPEN-CURSOR.
-      * OPENは結果セットを開始しますが、まだ行を取得しません。
            EXEC SQL OPEN ACCOUNT-CURSOR END-EXEC
            IF SQLCODE = 0
                MOVE "Y" TO WS-CURSOR-OPEN
@@ -77,7 +68,6 @@
                MOVE "Y" TO WS-FAILED
            END-IF.
        3000-FETCH-ROWS.
-      * FETCHのたびに1行が上記のホスト変数へ格納されます。
            PERFORM UNTIL WS-DONE = "Y"
                EXEC SQL
                    FETCH ACCOUNT-CURSOR
@@ -98,7 +88,6 @@
                END-EVALUATE
            END-PERFORM.
        4000-CLOSE-CURSOR.
-      * EOFまたは取得エラーの後も、資源を解放するためカーソルを閉じます。
            EXEC SQL CLOSE ACCOUNT-CURSOR END-EXEC
            IF SQLCODE = 0
                MOVE "N" TO WS-CURSOR-OPEN
@@ -108,7 +97,6 @@
                MOVE "Y" TO WS-FAILED
            END-IF.
        9000-DISCONNECT-DATABASE.
-      * カーソル処理後にCONNECT RESETを実行し、DB接続を解放します。
            EXEC SQL CONNECT RESET END-EXEC
            IF SQLCODE = 0
                DISPLAY "切断=成功"

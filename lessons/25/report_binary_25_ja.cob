@@ -8,7 +8,6 @@
        COPY "AMOUNT-INTERFACE.CPY".
       * BINARY-LONGの引数をLINKAGEで受け取ります。
       * 値を表示用項目へ移します。BY VALUEのため呼び出し側の記憶域は変わりません。
-      * 診断結果を表示し、GOBACKで呼び出し側へ戻ります。
        PROCEDURE DIVISION USING BY VALUE AMOUNT-ARGUMENT.
        0000-REPORT-VALUE.
            MOVE AMOUNT-ARGUMENT TO WS-EDITED-AMOUNT

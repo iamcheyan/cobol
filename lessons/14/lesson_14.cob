@@ -1,16 +1,7 @@
-      *レッスン 14: 型指定されたトランザクションを口座レコードと照合します。
-      *取引先レコードは階層的にグループ化され、テーブルに保持されます。
-      *トランザクション ペイロードは、REDEFINES を通じてストレージを共有します。
-      *SEARCH ALL は、トランザクション アカウント キーをマスター データに関連付けます。
-      *入金レイアウトと転送レイアウトのストレージ サイズは同じです。
-      *送金では、残高を変更する前に両方のアカウントを確認します。
-      *マスター テーブルは、実際にはアカウント キーの昇順になっています。
-      *この固定データ バッチでは、ファイルやデータベースは使用されません。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. MATCH14.
        DATA DIVISION.
        WORKING-STORAGE SECTION.
-      *アカウントの ID と残高は、1 つの反復されたマスター レコードを形成します。
        01 WS-ACCOUNT-TABLE.
           05 WS-ACCOUNT-ENTRY OCCURS 3 TIMES
              ASCENDING KEY IS WS-ACCOUNT-NUMBER
@@ -18,7 +9,6 @@
              10 WS-ACCOUNT-INFO.
                 15 WS-ACCOUNT-NUMBER PIC X(10).
                 15 WS-ACCOUNT-BALANCE PIC 9(7)V99.
-      *各トランザクションにはタイプがあり、その後に共有ペイロード領域が続きます。
        01 WS-TRANSACTION-TABLE.
           05 WS-TRANSACTION-ENTRY OCCURS 4 TIMES.
              10 WS-TRANSACTION-CODE PIC X.
@@ -38,7 +28,6 @@
        01 WS-POSTED-COUNT PIC 9(2) VALUE ZERO.
        01 WS-拒否-COUNT PIC 9(2) VALUE ZERO.
        PROCEDURE DIVISION.
-      *トランザクションを処理する前に、両方のメモリ内データ セットをロードします。
        0000-MAIN.
            PERFORM 1000-LOAD-ACCOUNTS
            PERFORM 1100-LOAD-TRANSACTIONS
@@ -50,7 +39,6 @@
            END-PERFORM
            PERFORM 9000-REPORT
            STOP RUN.
-      *エントリは実際のキーの昇順でロードされます。
        1000-LOAD-ACCOUNTS.
            MOVE "0001234567" TO WS-ACCOUNT-NUMBER(1)
            MOVE 1000.00 TO WS-ACCOUNT-BALANCE(1)
@@ -58,7 +46,6 @@
            MOVE 200.00 TO WS-ACCOUNT-BALANCE(2)
            MOVE "0007654321" TO WS-ACCOUNT-NUMBER(3)
            MOVE 50.00 TO WS-ACCOUNT-BALANCE(3).
-      *入金ペイロードと転送ペイロードは同じ 27 文字を占めます。
        1100-LOAD-TRANSACTIONS.
            MOVE "D" TO WS-TRANSACTION-CODE(1)
            MOVE "0001234567" TO WS-DEPOSIT-ACCOUNT(1)
@@ -76,7 +63,6 @@
            MOVE "0007654321" TO WS-SOURCE-ACCOUNT(4)
            MOVE "0009999999" TO WS-TARGET-ACCOUNT(4)
            MOVE 20.00 TO WS-TRANSFER-AMOUNT(4).
-      *トランザクション コードによって、どのペイロード ビューがアクティブになるかが決まります。
        2000-PROCESS-TRANSACTION.
            DISPLAY "取引=" WS-TRANSACTION-NUMBER
                " 種別=" WS-TRANSACTION-CODE(WS-TRANSACTION-NUMBER)
@@ -107,7 +93,6 @@
                DISPLAY "結果=拒否 REASON=ACCOUNT_NOT_FOUND"
                ADD 1 TO WS-拒否-COUNT
            END-IF.
-      *いずれかの残高を適用する前に、両方の振込口座を検証してください。
        2200-POST-TRANSFER.
            MOVE WS-SOURCE-ACCOUNT(WS-TRANSACTION-NUMBER)
                TO WS-SEARCH-KEY
@@ -148,7 +133,6 @@
                    " REASON=SOURCE_NOT_FOUND"
                ADD 1 TO WS-拒否-COUNT
            END-IF.
-      *SEARCH ALL では、一意の昇順アカウント キーが使用されます。
        3000-FIND-ACCOUNT.
            MOVE "N" TO WS-ACCOUNT-FOUND
            SEARCH ALL WS-ACCOUNT-ENTRY
@@ -158,7 +142,6 @@
                    = WS-SEARCH-KEY
                    MOVE "Y" TO WS-ACCOUNT-FOUND
            END-SEARCH.
-      *各アカウントの残高とバッチ結果の数をレポートします。
        9000-REPORT.
            DISPLAY "口座残高 口座=" WS-ACCOUNT-NUMBER(1)
                " 残高=" WS-ACCOUNT-BALANCE(1)

@@ -1,4 +1,3 @@
-      * 第28課：記帳と残高報告を別プログラムに分けます。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON28.
        ENVIRONMENT DIVISION.
@@ -24,18 +23,10 @@
        01 WS-IO-ERROR PIC X VALUE "N".
        01 WS-LOG-MESSAGE PIC X(100) VALUE SPACES.
        01 WS-TRANSACTION-NO PIC 9(3) VALUE ZERO.
-      * CALLで共有する項目を定義し、引数の意味を呼出側と揃えます。
       * POST-STATUSには記帳結果が返ります。業務拒否は通常の判定として扱い、
-      * 未知の状態コードだけを呼出契約の異常として検出します。
-      * 金額PICのVは暗黙小数点で、記憶領域を占有しません。
-      * 表示項目は小数点を補い、金額を読みやすくします。
-      * INITIALIZEで件数を戻し、取引条件を設定してから共通段落をCALLします。
-      * 残高不足の引出しは拒否され、口座残高は変わりません。
-      * 全取引の処理後、共有値を使って最終残高と件数を報告します。
        01 WS-EDITED-AMOUNT PIC 9(7).99 VALUE ZERO.
        01 WS-UNKNOWN-STATUS PIC X VALUE "N".
        PROCEDURE DIVISION.
-      * メイン段落が初期化と取引順を管理します。
        0000-MAIN.
            PERFORM 9000-OPEN-LOG
            IF WS-LOG-OPEN = "Y"
@@ -59,13 +50,11 @@
                MOVE 1 TO RETURN-CODE
            END-IF
            STOP RUN.
-      * 口座とバッチ集計項目を初期化する。
        1000-INITIALIZE-BATCH.
            INITIALIZE WS-ACCOUNT-RECORD WS-BATCH-COUNTS
            MOVE "A000000001" TO WS-ACCOUNT-NUMBER
            MOVE "C0001001" TO WS-CUSTOMER-ID
            MOVE 1000.00 TO WS-ACCOUNT-BALANCE.
-      * 各段落で取引を準備し、共通段落からCALLして記帳結果を受け取ります。
        1100-POST-DEPOSIT.
            MOVE "A000000001" TO WS-TRANSACTION-ACCOUNT
            MOVE "D" TO WS-TRANSACTION-TYPE
@@ -91,8 +80,6 @@
            MOVE "D" TO WS-TRANSACTION-TYPE
            MOVE 1.00 TO WS-TRANSACTION-AMOUNT
            PERFORM 2000-CALL-POSTER.
-      * 参照渡しの3項目は、呼出先の変更が呼出側にも反映されます。
-      * 集計は呼出側が管理し、戻り値の状態コードを確認します。
        2000-CALL-POSTER.
            ADD 1 TO WS-TRANSACTION-NO
            MOVE SPACES TO WS-POST-STATUS
@@ -108,7 +95,6 @@
            IF WS-LOG-FAILED = "N"
                PERFORM 2200-LOG-POST-RESULT
            END-IF.
-      * 呼出側が件数を集計し、未知の状態コードを検査します。
        2100-REPORT-RESULT.
            EVALUATE WS-POST-STATUS
                WHEN "POSTED"

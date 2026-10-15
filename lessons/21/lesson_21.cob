@@ -1,8 +1,4 @@
-      * SORTは入力手続きを呼び、ソースをEOFまで読み込みます。
-      * 各行をSDレコードへ移してRELEASEし、状態を確認してソースを閉じます。
       * SORT-RETURNまたはファイル状態の異常は失敗として返します。
-      * 入力・出力レコード数の一致で欠落を確認できます。入力は変更せず、
-      * 出力ファイルも作成しません。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. SORT21.
        ENVIRONMENT DIVISION.

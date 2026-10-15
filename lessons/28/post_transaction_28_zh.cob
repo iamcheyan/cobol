@@ -1,4 +1,3 @@
-      * 对调用方持有的账户存储应用一笔交易。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. POST-TRANSACTION28.
        DATA DIVISION.

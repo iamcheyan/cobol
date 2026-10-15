@@ -1,9 +1,6 @@
       * 呼出契約は金額PIC 9(7)V99、結果PIC X(15)です。
       * 結果はZERO-AMOUNT、LIMIT-EXCEEDED、VALIDのいずれかです。
       * 上限1000.00は有効範囲に含みます。
-      * 主処理は8つの代表値と境界値を順に設定し、共通段落から呼びます。
-      * CALL前に結果領域を消去し、両項目をBY REFERENCEで渡します。
-      * 呼出先はゼロ、上限超過、それ以外の順に判定します。
       * 結果を呼出元へ返し、呼出元は復帰後に表示して件数を加算します。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON24.

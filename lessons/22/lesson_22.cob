@@ -1,10 +1,4 @@
-      * 主処理は取引を読み、幅20文字の行だけSORTへRELEASEします。
-      * 状態10は正常EOFです。他の状態や幅不正は読込異常です。
-      * SORT後は取引をキー順にRETURNし、マスターを前進させます。
       * マスターがなければNO_ACCOUNT、照合後は種別D/Cと数字金額を検証します。
-      * 有効取引は口座・顧客・種別・金額の固定幅で出力します。
-      * 不正取引は口座・理由・種別・金額を拒否ファイルへ書きます。
-      * マスター単独行も集計します。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. BATCH22.
        ENVIRONMENT DIVISION.

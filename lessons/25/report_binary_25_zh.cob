@@ -1,4 +1,3 @@
-      * 读取按值传递的二进制全字长参数。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. REPORT-BINARY.
        DATA DIVISION.
@@ -6,9 +5,6 @@
        01 WS-EDITED-AMOUNT PIC 9(9) VALUE ZERO.
        LINKAGE SECTION.
        COPY "AMOUNT-INTERFACE.CPY".
-      * 接收按值传递的全字长整数。
-      * 将其移入编辑显示字段，不修改调用方存储区。
-      * 输出诊断信息后用GOBACK将控制权交还调用方。
        PROCEDURE DIVISION USING BY VALUE AMOUNT-ARGUMENT.
        0000-REPORT-VALUE.
            MOVE AMOUNT-ARGUMENT TO WS-EDITED-AMOUNT

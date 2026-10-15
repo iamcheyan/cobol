@@ -1,19 +1,3 @@
-      * Read the account master and daily transactions as independent
-      * sequential inputs.
-      * Both files are line-sequential text with records up to 100
-      * characters. This program displays rows and counts them; it does
-      * not parse fields or match accounts.
-      * The main paragraph opens both required inputs before entering
-      * the loop. If the second OPEN fails, it closes the first file and
-      * exits with failure.
-      * Each pass reads at most one row from each stream that has not
-      * reached EOF. A successful read increments only that stream's
-      * count. Status 10 marks EOF for that file.
-      * When one stream ends, the other continues. A non-EOF read error
-      * stops the loop. Open files are closed after normal completion or
-      * a read failure, and close errors are also reported.
-      * Any OPEN, READ, or CLOSE failure returns a nonzero code. An
-      * empty file is a normal EOF case.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. MULTI19.
        ENVIRONMENT DIVISION.

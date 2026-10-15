@@ -1,18 +1,7 @@
-      * Sort an unsorted account master through SORT input and output
-      * procedures.
       * Each source row is 27 characters: account number 10, customer ID
-      * 8, and balance 9. The ten-character account number is the sort
       * key, including leading zeroes.
-      * SORT invokes the input procedure to read through EOF. For each
-      * row, it moves the layout to the SD record and RELEASEs it. The
-      * procedure checks source status and closes the source when
-      * loading ends.
-      * After sorting, the output procedure uses RETURN one row at a
       * time. RETURN AT END is normal completion; successful rows are
-      * counted and displayed in ascending key order.
       * File errors and nonzero SORT-RETURN produce a failure status.
-      * Comparing input and output counts helps reveal lost rows. The
-      * source is unchanged and no output file is created.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. SORT21.
        ENVIRONMENT DIVISION.

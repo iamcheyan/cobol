@@ -1,21 +1,8 @@
-      * Sort transactions, reconcile them to the account master, and
-      * write accepted and rejected files.
       * A transaction is 20 characters: account 10, type 1, amount 9. A
-      * master row is 27: account 10, customer 8, balance 9. Both
-      * streams use the same ascending account-key order.
-      * The load procedure reads the transaction feed and RELEASEs only
       * rows whose trimmed width is exactly 20. Status 10 is normal EOF;
-      * other statuses and invalid widths fail the load.
-      * After SORT, transactions are RETURNed in key order while the
-      * master advances. Without a matching master, the reason is
       * NO_ACCOUNT. Matched rows are checked for type D/C and a numeric
-      * amount.
-      * Accepted output contains account, customer, type, and amount in
-      * fixed positions. Rejected output contains account, reason, type,
       * and amount. Master-only rows are counted as well.
-      * Close every opened file. OPEN, READ, WRITE, CLOSE, or SORT
       * failures produce a nonzero exit status. OPEN OUTPUT replaces
-      * prior result files.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. BATCH22.
        ENVIRONMENT DIVISION.

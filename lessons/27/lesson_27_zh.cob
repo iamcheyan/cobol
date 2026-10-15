@@ -1,5 +1,3 @@
-      * 程序标识与外部文件。
-      * 先打开批次日志；逐一检查各文件状态码。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LOG27.
        ENVIRONMENT DIVISION.
@@ -21,9 +19,6 @@
                ASSIGN TO "rejected.txt"
                ORGANIZATION IS LINE SEQUENTIAL
                FILE STATUS IS WS-REJECTED-STATUS.
-      * 文件记录定义日志、输入、接受及拒绝输出布局。
-      * 工作存储区分别管理生命周期标志、业务字段、
-      * 事件文本、操作状态和批次计数。
        DATA DIVISION.
        FILE SECTION.
        FD BATCH-LOG.
@@ -58,8 +53,6 @@
        01 WS-INPUT-COUNT PIC 9(3) VALUE ZERO.
        01 WS-ACCEPTED-COUNT PIC 9(3) VALUE ZERO.
        01 WS-REJECTED-COUNT PIC 9(3) VALUE ZERO.
-      * 主流程：先建立日志，仅在安全状态下处理，关闭业务文件，
-      * 写结束事件并关闭日志；故障时设置非零返回码。
        PROCEDURE DIVISION.
        0000-MAIN.
            PERFORM 9000-OPEN-LOG
@@ -101,8 +94,6 @@
                DISPLAY "错误=打开日志 状态=" WS-LOG-STATUS
                MOVE "Y" TO WS-SYSTEM-ERROR
            END-IF.
-      * 按序打开业务文件；仅状态 00 时设置打开标志。
-      * 任何失败都是系统错误，并阻止后续处理。
        1000-OPEN-DATA-FILES.
            OPEN INPUT TRANSACTION-INPUT
            IF WS-INPUT-STATUS = "00"
@@ -132,14 +123,11 @@
                    PERFORM 9300-REPORT-SYSTEM-ERROR
                END-IF
            END-IF.
-      * 遇到 EOF 或系统错误时停止读取。
        2000-PROCESS-INPUT.
            PERFORM UNTIL WS-END-OF-FILE = "Y"
                OR WS-SYSTEM-ERROR = "Y"
                PERFORM 2100-READ-ONE-RECORD
            END-PERFORM.
-      * 为成功读取的记录编号并取得账户键。
-      * 校验前记录读取事件；区分 EOF 与读取故障。
        2100-READ-ONE-RECORD.
            READ TRANSACTION-INPUT
                AT END
@@ -161,7 +149,6 @@
                MOVE WS-INPUT-STATUS TO WS-ERROR-STATUS
                PERFORM 9300-REPORT-SYSTEM-ERROR
            END-IF.
-      * 读取事件关联记录序号和账户号；组装前清空消息。
        2200-LOG-RECORD-READ.
            MOVE SPACES TO WS-LOG-MESSAGE
            STRING "EVENT=RECORD_READ NO=" DELIMITED BY SIZE
@@ -171,7 +158,6 @@
                INTO WS-LOG-MESSAGE
            END-STRING
            PERFORM 9100-WRITE-LOG.
-      * 校验宽度、分隔符、金额数字性及非零金额。
       * 这些是业务拒绝原因，不是系统故障。
        3000-VALIDATE-RECORD.
            MOVE SPACES TO WS-REJECT-REASON
@@ -199,7 +185,6 @@
            ELSE
                PERFORM 5000-WRITE-REJECTED
            END-IF.
-      * 先写接受数据；仅状态 00 后才计数并记录事件。
        4000-WRITE-ACCEPTED.
            MOVE FD-TRANSACTION-RECORD(1:12)
                TO WS-ACCEPTED-WORK
@@ -213,7 +198,6 @@
                MOVE WS-ACCEPTED-STATUS TO WS-ERROR-STATUS
                PERFORM 9300-REPORT-SYSTEM-ERROR
            END-IF.
-      * 接受输出成功写入后，才记录接受事件。
        4100-LOG-ACCEPTED.
            MOVE SPACES TO WS-LOG-MESSAGE
            STRING "EVENT=RECORD_ACCEPTED NO=" DELIMITED BY SIZE
@@ -223,8 +207,6 @@
                INTO WS-LOG-MESSAGE
            END-STRING
            PERFORM 9100-WRITE-LOG.
-      * 向拒绝文件写入账户号和拒绝原因。
-      * 输出写入失败属于系统错误。
        5000-WRITE-REJECTED.
            MOVE SPACES TO WS-REJECTED-WORK
            MOVE WS-ACCOUNT TO WS-REJECTED-WORK(1:6)
@@ -242,7 +224,6 @@
                MOVE WS-REJECTED-STATUS TO WS-ERROR-STATUS
                PERFORM 9300-REPORT-SYSTEM-ERROR
            END-IF.
-      * 记录行序号、账户号及拒绝原因。
        5100-LOG-REJECTED.
            MOVE SPACES TO WS-LOG-MESSAGE
            STRING "EVENT=BUSINESS_REJECT NO=" DELIMITED BY SIZE
@@ -254,8 +235,6 @@
                INTO WS-LOG-MESSAGE
            END-STRING
            PERFORM 9100-WRITE-LOG.
-      * 检查每次日志 WRITE。失败后停止处理且不再追加。
-      * 日志无法记录自身写入故障。
        9100-WRITE-LOG.
            IF WS-LOG-FAILED = "N"
                MOVE WS-LOG-MESSAGE TO FD-BATCH-LOG-RECORD
@@ -266,7 +245,6 @@
                    MOVE "Y" TO WS-SYSTEM-ERROR
                END-IF
            END-IF.
-      * 报告操作名称和状态；日志可用时记录该事件。
        9300-REPORT-SYSTEM-ERROR.
            MOVE "Y" TO WS-SYSTEM-ERROR
            DISPLAY "错误="
@@ -282,8 +260,6 @@
                END-STRING
                PERFORM 9100-WRITE-LOG
            END-IF.
-      * 只关闭已打开的业务文件，并检查关闭状态。
-      * 日志可用时记录文件关闭故障。
        8000-CLOSE-DATA-FILES.
            IF WS-REJECTED-OPEN = "Y"
                CLOSE REJECTED-OUTPUT
@@ -311,8 +287,6 @@
                    PERFORM 9300-REPORT-SYSTEM-ERROR
                END-IF
            END-IF.
-      * 业务文件关闭后记录计数和错误标志，再关闭日志。
-      * 日志关闭故障只能报告到屏幕。
        9200-LOG-BATCH-END.
            MOVE SPACES TO WS-LOG-MESSAGE
            STRING "EVENT=BATCH_END INPUT=" DELIMITED BY SIZE

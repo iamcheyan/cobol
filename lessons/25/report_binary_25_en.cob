@@ -7,10 +7,6 @@
        LINKAGE SECTION.
        COPY "AMOUNT-INTERFACE.CPY".
       * Receive the full-word integer passed by value.
-      * Move it to an edited display field without changing caller
-      * storage.
-      * Return control to the caller with GOBACK after diagnostic
-      * output.
        PROCEDURE DIVISION USING BY VALUE AMOUNT-ARGUMENT.
        0000-REPORT-VALUE.
            MOVE AMOUNT-ARGUMENT TO WS-EDITED-AMOUNT

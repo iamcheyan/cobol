@@ -1,4 +1,3 @@
-      * Apply one transaction to caller-owned account storage.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. POST-TRANSACTION28.
        DATA DIVISION.

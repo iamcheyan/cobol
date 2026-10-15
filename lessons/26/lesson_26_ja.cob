@@ -1,4 +1,3 @@
-      * 第26課：業務データの不正とファイル障害を区別します。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. ERROR26.
        ENVIRONMENT DIVISION.
@@ -58,8 +57,6 @@
                MOVE 1 TO RETURN-CODE
            END-IF
            STOP RUN.
-      * どちらかの出力ファイルを作成する前に入力フ
-      * ァイルを開く。
        1000-OPEN-FILES.
            OPEN INPUT TRANSACTION-INPUT
            IF WS-INPUT-STATUS = "00"
@@ -89,7 +86,6 @@
                END-IF
            END-IF.
       * AT END は EOFを処理し、それ以外の状態はシステ
-      * ムエラーとする。
        2000-PROCESS-INPUT.
            PERFORM UNTIL WS-END-OF-FILE = "Y"
                OR WS-SYSTEM-ERROR = "Y"
@@ -111,7 +107,6 @@
                    WS-INPUT-STATUS
                MOVE "Y" TO WS-SYSTEM-ERROR
            END-IF.
-      * 業務検証で行を拒否しても、後続レコードの処理は続けます。
        3000-VALIDATE-RECORD.
            MOVE SPACES TO WS-REJECT-REASON
            MOVE FD-TRANSACTION-RECORD(1:6) TO WS-ACCOUNT
@@ -139,7 +134,6 @@
            ELSE
                PERFORM 5000-WRITE-REJECTED
            END-IF.
-      * 有効行数は出力WRITEが成功した後にだけ加算します。
        4000-WRITE-ACCEPTED.
            MOVE FD-TRANSACTION-RECORD(1:12)
                TO WS-ACCEPTED-WORK
@@ -152,7 +146,6 @@
                    WS-ACCEPTED-STATUS
                MOVE "Y" TO WS-SYSTEM-ERROR
            END-IF.
-      * 形式不正の行は理由とともに記録し、後続行の処理を続けます。
        5000-WRITE-REJECTED.
            MOVE SPACES TO WS-REJECTED-WORK
            MOVE WS-ACCOUNT TO WS-REJECTED-WORK(1:6)
@@ -169,8 +162,6 @@
                    WS-REJECTED-STATUS
                MOVE "Y" TO WS-SYSTEM-ERROR
            END-IF.
-      * OPENに成功したすべてのファイルを閉じ、それ
-      * ぞれの状態を確認する。
        8000-CLOSE-FILES.
            IF WS-REJECTED-OPEN = "Y"
                CLOSE REJECTED-OUTPUT

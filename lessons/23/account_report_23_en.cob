@@ -1,9 +1,3 @@
-      * Build a standalone account report using the shared account
-      * definition.
-      * The main flow sets account number, customer ID, and balance,
-      * then calls the report paragraph.
-      * The report paragraph moves the balance to an edited display
-      * field and prints the account details with a decimal point.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. ACCOUNT-REPORT23.
        DATA DIVISION.

@@ -1,4 +1,3 @@
-      * 第26课：区分业务数据错误行与文件故障。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. ERROR26.
        ENVIRONMENT DIVISION.
@@ -58,7 +57,6 @@
                MOVE 1 TO RETURN-CODE
            END-IF
            STOP RUN.
-      * 创建任一输出文件前先打开输入文件。
        1000-OPEN-FILES.
            OPEN INPUT TRANSACTION-INPUT
            IF WS-INPUT-STATUS = "00"
@@ -87,7 +85,6 @@
                    MOVE "Y" TO WS-SYSTEM-ERROR
                END-IF
            END-IF.
-      * AT END 处理文件结束；其他状态仍视为系统错误。
        2000-PROCESS-INPUT.
            PERFORM UNTIL WS-END-OF-FILE = "Y"
                OR WS-SYSTEM-ERROR = "Y"
@@ -109,7 +106,6 @@
                    WS-INPUT-STATUS
                MOVE "Y" TO WS-SYSTEM-ERROR
            END-IF.
-      * 业务验证会拒绝该行并继续处理批次。
        3000-VALIDATE-RECORD.
            MOVE SPACES TO WS-REJECT-REASON
            MOVE FD-TRANSACTION-RECORD(1:6) TO WS-ACCOUNT
@@ -137,7 +133,6 @@
            ELSE
                PERFORM 5000-WRITE-REJECTED
            END-IF.
-      * 只有输出 WRITE 成功后才统计有效行。
        4000-WRITE-ACCEPTED.
            MOVE FD-TRANSACTION-RECORD(1:12)
                TO WS-ACCEPTED-WORK
@@ -150,7 +145,6 @@
                    WS-ACCEPTED-STATUS
                MOVE "Y" TO WS-SYSTEM-ERROR
            END-IF.
-      * 格式错误的业务行会被记录，处理随后继续。
        5000-WRITE-REJECTED.
            MOVE SPACES TO WS-REJECTED-WORK
            MOVE WS-ACCOUNT TO WS-REJECTED-WORK(1:6)
@@ -167,7 +161,6 @@
                    WS-REJECTED-STATUS
                MOVE "Y" TO WS-SYSTEM-ERROR
            END-IF.
-      * 关闭每个已成功 OPEN 的文件，并检查各自状态。
        8000-CLOSE-FILES.
            IF WS-REJECTED-OPEN = "Y"
                CLOSE REJECTED-OUTPUT

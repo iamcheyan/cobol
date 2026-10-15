@@ -1,4 +1,3 @@
-      * 呼出側が所有する口座記憶域に1件の取引を適用します。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. POST-TRANSACTION28.
        DATA DIVISION.

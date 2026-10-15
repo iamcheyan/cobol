@@ -1,4 +1,3 @@
-      * 呼出側が所有する口座と取引集計を報告します。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. REPORT-ACCOUNT28.
        DATA DIVISION.

@@ -1,7 +1,3 @@
-      * 各反復でEOF前の各ストリームから1件読みます。
-      * 成功時だけ対応件数を増やし、状態10はそのファイルのEOFとします。
-      * 一方のEOF後も他方を読みます。EOF以外の読取異常でループを止め、
-      * 正常終了・読取異常のどちらでも開いたファイルを閉じます。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. MULTI19.
        ENVIRONMENT DIVISION.

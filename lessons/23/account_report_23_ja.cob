@@ -1,6 +1,3 @@
-      * 共有口座定義を使って単独の報告行を組み立てます。
-      * 主処理は口座番号、顧客ID、残高を設定し、報告段落を呼びます。
-      * 報告段落は残高を編集表示項目へ移し、小数点付きで口座情報を表示します。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. ACCOUNT-REPORT23.
        DATA DIVISION.

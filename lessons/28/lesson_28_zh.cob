@@ -1,4 +1,3 @@
-      * 第28课：构建一个小型多程序记账项目。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON28.
        ENVIRONMENT DIVISION.
@@ -24,18 +23,11 @@
        01 WS-IO-ERROR PIC X VALUE "N".
        01 WS-LOG-MESSAGE PIC X(100) VALUE SPACES.
        01 WS-TRANSACTION-NO PIC 9(3) VALUE ZERO.
-      * 账户字段由记账和报表两个子程序共享。
       * 交易记录布局是CALL的输入契约，POST-STATUS用于返回记账判定。
-      * 业务拒绝是正常结果；未知状态码才表示调用契约异常。
-      * 金额PIC中的V表示隐含小数点，不占存储空间。
-      * 显示字段补出小数点，让金额更易辨认。
-      * INITIALIZE清零计数器；每笔交易设置账户、类型和金额后再CALL。
       * 余额不足的取款会被拒绝，账户余额保持不变。
-      * 全部交易结束后，报表程序读取共享账户和计数器生成汇总。
        01 WS-EDITED-AMOUNT PIC 9(7).99 VALUE ZERO.
        01 WS-UNKNOWN-STATUS PIC X VALUE "N".
        PROCEDURE DIVISION.
-      * 主程序控制初始化和交易处理顺序。
        0000-MAIN.
            PERFORM 9000-OPEN-LOG
            IF WS-LOG-OPEN = "Y"
@@ -59,13 +51,11 @@
                MOVE 1 TO RETURN-CODE
            END-IF
            STOP RUN.
-      * 初始化该账户和批次汇总字段。
        1000-INITIALIZE-BATCH.
            INITIALIZE WS-ACCOUNT-RECORD WS-BATCH-COUNTS
            MOVE "A000000001" TO WS-ACCOUNT-NUMBER
            MOVE "C0001001" TO WS-CUSTOMER-ID
            MOVE 1000.00 TO WS-ACCOUNT-BALANCE.
-      * 各段落准备交易字段，再调用共用段落完成记账。
        1100-POST-DEPOSIT.
            MOVE "A000000001" TO WS-TRANSACTION-ACCOUNT
            MOVE "D" TO WS-TRANSACTION-TYPE
@@ -91,7 +81,6 @@
            MOVE "D" TO WS-TRANSACTION-TYPE
            MOVE 1.00 TO WS-TRANSACTION-AMOUNT
            PERFORM 2000-CALL-POSTER.
-      * 按引用传递的三个字段由被调用程序直接修改，结果会反映到调用方。
        2000-CALL-POSTER.
            ADD 1 TO WS-TRANSACTION-NO
            MOVE SPACES TO WS-POST-STATUS
@@ -107,7 +96,6 @@
            IF WS-LOG-FAILED = "N"
                PERFORM 2200-LOG-POST-RESULT
            END-IF.
-      * 调用方维护批次计数，并检查模块是否返回未知状态码。
        2100-REPORT-RESULT.
            EVALUATE WS-POST-STATUS
                WHEN "POSTED"

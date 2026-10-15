@@ -1,5 +1,3 @@
-      * Program identity and external files.
-      * Open the batch log first; check each file status.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LOG27.
        ENVIRONMENT DIVISION.
@@ -21,9 +19,6 @@
                ASSIGN TO "rejected.txt"
                ORGANIZATION IS LINE SEQUENTIAL
                FILE STATUS IS WS-REJECTED-STATUS.
-      * File records define log, input, accepted, and rejected layouts.
-      * Working storage separates lifecycle flags, business fields,
-      * event text, operation status, and batch totals.
        DATA DIVISION.
        FILE SECTION.
        FD BATCH-LOG.
@@ -58,8 +53,6 @@
        01 WS-INPUT-COUNT PIC 9(3) VALUE ZERO.
        01 WS-ACCEPTED-COUNT PIC 9(3) VALUE ZERO.
        01 WS-REJECTED-COUNT PIC 9(3) VALUE ZERO.
-      * Main flow: establish logging, process while safe, close data,
-      * write the final event, close the log, set failure return code.
        PROCEDURE DIVISION.
        0000-MAIN.
            PERFORM 9000-OPEN-LOG
@@ -92,7 +85,6 @@
                MOVE 1 TO RETURN-CODE
            END-IF
            STOP RUN.
-      * Open the log first. Without it, do not start the batch.
        9000-OPEN-LOG.
            OPEN OUTPUT BATCH-LOG
            IF WS-LOG-STATUS = "00"
@@ -101,8 +93,6 @@
                DISPLAY "ERROR=OPEN_LOG STATUS=" WS-LOG-STATUS
                MOVE "Y" TO WS-SYSTEM-ERROR
            END-IF.
-      * Open business files in order; set open flags only on status 00.
-      * Any failure is a system error and prevents processing.
        1000-OPEN-DATA-FILES.
            OPEN INPUT TRANSACTION-INPUT
            IF WS-INPUT-STATUS = "00"
@@ -132,14 +122,11 @@
                    PERFORM 9300-REPORT-SYSTEM-ERROR
                END-IF
            END-IF.
-      * Stop reading at EOF or when a system error occurs.
        2000-PROCESS-INPUT.
            PERFORM UNTIL WS-END-OF-FILE = "Y"
                OR WS-SYSTEM-ERROR = "Y"
                PERFORM 2100-READ-ONE-RECORD
            END-PERFORM.
-      * Number each successful row and capture its account key.
-      * Log reads before validation; distinguish EOF from read failure.
        2100-READ-ONE-RECORD.
            READ TRANSACTION-INPUT
                AT END
@@ -161,7 +148,6 @@
                MOVE WS-INPUT-STATUS TO WS-ERROR-STATUS
                PERFORM 9300-REPORT-SYSTEM-ERROR
            END-IF.
-      * Tie each read event to sequence and account; clear the buffer.
        2200-LOG-RECORD-READ.
            MOVE SPACES TO WS-LOG-MESSAGE
            STRING "EVENT=RECORD_READ NO=" DELIMITED BY SIZE
@@ -171,7 +157,6 @@
                INTO WS-LOG-MESSAGE
            END-STRING
            PERFORM 9100-WRITE-LOG.
-      * Validate width, delimiter, numeric amount, and nonzero amount.
       * These are business rejections, not system failures.
        3000-VALIDATE-RECORD.
            MOVE SPACES TO WS-REJECT-REASON
@@ -213,7 +198,6 @@
                MOVE WS-ACCEPTED-STATUS TO WS-ERROR-STATUS
                PERFORM 9300-REPORT-SYSTEM-ERROR
            END-IF.
-      * Record acceptance only after the output write succeeds.
        4100-LOG-ACCEPTED.
            MOVE SPACES TO WS-LOG-MESSAGE
            STRING "EVENT=RECORD_ACCEPTED NO=" DELIMITED BY SIZE
@@ -223,8 +207,6 @@
                INTO WS-LOG-MESSAGE
            END-STRING
            PERFORM 9100-WRITE-LOG.
-      * Write account and rejection reason to the reject file.
-      * A failed output write is a system error.
        5000-WRITE-REJECTED.
            MOVE SPACES TO WS-REJECTED-WORK
            MOVE WS-ACCOUNT TO WS-REJECTED-WORK(1:6)
@@ -242,7 +224,6 @@
                MOVE WS-REJECTED-STATUS TO WS-ERROR-STATUS
                PERFORM 9300-REPORT-SYSTEM-ERROR
            END-IF.
-      * Log the row number, account, and rejection reason.
        5100-LOG-REJECTED.
            MOVE SPACES TO WS-LOG-MESSAGE
            STRING "EVENT=BUSINESS_REJECT NO=" DELIMITED BY SIZE
@@ -254,7 +235,6 @@
                INTO WS-LOG-MESSAGE
            END-STRING
            PERFORM 9100-WRITE-LOG.
-      * Check each log WRITE. On failure, stop processing and appending.
       * The log cannot report its own write failure.
        9100-WRITE-LOG.
            IF WS-LOG-FAILED = "N"
@@ -266,7 +246,6 @@
                    MOVE "Y" TO WS-SYSTEM-ERROR
                END-IF
            END-IF.
-      * Report operation and status; log the event when possible.
        9300-REPORT-SYSTEM-ERROR.
            MOVE "Y" TO WS-SYSTEM-ERROR
            DISPLAY "ERROR="
@@ -283,7 +262,6 @@
                PERFORM 9100-WRITE-LOG
            END-IF.
       * Close only opened data files; check each status.
-      * Close errors are system errors while logging is available.
        8000-CLOSE-DATA-FILES.
            IF WS-REJECTED-OPEN = "Y"
                CLOSE REJECTED-OUTPUT
@@ -311,8 +289,6 @@
                    PERFORM 9300-REPORT-SYSTEM-ERROR
                END-IF
            END-IF.
-      * After data closes, log totals and error flag.
-      * Then close the log; CLOSE failure reaches screen only.
        9200-LOG-BATCH-END.
            MOVE SPACES TO WS-LOG-MESSAGE
            STRING "EVENT=BATCH_END INPUT=" DELIMITED BY SIZE

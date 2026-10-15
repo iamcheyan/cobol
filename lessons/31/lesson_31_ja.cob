@@ -1,9 +1,7 @@
-      *プログラム識別情報と実行時に使うファイル・DB資源です。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON31.
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
-      *行順編成ファイルを割り当て、操作ごとの状態を記録します。
        FILE-CONTROL.
            SELECT SNAPSHOT-FILE ASSIGN TO "snapshot.txt"
                ORGANIZATION IS LINE SEQUENTIAL
@@ -11,15 +9,12 @@
            SELECT DIFFERENCE-FILE ASSIGN TO "differences.txt"
                ORGANIZATION IS LINE SEQUENTIAL
                FILE STATUS IS WS-OUT-STATUS.
-      *固定長レコードで入力レイアウトを明確にします。
        DATA DIVISION.
        FILE SECTION.
        FD SNAPSHOT-FILE.
        01 SNAPSHOT-RECORD PIC X(27).
        FD DIFFERENCE-FILE.
        01 DIFFERENCE-RECORD PIC X(80).
-      *作業領域では入力文字列、数値、実行状態を分けます。
-      *パック10進数で金額を正確に保持し、件数を結果別に集計します。
        WORKING-STORAGE SECTION.
        01 WS-FILE-STATUS PIC XX.
        01 WS-OUT-STATUS PIC XX.
@@ -44,10 +39,7 @@
        01 WS-EOF PIC X VALUE "N".
        01 WS-FAILED PIC X VALUE "N".
        EXEC SQL INCLUDE SQLCA END-EXEC.
-      *依存順に処理し、エラー後は後続の業務処理を止めます。
        PROCEDURE DIVISION.
-      *ファイルを開き、成功後にDBへ接続して照合を開始します。
-      *オープン済み資源だけを閉じ、件数表示後にDBを切断します。
        MAIN-PROCEDURE.
            PERFORM 1000-OPEN-INPUT
            IF WS-FAILED NOT = "Y"
@@ -87,7 +79,6 @@
                END-IF
            END-IF
            GOBACK.
-      *スナップショットを開き、状態コードを確認できるよう保持します。
        1000-OPEN-INPUT.
            OPEN INPUT SNAPSHOT-FILE
            IF WS-FILE-STATUS = "00"
@@ -96,7 +87,6 @@
                DISPLAY "エラー=入力オープン 状態=" WS-FILE-STATUS
                MOVE "Y" TO WS-FAILED
            END-IF.
-      *差異レポートを作成し、失敗時は後続処理を行いません。
        1100-OPEN-OUTPUT.
            OPEN OUTPUT DIFFERENCE-FILE
            IF WS-OUT-STATUS = "00"
@@ -105,8 +95,6 @@
                DISPLAY "エラー=出力オープン 状態=" WS-OUT-STATUS
                MOVE "Y" TO WS-FAILED
            END-IF.
-      *DATASRC、DATASRC_USR、DATASRC_PWDから接続情報を取得します。
-      *SQLSTATEで接続エラーを報告し、資格情報は表示しません。
        1200-CONNECT-DATABASE.
            DISPLAY "DATASRC" UPON ENVIRONMENT-NAME
            ACCEPT WS-DATASRC FROM ENVIRONMENT-VALUE
@@ -125,7 +113,6 @@
                DISPLAY "接続=エラー SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            END-IF.
-      *EOFまたはエラーまで、27文字のレコードを1件ずつ読みます。
        2000-READ-SNAPSHOT.
            PERFORM UNTIL WS-EOF = "Y" OR WS-FAILED = "Y"
                READ SNAPSHOT-FILE
@@ -141,8 +128,6 @@
                        END-IF
                END-READ
            END-PERFORM.
-      *位置で口座10桁、顧客ID8桁、金額文字列9桁に分割します。
-      *数字を検証してからNUMVALで変換し、100で割って通貨単位にします。
        3000-RECONCILE-ROW.
            ADD 1 TO WS-ROW-COUNT
            MOVE SNAPSHOT-RECORD(1:10) TO WS-ACCOUNT
@@ -156,9 +141,6 @@
                DISPLAY "エラー=不正残高 口座=" WS-ACCOUNT
                MOVE "Y" TO WS-FAILED
            END-IF.
-      *ホスト変数を使い、口座番号でDBレコードを検索します。
-      *SQLCODE 0では顧客IDと残高を比較し、100は該当行なしです。
-      *その他のSQLエラーでは、誤った照合結果を作らず処理を止めます。
        3100-LOOKUP-ACCOUNT.
            MOVE SPACES TO WS-DB-CUSTOMER
            MOVE ZERO TO WS-DB-BALANCE
@@ -188,9 +170,6 @@
            IF WS-FAILED NOT = "Y"
                PERFORM 4000-WRITE-RESULT
            END-IF.
-      *分類した各レコードを先にRECON_RESULTへ保存します。
-      *MATCH以外だけをdifferences.txtへ書き、確認対象を絞ります。
-      *STRINGで固定長レポートを組み立て、状態コードで書込みを確認します。
        4000-WRITE-RESULT.
            EXEC SQL
                INSERT INTO RECON_RESULT
@@ -222,7 +201,6 @@
                    END-IF
                END-IF
            END-IF.
-      *ファイル処理後にSQL接続をリセットし、失敗を報告します。
        9000-DISCONNECT-DATABASE.
            EXEC SQL CONNECT RESET END-EXEC
            IF SQLCODE = 0

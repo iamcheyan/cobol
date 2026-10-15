@@ -1,21 +1,3 @@
-      * Read customer CSV one physical line at a time and validate its
-      * five-field contract.
-      * Fields are ID, name, account, status, and note. Commas inside
-      * quotes are data; doubled quotes represent one quote. Each field
-      * is limited to 20 characters and the input area to 200.
-      * The main paragraph opens the input and counts each available row
-      * before calling the parser. EOF is normal and is not counted. The
-      * final summary reports valid and rejected rows.
-      * The row parser clears field storage and parser state, then scans
-      * characters in order. Separate paths handle quoted content, a
-      * closing quote, and unquoted text; a comma advances to the next
-      * field.
-      * The parser checks field count, length, quote placement, and a
-      * trailing comma. It keeps the first error found. Only a clean row
-      * with exactly five fields is displayed; other rows are rejected
-      * with a reason.
-      * Quoted fields cannot span physical lines in this profile. The
-      * input file is read-only.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. CSV18.
        ENVIRONMENT DIVISION.

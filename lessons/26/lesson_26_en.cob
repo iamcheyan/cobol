@@ -1,4 +1,3 @@
-      * Lesson 26: distinguish bad business rows from file failures.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. ERROR26.
        ENVIRONMENT DIVISION.
@@ -58,7 +57,6 @@
                MOVE 1 TO RETURN-CODE
            END-IF
            STOP RUN.
-      * Open input before creating either output file.
        1000-OPEN-FILES.
            OPEN INPUT TRANSACTION-INPUT
            IF WS-INPUT-STATUS = "00"
@@ -150,7 +148,6 @@
                    WS-ACCEPTED-STATUS
                MOVE "Y" TO WS-SYSTEM-ERROR
            END-IF.
-      * A malformed business row is logged and processing continues.
        5000-WRITE-REJECTED.
            MOVE SPACES TO WS-REJECTED-WORK
            MOVE WS-ACCOUNT TO WS-REJECTED-WORK(1:6)
@@ -167,7 +164,6 @@
                    WS-REJECTED-STATUS
                MOVE "Y" TO WS-SYSTEM-ERROR
            END-IF.
-      * Close every file whose OPEN succeeded, checking each status.
        8000-CLOSE-FILES.
            IF WS-REJECTED-OPEN = "Y"
                CLOSE REJECTED-OUTPUT

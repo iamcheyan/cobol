@@ -1,21 +1,7 @@
-      * Merge a sorted account master and transaction feed by account
-      * key.
-      * The master contract is 27 characters and the transaction
       * contract is 20. Both inputs must be sorted ascending by the same
       * ten-character account number; duplicate keys are outside this
-      * example.
-      * The main flow opens both inputs and compares their current keys.
       * It advances only the smaller side; equal keys form a match and
-      * advance both streams.
-      * Each read paragraph updates its current row on success and
-      * records status 10 as that stream's EOF. Other I/O errors fail
-      * the run.
       * A key present on one side is classified as an orphan. Once one
-      * input ends, every remaining row on the other side is classified.
-      * EOF is checked before key access; both inputs are closed before
-      * the classification totals are reported.
-      * The inputs remain unchanged, and the forward merge uses constant
-      * working storage.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. MATCH20.
        ENVIRONMENT DIVISION.

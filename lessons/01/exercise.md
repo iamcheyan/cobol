@@ -4,7 +4,7 @@
 
 ## 修改练习（会在 `answer.md` 提供参考答案）
 
-打开 `lesson_01.cob`，把问候语改为：
+打开 `lesson.cob`，把问候语改为：
 
 ```text
 Hello, batch team!

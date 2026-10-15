@@ -41,7 +41,7 @@ END-EVALUATE
 
 ## 三、完整示例
 
-[`lesson_05.cob`](./lesson_05.cob) 共 100 行。固定输入为 `D`，用于展示存款分支。程序先显示交易参考号和代码，再输出一个分类与一个动作标签。
+[`lesson.cob`](./lesson.cob) 共 100 行。固定输入为 `D`，用于展示存款分支。程序先显示交易参考号和代码，再输出一个分类与一个动作标签。
 
 ### 数据字段
 
@@ -68,8 +68,8 @@ END-EVALUATE
 ```sh
 scratch_dir=$(mktemp -d)
 trap 'rm -rf "$scratch_dir"' EXIT
-cobc -fsyntax-only lesson_05.cob
-cobc -x -Wall -o "$scratch_dir/lesson_05" lesson_05.cob
+cobc -fsyntax-only lesson.cob
+cobc -x -Wall -o "$scratch_dir/lesson_05" lesson.cob
 "$scratch_dir/lesson_05"
 ```
 

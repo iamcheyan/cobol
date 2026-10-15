@@ -12,7 +12,7 @@ fi
 
 check_sources() {
   "$cobc_bin" -I "$copybook_dir" -fsyntax-only \
-    "$script_dir/lesson_28.cob" \
+    "$script_dir/lesson.cob" \
     "$script_dir/post_transaction_28.cob" \
     "$script_dir/report_account_28.cob"
 }
@@ -27,7 +27,7 @@ build_project() {
     -o "$build_dir/report_account_28.o" \
     "$script_dir/report_account_28.cob"
   "$cobc_bin" -x -I "$copybook_dir" -o "$build_dir/lesson_28" \
-    "$script_dir/lesson_28.cob" \
+    "$script_dir/lesson.cob" \
     "$build_dir/post_transaction_28.o" \
     "$build_dir/report_account_28.o"
 }

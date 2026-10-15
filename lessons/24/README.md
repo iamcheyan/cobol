@@ -16,7 +16,7 @@
 
 ## 二、主程序与子程序
 
-- [`lesson_24.cob`](./lesson_24.cob) 负责准备八个测试金额、执行 `CALL`、统计结果并显示汇总。
+- [`lesson.cob`](./lesson.cob) 负责准备八个测试金额、执行 `CALL`、统计结果并显示汇总。
 - [`amount_check_24.cob`](./amount_check_24.cob) 的 `PROGRAM-ID` 是 `CHECK-AMOUNT`。它在 `LINKAGE SECTION` 声明两个接收字段：金额和结果状态。
 
 调用方每次先清空结果字段，然后执行：
@@ -44,8 +44,8 @@
 ```sh
 scratch_dir=$(mktemp -d)
 trap 'rm -rf "$scratch_dir"' EXIT
-cobc -fsyntax-only lesson_24.cob amount_check_24.cob
-cobc -x -Wall -o "$scratch_dir/lesson_24" lesson_24.cob amount_check_24.cob
+cobc -fsyntax-only lesson.cob amount_check_24.cob
+cobc -x -Wall -o "$scratch_dir/lesson_24" lesson.cob amount_check_24.cob
 "$scratch_dir/lesson_24"
 ```
 

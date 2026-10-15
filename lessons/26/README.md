@@ -14,7 +14,7 @@
 
 ## 二、输入与输出
 
-[`lesson_26.cob`](./lesson_26.cob) 从 [`transactions.txt`](./transactions.txt) 读取逐行记录。记录格式为六字符账户号、竖线分隔符、五位金额分；例如 `A00001|00125` 表示 125 个金额单位。金额必须为数字且不能为零，记录总宽度必须为 12。
+[`lesson.cob`](./lesson.cob) 从 [`transactions.txt`](./transactions.txt) 读取逐行记录。记录格式为六字符账户号、竖线分隔符、五位金额分；例如 `A00001|00125` 表示 125 个金额单位。金额必须为数字且不能为零，记录总宽度必须为 12。
 
 成功记录写到 `accepted.txt`；宽度、分隔符或金额错误写到 `rejected.txt`。这两个输出都以 `OPEN OUTPUT` 打开，每次运行会覆盖已有内容。请在临时目录运行。
 
@@ -39,8 +39,8 @@ GnuCOBOL Programmer’s Guide 指出，`AT END` 只处理文件状态 `10`，不
 ```sh
 scratch_dir=$(mktemp -d)
 trap 'rm -rf "$scratch_dir"' EXIT
-cobc -fsyntax-only lesson_26.cob
-cobc -x -Wall -o "$scratch_dir/lesson_26" lesson_26.cob
+cobc -fsyntax-only lesson.cob
+cobc -x -Wall -o "$scratch_dir/lesson_26" lesson.cob
 cp transactions.txt "$scratch_dir/"
 (cd "$scratch_dir" && ./lesson_26)
 ```

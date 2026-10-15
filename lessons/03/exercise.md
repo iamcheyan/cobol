@@ -2,7 +2,7 @@
 
 ## 修改练习（参考答案见 `answer.md`）
 
-在 `lesson_03.cob` 中：
+在 `lesson.cob` 中：
 
 1. 把 `WS-DEPOSIT` 初值从 `250.55` 改为 `200.65`。
 2. 把 `WS-PERIOD-RATE` 初值从 `0.0125` 改为 `0.0150`。

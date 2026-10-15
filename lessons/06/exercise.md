@@ -2,7 +2,7 @@
 
 ## 修改练习（答案见 `answer.md`）
 
-修改 `lesson_06.cob` 的 `WS-LAST-SAMPLE` 初值，每种情况都从初始源码开始：
+修改 `lesson.cob` 的 `WS-LAST-SAMPLE` 初值，每种情况都从初始源码开始：
 
 1. `0`：循环体应执行 0 次。
 2. `1`：只处理第 1 笔样例。

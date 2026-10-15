@@ -8,7 +8,7 @@
 
 ## 二、数据布局
 
-[`lesson_14.cob`](./lesson_14.cob) 有两个主要数据结构：
+[`lesson.cob`](./lesson.cob) 有两个主要数据结构：
 
 - 账户主档是三项 OCCURS 表格。每个账户组包含账户号和余额。账户号唯一，表格实际按 `ASCENDING KEY` 声明的账户号排序，并由 `INDEXED BY` 提供搜索索引。
 - 交易表包含四项。每项有交易类型和 27 字节负载。存款视图包含账户号、金额和参考号；转账视图以 `REDEFINES` 复用同一空间，包含来源账户、目标账户和金额。两个视图在本例中占用相同长度。
@@ -32,8 +32,8 @@
 ```sh
 scratch_dir=$(mktemp -d)
 trap 'rm -rf "$scratch_dir"' EXIT
-cobc -fsyntax-only lesson_14.cob
-cobc -x -Wall -o "$scratch_dir/lesson_14" lesson_14.cob
+cobc -fsyntax-only lesson.cob
+cobc -x -Wall -o "$scratch_dir/lesson_14" lesson.cob
 "$scratch_dir/lesson_14"
 ```
 

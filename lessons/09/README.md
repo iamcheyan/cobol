@@ -37,7 +37,7 @@
 
 ## 三、完整示例说明
 
-[`lesson_09.cob`](./lesson_09.cob) 用固定 `VALUE` 定义一笔客户交易记录，没有文件、终端输入、表格或重定义。客户号和账户号使用文本字段保存；金额使用 `PIC 9(5)V99`，单独引用时按数值格式显示为 `00125.50`。
+[`lesson.cob`](./lesson.cob) 用固定 `VALUE` 定义一笔客户交易记录，没有文件、终端输入、表格或重定义。客户号和账户号使用文本字段保存；金额使用 `PIC 9(5)V99`，单独引用时按数值格式显示为 `00125.50`。
 
 代码按组分别显示客户、账户和交易字段。两项同名的 `WS-STATUS` 都通过各自父组限定。最后一行把整个 `WS-TRANSACTION-RECORD` 作为组项显示：子项按声明顺序连续出现，没有自动插入分隔符。该输出只是观察内存中组内容的演示，不是本课程定义的文件格式或跨平台接口。
 
@@ -50,8 +50,8 @@
 ```sh
 scratch_dir=$(mktemp -d)
 trap 'rm -rf "$scratch_dir"' EXIT
-cobc -fsyntax-only lesson_09.cob
-cobc -x -Wall -o "$scratch_dir/lesson_09" lesson_09.cob
+cobc -fsyntax-only lesson.cob
+cobc -x -Wall -o "$scratch_dir/lesson_09" lesson.cob
 "$scratch_dir/lesson_09"
 ```
 

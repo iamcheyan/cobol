@@ -16,7 +16,7 @@
 
 ## 二、项目文件
 
-- [`lesson_28.cob`](./lesson_28.cob)：初始化账户、准备五笔样例交易、调用过账模块、汇总返回状态并写批次日志。
+- [`lesson.cob`](./lesson.cob)：初始化账户、准备五笔样例交易、调用过账模块、汇总返回状态并写批次日志。
 - [`post_transaction_28.cob`](./post_transaction_28.cob)：按账户号和交易类型校验交易；成功时修改调用方余额，通过状态字段返回处理结果。
 - [`report_account_28.cob`](./report_account_28.cob)：读取最终账户与批次计数并显示报告。
 - [`copybooks/ACCOUNT-REC.CPY`](./copybooks/ACCOUNT-REC.CPY)：账户号、客户号和余额的共享记录布局。

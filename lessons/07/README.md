@@ -22,7 +22,7 @@
 
 ## 三、完整示例
 
-[`lesson_07.cob`](./lesson_07.cob) 共 100 行。固定金额为期初 `1000.00`、存款 `125.50`、取款 `40.10`。程序在处理段落中计算期末余额 `1085.40`。
+[`lesson.cob`](./lesson.cob) 共 100 行。固定金额为期初 `1000.00`、存款 `125.50`、取款 `40.10`。程序在处理段落中计算期末余额 `1085.40`。
 
 | 段落 | 职责 | 关键语句 |
 |---|---|---|
@@ -50,8 +50,8 @@
 ```sh
 scratch_dir=$(mktemp -d)
 trap 'rm -rf "$scratch_dir"' EXIT
-cobc -fsyntax-only lesson_07.cob
-cobc -x -Wall -o "$scratch_dir/lesson_07" lesson_07.cob
+cobc -fsyntax-only lesson.cob
+cobc -x -Wall -o "$scratch_dir/lesson_07" lesson.cob
 "$scratch_dir/lesson_07"
 ```
 

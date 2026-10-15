@@ -16,7 +16,7 @@
 
 [`customers.csv`](./customers.csv) 不带标题行，每条记录固定为五个字段：客户号、姓名、账户号、状态、备注。示例包含未引用字段、姓名中的逗号、双引号转义、显式空字段、少字段行、恰好 20 字符的姓名和超长姓名。
 
-[`lesson_18.cob`](./lesson_18.cob) 用状态标记逐个扫描字符。逗号只有在引号外才结束字段；字段内的 `""` 解析为一个双引号。每个字段最多 20 个字符，且每行必须正好五个字段。无效行整行拒绝并报告原因，不把过长文本静默截断。
+[`lesson.cob`](./lesson.cob) 用状态标记逐个扫描字符。逗号只有在引号外才结束字段；字段内的 `""` 解析为一个双引号。每个字段最多 20 个字符，且每行必须正好五个字段。无效行整行拒绝并报告原因，不把过长文本静默截断。
 
 GnuCOBOL 的 `UNSTRING` 可按分隔符拆分，也能产生空子串，但它不会自动应用 CSV 的引号状态规则。本例因此显式跟踪“引号内”“刚关闭引号”和“字段起始”状态。
 
@@ -46,8 +46,8 @@ GnuCOBOL 的 `UNSTRING` 可按分隔符拆分，也能产生空子串，但它�
 ```sh
 scratch_dir=$(mktemp -d)
 trap 'rm -rf "$scratch_dir"' EXIT
-cobc -fsyntax-only lesson_18.cob
-cobc -x -Wall -o "$scratch_dir/lesson_18" lesson_18.cob
+cobc -fsyntax-only lesson.cob
+cobc -x -Wall -o "$scratch_dir/lesson_18" lesson.cob
 cp customers.csv "$scratch_dir/"
 (cd "$scratch_dir" && ./lesson_18)
 ```

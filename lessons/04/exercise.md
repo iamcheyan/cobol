@@ -2,7 +2,7 @@
 
 ## 修改练习（答案见 `answer.md`）
 
-逐项修改 `lesson_04.cob` 的 `WS-TRANSACTION-AMOUNT` 和 `WS-ACCOUNT-STATUS` 初值，编译并运行：
+逐项修改 `lesson.cob` 的 `WS-TRANSACTION-AMOUNT` 和 `WS-ACCOUNT-STATUS` 初值，编译并运行：
 
 1. `0.00`，状态 `A`。
 2. `-0.01`，状态 `A`。

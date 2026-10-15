@@ -17,8 +17,8 @@
 运行：
 
 ```sh
-cobc -fsyntax-only lesson_01.cob
-cobc -x -Wall -o build/lesson_01 lesson_01.cob
+cobc -fsyntax-only lesson.cob
+cobc -x -Wall -o build/lesson_01 lesson.cob
 ./build/lesson_01
 ```
 

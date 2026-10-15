@@ -33,8 +33,8 @@
 ```sh
 scratch_dir=$(mktemp -d)
 trap 'rm -rf "$scratch_dir"' EXIT
-cobc -fsyntax-only lesson_21.cob
-cobc -x -Wall -o "$scratch_dir/lesson_21" lesson_21.cob
+cobc -fsyntax-only lesson.cob
+cobc -x -Wall -o "$scratch_dir/lesson_21" lesson.cob
 cp accounts-unsorted.txt "$scratch_dir/"
 (cd "$scratch_dir" && ./lesson_21)
 ```

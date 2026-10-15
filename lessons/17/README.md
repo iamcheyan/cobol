@@ -24,7 +24,7 @@
 
 `V` 是隐含小数点，不占物理字节。九个余额数字 `000100000` 表示 `1000.00`。
 
-[`lesson_17.cob`](./lesson_17.cob) 使用 `ORGANIZATION IS SEQUENTIAL`。GnuCOBOL 按 FD 记录长度计算每条记录的偏移；该组织格式没有行结束符，不能用普通文本编辑器另存，因为文本编辑器会插入换行字节。
+[`lesson.cob`](./lesson.cob) 使用 `ORGANIZATION IS SEQUENTIAL`。GnuCOBOL 按 FD 记录长度计算每条记录的偏移；该组织格式没有行结束符，不能用普通文本编辑器另存，因为文本编辑器会插入换行字节。
 
 程序把字段重新排列并写到 `balances.dat`，每条输出也为 27 字节：
 
@@ -49,8 +49,8 @@
 ```sh
 scratch_dir=$(mktemp -d)
 trap 'rm -rf "$scratch_dir"' EXIT
-cobc -fsyntax-only lesson_17.cob
-cobc -x -Wall -o "$scratch_dir/lesson_17" lesson_17.cob
+cobc -fsyntax-only lesson.cob
+cobc -x -Wall -o "$scratch_dir/lesson_17" lesson.cob
 cp accounts.dat "$scratch_dir/"
 (cd "$scratch_dir" && ./lesson_17)
 wc -c "$scratch_dir/balances.dat"

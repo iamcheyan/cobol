@@ -14,7 +14,7 @@
 
 ## 二、样例结果
 
-[`lesson_16.cob`](./lesson_16.cob) 从内存表格装入四条已经分类的结果：两条接受、两条拒绝。`A` 记录进入 `accepted.txt`，`R` 记录进入 `rejected.txt`。每条输出记录恰好 35 个字符，以竖线分隔字段；本课聚焦文件写入，不重新计算业务分类。
+[`lesson.cob`](./lesson.cob) 从内存表格装入四条已经分类的结果：两条接受、两条拒绝。`A` 记录进入 `accepted.txt`，`R` 记录进入 `rejected.txt`。每条输出记录恰好 35 个字符，以竖线分隔字段；本课聚焦文件写入，不重新计算业务分类。
 
 两个输出都使用 `ORGANIZATION IS LINE SEQUENTIAL`。每条成功的 `WRITE` 写一行，Linux 上以换行符结束。`WRITE ... FROM` 会先把来源文本移动到 FD 记录，再写出该记录。
 
@@ -33,8 +33,8 @@
 ```sh
 scratch_dir=$(mktemp -d)
 trap 'rm -rf "$scratch_dir"' EXIT
-cobc -fsyntax-only lesson_16.cob
-cobc -x -Wall -o "$scratch_dir/lesson_16" lesson_16.cob
+cobc -fsyntax-only lesson.cob
+cobc -x -Wall -o "$scratch_dir/lesson_16" lesson.cob
 (cd "$scratch_dir" && ./lesson_16)
 cat "$scratch_dir/accepted.txt"
 cat "$scratch_dir/rejected.txt"

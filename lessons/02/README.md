@@ -46,7 +46,7 @@ Java / Python 通常通过类、`String`、整数或 `Decimal` 等类型表达�
 
 ## 三、完整示例源码
 
-打开 [`lesson_02.cob`](./lesson_02.cob)。源码共 105 行，包含账户快照的平面数据项和输出语句；记录分组会在第 09 课学习。
+打开 [`lesson.cob`](./lesson.cob)。源码共 105 行，包含账户快照的平面数据项和输出语句；记录分组会在第 09 课学习。
 
 ## 四、源码逐步解析
 
@@ -96,8 +96,8 @@ Java / Python 通常通过类、`String`、整数或 `Decimal` 等类型表达�
 ```sh
 scratch_dir=$(mktemp -d)
 trap 'rm -rf "$scratch_dir"' EXIT
-cobc -fsyntax-only lesson_02.cob
-cobc -x -Wall -o "$scratch_dir/lesson_02" lesson_02.cob
+cobc -fsyntax-only lesson.cob
+cobc -x -Wall -o "$scratch_dir/lesson_02" lesson.cob
 "$scratch_dir/lesson_02"
 ```
 

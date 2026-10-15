@@ -2,7 +2,7 @@
 
 ## 修改练习（答案见 `answer.md`）
 
-在 `lesson_05.cob` 中，每次只修改 `WS-TRANSACTION-CODE` 的 `VALUE` 子句，重新编译并运行：
+在 `lesson.cob` 中，每次只修改 `WS-TRANSACTION-CODE` 的 `VALUE` 子句，重新编译并运行：
 
 1. `W`：应分类为取款。
 2. `T`：应分类为转账。

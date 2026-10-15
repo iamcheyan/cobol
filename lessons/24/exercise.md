@@ -2,7 +2,7 @@
 
 ## 修改练习（答案见 `answer.md`）
 
-每次修改后都要把主程序 `lesson_24.cob` 与 `amount_check_24.cob` 一起重新编译，因为校验规则在子程序中。
+每次修改后都要把主程序 `lesson.cob` 与 `amount_check_24.cob` 一起重新编译，因为校验规则在子程序中。
 
 1. 在 `amount_check_24.cob` 中，将 `LK-AMOUNT > 1000.00` 的阈值改为 `1500.00`。重新编译并运行，确认 `1000.01` 变为 `VALID`，但 `9999999.99` 仍为 `LIMIT-EXCEEDED`。
 2. 从原始源码出发，在 `1200-CHECK-ZERO-AMOUNT` 中把 `MOVE ZERO` 改为 `MOVE 0.01`。重新编译并运行，确认最初的 `ZERO-AMOUNT` 结果变为 `VALID`。

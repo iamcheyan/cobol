@@ -14,7 +14,7 @@
 
 ## 二、索引和下标的区别
 
-[`lesson_12.cob`](./lesson_12.cob) 声明四个账户出现项，并在 `OCCURS` 子句上使用 `INDEXED BY WS-ACCOUNT-IDX`。这个索引由表格定义关联；它不是带 `PIC 9` 的普通数值工作字段。循环先执行 `SET WS-ACCOUNT-IDX TO 1`，每轮读完账户号与余额后执行 `SET WS-ACCOUNT-IDX UP BY 1`。
+[`lesson.cob`](./lesson.cob) 声明四个账户出现项，并在 `OCCURS` 子句上使用 `INDEXED BY WS-ACCOUNT-IDX`。这个索引由表格定义关联；它不是带 `PIC 9` 的普通数值工作字段。循环先执行 `SET WS-ACCOUNT-IDX TO 1`，每轮读完账户号与余额后执行 `SET WS-ACCOUNT-IDX UP BY 1`。
 
 上一课使用 `WS-SAMPLE-INDEX PIC 9(2)` 作为下标。普通数值下标直接表示出现项编号；索引则通过 `SET` 赋值或递增。两者的引用语法都使用括号，例如 `WS-ACCOUNT-NUMBER(WS-ACCOUNT-IDX)`，但括号里的数据项声明决定它是索引还是下标。索引不能当作普通数值做任意算术；顺序移动使用 `SET UP` 或 `SET DOWN`。
 
@@ -38,8 +38,8 @@
 ```sh
 scratch_dir=$(mktemp -d)
 trap 'rm -rf "$scratch_dir"' EXIT
-cobc -fsyntax-only lesson_12.cob
-cobc -x -Wall -o "$scratch_dir/lesson_12" lesson_12.cob
+cobc -fsyntax-only lesson.cob
+cobc -x -Wall -o "$scratch_dir/lesson_12" lesson.cob
 "$scratch_dir/lesson_12"
 ```
 

@@ -88,7 +88,7 @@ GixSQL 运行库在某些环境会把 libxml 版本警告写到标准错误；�
 
 源码保持传统固定格式：第 7 列为指示符区，第 8 列起是 Area A，第 12 列起是 Area B，有效文本不超过第 72 列。用下表按声明和段落阅读每条语句；程序中相邻的 `MOVE` / `COMPUTE` / `IF` / `WRITE` 分别完成字段搬运、金额换算、分支决策和持久化。
 
-### `lesson_32.cob`：主程序
+### `lesson.cob`：主程序
 
 - 第 1–8 行声明程序名并引入 `BATCH-INTERFACE.CPY`。`WS-ACCOUNT-TABLE` 是固定 20 行的共享账户表；`WS-BATCH-COUNTS` 保存交易和数据库同步计数；`WS-CHECK-COUNT` 是校验时的临时数值。
 - 第 10–28 行是主流程。`INITIALIZE` 清空表和计数，然后明确把失败标志置为 `N`。`CALL ... BY REFERENCE` 把同一块数据交给 `LOADPOST32`；只有共享失败标志不是 `Y` 才调用 `SYNCDB32`。随后校验计数、打印摘要、设置进程返回码。

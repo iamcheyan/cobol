@@ -37,7 +37,7 @@ GnuCOBOL 本身不解析 `EXEC SQL`。本课使用 [GixSQL](https://github.com/m
 ./build.sh run
 ```
 
-`run` 会在 `build/accounts.db` 创建新的 SQLite 文件并加载 [`schema.sql`](./schema.sql)，然后编译并运行 [`lesson_29.cob`](./lesson_29.cob)。`build.sh clean` 会删除整个 `build/`，包括下载的工具链、预编译文件和数据库。
+`run` 会在 `build/accounts.db` 创建新的 SQLite 文件并加载 [`schema.sql`](./schema.sql)，然后编译并运行 [`lesson.cob`](./lesson.cob)。`build.sh clean` 会删除整个 `build/`，包括下载的工具链、预编译文件和数据库。
 
 标准输出应为：
 

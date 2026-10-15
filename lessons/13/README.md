@@ -14,7 +14,7 @@
 
 ## 二、样例账户表
 
-[`lesson_13.cob`](./lesson_13.cob) 将四个账户按 `X(10)` 账户号递增顺序装入 OCCURS 表格。账户号唯一，第三项余额为 `520.00`。表格声明 `ASCENDING KEY IS WS-ACCOUNT-NUMBER`，并用 `INDEXED BY WS-ACCOUNT-IDX` 提供搜索索引。
+[`lesson.cob`](./lesson.cob) 将四个账户按 `X(10)` 账户号递增顺序装入 OCCURS 表格。账户号唯一，第三项余额为 `520.00`。表格声明 `ASCENDING KEY IS WS-ACCOUNT-NUMBER`，并用 `INDEXED BY WS-ACCOUNT-IDX` 提供搜索索引。
 
 该程序对已存在的 `0002468101` 和不存在的 `0005550000` 分别执行两种查找。固定宽度的文本账户号包含前导零；这些样例按相同长度的字符顺序升序排列。
 
@@ -44,8 +44,8 @@
 ```sh
 scratch_dir=$(mktemp -d)
 trap 'rm -rf "$scratch_dir"' EXIT
-cobc -fsyntax-only lesson_13.cob
-cobc -x -Wall -o "$scratch_dir/lesson_13" lesson_13.cob
+cobc -fsyntax-only lesson.cob
+cobc -x -Wall -o "$scratch_dir/lesson_13" lesson.cob
 "$scratch_dir/lesson_13"
 ```
 

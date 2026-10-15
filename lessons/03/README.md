@@ -50,7 +50,7 @@ COMPUTE WS-INTEREST-ROUNDED ROUNDED = WS-INTEREST-RAW
 
 ## 三、完整示例源码
 
-见 [`lesson_03.cob`](./lesson_03.cob)，共 100 行。它使用固定样例，不读取外部数据；先计算交易后余额，再比较 `MOVE`、不舍入的 `COMPUTE` 和舍入的 `COMPUTE`。
+见 [`lesson.cob`](./lesson.cob)，共 100 行。它使用固定样例，不读取外部数据；先计算交易后余额，再比较 `MOVE`、不舍入的 `COMPUTE` 和舍入的 `COMPUTE`。
 
 ## 四、源码逐步解析
 
@@ -89,8 +89,8 @@ COMPUTE WS-INTEREST-ROUNDED ROUNDED = WS-INTEREST-RAW
 ```sh
 scratch_dir=$(mktemp -d)
 trap 'rm -rf "$scratch_dir"' EXIT
-cobc -fsyntax-only lesson_03.cob
-cobc -x -Wall -o "$scratch_dir/lesson_03" lesson_03.cob
+cobc -fsyntax-only lesson.cob
+cobc -x -Wall -o "$scratch_dir/lesson_03" lesson.cob
 "$scratch_dir/lesson_03"
 ```
 

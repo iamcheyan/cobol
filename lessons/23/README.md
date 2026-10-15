@@ -15,7 +15,7 @@
 
 ## 二、课程文件
 
-- [`lesson_23.cob`](./lesson_23.cob) 使用账户与交易 Copybook，依次演示入账、提款、余额不足、未知类型和账户不存在。
+- [`lesson.cob`](./lesson.cob) 使用账户与交易 Copybook，依次演示入账、提款、余额不足、未知类型和账户不存在。
 - [`account_report_23.cob`](./account_report_23.cob) 是第二个独立程序，也导入账户 Copybook，证明该定义可以被多个程序使用。
 - [`copybooks/ACCOUNT-REC.CPY`](./copybooks/ACCOUNT-REC.CPY) 定义账户号、客户号和余额。
 - [`copybooks/TRANSACTION-REC.CPY`](./copybooks/TRANSACTION-REC.CPY) 定义交易账户、类型和金额。
@@ -49,8 +49,8 @@
 ```sh
 scratch_dir=$(mktemp -d)
 trap 'rm -rf "$scratch_dir"' EXIT
-cobc -fsyntax-only -I copybooks lesson_23.cob
-cobc -x -Wall -I copybooks -o "$scratch_dir/lesson_23" lesson_23.cob
+cobc -fsyntax-only -I copybooks lesson.cob
+cobc -x -Wall -I copybooks -o "$scratch_dir/lesson_23" lesson.cob
 cobc -fsyntax-only -I copybooks account_report_23.cob
 cobc -x -Wall -I copybooks -o "$scratch_dir/account_report_23" account_report_23.cob
 "$scratch_dir/lesson_23"

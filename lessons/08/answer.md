@@ -4,7 +4,7 @@
 
 ## 修改期初余额
 
-将 `lesson_08.cob` 中的初值改为：
+将 `lesson.cob` 中的初值改为：
 
 ```cobol
        01 WS-OPENING-BALANCE PIC 9(7)V99 VALUE 2000.00.

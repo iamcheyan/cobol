@@ -33,7 +33,7 @@ GnuCOBOL Programmer’s Guide 的 `PERFORM VARYING` 示例也使用 `FROM 1 BY 1
 
 ## 三、固定样例程序
 
-[`lesson_06.cob`](./lesson_06.cob) 共 100 行。课程尚未讲解 `OCCURS` 表格，所以示例暂时用 `EVALUATE` 按索引选择三笔固定样例：存款、取款和转账。每轮显示一笔样例，然后用 `COMPUTE` 将已处理次数加一。
+[`lesson.cob`](./lesson.cob) 共 100 行。课程尚未讲解 `OCCURS` 表格，所以示例暂时用 `EVALUATE` 按索引选择三笔固定样例：存款、取款和转账。每轮显示一笔样例，然后用 `COMPUTE` 将已处理次数加一。
 
 | 字段 | PIC / 初值 | 用途 |
 |---|---|---|
@@ -60,8 +60,8 @@ GnuCOBOL Programmer’s Guide 的 `PERFORM VARYING` 示例也使用 `FROM 1 BY 1
 ```sh
 scratch_dir=$(mktemp -d)
 trap 'rm -rf "$scratch_dir"' EXIT
-cobc -fsyntax-only lesson_06.cob
-cobc -x -Wall -o "$scratch_dir/lesson_06" lesson_06.cob
+cobc -fsyntax-only lesson.cob
+cobc -x -Wall -o "$scratch_dir/lesson_06" lesson.cob
 "$scratch_dir/lesson_06"
 ```
 

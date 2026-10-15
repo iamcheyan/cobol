@@ -16,7 +16,7 @@
 
 [`copybooks/AMOUNT-INTERFACE.CPY`](./copybooks/AMOUNT-INTERFACE.CPY) 声明一个 `AMOUNT-ARGUMENT USAGE BINARY-LONG`。调用方在 `WORKING-STORAGE SECTION` 引入它；两个子程序在 `LINKAGE SECTION` 引入同一声明。这样三份源文件共享同一个参数名称、符号属性和存储类型。
 
-主程序 [`lesson_25.cob`](./lesson_25.cob) 依次调用 [`add_one_25.cob`](./add_one_25.cob) 和 [`report_binary_25.cob`](./report_binary_25.cob)：
+主程序 [`lesson.cob`](./lesson.cob) 依次调用 [`add_one_25.cob`](./add_one_25.cob) 和 [`report_binary_25.cob`](./report_binary_25.cob)：
 
 | 调用方式 | 调用方写法 | 子程序中的可见内容 | 被调用后调用方字段 |
 |---|---|---|---|
@@ -39,9 +39,9 @@ GnuCOBOL Programmer’s Guide 说明，`BY VALUE` 面向完整字长的二进制
 ```sh
 scratch_dir=$(mktemp -d)
 trap 'rm -rf "$scratch_dir"' EXIT
-cobc -fsyntax-only -I copybooks lesson_25.cob add_one_25.cob report_binary_25.cob
+cobc -fsyntax-only -I copybooks lesson.cob add_one_25.cob report_binary_25.cob
 cobc -x -Wall -I copybooks -o "$scratch_dir/lesson_25" \
-  lesson_25.cob add_one_25.cob report_binary_25.cob
+  lesson.cob add_one_25.cob report_binary_25.cob
 "$scratch_dir/lesson_25"
 ```
 

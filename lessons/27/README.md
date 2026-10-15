@@ -14,7 +14,7 @@
 
 ## 二、日志格式与生命周期
 
-[`lesson_27.cob`](./lesson_27.cob) 从第 26 课复用交易校验流程，并新增 `batch.log`。日志采用稳定、逐行的 `KEY=VALUE` 文本格式，使用固定训练批次 ID `TRAINING-001`，使夹具和预期结果可以逐字比较。生产作业应使用唯一批次 ID。
+[`lesson.cob`](./lesson.cob) 从第 26 课复用交易校验流程，并新增 `batch.log`。日志采用稳定、逐行的 `KEY=VALUE` 文本格式，使用固定训练批次 ID `TRAINING-001`，使夹具和预期结果可以逐字比较。生产作业应使用唯一批次 ID。
 
 一次成功运行依序记录：
 
@@ -39,8 +39,8 @@
 ```sh
 scratch_dir=$(mktemp -d)
 trap 'rm -rf "$scratch_dir"' EXIT
-cobc -fsyntax-only lesson_27.cob
-cobc -x -Wall -o "$scratch_dir/lesson_27" lesson_27.cob
+cobc -fsyntax-only lesson.cob
+cobc -x -Wall -o "$scratch_dir/lesson_27" lesson.cob
 cp transactions.txt "$scratch_dir/"
 (cd "$scratch_dir" && ./lesson_27)
 ```

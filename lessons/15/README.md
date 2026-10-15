@@ -16,7 +16,7 @@
 
 [`transactions.txt`](./transactions.txt) 是四行每日交易样例，含存款和转账记录。每行包含日期、交易号、类型、账户号和金额等可见文本字段；记录长度不同。
 
-[`lesson_15.cob`](./lesson_15.cob) 将文件声明为行顺序组织，FD 记录区长度为 100 个字符。GnuCOBOL 对较短的行在右侧补空格；`FUNCTION TRIM(... TRAILING)` 只用于显示时去掉这些填充。程序把整行当作文本读取，不在本课拆分字段。
+[`lesson.cob`](./lesson.cob) 将文件声明为行顺序组织，FD 记录区长度为 100 个字符。GnuCOBOL 对较短的行在右侧补空格；`FUNCTION TRIM(... TRAILING)` 只用于显示时去掉这些填充。程序把整行当作文本读取，不在本课拆分字段。
 
 ## 三、逐记录读取流程
 
@@ -33,8 +33,8 @@
 ```sh
 scratch_dir=$(mktemp -d)
 trap 'rm -rf "$scratch_dir"' EXIT
-cobc -fsyntax-only lesson_15.cob
-cobc -x -Wall -o "$scratch_dir/lesson_15" lesson_15.cob
+cobc -fsyntax-only lesson.cob
+cobc -x -Wall -o "$scratch_dir/lesson_15" lesson.cob
 "$scratch_dir/lesson_15"
 ```
 

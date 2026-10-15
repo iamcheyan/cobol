@@ -44,7 +44,7 @@ COBOL 程序常用于按明确记录和规则处理业务数据。第一课先�
 
 ## 三、完整示例源码
 
-完整源码见 [`lesson_01.cob`](./lesson_01.cob)。共 5 行有效 COBOL 语句，按固定格式编写。
+完整源码见 [`lesson.cob`](./lesson.cob)。共 5 行有效 COBOL 语句，按固定格式编写。
 
 ## 四、逐行解析
 
@@ -66,8 +66,8 @@ COBOL 程序常用于按明确记录和规则处理业务数据。第一课先�
 
 ```sh
 mkdir -p build
-cobc -fsyntax-only lesson_01.cob
-cobc -x -Wall -o build/lesson_01 lesson_01.cob
+cobc -fsyntax-only lesson.cob
+cobc -x -Wall -o build/lesson_01 lesson.cob
 ./build/lesson_01
 ```
 

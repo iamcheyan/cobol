@@ -7,7 +7,7 @@ gixsql_root=${GIXSQL_ROOT:-"$build_dir/toolchain/usr"}
 gixpp="$gixsql_root/bin/gixpp"
 copy_dir="$gixsql_root/share/gixsql/copy"
 lib_dir="$gixsql_root/lib"
-source_file="$script_dir/lesson_29.cob"
+source_file="$script_dir/lesson.cob"
 preprocessed="$build_dir/lesson_29.cbsql"
 executable="$build_dir/lesson_29"
 

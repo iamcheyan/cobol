@@ -2,7 +2,7 @@
 
 ## 修改练习（参考答案见 `answer.md`）
 
-在 `lesson_02.cob` 中做三项修改：
+在 `lesson.cob` 中做三项修改：
 
 1. 把 `WS-BRANCH-CODE` 的初值从 `2048` 改为 `3107`。
 2. 把 `WS-CURRENCY-CODE` 的初值从 `USD` 改为 `EUR`。

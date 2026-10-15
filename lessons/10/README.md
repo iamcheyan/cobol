@@ -14,7 +14,7 @@
 
 ## 二、两种交易视图
 
-[`lesson_10.cob`](./lesson_10.cob) 在同一个 `01` 交易记录里定义一个交易码，以及两个同为 `05` 层级的负载组：
+[`lesson.cob`](./lesson.cob) 在同一个 `01` 交易记录里定义一个交易码，以及两个同为 `05` 层级的负载组：
 
 | 视图 | 基本项 | 长度 |
 |---|---|---:|
@@ -40,8 +40,8 @@
 ```sh
 scratch_dir=$(mktemp -d)
 trap 'rm -rf "$scratch_dir"' EXIT
-cobc -fsyntax-only lesson_10.cob
-cobc -x -Wall -o "$scratch_dir/lesson_10" lesson_10.cob
+cobc -fsyntax-only lesson.cob
+cobc -x -Wall -o "$scratch_dir/lesson_10" lesson.cob
 "$scratch_dir/lesson_10"
 ```
 

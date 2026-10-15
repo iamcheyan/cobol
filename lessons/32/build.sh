@@ -39,7 +39,7 @@ prepare() {
 check_sources() {
     prepare
     "$cobc_bin" -fsyntax-only -I "$copybook_dir" \
-        "$script_dir/lesson_32.cob" "$script_dir/load_post_32.cob"
+        "$script_dir/lesson.cob" "$script_dir/load_post_32.cob"
     "$cobc_bin" -fsyntax-only -I "$copybook_dir" \
         -I "$sql_copy_dir" "$build_dir/sync_db_32.cbsql"
 }
@@ -54,7 +54,7 @@ build_project() {
         "$build_dir/sync_db_32.cbsql"
     multiarch=$(gcc -print-multiarch)
     "$cobc_bin" -x -fstatic-call -Wall -I "$copybook_dir" \
-        -o "$build_dir/lesson_32" "$script_dir/lesson_32.cob" \
+        -o "$build_dir/lesson_32" "$script_dir/lesson.cob" \
         "$build_dir/load_post_32.o" "$build_dir/sync_db_32.o" \
         -L "$lib_dir" -L "$lib_dir/$multiarch" -lgixsql \
         -Q "-Wl,-rpath-link,$lib_dir/$multiarch"

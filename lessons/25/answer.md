@@ -1,6 +1,6 @@
 # 第 25 课修改练习参考答案
 
-本答案只覆盖 `exercise.md` 中的两项修改练习，不提供举一反三练习答案。每次都要把 `lesson_25.cob`、`add_one_25.cob` 和 `report_binary_25.cob` 一起重新编译。
+本答案只覆盖 `exercise.md` 中的两项修改练习，不提供举一反三练习答案。每次都要把 `lesson.cob`、`add_one_25.cob` 和 `report_binary_25.cob` 一起重新编译。
 
 ## 1. 把子程序增量改为 2
 

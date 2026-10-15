@@ -36,7 +36,7 @@ Java 可用 `if`/`else if` 做类似判断；Python 使用 `if`/`elif`/`else`。
 
 ## 三、示例程序
 
-[`lesson_04.cob`](./lesson_04.cob) 共 102 行。它用固定数据判断一笔交易是否为正数、是否不超过 1000.00，以及账户是否有效。它不读用户输入或文件，也不修改余额。
+[`lesson.cob`](./lesson.cob) 共 102 行。它用固定数据判断一笔交易是否为正数、是否不超过 1000.00，以及账户是否有效。它不读用户输入或文件，也不修改余额。
 
 ### 数据定义
 
@@ -65,8 +65,8 @@ Java 可用 `if`/`else if` 做类似判断；Python 使用 `if`/`elif`/`else`。
 ```sh
 scratch_dir=$(mktemp -d)
 trap 'rm -rf "$scratch_dir"' EXIT
-cobc -fsyntax-only lesson_04.cob
-cobc -x -Wall -o "$scratch_dir/lesson_04" lesson_04.cob
+cobc -fsyntax-only lesson.cob
+cobc -x -Wall -o "$scratch_dir/lesson_04" lesson.cob
 "$scratch_dir/lesson_04"
 ```
 
@@ -85,7 +85,7 @@ GnuCOBOL 3.2.0 的标准输出：
 
 ## 五、修改练习（有答案）
 
-在 `lesson_04.cob` 中分别调整金额和状态，观察对应分支：
+在 `lesson.cob` 中分别调整金额和状态，观察对应分支：
 
 1. 金额为 `0.00`：拒绝，原因 `AMOUNT_NOT_POSITIVE`。
 2. 金额为 `-0.01`：拒绝，原因 `AMOUNT_NOT_POSITIVE`。

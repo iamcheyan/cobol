@@ -1,6 +1,6 @@
 # 课程导航
 
-本目录是 CPR #31 的 32 课主课程。按课程总目录顺序学习；每课目录内保留 `lesson_xx.cob`、`README.md`、`exercise.md`、`answer.md` 以及该课需要的脚本、Copybook、数据夹具和预期结果。
+每课固定交付 `lesson.cob`、`README.md`、`exercise.md`、`answer.md` 以及该课需要的脚本、Copybook、数据夹具和预期结果。
 
 - [32 课总目录](DIRECTORY.md)：六个阶段的目标、先修关系、耗时估算和源码交付物。
 - [第 01 课：Hello COBOL](01/README.md)：从固定格式程序编译并运行第一条 `DISPLAY`。

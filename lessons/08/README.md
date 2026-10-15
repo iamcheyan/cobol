@@ -29,7 +29,7 @@
 
 ## 三、数据和过程结构
 
-[`lesson_08.cob`](./lesson_08.cob) 用独立字段保存期初余额、当前余额、交易码、带独立符号的金额、样例序号以及三种计数。金额采用两个小数位；示例的存储和计算遵循 GnuCOBOL 当前平台行为。
+[`lesson.cob`](./lesson.cob) 用独立字段保存期初余额、当前余额、交易码、带独立符号的金额、样例序号以及三种计数。金额采用两个小数位；示例的存储和计算遵循 GnuCOBOL 当前平台行为。
 
 | 段落 | 职责 | 关键语句 |
 |---|---|---|
@@ -62,8 +62,8 @@
 ```sh
 scratch_dir=$(mktemp -d)
 trap 'rm -rf "$scratch_dir"' EXIT
-cobc -fsyntax-only lesson_08.cob
-cobc -x -Wall -o "$scratch_dir/lesson_08" lesson_08.cob
+cobc -fsyntax-only lesson.cob
+cobc -x -Wall -o "$scratch_dir/lesson_08" lesson.cob
 "$scratch_dir/lesson_08"
 ```
 

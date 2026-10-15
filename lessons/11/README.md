@@ -14,7 +14,7 @@
 
 ## 二、表格布局
 
-[`lesson_11.cob`](./lesson_11.cob) 在 `WS-TRANSACTION-TABLE` 中声明四次出现的 `WS-TRANSACTION-ENTRY`。每个出现项包含交易码 `WS-TXN-CODE` 和金额 `WS-TXN-AMOUNT`：
+[`lesson.cob`](./lesson.cob) 在 `WS-TRANSACTION-TABLE` 中声明四次出现的 `WS-TRANSACTION-ENTRY`。每个出现项包含交易码 `WS-TXN-CODE` 和金额 `WS-TXN-AMOUNT`：
 
 ```text
 01 WS-TRANSACTION-TABLE
@@ -44,8 +44,8 @@
 ```sh
 scratch_dir=$(mktemp -d)
 trap 'rm -rf "$scratch_dir"' EXIT
-cobc -fsyntax-only lesson_11.cob
-cobc -x -Wall -o "$scratch_dir/lesson_11" lesson_11.cob
+cobc -fsyntax-only lesson.cob
+cobc -x -Wall -o "$scratch_dir/lesson_11" lesson.cob
 "$scratch_dir/lesson_11"
 ```
 

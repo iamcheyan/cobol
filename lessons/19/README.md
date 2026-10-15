@@ -34,8 +34,8 @@ GnuCOBOL 手册说明 `AT END` 用于处理文件状态 `10`，不会捕获其�
 ```sh
 scratch_dir=$(mktemp -d)
 trap 'rm -rf "$scratch_dir"' EXIT
-cobc -fsyntax-only lesson_19.cob
-cobc -x -Wall -o "$scratch_dir/lesson_19" lesson_19.cob
+cobc -fsyntax-only lesson.cob
+cobc -x -Wall -o "$scratch_dir/lesson_19" lesson.cob
 cp accounts.txt transactions.txt "$scratch_dir/"
 (cd "$scratch_dir" && ./lesson_19)
 ```

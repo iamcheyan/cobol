@@ -1,96 +1,155 @@
-# 第 28 课：综合练习——多程序批处理工程
+# 第 28 课：综合练习——把批次拆成多程序工程
 
-> 示例使用 GnuCOBOL 3.2.0 默认方言与固定格式。
+第四阶段之前，所有逻辑都写在一个程序里；真实批次要把共享记录、过账规则和结果报告分给不同程序单元，并由一个可重复的构建入口把它们组装起来。本课用四个 Copybook 定义模块接口，把过账和报告拆成两个独立子程序，用 `CALL ... USING BY REFERENCE` 传递可更新记录，最后用一个 `build.sh` 完成语法检查、分别编译、链接和运行。
 
-## 一、课程目标
+## 为什么现在学
+
+第 23–27 课你分别学过 Copybook 共享声明、`CALL`/`USING` 的参数方向、业务错误分类和批次日志，但它们都在单文件程序里演示。缺口是“工程化”：模块接口必须是一份共享的、可编译验证的声明；改了字段宽度，所有消费者都要重新编译；构建步骤必须可重复。本课把这些收进一个小工程，让接口不一致在构建期或运行期立刻暴露。
+
+## 本课完成后的能力与边界
 
 学完本课后，你可以：
 
-- 将共享记录和结果状态放进 Copybook，供主程序与子程序复用。
-- 将批次控制、交易过账与账户报告拆成独立程序单元。
-- 通过 `CALL ... USING BY REFERENCE` 传递可更新记录和返回状态。
-- 用一个构建脚本分别编译模块、链接主程序，并运行项目。
-- 检查日志文件状态、子程序返回状态和整批过账计数。
+- 把共享记录与状态放进 Copybook，供主程序和子程序以同一份声明编译。
+- 把批次控制、过账规则与报告拆成三个程序单元，并说明各自拥有什么状态。
+- 用 `CALL ... USING BY REFERENCE` 传递可更新记录，说明状态字段由谁写入、计数由谁维护。
+- 用 `build.sh check|build|run|clean` 完成语法检查、模块编译、链接、运行与清理。
+- 用 `expected-output.txt` 与 `expected-batch.log` 逐行核对标准输出与日志。
 
-本课把第 23–27 课的 Copybook、CALL/USING、业务错误分类与批次日志组合成小型工程。交易样例在主程序中明确列出，重点是模块接口和可重复构建；不再引入新的外部输入格式。
+边界：样例交易固定写在主程序里，不读外部输入文件；构建脚本是本地单机脚本，不固定编译器版本、ABI 或产物版本。文件输入见第 15–22 课，日志与错误分类见第 26、27 课，数据库批次见第 29–32 课。
 
-## 二、项目文件
+## 运行环境
 
-- [`lesson.cob`](./lesson.cob)：初始化账户、准备五笔样例交易、调用过账模块、汇总返回状态并写批次日志。
-- [`post_transaction_28.cob`](./post_transaction_28.cob)：按账户号和交易类型校验交易；成功时修改调用方余额，通过状态字段返回处理结果。
-- [`report_account_28.cob`](./report_account_28.cob)：读取最终账户与批次计数并显示报告。
-- [`copybooks/ACCOUNT-REC.CPY`](./copybooks/ACCOUNT-REC.CPY)：账户号、客户号和余额的共享记录布局。
-- [`copybooks/TRANSACTION-REC.CPY`](./copybooks/TRANSACTION-REC.CPY)：账户号、类型和金额的交易输入布局。
-- [`copybooks/POST-STATUS.CPY`](./copybooks/POST-STATUS.CPY)：主程序与过账模块共用的返回状态字段。
-- [`copybooks/BATCH-COUNTS.CPY`](./copybooks/BATCH-COUNTS.CPY)：主程序与报告模块共用的计数布局。
-- [`build.sh`](./build.sh)：语法检查、模块目标文件编译、链接、运行和清理入口。
+- GnuCOBOL 3.2.0，默认方言（不加 `-std=cobol85`），源文件为固定格式。
+- Linux 终端 + `bash`；`build.sh` 需要 PATH 里有 `cobc`（可用 `COBC` 环境变量指定其他编译器命令）。
+- 构建目录默认是课内 `build/`（可用 `BUILD_DIR` 覆盖）；`build/` 已被仓库忽略，`./build.sh clean` 即可清除。程序在构建目录里运行，`batch.log` 与目标文件都落在那里。
 
-每个 Copybook 只描述一个接口的数据形状。`POST-TRANSACTION28` 和 `REPORT-ACCOUNT28` 的 `LINKAGE SECTION` 按相同顺序引入对应声明；主程序用完全相同的字段顺序进行 CALL。
+## 项目文件
 
-## 三、构建和运行
+| 文件 | 职责 |
+|---|---|
+| [`lesson.cob`](./lesson.cob) | 主程序：开日志、初始化账户、准备五笔样例交易、`CALL` 过账模块、汇总状态并写日志 |
+| [`post_transaction_28.cob`](./post_transaction_28.cob) | 过账模块 `POST-TRANSACTION28`：按账户号与类型校验，成功时更新调用方余额，用状态字段返回结果 |
+| [`report_account_28.cob`](./report_account_28.cob) | 报告模块 `REPORT-ACCOUNT28`：读取最终账户与批次计数并显示 |
+| `copybooks/ACCOUNT-REC.CPY` | 账户记录：账户号 `X(10)`、客户号 `X(8)`、余额 `9(7)V99`（共 27 字节） |
+| `copybooks/TRANSACTION-REC.CPY` | 交易记录：账户号 `X(10)`、类型 `X`、金额 `9(7)V99`（共 20 字节） |
+| `copybooks/POST-STATUS.CPY` | 过账结果状态 `X(12)`：`POSTED`、`INSUFFICIENT`、`BAD_TYPE`、`NO_ACCOUNT` |
+| `copybooks/BATCH-COUNTS.CPY` | 批次计数：`POSTED-COUNT`、`REJECTED-COUNT`（各 `9(3)`） |
+| [`build.sh`](./build.sh) | 构建与运行入口（`check` / `build` / `run` / `clean`） |
+
+每个 Copybook 只描述**一个**接口的数据形状。`POST-TRANSACTION28` 与 `REPORT-ACCOUNT28` 的 `LINKAGE SECTION` 按相同顺序 `COPY` 对应声明，主程序用完全相同的字段顺序发起 `CALL`——字段顺序或宽度对不上，接口就是错的，而共享声明让这种不一致立刻暴露。
+
+## 模块调用顺序
+
+1. `./build.sh check`：对主程序和两个子程序做组合语法检查（`cobc -I copybooks -fsyntax-only`）。
+2. `./build.sh build`：先把两个子程序各自编译成 `.o`，再把主程序与两个目标文件链接成 `build/lesson_28`。
+3. 主程序打开 `batch.log` 并写 `EVENT=BATCH_START`，然后 `INITIALIZE` 账户与计数。
+4. 每笔交易重用同一个 `WS-TRANSACTION-RECORD`，显式 `BY REFERENCE` 传递账户、交易与状态。
+5. `POST-TRANSACTION28` 更新调用方账户余额或写入拒绝状态；**计数与日志事件仍由主程序拥有**。
+6. `REPORT-ACCOUNT28` 接收共享账户与计数结构，显示最终余额与计数。
+7. 主程序写 `EVENT=BATCH_END`、检查 `FILE STATUS` 并关闭日志；出现未知状态或 I/O 故障时返回非零码。
+
+接口不使用 `BINARY-LONG` 等平台二进制布局；金额一律以 `PIC 9(7)V99` 的十进制字段契约传递。
+
+## 交易规则与预期结果
+
+账户起始余额 `1000.00`，五笔样例依次为：存款 `125.50`、取款 `25.25`、超余额取款 `2000.00`、未知类型 `X`、不存在账户 `A000000099` 的存款。只有前两笔成功：
+
+| 序 | 类型 | 金额 | 结果状态 | 原因 |
+|---:|---|---:|---|---|
+| 1 | `D` | 125.50 | `POSTED` | 存款成功 |
+| 2 | `C` | 25.25 | `POSTED` | 余额足够 |
+| 3 | `C` | 2000.00 | `INSUFFICIENT` | 超过当前余额，余额不变 |
+| 4 | `X` | 1.00 | `BAD_TYPE` | 类型不在 `D`/`C` 之内 |
+| 5 | `D` | 1.00 | `NO_ACCOUNT` | 账户号与主记录不匹配 |
+
+计数不变量：`記帳 + 拒否 = 5`，本课为 `2 + 3 = 5`。
+
+这些都是**业务结果**，不是构建或文件系统故障：超额取款返回 `INSUFFICIENT` 且不修改余额，未知类型返回 `BAD_TYPE`，账户号不匹配返回 `NO_ACCOUNT`。
+
+## 构建、运行和观察
+
+**输入：** 无外部输入。五笔样例在主程序里固定写出。
+
+**命令及作用：**
 
 ```sh
-scratch_dir=$(mktemp -d)
-trap 'rm -rf "$scratch_dir"' EXIT
-BUILD_DIR="$scratch_dir/build" ./build.sh check
-BUILD_DIR="$scratch_dir/build" ./build.sh build
-BUILD_DIR="$scratch_dir/build" ./build.sh run
+./build.sh check    # 组合语法检查，不生成任何产物
+./build.sh build    # 编译两个子程序为 .o，再链接出 build/lesson_28
+./build.sh run      # 构建后在 build/ 里运行，输出与 batch.log 都落在 build/
+echo $?             # 查看退出码
+./build.sh clean    # 删除 build/（可执行文件、目标文件与日志）
 ```
 
-`check` 对主程序和两个子程序做组合语法检查。`build` 单独将两个子程序编译为目标文件，再将主程序与这两个目标文件链接成可执行文件。`run` 从构建目录启动程序，因此 `batch.log` 和目标文件都留在该临时目录。`clean` 删除由当前 `BUILD_DIR` 指定的构建目录；省略 `BUILD_DIR` 时，默认是本课的 `build/`。
+`./build.sh unknown` 会返回 `64` 并打印用法；`cobc` 不在 PATH 时返回 `127`（可用 `COBC` 指定）。
 
-本课没有指定严格 `-std=cobol85`，使用 GnuCOBOL 默认方言。编译时若出现环境级 `libxml` 版本警告，它属于标准错误，不是批次输出。
+**预期结果：**
 
-标准输出应与 [`expected-output.txt`](./expected-output.txt) 逐行一致；构建目录下的 `batch.log` 应与 [`expected-batch.log`](./expected-batch.log) 一致。
-
-## 四、交易规则与预期结果
-
-账户起始余额为 1000.00。样例依次执行：存款 125.50、取款 25.25、超余额取款 2000.00、未知类型 `X` 和不存在账户的存款。只有前两笔成功：
+| 观察项 | 预期值 |
+|---|---|
+| `./build.sh check` 退出码 | `0`，无诊断 |
+| `./build.sh build` 退出码 | `0`，无编译警告 |
+| `./build.sh run` 退出码 | `0` |
+| 标准输出 | 12 行，与 [`expected-output.txt`](./expected-output.txt) 逐行一致 |
+| `build/batch.log` | 7 行，与 [`expected-batch.log`](./expected-batch.log) 逐行一致 |
+| 生成文件 | `build/lesson_28`、两个 `.o`、`build/batch.log` |
 
 ```text
-ACCOUNT=A000000001 CUSTOMER=C0001001 BALANCE=0001100.25
-SUMMARY POSTED=002 REJECTED=003
+呼出=過帳 口座=A000000001 TYPE=D 金額=0000125.50
+呼出=戻り 状態=POSTED
+呼出=過帳 口座=A000000001 TYPE=C 金額=0000025.25
+呼出=戻り 状態=POSTED
+呼出=過帳 口座=A000000001 TYPE=C 金額=0002000.00
+呼出=戻り 状態=INSUFFICIENT
+呼出=過帳 口座=A000000001 TYPE=X 金額=0000001.00
+呼出=戻り 状態=BAD_TYPE
+呼出=過帳 口座=A000000099 TYPE=D 金額=0000001.00
+呼出=戻り 状態=NO_ACCOUNT
+口座=A000000001 CUSTOMER=C0001001 BALANCE=0001100.25
+集計 記帳=002 拒否=003
 ```
 
-超额取款返回 `INSUFFICIENT` 且不修改余额；未知类型返回 `BAD_TYPE`；账户号不匹配返回 `NO_ACCOUNT`。这些是业务结果，不是构建或文件系统故障。若日志无法打开，程序在处理交易前报告文件状态并以返回码 1 结束。
+**输出对照（实际标签 → 含义）：** `呼出=過帳` = 发出过账调用（`口座` 账户号、`TYPE` 类型、`金額` 金额）；`呼出=戻り 状態` = 调用返回状态；`口座`/`CUSTOMER`/`BALANCE` = 最终账户报告；`集計 記帳=.. 拒否=..` = 过账/拒绝计数汇总。余额可手算：`1000.00 + 125.50 − 25.25 = 1100.25`。
 
-## 五、模块调用顺序
+`build/batch.log`：
 
-1. `build.sh check` 验证所有源文件和 Copybook 路径。
-2. `build.sh build` 先编译两个被调用程序的目标文件，再把它们与主程序链接。
-3. 主程序打开 `batch.log`，记录 `EVENT=BATCH_START`，然后初始化账户和计数。
-4. 每笔交易都重用同一个 `WS-TRANSACTION-RECORD`，并显式通过 `BY REFERENCE` 传递账户、交易和状态字段。
-5. `POST-TRANSACTION28` 更新账户余额或返回拒绝状态；主程序拥有计数和日志事件。
-6. `REPORT-ACCOUNT28` 接收共享账户与计数结构，显示批次结果。
-7. 主程序写批次结束事件、检查文件状态并关闭日志。未知的子程序状态也令进程返回非零码。
+```text
+EVENT=BATCH_START ID=TRAINING-001
+EVENT=TRANSACTION NO=001 ACCOUNT=A000000001 TYPE=D STATUS=POSTED
+EVENT=TRANSACTION NO=002 ACCOUNT=A000000001 TYPE=C STATUS=POSTED
+EVENT=TRANSACTION NO=003 ACCOUNT=A000000001 TYPE=C STATUS=INSUFFICIENT
+EVENT=TRANSACTION NO=004 ACCOUNT=A000000001 TYPE=X STATUS=BAD_TYPE
+EVENT=TRANSACTION NO=005 ACCOUNT=A000000099 TYPE=D STATUS=NO_ACCOUNT
+EVENT=BATCH_END POSTED=002 REJECTED=003 IO_ERROR=N
+```
 
-`BINARY-LONG` 等平台二进制布局不在本课接口中使用；金额以 `PIC 9(7)V99` 展示十进制字段契约。共享声明让所有模块从同一 Copybook 编译，降低 PIC 或字段顺序不一致的风险。
+**实际观察到的环境细节：** 在本工作区运行可执行文件时，标准错误会输出 `Warning: program compiled against libxml 212 using older 209`。这是运行环境的链接库版本警告，不是本程序的标准输出；其触发组件尚未定位。
 
-## 六、构建错误与日志错误
+## 构建错误与日志错误
 
-- `./build.sh unknown` 返回 64 并打印用法说明。
-- 缺少 `cobc` 时，shell 返回 127；可用 `COBC` 指定编译器命令。
-- 日志路径无法打开时，主程序报告 `ERROR=OPEN_LOG STATUS=37`，返回 1，且不会调用过账子程序。
-- 日志 WRITE 或 CLOSE 状态失败也会设置系统错误并返回 1。`BATCH_END` 在关闭日志前写入，因此若日志 CLOSE 随后失败，最后一条日志仍可能显示 `IO_ERROR=N`；此时标准输出与进程返回码为准。日志自身的 OPEN 失败无法写入日志，因此通过标准输出和退出码报告。
+- 日志无法打开时，主程序报告 `エラー=ログOPEN 状態=37`，退出码 `1`，**不会调用过账子程序**。
+- 日志 WRITE 或 CLOSE 失败同样设置系统错误并返回 `1`。
+- `BATCH_END` 在关闭日志**之前**写出，所以若日志 CLOSE 随后失败，最后一条日志仍可能写着 `IO_ERROR=N`；此时以标准输出与退出码为准。日志自身的 OPEN 失败写不进日志，只能靠标准输出和退出码报告。
+- 过账模块返回未知状态时主程序记为拒绝，并令退出码非零。
 
-已实际验证 clean scratch 构建、正常运行、日志精确输出和日志打开失败。当前环境可能在标准错误打印 `Warning: program compiled against libxml 212 using older 209`；它不属于程序的标准输出。
+## 修改练习
 
-## 七、修改练习（有答案）
+两项都从原始源码开始，用 `./build.sh run` 重跑，以便子程序重新编译并重新链接：
 
-1. 在 `1300-POST-OVERDRAFT` 中把金额从 2000.00 改为 1000.00。重新运行，确认这笔取款成功、余额和 posted/rejected 计数随之变化，且日志状态与 CALL 返回一致。
-2. 在 `1400-POST-UNKNOWN-TYPE` 中把类型从 `X` 改为 `D`。重新运行，确认未知类型拒绝变成有效存款，并检查账户报告和第四条交易日志。
+1. 把 `1300-POST-OVERDRAFT` 的金额从 `2000.00` 改为 `1000.00`，确认这笔取款成功、最终余额与 `記帳`/`拒否` 计数随之变化，且日志状态与调用返回一致。
+2. 把 `1400-POST-UNKNOWN-TYPE` 的类型从 `X` 改为 `D`，确认未知类型拒绝变成有效存款，并检查账户报告与第四条交易日志。
 
-答案只覆盖这两项修改练习，见 [`answer.md`](./answer.md)；步骤见 [`exercise.md`](./exercise.md)。
+完整题目与预期见 [`exercise.md`](./exercise.md)，参考答案见 [`answer.md`](./answer.md)。
 
-## 八、举一反三（无答案）
+## 举一反三练习
 
-将账户记录与交易记录改为由文件模块逐条装载；定义文件状态如何区分 EOF、坏记录和 I/O 故障。为每个子程序调用加入可关联的批次号与记录序号，说明目标文件重编译后如何触发重新链接。
+把样例交易改为文件输入，并把“读取 / EOF / 坏记录分类”放进一个独立模块；保持账户、交易与状态 Copybook 是唯一接口定义。说明 Copybook 改动后如何保证所有受影响的模块都被重新编译和链接。不要把业务拒绝伪装成编译失败，也不要重复定义 Copybook 里已有的记录布局。题目见 [`exercise.md`](./exercise.md)，本题不提供答案。
 
-本题不提供答案。不要把业务拒绝伪装成编译失败，也不要重复定义 Copybook 中已有的记录布局。
+## 在企业中的位置
 
-## 九、企业实战补充
+模块职责可以这样划线：主程序拥有批次流程与计数，过账程序拥有业务规则，报告程序只消费最终状态。Copybook 是**接口的一部分**，必须和目标文件一起纳入构建依赖——这正是本课把接口抽成 4 个 Copybook 并由 `build.sh` 统一编译的原因。
 
-主程序拥有批次流程和计数；过账程序拥有业务规则；报告程序只消费最终状态。Copybook 是模块接口的一部分，必须和每个目标文件一起纳入构建依赖。生产构建还需固定编译器版本、编译选项、ABI、模块清单和产物版本；本例的单脚本仅演示可重复的本地构建。
+生产构建还要固定编译器版本、编译选项、ABI、模块清单和产物版本；本课的单脚本只演示本地可重复构建，不提供产物版本管理、增量构建或依赖图自动推导。数据库批次的构建与工具链见第 29–32 课。
 
 ## 参考资料
 
@@ -98,3 +157,4 @@ SUMMARY POSTED=002 REJECTED=003
 - [GnuCOBOL Programmer’s Guide：CALL](https://gnucobol.sourceforge.io/HTML/gnucobpg.html#CALL)
 - [GnuCOBOL Programmer’s Guide：PROCEDURE DIVISION USING](https://gnucobol.sourceforge.io/HTML/gnucobpg.html#PROCEDURE-DIVISION-USING)
 - [GnuCOBOL Programmer’s Guide：FILE STATUS](https://gnucobol.sourceforge.io/HTML/gnucobpg.html#SELECT)
+- 仓库课程主页：[README.md](../../README.md)

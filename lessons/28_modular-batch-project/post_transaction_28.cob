@@ -1,3 +1,6 @@
+      * 调用契约：LINKAGE 顺序须与调用方一致——账户记录、交易记录、状态字段，
+      * 全部 BY REFERENCE；本程序只更新账户余额并写状态，不碰调用方的计数与日志。
+      * 状态取值：POSTED / INSUFFICIENT / BAD_TYPE / NO_ACCOUNT。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. POST-TRANSACTION28.
        DATA DIVISION.

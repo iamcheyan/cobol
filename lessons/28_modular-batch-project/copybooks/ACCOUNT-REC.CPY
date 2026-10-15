@@ -1,3 +1,4 @@
+      * 账户记录接口：X(10)+X(8)+9(7)V99，共 27 字节；主程序与 REPORT-ACCOUNT28 共用。
        01 WS-ACCOUNT-RECORD.
           05 WS-ACCOUNT-NUMBER PIC X(10).
           05 WS-CUSTOMER-ID PIC X(8).

@@ -1,3 +1,4 @@
+      * 交易记录接口：X(10)+X(1)+9(7)V99，共 20 字节；主程序与 POST-TRANSACTION28 共用。
        01 WS-TRANSACTION-RECORD.
           05 WS-TRANSACTION-ACCOUNT PIC X(10).
           05 WS-TRANSACTION-TYPE PIC X.

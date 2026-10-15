@@ -1,4 +1,5 @@
-      * ソートキーは先頭ゼロを含む10桁の口座番号です。入力またはSORTの異常はバッチ失敗として返します。
+      * 排序键是含前导零的 10 位账户号；等长文本按字符顺序比较即按账户号升序。
+      * 输入或排序工作异常按批次失败处理（返回非零码）。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. SORT21.
        ENVIRONMENT DIVISION.

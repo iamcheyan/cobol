@@ -1,5 +1,6 @@
-      * 呼出契約：金額PIC 9(7)V99、結果PIC X(15)をBY REFERENCEで渡します。
-      * 結果はZERO-AMOUNT、LIMIT-EXCEEDED、VALID。上限1000.00は有効です。
+      * 调用契约：按 BY REFERENCE 传「金额 PIC 9(7)V99」与「结果 PIC X(15)」，
+      * 次序和类型必须与 CHECK-AMOUNT 的 LINKAGE SECTION 一致，否则会写坏存储。
+      * 业务拒绝只写结果字段，主程序退出码仍为 0；非零退出码留给系统故障。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON24.
        DATA DIVISION.
@@ -19,6 +20,7 @@
            DISPLAY "调用方：子程序返回后继续"
            PERFORM 3000-DISPLAY-SUMMARY
            STOP RUN.
+      * 八个用例覆盖零、上限两侧、最小正金额与 PIC 9(7)V99 最大值。
        1000-RUN-CHECK-CASES.
            PERFORM 1100-CHECK-ORDINARY-AMOUNT
            PERFORM 1200-CHECK-ZERO-AMOUNT
@@ -53,6 +55,8 @@
            MOVE 500.00 TO WS-AMOUNT
            PERFORM 2000-CALL-AMOUNT-CHECK.
        2000-CALL-AMOUNT-CHECK.
+      * 先清空结果字段：本版子程序每个分支都会写入，清空是防御性约定；
+      * 若将来新增分支漏写，空值会落入 WHEN OTHER 计为拒绝而不沿用上一笔状态。
            MOVE SPACES TO WS-CHECK-RESULT
            MOVE WS-AMOUNT TO WS-EDITED-AMOUNT
            DISPLAY "调用前 金额=" WS-EDITED-AMOUNT

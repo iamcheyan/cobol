@@ -1,44 +1,94 @@
 # 第 24 课修改练习参考答案
 
-本答案只覆盖 `exercise.md` 中的两项修改练习，不提供举一反三练习答案。每次修改后都将主程序和子程序一起编译。
+本答案只覆盖 [`exercise.md`](./exercise.md) 中的两项修改练习，不提供举一反三练习答案。两项练习都从原始两个源文件开始，互不依赖；每次修改后都要把主程序与子程序一起编译：
 
-## 1. 把校验上限提高到 1500.00
+```sh
+mkdir -p build
+cobc -x -Wall -o build/lesson_24 lesson.cob amount_check_24.cob
+./build/lesson_24
+rm -rf build
+```
 
-在 `amount_check_24.cob` 中将条件改为：
+## 1. 把金额上限提高到 1500.00
+
+原始 `amount_check_24.cob` 的 `0000-VALIDATE-AMOUNT` 中：
+
+```cobol
+               WHEN LK-AMOUNT > 1000.00
+```
+
+改为：
 
 ```cobol
                WHEN LK-AMOUNT > 1500.00
 ```
 
-金额 `1000.01` 从 `LIMIT-EXCEEDED` 变成 `VALID`；`9999999.99` 仍超过新业务上限。结果为：
+`1000.01` 现在满足 `0 < 1000.01 ≤ 1500.00`，落进 `WHEN OTHER` 返回 `VALID`；`9999999.99` 仍大于新上限，保持 `LIMIT-EXCEEDED`。完整运行结果（20 行）：
 
 ```text
-CALL=BEGIN AMOUNT=0001000.01
-CALL=RETURN STATUS=VALID
-...
-CALL=BEGIN AMOUNT=9999999.99
-CALL=RETURN STATUS=LIMIT-EXCEEDED
-CALLER=RESUMED
-SUMMARY CHECKED=008 VALID=006 REJECTED=002
-REJECT ZERO=001 OVER_LIMIT=001
+调用方：开始
+调用前 金额=0000125.50
+调用返回 状态=VALID
+调用前 金额=0000000.00
+调用返回 状态=ZERO-AMOUNT
+调用前 金额=0001000.00
+调用返回 状态=VALID
+调用前 金额=0001000.01
+调用返回 状态=VALID
+调用前 金额=0000000.01
+调用返回 状态=VALID
+调用前 金额=0000999.99
+调用返回 状态=VALID
+调用前 金额=9999999.99
+调用返回 状态=LIMIT-EXCEEDED
+调用前 金额=0000500.00
+调用返回 状态=VALID
+调用方：子程序返回后继续
+检查总数=008 有效=006 拒绝=002
+零金额拒绝数=001 超限拒绝数=001
 ```
 
-要让主程序使用新规则，必须重新编译并链接两个源文件。
+与原始运行的差异只有 3 行：第 4 笔的 `调用返回 状态` 由 `LIMIT-EXCEEDED` 变为 `VALID`，以及最后两行计数（有效 `005→006`、超限 `002→001`）。`检查总数=008` 与 `零金额拒绝数=001` 不变，仍然满足 `8 = 6 + 2`。
 
-## 2. 把零金额案例改为一分钱
+控制流：`调用前 金额=` 出现在每次 `CALL` 之前；`调用返回 状态=` 出现在同一次 `CALL` 返回之后；`调用方：子程序返回后继续` 在八笔用例全部返回后输出，说明主程序接着执行自己的 `PERFORM 3000-DISPLAY-SUMMARY`，而不是被子程序结束。
 
-在 `1200-CHECK-ZERO-AMOUNT` 中使用：
+## 2. 把零金额用例改为一分钱
+
+原始 `lesson.cob` 的 `1200-CHECK-ZERO-AMOUNT` 中：
+
+```cobol
+           MOVE ZERO TO WS-AMOUNT
+```
+
+改为：
 
 ```cobol
            MOVE 0.01 TO WS-AMOUNT
 ```
 
-正一分钱满足 `> ZERO` 且不超过 1000.00，因此返回 `VALID`。最终计数为：
+`0.01` 非零且不超过 1000.00，子程序返回 `VALID`。该段落与 `1500-CHECK-SMALL-POSITIVE` 的金额相同，因此输出中会出现两笔 `金额=0000000.01`。完整运行结果：
 
 ```text
-CALLER=RESUMED
-SUMMARY CHECKED=008 VALID=006 REJECTED=002
-REJECT ZERO=000 OVER_LIMIT=002
+调用方：开始
+调用前 金额=0000125.50
+调用返回 状态=VALID
+调用前 金额=0000000.01
+调用返回 状态=VALID
+调用前 金额=0001000.00
+调用返回 状态=VALID
+调用前 金额=0001000.01
+调用返回 状态=LIMIT-EXCEEDED
+调用前 金额=0000000.01
+调用返回 状态=VALID
+调用前 金额=0000999.99
+调用返回 状态=VALID
+调用前 金额=9999999.99
+调用返回 状态=LIMIT-EXCEEDED
+调用前 金额=0000500.00
+调用返回 状态=VALID
+调用方：子程序返回后继续
+检查总数=008 有效=006 拒绝=002
+零金额拒绝数=000 超限拒绝数=002
 ```
 
-其他输入结果保持不变；主程序仍通过 `CALL` 交给 `CHECK-AMOUNT` 判断。
+与原始运行的差异：第 2 笔的 `调用前 金额` 由 `0000000.00` 变为 `0000000.01`、其状态由 `ZERO-AMOUNT` 变为 `VALID`；末两行计数变为零金额 `001→000`、超限保持 `002`、有效 `005→006`。子程序与上限都没改，`1000.01` 仍是 `LIMIT-EXCEEDED`，所以超限计数不变，仍然满足 `8 = 6 + 2`。

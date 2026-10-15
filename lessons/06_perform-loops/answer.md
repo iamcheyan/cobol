@@ -1,6 +1,12 @@
 # 第 06 课修改练习参考答案
 
-本答案只覆盖 `exercise.md` 中对 `WS-LAST-SAMPLE` 的修改，不提供举一反三练习答案。编译和运行命令使用 README 中的临时目录流程。
+本答案只覆盖 `exercise.md` 中对 `WS-LAST-SAMPLE` 的修改，不提供举一反三练习答案。每种取值都从原始 `lesson.cob` 开始，编译和运行命令使用 README 中的 `build/` 流程：
+
+```sh
+cobc -fsyntax-only lesson.cob
+cobc -x -Wall -o build/lesson_06 lesson.cob
+./build/lesson_06
+```
 
 ## 最后序号为 0
 

@@ -1,63 +1,121 @@
-# 第 23 课：COPYBOOK——共享记录定义
+# 第 23 课：Copybook——用 `COPY` 把共享记录声明抽出来
 
-> 示例使用 GnuCOBOL 3.2.0 默认方言与固定格式。
+银行夜间对账里，同一份账户记录要经过多个程序：第 17 课按 27 字节定长布局读写它，第 20 课按键匹配它，第 22 课在对账里分流写出处理结果。如果每个程序各写一遍字段声明，一处宽度笔误就会让同一批字节被解释成两种记录。本课把账户与交易的字段声明分别抽进 `copybooks/` 下的 `.CPY` 文件，用 `COPY` 让两个独立程序共享同一份物理声明，并用一次宽度改动看清它对**全部消费者**的影响。
 
-## 一、课程目标
+## 为什么现在学
+
+你已经会在一个程序里用 `01`/`05` 层级声明记录（第 09 课），也见过同一份布局被落成 27 字节定长文件（第 17 课）。缺口是“共享”：声明只存在于某一个源文件里，第二个消费者只能靠复制粘贴跟随，字段宽度、偏移和单位没有任何机制保证一致。Copybook 补上这一点——把声明放在单独文件里，由每个消费者在编译期引入，于是“布局”成为一份可以被指向的契约。下一课（第 24 课）要把校验逻辑也拆出去，届时主程序与子程序必须就同一份记录布局达成一致，正是靠本课的 Copybook。
+
+## 本课完成后的能力与边界
 
 学完本课后，你可以：
 
-- 把账户和交易记录的字段声明分别保存在 `.CPY` Copybook 中。
-- 在 `WORKING-STORAGE SECTION` 用 `COPY` 引入数据声明。
-- 通过编译器的 Copybook 搜索路径找到子目录中的声明文件。
-- 在两个独立 COBOL 程序中复用相同账户记录布局。
-- 解释 Copybook 是编译期源码复用，不会产生运行时调用。
-- 修改共享字段后重新编译所有使用它的程序，并检查记录布局是否仍符合业务契约。
+- 把账户、交易字段声明分别放进 `copybooks/ACCOUNT-REC.CPY` 与 `copybooks/TRANSACTION-REC.CPY`，用 `COPY "名称.CPY".` 在 `WORKING-STORAGE SECTION` 引入。
+- 用 `cobc -I copybooks` 指定查找目录，并说明找不到声明文件时编译器报的是哪些错误。
+- 编译并运行两个独立程序（`lesson.cob`、`account_report_23.cob`），确认它们用的是同一份物理 `.CPY`。
+- 用实测字节数说明两份声明的长度：账户记录 27 字节、交易记录 20 字节，并与第 17、20、22 课的定长接口对照。
+- 改一处 Copybook 字段宽度后，列出必须重编译的消费者、会出现的编译警告，以及外部定长接口为什么会失效。
 
-## 二、课程文件
+边界：本课不读也不写任何业务文件，两个程序的“输入”都是源码内常量；不调用子程序（第 24–25 课）、不做错误码分类（第 26 课）、不写日志（第 27 课）、没有构建脚本（第 28 课才有 `build.sh`）。Copybook 的版本管理、依赖自动追踪和生产级布局变更流程也不在本课范围。
 
-- [`lesson.cob`](./lesson.cob) 使用账户与交易 Copybook，依次演示入账、提款、余额不足、未知类型和账户不存在。
-- [`account_report_23.cob`](./account_report_23.cob) 是第二个独立程序，也导入账户 Copybook，证明该定义可以被多个程序使用。
-- [`copybooks/ACCOUNT-REC.CPY`](./copybooks/ACCOUNT-REC.CPY) 定义账户号、客户号和余额。
-- [`copybooks/TRANSACTION-REC.CPY`](./copybooks/TRANSACTION-REC.CPY) 定义交易账户、类型和金额。
+## 运行环境
 
-`COPY "ACCOUNT-REC.CPY".` 和 `COPY "TRANSACTION-REC.CPY".` 放在工作存储区中，因此 Copybook 内容也必须是能在该位置出现的 COBOL 数据声明。COPY 语句末尾的句点必需。字段声明由编译器插入当前程序；它不等同于 `CALL`，也不会在程序运行时读取 `.CPY` 文件。
+- GnuCOBOL 3.2.0，默认方言（**不加** `-std=cobol85`），源文件为固定格式。
+- Linux 终端；不需要数据库或附加工具。
+- 编译必须带上 `-I copybooks`，且**在本课目录**执行：该选项是相对当前工作目录解析的，在仓库根目录用相对路径会找不到声明文件（见下文实测）。
+- 两个程序都不写业务数据文件；运行只在 `build/` 下留下可执行文件（`build/` 已被仓库忽略）。
 
-编译器默认从当前目录及配置路径查找 Copybook。本课把文件放在 `copybooks/`，因此编译命令用 `-I copybooks` 指定目录。文件名区分大小写，源码中的名称必须与磁盘路径一致。
+## 业务与知识点
 
-## 三、记录布局
+### 共享声明解决什么问题
 
-| 记录 | 字段 | PIC | 总长度 |
+第 17 课的 27 字节账户记录由三个字段拼成：账户号 10 字节、客户号 8 字节、余额 9 字节。第 22 课的交易记录是 20 字节：账户号 10 字节、类型 1 字节、金额 9 字节。字段宽度不是风格问题，而是**字节契约**：交换双方的偏移必须逐字节相同。Copybook 把这个契约从“某个程序的一段声明”提升为“一个被多个程序引入的文件”。
+
+### `COPY` 是编译期插入，不是运行时调用
+
+编译器在遇到 `COPY "ACCOUNT-REC.CPY".` 时，把该文件的文本原样插入到这一行所在的位置，然后照常编译。因此：
+
+- 声明文件必须在**编译时**可被找到（`-I` 目录），运行时不再需要它；
+- Copybook 的内容必须是当前位置合法的 COBOL 数据声明（本课放在 `WORKING-STORAGE SECTION`）；
+- 它与 `CALL` 完全不同：没有程序单元、没有参数传递、也不产生运行期开销（`CALL` 见第 24 课）。
+
+### 为什么不继续用已经学过的方式
+
+可以在每个程序里各写一遍 `01`/`05` 声明——这正是本课之前的做法——但两处声明之间没有任何约束：只改其中一处宽度不会有人提醒你另一个程序的偏移已经不同了。练习 1 会让你亲手做一次宽度改动，看它在编译期和运行期各留下什么痕迹。
+
+## 输入与规则
+
+**数据来源：** 两个程序都没有外部输入文件，也没有命令行参数。样例值全部写在源码里：`1000-INITIALIZE-RECORDS` 把共享账户记录初始化为账户号 `A000000001`、客户号 `C0001001`、余额 `1000.00`，随后五个段落按固定顺序各填一笔交易。
+
+| 顺序 | 段落 | 类型 | 金额 | 结果 | 依据 |
+|---:|---|---|---:|---|---|
+| 1 | `1100-POST-DEPOSIT` | `D` | 125.50 | 过账 | 存款直接加到余额 |
+| 2 | `1200-POST-WITHDRAWAL` | `C` | 25.25 | 过账 | 此时余额 1125.50，`25.25 ≤ 1125.50` 成立 |
+| 3 | `1300-POST-OVERDRAFT` | `C` | 2000.00 | `INSUFFICIENT` | 2000.00 > 1100.25，余额不足 |
+| 4 | `1400-POST-UNKNOWN-TYPE` | `X` | 1.00 | `BAD_TYPE` | 只有 `D`、`C` 有分支，其余走 `WHEN OTHER` |
+| 5 | `1500-POST-MISSING-ACCOUNT` | `D` | 1.00 | `NO_ACCOUNT` | 交易账户 `A000000099` ≠ 账户号 `A000000001` |
+
+**字段宽度契约**（两份 Copybook 的实际声明）：
+
+| Copybook | 字段 | PIC | 字节 |
 |---|---|---|---:|
-| 账户 | 账户号、客户号、余额 | `X(10)` + `X(8)` + `9(7)V99` | 27 字节 |
-| 交易 | 账户号、类型、金额 | `X(10)` + `X` + `9(7)V99` | 20 字节 |
+| `ACCOUNT-REC.CPY` | `WS-ACCOUNT-NUMBER` | `X(10)` | 10 |
+| | `WS-CUSTOMER-ID` | `X(8)` | 8 |
+| | `WS-ACCOUNT-BALANCE` | `9(7)V99` | 9 |
+| `TRANSACTION-REC.CPY` | `WS-TRANSACTION-ACCOUNT` | `X(10)` | 10 |
+| | `WS-TRANSACTION-TYPE` | `X` | 1 |
+| | `WS-TRANSACTION-AMOUNT` | `9(7)V99` | 9 |
 
-`V` 表示隐含小数点，不占存储字节。两份 Copybook 都声明 01 级组项和明确前缀的字段名，避免多个结构被复制进同一程序后产生名称冲突。账户与交易的键和金额仍需遵守第 20–22 课的同一数据契约。
+`V` 是隐含小数点，不占字节：`9(7)V99` 是 9 个数字（7 位整数 + 2 位小数），所以账户记录 `10 + 8 + 9 = 27` 字节、交易记录 `10 + 1 + 9 = 20` 字节。这与第 17 课 `RECORD CONTAINS 27 CHARACTERS` 的账户主档、第 22 课 20 字符交易行完全一致——同一份契约，只是换了存放位置。
 
-## 四、程序处理步骤
+**前提与已校验规则的区分：**
 
-1. 编译器在工作存储区展开两个 `COPY` 语句，建立 `WS-ACCOUNT-RECORD` 与 `WS-TRANSACTION-RECORD`。
-2. 主程序先给共享账户记录赋值，再由各测试段落重复填入同一个交易记录。
-3. `2000-POST-TRANSACTION` 先比较账户号。不同账户记为 `NO_ACCOUNT`。
-4. `2100-VALIDATE-AND-POST` 根据交易类型选择入账、提款或 `BAD_TYPE`；提款转交给 `2200-CHECK-WITHDRAWAL`，余额不足时不改账户余额。
-5. `2900-REPORT-TRANSACTION` 更新成功或拒绝计数。最后显示共享账户记录和计数。
-6. `account_report_23.cob` 单独编译，重新导入同一个 `ACCOUNT-REC.CPY`，并输出另一条账户记录。
+- 程序内已校验：交易账户号是否等于账户号、类型是否 `D`/`C`、提款金额是否不超过余额。
+- 仅由程序内常量提供、程序不校验：账户号恰好 10 字符且不含空格、客户号 8 字符、金额字段全为数字。真实上游文件必须自己保证这些，本课不做格式检查。
+- 拒绝的先后顺序是契约的一部分：`2000-POST-TRANSACTION` **先**核对账户号，不符一律记 `NO_ACCOUNT`，因此“账户号错 + 类型也错”的交易只报 `NO_ACCOUNT`。
+- 三条拒绝路径都不修改共享账户记录的余额；只有过账路径写余额。
 
-## 五、编译、运行和预期输出
+## 源码阅读路径
 
-在本目录运行：
+1. `WORKING-STORAGE SECTION` 里的两条 `COPY` 是全部数据声明的来源。读代码时先把两个 `.CPY` 的内容在脑中展开：`COPY "ACCOUNT-REC.CPY".` 展开成 `01 WS-ACCOUNT-RECORD` 组项及其三个 `05` 子项。
+2. `1000-INITIALIZE-RECORDS` 只给共享账户记录赋值，并把账户号抄进交易记录；之后五个段落反复复写**同一个**交易记录区，再 `PERFORM 2000-POST-TRANSACTION`。这是“一块存储、多次复用”的写法，不是五笔独立记录。
+3. `2000-POST-TRANSACTION` → `2100-VALIDATE-AND-POST` → `2200-CHECK-WITHDRAWAL` 是唯一的决策链：账户号、类型、余额依次过关才 `MOVE "POSTED"`。
+4. `WS-POST-STATUS` 声明为 `X(12)`，状态字面量不足 12 字符处补空格。所以判定用 `WS-POST-STATUS = "POSTED"` 可以直接比较（比较两个不等长的字母数字项时，短的一方先补齐空格），而显示时才用 `FUNCTION TRIM(... TRAILING)` 去掉尾部空格。
+5. `WS-EDITED-AMOUNT`、`WS-EDITED-BALANCE` 是**编辑显示字段**，`9(7).99` 里的小数点是显式字符；它们不参与存储布局。`account_report_23.cob` 里同样如此：`WS-REPORT-BALANCE` 只是显示字段，真正的布局在 Copybook。
+6. `account_report_23.cob` 是第二个消费者：它只引入 `ACCOUNT-REC.CPY`，证明同一份物理声明可以被不同程序单元引入，而不需要复制文本。
+
+## 运行与观察
+
+**输入：** 无外部输入文件；样例值来自源码常量。两个程序都在本课目录编译，可执行文件写入 `build/`。
+
+**命令及作用：**
 
 ```sh
-scratch_dir=$(mktemp -d)
-trap 'rm -rf "$scratch_dir"' EXIT
-cobc -fsyntax-only -I copybooks lesson.cob
-cobc -x -Wall -I copybooks -o "$scratch_dir/lesson_23" lesson.cob
-cobc -fsyntax-only -I copybooks account_report_23.cob
-cobc -x -Wall -I copybooks -o "$scratch_dir/account_report_23" account_report_23.cob
-"$scratch_dir/lesson_23"
-"$scratch_dir/account_report_23"
+mkdir -p build
+cobc -fsyntax-only -I copybooks lesson.cob                 # 只做语法检查
+cobc -fsyntax-only -I copybooks account_report_23.cob      # 第二个消费者也检查
+cobc -x -Wall -I copybooks -o build/lesson_23 lesson.cob   # 编译主程序
+cobc -x -Wall -I copybooks -o build/account_report_23 account_report_23.cob
+./build/lesson_23                                          # 运行主程序
+echo $?                                                    # 查看退出码
+./build/account_report_23                                  # 运行报表程序
+rm -rf build                                               # 清掉两个可执行文件
 ```
 
-`lesson_23` 标准输出：
+`-fsyntax-only` 只验证语法路径、不生成可执行文件，不能替代编译与运行观察；`-I copybooks` 提供 Copybook 查找目录，缺了它连语法检查都过不去。
+
+**预期结果：**
+
+| 观察项 | 预期值 |
+|---|---|
+| 两条 `cobc -fsyntax-only` | 退出码 `0`，无诊断 |
+| 两条 `cobc -x -Wall` | 退出码 `0`，无诊断 |
+| `./build/lesson_23` 标准输出 | 7 行，见下方 |
+| `./build/account_report_23` 标准输出 | 1 行，见下方 |
+| 两个进程退出码 | `0` |
+| 生成文件 | 仅 `build/lesson_23`、`build/account_report_23` |
+
+`lesson_23`：
 
 ```text
 入账成功 类型=D 金额=0000125.50
@@ -69,33 +127,75 @@ cobc -x -Wall -I copybooks -o "$scratch_dir/account_report_23" account_report_23
 成功笔数=002 拒绝笔数=003
 ```
 
-`account_report_23` 标准输出：
+`account_report_23`：
 
 ```text
-口座レポート NUMBER=A000000009 CUSTOMER=C0001009 BALANCE=0000020.00
+口座レポート 口座番号=A000000009 顧客番号=C0001009 残高=0000020.00
 ```
 
-两份程序都已用指定 `-I copybooks` 的语法检查、`-Wall` 编译并运行验证。编译时本机可能在标准错误输出 `Warning: program compiled against libxml 212 using older 209`；这不是程序标准输出。
+**可独立核算：** 余额 `1000.00 + 125.50 = 1125.50`，再 `1125.50 − 25.25 = 1100.25`；第 3 笔比较 `2000.00 ≤ 1100.25` 为假 → `INSUFFICIENT`；`X` 不是 `D`/`C` → `BAD_TYPE`；`A000000099` 与账户号不等 → `NO_ACCOUNT`。过账 2 笔、拒绝 3 笔，`2 + 3 = 5` 与五个常量段落一一对应。
 
-## 六、修改练习（有答案）
+**输出字段对照（运行时标签 → 含义）：** `入账成功` 已过账、`入账拒绝` 已拒绝；`类型=` 交易类型；`金额=` 该笔金额（编辑字段，`0000125.50` 即 125.50）；`原因=` 拒绝原因 `INSUFFICIENT`/`BAD_TYPE`/`NO_ACCOUNT`；`账户号码=`/`客户号码=`/`余额=` 共享账户记录的三个字段；`成功笔数=`/`拒绝笔数=` 两个计数。报表程序的日文标签对应：`口座レポート` 账户报告、`口座番号=` 账户号、`顧客番号=` 客户号、`残高=` 余额。两个程序的输出标签混用了中文与日文，这是仓库既有约定，本课不改动它们。
 
-1. 从原始源码出发，将 `1100-POST-DEPOSIT` 的交易类型从 `D` 改为 `C`。重新编译运行，检查余额、结果计数和后续提款是否正确。
-2. 从原始源码出发，将 `1500-POST-MISSING-ACCOUNT` 中的账户号从 `A000000099` 改成 `A000000001`。重新编译运行，确认该交易能匹配账户并入账。
+**实际观察到的环境细节：** 在本工作区运行任一可执行文件时，标准错误会输出 `Warning: program compiled against libxml 212 using older 209`。这是运行环境的链接库版本警告，不是程序的业务输出；其触发组件尚未定位。
 
-参考答案只覆盖这两项修改练习，见 [`answer.md`](./answer.md)；操作步骤见 [`exercise.md`](./exercise.md)。
+**没有 `-I copybooks` 会怎样：** 实测 `cobc -fsyntax-only lesson.cob` 报两条 `ACCOUNT-REC.CPY: そのようなファイルやディレクトリはありません` / `TRANSACTION-REC.CPY: …`（GnuCOBOL 3.2.0 的日文错误文本意为“没有该文件或目录”），随后级联报出 `'WS-ACCOUNT-NUMBER' is not defined` 等错误——这正说明声明是被插入到源码里的，找不到文件就没有字段可用。
 
-## 七、举一反三（无答案）
+## 固定格式与字节核对
 
-把账户 Copybook 的余额字段从数字 PIC 改成显式符号的有符号 PIC，并设计一笔贷记和一笔借记。确认账户程序和报表程序都重新编译，记录变更前后的存储定义与显示结果。说明该改动是否会改变外部固定长文件格式。
+本课程源码使用固定格式。实测（按字节计数，`V` 不占字节、中文按 UTF-8 每字 3 字节）：
 
-本题不提供答案。不只修改一个程序，也不把 Copybook 当作运行时配置文件。
+| 位置约定 | 本课实测 |
+|---|---|
+| 第 7 列指示符 | `lesson.cob` 第 1、2、3、8、9、12、16、17、56 行是 `*` 注释行 |
+| Area A 第 8 列 | `IDENTIFICATION DIVISION.`、`PROGRAM-ID.`、`WORKING-STORAGE SECTION.`、段落名、`01` 级都在第 8 列 |
+| 仓库约定 `05` 级第 11 列 | 两份 `.CPY` 的 `05` 级都在第 11 列，`01` 组项在第 8 列 |
+| Area B 第 12 列起 | `MOVE`/`PERFORM`/`IF`/`DISPLAY` 等语句从第 12 列开始，嵌套层继续右移到 16、20、24 列 |
+| 程序文本不越第 72 列 | 最长的程序文本行：`lesson.cob` 65 字节、`account_report_23.cob` 71 字节、两份 `.CPY` 分别 44/47 字节 |
 
-## 八、企业实战补充
+两个需要按字节说明的事实：
 
-账户和交易布局常被文件读写程序、校验程序和报表程序共同使用。把声明抽到 Copybook 可以减少重复定义，但它也形成编译依赖：布局变更后，所有消费者都应重编译，并核对文件长度、字段偏移和上下游版本。本课用两个小程序展示源码复用，不包含自动依赖追踪或版本协商；第 28 课再把 Copybook 纳入可重复构建工程。
+- GnuCOBOL 3.2.0 默认**按字节**截断超长源行。实测把一个字符数 42、字节数 82 的 `DISPLAY` 字面量行编译时，编译器在第 72 列附近切开，报 `error: invalid literal` 和 `note: missing terminating " character`——截断点落在中文字符中间，字符串直接破损。所以中文注释和字面量都要按字节核对。
+- 第 7 列是 `*` 的注释行整行被编译器忽略，其字节数可以超过 72：本课最长的注释行 110 字节，`cobc -fsyntax-only -I copybooks` 仍然零诊断（上面的实测命令已验证）。
+
+编译器方言：全程使用 GnuCOBOL 默认方言，**不**加 `-std=cobol85`。本课用到 `FUNCTION TRIM`（COBOL 2002 内建函数），严格 COBOL 85 不接受它；声明文件与两个程序均以 `-Wall` 编译无诊断。
+
+**改宽度的连锁影响：** 两份 Copybook 的字段宽度是账户 27 字节、交易 20 字节契约的唯一定义处。改任一声明都会同时波及：
+
+1. 本课两个消费者（`lesson.cob`、`account_report_23.cob`）——必须重编译，否则旧可执行文件仍用旧布局；
+2. 外部定长文件接口——第 17、20、22 课的 27 字节账户记录、20 字符交易行会与程序内存布局错位（该错位属于其它课的场景，本课未运行验证）；
+3. 第 28 课的 `copybooks/` 里保存着两份字段定义相同、但物理独立的副本（本课的注释不会同步过去），它同样要跟着改，本课不会自动传播到那里。
+
+## 修改练习
+
+两项都在本课目录的**副本**上做，不要改动仓库里的原始文件；命令与预期差异见 [`exercise.md`](./exercise.md)，参考答案见 [`answer.md`](./answer.md)。
+
+1. 从原始源码出发，把 `copybooks/ACCOUNT-REC.CPY` 的 `WS-ACCOUNT-NUMBER` 由 `PIC X(10)` 改为 `PIC X(8)`，重新编译两个消费者并运行；记录编译输出、七行输出的差异、余额与两个计数，用字母数字比较规则解释你看到的结果，并说明账户记录变成多少字节、27 字节契约受损意味着什么。
+2. 从原始源码出发，把 `1500-POST-MISSING-ACCOUNT` 的账户号由 `A000000099` 改为 `A000000001`，核对第 5 笔的去向、余额与两个计数；说明这次有哪些消费者需要重编译以及为什么。
+
+## 举一反三练习
+
+为“月度对账单”再写第三个消费者程序（例如 `monthly_statement_23.cob`），复用同一份 `ACCOUNT-REC.CPY`；同时把余额改成带符号 PIC 表示借方余额。需要你自己决定：用 `S9(7)V99` 还是 `S9(7)V99 SIGN LEADING SEPARATE`、显示字段怎么声明才能显示负号、以及要改哪条过账规则才能让负余额出现。给出两个消费者（原程序与新程序）的完整编译命令与运行输出，并说明 27 字节定长契约是否被破坏。题目见 [`exercise.md`](./exercise.md)，本题不提供答案。
+
+## 在企业中的位置
+
+把记录布局抽成 Copybook 是 COBOL 工程里最常见的共享机制：文件读写程序、校验程序、报表程序都引入同一份声明，布局只有一处定义。代价是隐藏的编译依赖——改一处宽度，所有消费者都得重编译并核对文件长度、字段偏移与上下游版本。本课演示“改一个字段宽度会怎样”，但生产上还需要 Copybook 版本号、变更评审与自动重编译：第 24 课用 `CALL` 拆出子程序、第 25 课把接口参数也放进 Copybook、第 26–27 课补错误码与日志、第 28 课把这些放进带 `build.sh` 的可重复构建工程，第 32 课的毕业项目再统一处理版本与内容校验。
+
+真实系统还必须补齐本课没有的东西：布局变更前的双版本并行、Copybook 版本标识、上游文件的实际格式校验，以及布局与数据迁移的发布顺序。这些都不在本课实现。
+
+## 已验证的范围与限制
+
+- 已实测：两份源码的 `cobc -fsyntax-only -I copybooks`；两份 `cobc -x -Wall -I copybooks`（无诊断）；两个可执行文件的完整标准输出、标准错误与退出码；缺 `-I copybooks` 时的报错；在仓库根目录用相对 `-I copybooks` 失败；`.CPY` 文件名大小写敏感（改成小写报“没有该文件或目录”）。
+- 已实测：用 `FUNCTION LENGTH` 独立测得 `WS-ACCOUNT-RECORD` = 27 字节、`WS-TRANSACTION-RECORD` = 20 字节，与表中 `10+8+9`、`10+1+9` 一致；改窄账户号后同一测量给出 25 字节。
+- 已实测：超长源行按**字节**（不是字符数）在第 72 列附近被截断，截断点落在中文字符中间，字符串破损并报错；第 7 列的 `*` 注释行整行忽略，110 字节仍可编译。
+- 已实测：两道修改练习的改法与预期输出（详见 [`answer.md`](./answer.md)），其中宽度变窄那题证实“计数不变但内容被截断”。
+- 未验证：第 17、20、22 课的程序读取 25 字节账户记录会如何错位（属推断，需要那些课的夹具才能运行）；也没有在多平台或其它 GnuCOBOL 版本上复核以上行为。
+- 仓库根的 `make course-check` 只做文件存在性检查与第 01 课冒烟，不覆盖本课；本课验证命令以本页为准。
 
 ## 参考资料
 
 - [GnuCOBOL Programmer’s Guide：Copybooks](https://gnucobol.sourceforge.io/HTML/gnucobpg.html#Copybooks)
-- [GnuCOBOL Programmer’s Guide：COPY 语法与替换规则](https://gnucobol.sourceforge.io/HTML/gnucobpg.html#COPY)
-- [GnuCOBOL Manual：`-I` Copybook 搜索路径选项](https://gnucobol.sourceforge.io/doc/gnucobol.html)
+- [GnuCOBOL Programmer’s Guide：COPY 语句与替换规则](https://gnucobol.sourceforge.io/HTML/gnucobpg.html#COPY)
+- [GnuCOBOL Manual：`-I` Copybook 搜索路径](https://gnucobol.sourceforge.io/doc/gnucobol.html)
+- [GnuCOBOL Programmer’s Guide：`FUNCTION` 与内建函数](https://superbol.eu/gnucobpg/chapter8.html)
+- 课程总目录：[DIRECTORY.md](../DIRECTORY.md)

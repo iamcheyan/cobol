@@ -1,3 +1,9 @@
+      * 连接串与口令由部署环境传入，不写进源码。
+      * DECLARE 只登记查询，OPEN 才真正取数。
+      * SQLCODE 0=取到一行，100=结果集结束（非故障）。
+      * 只有打开成功的游标才关闭，OPEN 失败则跳过。
+      * 驱动特例：空表先给一条空白行（SQLCODE 0），
+      * 下一次 FETCH 才返回 100；该空白行会被计数。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON30.
        DATA DIVISION.
@@ -8,7 +14,9 @@
        01 WS-ACCOUNT PIC X(10).
        01 WS-CUSTOMER PIC X(8).
        01 WS-BALANCE PIC S9(7)V99 COMP-3.
+      * 显示副本仅 5 位整数；超过 99999.99 会丢高位。
        01 WS-EDITED-BALANCE PIC 9(5).99.
+      * 行计数只有 3 位；结果集超过 999 行会回卷。
        01 WS-ROW-COUNT PIC 9(3) VALUE ZERO.
        01 WS-DB-OPEN PIC X VALUE "N".
        01 WS-CURSOR-OPEN PIC X VALUE "N".
@@ -62,9 +70,9 @@
            EXEC SQL OPEN ACCOUNT-CURSOR END-EXEC
            IF SQLCODE = 0
                MOVE "Y" TO WS-CURSOR-OPEN
-               DISPLAY "カーソル=オープン"
+               DISPLAY "オープン=成功"
            ELSE
-               DISPLAY "CURSOR=OPEN_ERROR SQLSTATE=" SQLSTATE
+               DISPLAY "オープン=エラー SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            END-IF.
        3000-FETCH-ROWS.
@@ -91,9 +99,9 @@
            EXEC SQL CLOSE ACCOUNT-CURSOR END-EXEC
            IF SQLCODE = 0
                MOVE "N" TO WS-CURSOR-OPEN
-               DISPLAY "カーソル=クローズ"
+               DISPLAY "クローズ=成功"
            ELSE
-               DISPLAY "CURSOR=CLOSE_ERROR SQLSTATE=" SQLSTATE
+               DISPLAY "クローズ=エラー SQLSTATE=" SQLSTATE
                MOVE "Y" TO WS-FAILED
            END-IF.
        9000-DISCONNECT-DATABASE.

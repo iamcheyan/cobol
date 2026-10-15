@@ -1,7 +1,10 @@
-      * BY REFERENCE exposes callee changes in caller storage.
-      * BY CONTENT changes a temporary copy.
-      * BY VALUE uses a full-word integer; caller and callee
-      * must agree on BINARY-LONG width and signedness.
+      * 契约：三个程序共用同一份 AMOUNT-ARGUMENT 声明。
+      * 即 4 字节有符号二进制，宽度/符号须一致。
+      * 数据方向：BY REFERENCE 会改调用方存储，
+      * BY CONTENT 只改临时副本，BY VALUE 传数值、
+      * 调用方字段不变。
+      * 参数按 USING 的位置次序匹配，与名字无关；
+      * 写法与子程序不一致时编译器不报错。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON25.
        DATA DIVISION.
@@ -54,6 +57,7 @@
            DISPLAY "呼出側=呼出前 方式="
                FUNCTION TRIM(WS-MODE TRAILING)
                " 値=" WS-EDITED-ACTUAL.
+      * 自检只看调用方存储，验证不了子程序收参。
        8100-CHECK-ACTUAL.
            MOVE AMOUNT-ARGUMENT TO WS-ACTUAL
            MOVE WS-ACTUAL TO WS-EDITED-ACTUAL

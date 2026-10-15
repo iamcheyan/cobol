@@ -1,5 +1,6 @@
-      * 入力は改行なしの27バイト固定長（口座10、顧客8、残高9）。出力も幅を保ちます。
-      * OPEN OUTPUTは既存ファイルを置き換えます。出力先の扱いに注意してください。
+      * 契约：accounts.dat 无换行，27 字节定长记录。
+      * 总字节数须为 27 的整数倍，偏移才对齐。
+      * OPEN OUTPUT 替换原 balances.dat，不追加。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. FIXED17.
        ENVIRONMENT DIVISION.
@@ -15,12 +16,17 @@
                FILE STATUS IS WS-BALANCE-STATUS.
        DATA DIVISION.
        FILE SECTION.
+      * 01 级从 Area A 第 8 列起，05 级缩进到第 11 列；层级号决定父子关系。
+      * 输入偏移：账户号 1-10、客户号 11-18、
+      * 余额 19-27。V 不占字节，9 个数字 = 7 位 + 2 位。
        FD ACCOUNT-FILE
            RECORD CONTAINS 27 CHARACTERS.
        01 FD-ACCOUNT-RECORD.
           05 FD-ACCOUNT-NUMBER PIC X(10).
           05 FD-CUSTOMER-ID PIC X(8).
           05 FD-ACCOUNT-BALANCE PIC 9(7)V99.
+      * 输出同为 27 字节：客户号 1-8、账户号 9-18、
+      * 余额 19-27。MOVE 按名，WRITE 按声明次序落盘。
        FD BALANCE-FILE
            RECORD CONTAINS 27 CHARACTERS.
        01 FD-BALANCE-RECORD.
@@ -32,6 +38,7 @@
        01 WS-BALANCE-STATUS PIC XX VALUE SPACES.
        01 WS-END-OF-FILE PIC X VALUE "N".
        01 WS-IO-ERROR PIC X VALUE "N".
+      * 两位计数够本课 3 条；100 条时显示回绕。
        01 WS-RECORD-COUNT PIC 9(2) VALUE ZERO.
        PROCEDURE DIVISION.
        0000-MAIN.
@@ -60,6 +67,8 @@
                MOVE 1 TO RETURN-CODE
            END-IF
            STOP RUN.
+      * 定长 READ 不核对总字节数：末条不足 27 字节时
+      * GnuCOBOL 3.2.0 仍返回状态 00，保留上条残留字节。
        1000-READ-AND-WRITE.
            READ ACCOUNT-FILE
                AT END

@@ -3,7 +3,7 @@ set -euo pipefail
 
 script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 build_dir=${BUILD_DIR:-"$script_dir/build"}
-gixsql_root=${GIXSQL_ROOT:-"$script_dir/../29/build/toolchain/usr"}
+gixsql_root=${GIXSQL_ROOT:-"$script_dir/../29_embedded-sql/build/toolchain/usr"}
 gixpp="$gixsql_root/bin/gixpp"
 copy_dir="$gixsql_root/share/gixsql/copy"
 lib_dir="$gixsql_root/lib"
@@ -68,6 +68,8 @@ case ${1:-} in
     clean)
         rm -rf -- "$build_dir"
         rm -f -- "$script_dir/differences.txt"
+        # GixSQL 运行库把 gixsql.log 追加到进程工作目录；run 在课目录里执行程序
+        rm -f -- "$script_dir/gixsql.log"
         ;;
     *)
         printf 'Usage: %s {check|build|run|clean}\n' "$0" >&2

@@ -1,83 +1,240 @@
-# 第 31 课：文件与数据库快照同步
+# 第 31 课：数据同步——文件快照与数据库快照的差异核对
 
-> 使用第 29 课的 GixSQL/SQLite 工具链。
+银行夜间把账户变更导出成定长快照文件，系统主库（本课用 SQLite）保存着账户基准快照；本课让一个真实批次逐行读取文件快照、按账号主键查询 `ACCOUNT_SNAPSHOT`，把每条文件记录判定为 `MATCH` / `CHANGED` / `FILE_ONLY` 写入 `RECON_RESULT`，非匹配项同时导出 `differences.txt`，并交代计数不变量、重跑行为与失败后的残留状态。
 
-## 一、目标与同步边界
+## 为什么现在学
 
-程序读取按账户号升序排列的 27 字符文件快照，逐行按账户主键查询 `ACCOUNT_SNAPSHOT`，比较客户号和金额，并把每个文件键的分类写入 SQLite `RECON_RESULT`：
+第 29 课你已经能连上真实 SQLite 并用单行 `SELECT ... INTO` 取账户，第 30 课用游标逐行取数；第 20、26 课能顺序匹配文件、区分业务拒绝和系统故障。缺口是**两个数据源对不上时怎么判定、怎么留痕**：文件里有而数据库没有的账户、双方都有但客户号或金额不同的账户、数据库有而文件没有的账户，这三类必须各有明确去向，而且批次结束后要能凭计数核对"一条都没漏"。本课把文件侧与数据库侧放进同一个循环，产生可独立核算的结果表与差异文件。
 
-- `MATCH`：数据库账户存在，客户号和金额都相同。
-- `CHANGED`：账户存在，但客户号或金额至少一项不同。
-- `FILE_ONLY`：数据库查询以 SQLCODE 100 返回无匹配账户。
+## 本课完成后的能力与边界
 
-所有分类写入结果表；`CHANGED` 和 `FILE_ONLY` 同时写入 `differences.txt`。本练习做单向核对，不修改账户主表，也不扫描数据库中没有出现在文件里的账户。输入排序方便顺序审阅；查找由数据库主键完成。
+学完本课后，你可以：
 
-## 二、运行
+- 从 27 字节定长快照中切出账号（10）、客户号（8）、金额分（9），并说明为什么比较前要把"分"换算成数据库的"元"。
+- 用 `EVALUATE SQLCODE` 把三种结果分开：`0` 查到账户并比较出 `MATCH` / `CHANGED`，`100` 表示文件侧独有（`FILE_ONLY`），其他值按系统故障中止并返回非零退出码。
+- 让每条文件记录写一行 `RECON_RESULT`，并让 `CHANGED` / `FILE_ONLY` 追加进 `differences.txt`，再用计数不变量核对"文件行数 = 结果表行数 = 三类之和"。
+- 说明并复现重跑行为：`./build.sh run` 重建数据库所以可重复；直接对同一个数据库再跑可执行文件会因主键冲突以退出码 `1` 结束。
+- 说清本课**不**做的事：不扫描数据库独有账户（没有 `DB_ONLY` 分类）、不修改 `ACCOUNT_SNAPSHOT`、不改账户余额、没有事务与回滚。
 
-需要 Lesson 29 安装的 GixSQL/SQLite 工具链，以及 `cobc`、`sqlite3` 和 `gcc`：
+边界：本课是**单向**核对（文件 → 数据库），结果表 `RECON_RESULT` 记录文件侧状态，不是账户主档的更新。示例数据库是本机 SQLite 文件：真实 SQL 引擎、真实文件，但**不代表** Oracle/PostgreSQL/DB2 的事务与并发行为。工具链只在 x86-64 Linux + GixSQL v1.0.20b 上验证过。
 
-```sh
-./build.sh check
-./build.sh build
-./build.sh run
+## 运行环境
+
+- GnuCOBOL 3.2.x（`cobc`）、GixSQL 预编译器 `gixpp`、`sqlite3` 命令行程序、`gcc`。
+- 工具链**复用第 29 课**的安装位置：默认 `GIXSQL_ROOT=$script_dir/../29_embedded-sql/build/toolchain/usr`，即默认路径依赖 [第 29 课](../29_embedded-sql/README.md#运行环境)的 `install-toolchain.sh` 已执行过。自定义安装时设置 `GIXSQL_ROOT=/path/to/usr` 覆盖。
+- 因为工具链是跨课共享的，**不要在第 29 课执行 `./build.sh clean`**（会删掉共享的 GixSQL 安装）；第 31 课的 `clean` 只清本课的 `build/`。
+- 源文件保持固定格式（第 7 列指示符、Area A 第 8 列、Area B 第 12 列起），不使用 `-std=cobol85`：`COMP-3`、`FUNCTION TRIM`、`FUNCTION NUMVAL` 需要 GnuCOBOL 默认方言。实测：`lesson.cob` 的 214 行程序文本最长 68 字节，没有越过第 72 列；第 7 列只用于 `*` 注释行。
+- 构建目录是本课 `build/`（被 `.gitignore` 忽略）；差异报告 `differences.txt` 写在本课目录，`gixsql.log` 由 GixSQL 运行库追加到**进程当前工作目录**（`build.sh run` 把工作目录设为课目录，所以它看起来就在 `lesson.cob` 旁边），两者同样被忽略。
+
+## 业务与知识点
+
+文件快照和数据库快照是同一批账户的两种表示：文件是上游导出的"当日版本"，数据库是系统内的"基准版本"。核对要回答的不是"有没有值"，而是"同一个账号在两个来源里是否一致"。
+
+与第 29、30 课的区别在于**比较**：第 29 课只证明"能查到一行"，第 30 课证明"能逐行遍历"，本课要把文件侧字段与数据库侧列放到一起判断，并把判断结果持久化。与第 20 课的顺序匹配也不同：那次两个来源都是文件，靠升序归并推进指针；本课数据库侧用主键查询，所以文件侧的顺序只是方便人审阅，不是程序正确性的前提。
+
+## 输入与规则
+
+### 文件侧快照：`snapshot.txt`
+
+| 列 | 字段 | 宽度 | 说明 |
+|---|---|---:|---|
+| 1–10 | 账户号 | 10 | 与 `ACCOUNT_SNAPSHOT.ACCOUNT_NO` 对应 |
+| 11–18 | 客户号 | 8 | 与 `CUSTOMER_ID` 对应 |
+| 19–27 | 金额分 | 9 | 隐含小数点：`0000125075` = `1250.75` |
+
+每行一条记录、没有分隔符，`FD` 记录宽 27，换行符不计入宽度。程序**不校验行长**，实际表现是：
+
+- 行长正好 27：正常处理。
+- 行长不足 27：GnuCOBOL 以空格补齐，第 19–27 列变成空格 → 金额域非数字 → 按系统故障中止（退出码 `1`）。空行同理，账号显示为空格。
+- 行长超过 27：`READ` 返回文件状态 `06`，程序按系统故障中止（退出码 `1`）。
+
+金额域必须是数字；非数字不是业务拒绝，而是让批次以状态 `1` 失败的输入故障。文件按键升序**只是审阅前提**（查找走数据库主键，不依赖顺序）；键的唯一性由上游保证，程序不做查重——重复键会在写结果表时被主键拦下（见"失败、残留与恢复边界"）。
+
+### 数据库侧表结构与键（`schema.sql`）
+
+```sql
+CREATE TABLE ACCOUNT_SNAPSHOT (      -- 基准快照，来源表
+    ACCOUNT_NO  TEXT PRIMARY KEY,    -- 主键：每个账号最多查到一行
+    CUSTOMER_ID TEXT NOT NULL,
+    BALANCE     NUMERIC NOT NULL     -- 单位：元
+);
+CREATE TABLE RECON_RESULT (          -- 核对结果，按文件键写回
+    ACCOUNT_NO    TEXT PRIMARY KEY,  -- 每个文件键最多一行，重复即冲突
+    FILE_STATUS   TEXT NOT NULL,
+    FILE_CUSTOMER TEXT NOT NULL,
+    FILE_BALANCE  NUMERIC NOT NULL
+);
 ```
 
-默认工具链路径为 `../29/build/toolchain/usr/`；自定义安装时设置 `GIXSQL_ROOT=/path/to/usr`。`run` 每次创建新的 `build/lesson31.db`，装入 `schema.sql`，再从本课目录读取 `snapshot.txt`。程序覆盖生成的 `differences.txt`。`./build.sh clean` 删除本课构建目录和差异报告。
+演示库每次由 `run` 重建：`ACCOUNT_SNAPSHOT` 固定 2 行——`A000000001` / `C0001001` / `1250.75`，`A000000002` / `C0001002` / `875.00`；`RECON_RESULT` 开始时为空。夹具只有一个构建期行数上限：计数用 `PIC 9(3)`，微型夹具上限 999 条。
 
-标准输出：
+### 比对规则
+
+| 情况 | 判定 | 计数 | 是否写 `differences.txt` |
+|---|---|---|---|
+| `SQLCODE = 0`，客户号与金额都相等 | `MATCH` | 一致 | 否 |
+| `SQLCODE = 0`，客户号或金额至少一项不同 | `CHANGED` | 変更 | 是 |
+| `SQLCODE = 100`（无匹配账户） | `FILE_ONLY` | ファイルのみ | 是 |
+| 其他 `SQLCODE` | 系统故障，置失败标志 | — | — |
+
+金额比较是**数值**比较：文件侧的分先除以 100 换算成元，再与 `BALANCE` 比；不做文本比较。客户号按 8 字节定长字符串比较。数据库独有账户（在 `ACCOUNT_SNAPSHOT` 里但不在文件里）**不参与比对、不产生任何输出**——这是本课的明确边界。
+
+## 运行与观察
+
+```sh
+./build.sh check          # gixpp 预编译 + cobc -fsyntax-only，不产出可执行文件
+./build.sh build          # 预编译 + 编译 + 链接到 build/lesson_31
+./build.sh run            # 重建 build/lesson31.db（重跑 schema.sql）、再运行
+echo $?                   # 查看退出码
+./build.sh clean          # 删除 build/、differences.txt 与 gixsql.log
+```
+
+**预期结果（实测基线）：**
+
+| 观察项 | 预期值 |
+|---|---|
+| `./build.sh check` 退出码 | `0` |
+| `./build.sh build` 退出码 | `0` |
+| `./build.sh run` 退出码 | `0` |
+| 标准输出 | 6 行，与 [`expected-output.txt`](./expected-output.txt) 逐行一致 |
+| `differences.txt` | 2 行，与 [`expected-differences.txt`](./expected-differences.txt) 一致（126 字节含换行） |
+| 数据库 | `RECON_RESULT` 由 0 行变为 3 行，`ACCOUNT_SNAPSHOT` 仍 2 行 |
 
 ```text
-CONNECT=OK
+接続=成功
 MATCH ACCOUNT=A000000001 CUSTOMER=C0001001 BALANCE=01250.75
 CHANGED ACCOUNT=A000000002 CUSTOMER=C0001002 BALANCE=00100.00
 FILE_ONLY ACCOUNT=A000000003 CUSTOMER=C0001003 BALANCE=00025.00
-SUMMARY ROWS=003 MATCH=001 CHANGED=001 FILE_ONLY=001
-DISCONNECT=OK
+集計 行数=003 一致=001 変更=001 ファイルのみ=001
+切断=成功
 ```
-
-`differences.txt`：
 
 ```text
 CHANGED ACCOUNT=A000000002 CUSTOMER=C0001002 BALANCE=00100.00
 FILE_ONLY ACCOUNT=A000000003 CUSTOMER=C0001003 BALANCE=00025.00
 ```
 
-## 三、输入契约
+**输出对照（实际标签 → 含义）：** 运行输出沿用仓库既有的日文约定，含义如下。
 
-每行固定 27 个字符：10 字符账户号、8 字符客户号、9 位金额分。金额使用隐含小数点，`000001000` 表示 10.00。金额字段必须是数字；非数字值使批次以状态 1 失败。账户号在输入中应唯一，数据库以 `ACCOUNT_NO` 主键保证最多查到一行。
+| 实际标签 | 含义 |
+|---|---|
+| `接続=成功` / `接続=エラー SQLSTATE=` | 数据库连接成功 / 失败（失败时退出码 `1`） |
+| `MATCH` / `CHANGED` / `FILE_ONLY` | 一致 / 有变动 / 仅文件侧存在 |
+| `ACCOUNT=` `CUSTOMER=` `BALANCE=` | 账户号 / 客户号 / 文件侧金额（元，形如 `01250.75`） |
+| `集計 行数=` | 已处理（已读入并计数）的文件行数 |
+| `一致=` `変更=` `ファイルのみ=` | `MATCH` / `CHANGED` / `FILE_ONLY` 计数 |
+| `切断=成功` / `切断=エラー SQLSTATE=` | 断开连接成功 / 失败 |
+| `エラー=入力OPEN 状態=` | 输入快照打开失败 + COBOL 文件状态码 |
+| `エラー=不正残高 口座=` | 金额域非数字 + 账户号 |
+| `エラー=入力読取 状態=` | 读取失败 + 文件状态码（行长超过 27 时是 `06`） |
+| `エラー=挿入 SQLSTATE=` | `RECON_RESULT` 插入失败（重复键会走到这里） |
+| `エラー=出力OPEN` / `エラー=出力書込` / `エラー=出力クローズ` | 差异文件打开 / 写入 / 关闭失败 |
 
-`schema.sql` 建立两个实际 SQLite 表。`ACCOUNT_SNAPSHOT` 是来源快照；`RECON_RESULT` 保存每个文件键的状态、文件客户号和文件金额。程序对每个输入键插入一条结果；演示数据库每次由 `run` 重建，因此结果表为空。输入键须唯一；重复键会触发主键错误并让批次失败。
+**实际观察到的环境细节：** 运行可执行文件时，标准错误会输出 `Warning: program compiled against libxml 212 using older 209`。这是运行环境的链接库版本警告，不是本程序的业务输出；其触发组件尚未定位。
 
-## 四、程序流程
+**`gixsql.log` 里的 `02000: No data` 不是批次故障：** 每发生一次 `SQLCODE = 100`（本课基线夹具正好 1 次，来自 `A000000003` 的 `FILE_ONLY` 查询），GixSQL 运行库就向工作目录的 `gixsql.log` 追加一行：
 
-1. 打开输入快照和差异输出；记录每次 OPEN 的文件状态。
-2. 从环境连接 SQLite；路径由运行脚本传入，不写死到 COBOL 源码。
-3. 逐条读取固定宽度记录，拆出业务键和字段，并验证金额为数字。
-4. 对每行执行 `SELECT ... INTO`。SQLCODE 0 表示找到账户；100 表示文件侧独有；其他 SQL 状态为系统错误。
-5. 比较客户号和压缩十进制金额，归类后写 `RECON_RESULT`；非 `MATCH` 分类同时写入差异文件。
-6. 关闭文件、显示处理计数，再断开成功建立的数据库连接。I/O 或 SQL 故障令程序返回状态 1。
+```text
+[2026-10-16 ...] [libgixsql] [error] move_to_first_record failed: -122 - 02000: No data
+```
 
-## 五、失败与恢复
+本课把 `100` 当作**正常业务结果**处理（输出 `FILE_ONLY`、退出码 `0`），所以这行日志与批次成败无关；反过来，输入全为 `MATCH` 时该文件不新增任何行（实测）。日志逐次追加，`./build.sh clean` 会连同 `build/` 与 `differences.txt` 一起删除它。
 
-输入缺失、输出无法创建、坏金额、SQL 查询/写入错误、文件关闭错误和数据库断开错误都会返回非零。`run` 每次重建演示数据库，因此失败后的重试从干净夹具开始。真实批次若需原子性，应另行设计事务边界、提交策略和恢复标记；本练习不声称提供跨文件与数据库的原子提交。
+**数据库前后状态（`sqlite3 build/lesson31.db`）：**
 
-## 六、修改练习（有答案）
+```text
+运行前： RECON_RESULT 0 行
+运行后： A000000001|MATCH     |C0001001|1250.75
+        A000000002|CHANGED   |C0001002|100
+        A000000003|FILE_ONLY |C0001003|25
+```
 
-1. 把 `snapshot.txt` 的第二行金额改为数据库当前值 `000087500`。该键应从 `CHANGED` 变为 `MATCH`，差异报告只剩文件独有键。
-2. 在 `schema.sql` 中加入与 `A000000003` 完全相同的账户。该键应由 `FILE_ONLY` 变为 `MATCH`，差异报告只剩变更键。
+三点需要留意：`FILE_STATUS` 是 10 字符定长字段，落库后带尾部空格（`MATCH     `）；`FILE_BALANCE` 是数值列，SQLite 的 NUMERIC 亲和性把 `100.00` 存成 `100`（值不变，显示形式变化）；文件侧金额 `000010000`（分）在结果表里是 `100`（元）。
 
-参考答案只回答这两项修改练习，见 [`answer.md`](./answer.md)；操作过程见 [`exercise.md`](./exercise.md)。
+## 计数不变量与重跑行为
 
-## 七、举一反三（无答案）
+本课夹具：文件 3 行，`ACCOUNT_SNAPSHOT` 2 行。
 
-为输入加入重复账户键和非数字金额，分别定义业务拒绝与系统故障政策；让程序检测重复键，并确保拒绝数据不会写入 `RECON_RESULT`。再说明如何在有文件和数据库两个资源时设计可恢复的批次提交。
+| 不变量 | 代入本课 | 含义 |
+|---|---|---|
+| 文件行数 = `RECON_RESULT` 行数 | `3 = 3` | 每条文件记录都留下一行结果，一条不重不漏 |
+| `一致 + 変更 + ファイルのみ` = 文件行数 | `1 + 1 + 1 = 3` | 三类分类互斥且穷尽 |
+| `differences.txt` 行数 = `変更 + ファイルのみ` | `2 = 1 + 1` | 差异文件与分类计数吻合 |
+| 数据库独有账户数 = `ACCOUNT_SNAPSHOT` 行数 −（`一致 + 変更`） | `2 − 2 = 0` | 本课不检测 `DB_ONLY`；夹具恰好没有这类账户 |
 
-本题不提供答案。
+第四条是**本课的缺口**，不是成绩：把 `A000000099` 加进 `ACCOUNT_SNAPSHOT` 后重跑，标准输出与差异文件与基线完全一致，结果表仍是 3 行，该账户不出现于任何输出（实测见下节）。想覆盖它需要第 30 课的游标做反向扫描，见"举一反三练习"。
+
+**重跑行为：**
+
+- `./build.sh run` 每次先 `rm` 掉 `build/lesson31.db` 再用 `schema.sql` 重建，所以同一份夹具重复执行得到逐行相同的标准输出与差异文件；`differences.txt` 由 `OPEN OUTPUT` 截断重建，不会累积上一次的行。
+- 直接对**同一个**数据库再跑一次可执行文件（不重建）不是幂等的：第一条记录 `INSERT` 就撞上 `RECON_RESULT` 主键，批次以 `エラー=挿入 SQLSTATE=HY000`、`集計 行数=001`、退出码 `1` 结束。首次运行写入的 3 行结果**仍然留在数据库里**，而 `differences.txt` 已被本次运行清成 0 字节。
+
+## 失败、残留与恢复边界
+
+下表全部为在本工作区实际执行的观察（注入方式写在"如何复现"列，不需要改动程序）：
+
+| 场景 | 如何复现 | 实测关键输出 | 退出码 | 残留状态 |
+|---|---|---|---:|---|
+| 正常路径 | 原始夹具 `./build.sh run` | 见上文 6 行 | `0` | 结果表 3 行、差异文件 2 行 |
+| 数据库独有账户 | `schema.sql` 里给 `ACCOUNT_SNAPSHOT` 加 `A000000099` 后重跑 | 输出与差异文件与基线逐行相同 | `0` | 结果表仍 3 行；`A000000099` 不出现于任何输出 |
+| 输入缺失 | 运行前把 `snapshot.txt` 改名 | `エラー=入力OPEN 状態=35`、`集計 行数=000` | `1` | 不连数据库，不创建也不清空 `differences.txt`，结果表 0 行 |
+| 金额非数字 | 第 2 行第 19 列改成 `X` | `MATCH`（第 1 行）后 `エラー=不正残高 口座=A000000002`、`集計 行数=002` | `1` | 第 1 行结果已提交并保留，异常行不落库，差异文件只含本次已写行（本次实测 0 字节） |
+| 行短 / 空行 | 删掉第 2 行第 19–27 列 | 同上：空格补齐后金额非数字 | `1` | 同上一行 |
+| 行长超过 27 | 第 1 行后面追加 `EXTRA-DATA-…` | `エラー=入力読取 状態=06`、`集計 行数=000` | `1` | 无结果行；`READ` 在第一条就失败 |
+| 重复文件键 | 第 2 行复制第 1 行 | 第 1 行 `MATCH` 后 `エラー=挿入 SQLSTATE=HY000`、`集計 行数=002` | `1` | 第 1 行保留，重复行的结果不落库 |
+| 重跑（不重建库） | 对同一数据库再执行 `build/lesson_31` | `エラー=挿入 SQLSTATE=HY000`、`集計 行数=001` | `1` | 首次 3 行保留；`differences.txt` 被截断为 0 字节 |
+| 部分提交 | 预先把 `A000000003` 一行放进 `RECON_RESULT`，再运行 | 前两行正常，第 3 行 `エラー=挿入`、`集計 行数=003` | `1` | 第 1、2 行**已提交并保留**，差异文件只写到 `CHANGED` 一行 |
+
+**关于原子性（必须如实理解）：** 程序里没有 `COMMIT`、没有 `ROLLBACK`、没有批次号或恢复标记；GixSQL 逐条执行 SQL，失败时**更早的语句已经生效**。上表"部分提交"一行就是证据：批次以退出码 `1` 结束，数据库里却留下了本次运行新插入的两行。因此**不得**把本课描述为原子提交，也**不得**断言失败后会自动回滚。
+
+失败后可用的恢复手段只有两种，都靠外部操作：重新执行 `./build.sh run`（删库重建，回到干净夹具），或由运维流程显式清空 `RECON_RESULT`。真实批次需要的是事务边界、批次标识与可重入设计，这些属于第 32 课的毕业项目范围，本课不实现。
+
+## 源码阅读路径
+
+按"数据与状态如何变化"的顺序读，两条数据流的合并点是关键：
+
+1. **`FILE-CONTROL` / `FILE SECTION`**：`SNAPSHOT-FILE`（读，27 字节，`LINE SEQUENTIAL`）与 `DIFFERENCE-FILE`（写，80 字节）各自绑定 `FILE STATUS` 字段，后续每次 I/O 都靠它判成功。
+2. **`MAIN-PROCEDURE`**：打开顺序是"输入 → 差异文件 → 数据库"，任一步失败就跳过后续业务处理；关闭时只关真正打开过的资源；最后**先显示计数再断开**连接，断开失败同样置失败标志。
+3. **`3000-RECONCILE-ROW`**：`SNAPSHOT-RECORD(1:10)`、`(11:8)`、`(19:9)` 是文件侧字段切分点；`FUNCTION NUMVAL(...) / 100` 是分→元换算；非数字走 `エラー=不正残高` 分支。
+4. **`3100-LOOKUP-ACCOUNT`**：先清空宿主变量（`SQLCODE 100` 时驱动不改写接收项），再用 `:WS-ACCOUNT` 做 `WHERE` 条件 `SELECT ... INTO`；`EVALUATE SQLCODE` 的 `0 / 100 / OTHER` 三个分支就是三条业务路径。
+5. **`4000-WRITE-RESULT`**：数据库侧写点是 `INSERT INTO RECON_RESULT`，只有插入成功才继续拼接显示行与差异行；文件侧写点是 `IF WS-STATUS NOT = "MATCH"` 之后的 `WRITE DIFFERENCE-RECORD`。
+6. **`9000-DISCONNECT-DATABASE`**：`CONNECT RESET` 后检查 `SQLCODE`，失败则 `STOP RUN RETURNING 1`。
+
+两条数据流在 `3100` 汇合：文件侧字段在 `3000` 拆好，数据库侧列在 `SELECT ... INTO` 取回，比较发生在 `3100` 的 `IF WS-CUSTOMER = WS-DB-CUSTOMER AND WS-BALANCE = WS-DB-BALANCE`。
+
+## 修改练习
+
+两项都从原始 `lesson.cob` / `snapshot.txt` / `schema.sql` 开始，改完用 `./build.sh run` 重跑（脚本会重建数据库与差异文件，不必手工清理）：
+
+1. 把 `snapshot.txt` 第二行的金额从 `000010000` 改成 `000087500`，观察该键由 `CHANGED` 变为 `MATCH`，并核对差异文件与摘要计数。
+2. 在 `schema.sql` 的 `ACCOUNT_SNAPSHOT` 里增加 `A000000003` 和 `A000000099` 两个账户后重跑，观察 `FILE_ONLY` 归零、`A000000099` 完全不出现在输出里。
+
+两题的完整预期输出、差异文件内容与原因见 [`exercise.md`](./exercise.md) 与参考答案 [`answer.md`](./answer.md)。
+
+## 举一反三练习
+
+给输入加入重复账户键，再让数据库侧多出几个文件中不存在的账户，设计一个双向核对版本：用第 30 课的游标反向扫描 `ACCOUNT_SNAPSHOT`，增加 `DB_ONLY` 分类，并保持"文件行数 = 结果表行数"之外的计数关系仍然可核对；同时定义重复键的拒绝政策（业务拒绝还是系统故障）与失败后的重跑清理方案，说明验证方法。题目范围见 [`exercise.md`](./exercise.md)，本题不提供答案。
+
+## 在企业中的位置
+
+日终对账的常见链路是：上游导出文件快照、系统持有数据库快照、批次比对后把状态回写结果表并把差异交给人工或下游。本课交付的就是这条链路里最小的可运行版本：真实文件、真实 SQLite、真实 SQL，结果表与差异文件都能逐条核算，失败路径也留下可观察的痕迹。
+
+部署前还必须补上：数据库独有账户的处理、重复键与键格式校验、事务或可重入的重跑设计、批次标识与审计信息，以及差异文件的交付与留存策略。本课把这些都明确列为未实现。文件匹配的前提在第 20 课、错误分流在第 26 课、游标在第 30 课、完整项目在第 32 课。
 
 ## 参考资料
 
-- [Lesson 20：有序文件归并](../20_file-matching/README.md)
-- [Lesson 26：文件状态与错误处理](../26_error-handling/README.md)
-- [Lesson 29：GixSQL Embedded SQL 和 SQLite 工具链](../29_embedded-sql/README.md)
-- [GixSQL README](https://github.com/mridoni/gixsql/blob/main/README.md)
+- [GixSQL README：Embedded SQL、宿主变量与 SQLite 连接](https://github.com/mridoni/gixsql/blob/main/README.md)
+- [SQLite：主键与 PRIMARY KEY 约束](https://www.sqlite.org/lang_createtable.html)
 - [GnuCOBOL Programmer’s Guide](https://gnucobol.sourceforge.io/HTML/gnucobpg.html)
+- [第 20 课：有序文件匹配](../20_file-matching/README.md)
+- [第 26 课：文件状态与错误处理](../26_error-handling/README.md)
+- [第 29 课：GixSQL Embedded SQL 与 SQLite 工具链](../29_embedded-sql/README.md)
+- [第 30 课：游标](../30_sql-cursors/README.md)
+- [第 32 课：银行对账毕业项目](../32_bank-reconciliation-project/README.md)
+- 仓库课程主页：[README.md](../../README.md)
+
+## 证据来源
+
+本课"实测"结论来自在本工作区（x86-64 Linux + GnuCOBOL 3.2.x + GixSQL v1.0.20b + SQLite）执行的真实命令：`./build.sh check|build|run` 的退出码与标准输出；`sqlite3 build/lesson31.db "SELECT ..."` 核对结果表与快照表；以及在临时目录中复制夹具后注入的失败场景（输入缺失、非数字金额、行长 18/43 字节、空行、重复键、预置结果行、对同一数据库直接重跑）。基线输出与 [`expected-output.txt`](./expected-output.txt)、差异文件与 [`expected-differences.txt`](./expected-differences.txt) 逐行一致。
+
+未验证项：`differences.txt` 或 `build/` 无写权限时的失败路径（代码会以状态 `1` 报告 `エラー=出力OPEN`/`エラー=出力書込`，但本工作区未注入只读目录验证）；`ACCOUNT_SNAPSHOT` 为空、`RECON_RESULT` 已满（`PIC 9(3)` 上限 999）等更大规模的边界；SQLite 之外数据库方言下 `SQLCODE = 100` 与主键冲突的具体取值。

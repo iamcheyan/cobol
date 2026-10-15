@@ -2,6 +2,7 @@
        PROGRAM-ID. SEARCH13.
        DATA DIVISION.
        WORKING-STORAGE SECTION.
+      * SEARCH ALL 前提：实际键值须与 ASCENDING KEY 同序且唯一，重复键同样违反。
        01 WS-ACCOUNT-TABLE.
           05 WS-ACCOUNT-ENTRY OCCURS 4 TIMES
              ASCENDING KEY IS WS-ACCOUNT-NUMBER
@@ -53,4 +54,3 @@
                        "  残高="
                        WS-ACCOUNT-BALANCE(WS-ACCOUNT-IDX)
            END-SEARCH.
-      *重複キーもこの検索規約に違反します。

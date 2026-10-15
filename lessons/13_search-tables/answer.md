@@ -1,6 +1,12 @@
 # 第 13 课修改练习参考答案
 
-本答案只回答 `exercise.md` 的两项修改练习，不提供举一反三练习答案。
+本答案只回答 `exercise.md` 的两项修改练习，不提供举一反三练习答案。两项修改各自从原始 `lesson.cob` 开始，编译运行命令为：
+
+```sh
+cobc -fsyntax-only lesson.cob
+cobc -x -Wall -o build/lesson_13 lesson.cob
+./build/lesson_13
+```
 
 ## 修改已存在账户的余额
 

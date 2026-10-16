@@ -22,6 +22,8 @@ import markdown
 
 from site_about import ABOUT
 from site_reference import REFERENCE
+from site_history import HISTORY
+from site_glossary import GLOSSARY
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "build" / "site"
@@ -72,11 +74,25 @@ LOCALES = {
         "start_text": "准备 GnuCOBOL 与 Make，从第一课开始编译、修改、练习。源码、输入数据和参考答案都与讲义一起浏览。",
         "start_term": "终端 · Debian / Ubuntu", "start_open": "打开第 01 课",
         "more_eyebrow": "BEYOND THE MAIN COURSE", "more_title": "继续探索",
+        "more_kn": "知识库", "more_kn_desc": "语言背景、史话、速查手册与术语表",
         "more_ext": "拓展课程", "more_ext_desc": "旧版专题、企业批处理与编辑器教程",
         "more_src": "课程源码", "more_src_desc": "查看代码、夹具与构建脚本",
         "nav_plugins": "编辑器插件",
         "nav_gnucobol": "GnuCOBOL 官方",
         "nav_about": "COBOL 是什么", "nav_reference": "速查手册",
+        "nav_knowledge": "知识库",
+        "kn_eyebrow": "KNOWLEDGE BASE",
+        "kn_title": "COBOL 知识库",
+        "kn_lead": "除了 32 课主课程，这里还有四份资料：语言背景、发展史话、可随时查的速查手册，以及术语表。都不需要按顺序读。",
+        "kn_note": "内容以 COBOL 的公开历史资料、ISO 标准编号与 GnuCOBOL 官方文档为依据；能实测的行为都在 GnuCOBOL 3.2 上验证过。",
+        "kn_about": "COBOL 是什么",
+        "kn_about_desc": "语言定位、四个分部、为什么长成现在这样，以及它今天还在哪些行业运行。",
+        "kn_history": "COBOL 史话",
+        "kn_history_desc": "从 1959 年的会议、FACT 之争与那块墓碑，到 ISO/IEC 1989:2023 的标准化历程。",
+        "kn_reference": "速查手册",
+        "kn_reference_desc": "固定格式列规则、PIC 符号、USAGE 实测字节数、常用语句与文件状态码，一页查完。",
+        "kn_glossary": "术语表",
+        "kn_glossary_desc": "程序结构、数据层级、文件、表、模块与编译等 8 类术语，支持页内筛选。",
         "about_title": "COBOL 是什么", "reference_title": "COBOL 速查手册",
         "gnucobol_title": "GnuCOBOL 官方编译器",
         "gnucobol_eyebrow": "OFFICIAL COMPILER",
@@ -162,11 +178,25 @@ LOCALES = {
         "start_text": "Install GnuCOBOL and Make, then compile, modify and practise from lesson one. Source code, fixtures and answer keys sit next to each lesson.",
         "start_term": "Terminal · Debian / Ubuntu", "start_open": "Open lesson 01",
         "more_eyebrow": "BEYOND THE MAIN COURSE", "more_title": "Keep exploring",
+        "more_kn": "Knowledge base", "more_kn_desc": "Language background, history, reference and glossary",
         "more_ext": "Extensions", "more_ext_desc": "Legacy topics, enterprise batch and editor tutorials",
         "more_src": "Course source", "more_src_desc": "Code, fixtures and build scripts",
         "nav_plugins": "Editor plugin",
         "nav_gnucobol": "GnuCOBOL",
         "nav_about": "What is COBOL", "nav_reference": "Reference",
+        "nav_knowledge": "Knowledge",
+        "kn_eyebrow": "KNOWLEDGE BASE",
+        "kn_title": "COBOL knowledge base",
+        "kn_lead": "Beyond the 32-lesson course there are four references: what the language is, how it came to be, a lookup sheet, and a glossary. None of them needs to be read in order.",
+        "kn_note": "Content follows COBOL's published history, ISO standard numbers and official GnuCOBOL documentation; anything observable was verified on GnuCOBOL 3.2.",
+        "kn_about": "What is COBOL",
+        "kn_about_desc": "What the language is for, its four divisions, why it looks the way it does, and where it still runs.",
+        "kn_history": "A short history",
+        "kn_history_desc": "From the 1959 meetings, the FACT fight and the tombstone, to ISO/IEC 1989:2023.",
+        "kn_reference": "Reference sheet",
+        "kn_reference_desc": "Fixed-format columns, PICTURE symbols, measured USAGE sizes, statements and file status codes.",
+        "kn_glossary": "Glossary",
+        "kn_glossary_desc": "Eight groups of terms covering structure, data levels, files, tables, modules and compilation, filterable in place.",
         "about_title": "What is COBOL", "reference_title": "COBOL reference sheet",
         "gnucobol_title": "The GnuCOBOL compiler",
         "gnucobol_eyebrow": "OFFICIAL COMPILER",
@@ -252,11 +282,25 @@ LOCALES = {
         "start_text": "GnuCOBOL と Make を用意し、第1課からコンパイル・修正・演習を進めます。ソースコード、入力データ、解答例も各レッスンと一緒に閲覧できます。",
         "start_term": "ターミナル · Debian / Ubuntu", "start_open": "レッスン01を開く",
         "more_eyebrow": "BEYOND THE MAIN COURSE", "more_title": "さらに学ぶ",
+        "more_kn": "ナレッジベース", "more_kn_desc": "言語の概要・史話・リファレンス・用語集",
         "more_ext": "発展教材", "more_ext_desc": "旧版のトピック、企業バッチ、エディタのチュートリアル",
         "more_src": "コースのソース", "more_src_desc": "コード、フィクスチャ、ビルドスクリプト",
         "nav_plugins": "エディタプラグイン",
         "nav_gnucobol": "GnuCOBOL 公式",
         "nav_about": "COBOL とは", "nav_reference": "リファレンス",
+        "nav_knowledge": "ナレッジ",
+        "kn_eyebrow": "KNOWLEDGE BASE",
+        "kn_title": "COBOL ナレッジベース",
+        "kn_lead": "32 課のコースとは別に 4 つの資料を用意しています。言語の概要、成り立ちの史話、引けるリファレンス、用語集です。順番に読む必要はありません。",
+        "kn_note": "内容は COBOL の公開された歴史資料、ISO 標準番号、GnuCOBOL 公式ドキュメントに基づきます。観測できる挙動は GnuCOBOL 3.2 で実測しています。",
+        "kn_about": "COBOL とは",
+        "kn_about_desc": "言語の目的、4 つの DIVISION、なぜこの形なのか、現在も動く分野。",
+        "kn_history": "COBOL 史話",
+        "kn_history_desc": "1959 年の会合、FACT 論争と墓石、ISO/IEC 1989:2023 までの標準化。",
+        "kn_reference": "リファレンス",
+        "kn_reference_desc": "固定形式の桁、PIC 記号、USAGE の実測バイト数、主要な文、ファイル状態コード。",
+        "kn_glossary": "用語集",
+        "kn_glossary_desc": "構造・データ階層・ファイル・表・モジュール・コンパイルなど 8 分類の用語。ページ内で絞り込めます。",
         "about_title": "COBOL とは", "reference_title": "COBOL クイックリファレンス",
         "gnucobol_title": "GnuCOBOL コンパイラ",
         "gnucobol_eyebrow": "OFFICIAL COMPILER",
@@ -632,8 +676,7 @@ def shell(locale: str, title: str, body: str, page: Path, home: bool = False) ->
     extensions = site_href(Path(locale) / "extensions/README.html", locale, page)
     plugins = site_href(Path(locale) / "plugins.html", locale, page)
     gnucobol = site_href(Path(locale) / "gnucobol.html", locale, page)
-    about = site_href(Path(locale) / "about.html", locale, page)
-    reference = site_href(Path(locale) / "reference.html", locale, page)
+    knowledge = site_href(Path(locale) / "knowledge.html", locale, page)
     languages = "".join(
         f'<a lang="{LOCALES[key]["html"]}" hreflang="{LOCALES[key]["html"]}"'
         f' class="{"current" if key == locale else ""}" href="{site_href(Path(key) / page, locale, page)}">{LOCALES[key]["name"]}</a>'
@@ -677,7 +720,7 @@ def shell(locale: str, title: str, body: str, page: Path, home: bool = False) ->
 <header class="masthead">
 <a class="brand" href="{home_href}"><img src="{site_href(Path(locale) / "assets/shire_200.png", locale, page)}" alt="GnuCOBOL Shire horse mascot"><span><strong>GnuCOBOL</strong><small>{html.escape(labels["brand_sub"])}</small></span></a>
 <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="{labels["nav_menu"]}"><span class="nav-bars" aria-hidden="true"></span><span class="nav-toggle-label">{labels["nav_menu"]}</span></button>
-<nav id="site-nav"><a href="{home_href}">{labels["nav_home"]}</a><a href="{directory}">{labels["nav_directory"]}</a><a href="{extensions}">{labels["nav_extensions"]}</a><a href="{about}">{labels["nav_about"]}</a><a href="{reference}">{labels["nav_reference"]}</a><a href="{plugins}">{labels["nav_plugins"]}</a><a href="{gnucobol}">{labels["nav_gnucobol"]}</a><a href="https://github.com/iamcheyan/cobol">{labels["nav_source"]}</a><div class="language-menu" aria-label="{labels["nav_lang"]}">{languages}</div></nav>
+<nav id="site-nav"><a href="{home_href}">{labels["nav_home"]}</a><a href="{directory}">{labels["nav_directory"]}</a><a href="{extensions}">{labels["nav_extensions"]}</a><a href="{knowledge}">{labels["nav_knowledge"]}</a><a href="{plugins}">{labels["nav_plugins"]}</a><a href="{gnucobol}">{labels["nav_gnucobol"]}</a><a href="https://github.com/iamcheyan/cobol">{labels["nav_source"]}</a><div class="language-menu" aria-label="{labels["nav_lang"]}">{languages}</div></nav>
 <button class="theme-toggle" type="button" aria-label="{html.escape(labels["theme_dark"])}" aria-pressed="false" data-dark-label="{html.escape(labels["theme_dark"])}" data-light-label="{html.escape(labels["theme_light"])}" title="{html.escape(labels["theme_dark"])}"><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.6A8.6 8.6 0 1 1 9.4 3.5a6.9 6.9 0 0 0 11.1 11.1Z"/></svg><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M4.2 12H2M22 12h-2.2M6.5 6.5 5 5M19 19l-1.5-1.5M17.5 6.5 19 5M5 19l1.5-1.5"/></svg></button>
 </header>
 {main}
@@ -855,6 +898,105 @@ def reference_page(locale: str) -> str:
     )
 
 
+
+KNOWLEDGE_PAGES = ("about", "history", "reference", "glossary")
+
+
+def _knowledge_nav(locale: str, current: str, page: Path) -> str:
+    """Small cross-link strip shown on every knowledge page."""
+    labels = LOCALES[locale]
+    items = []
+    for key in KNOWLEDGE_PAGES:
+        href = site_href(Path(locale) / f"{key}.html", locale, page)
+        cls = ' class="current"' if key == current else ""
+        items.append(f'<a href="{href}"{cls}>{html.escape(labels[f"kn_{key}"])}</a>')
+    return f'<nav class="kn-nav">{"".join(items)}</nav>'
+
+
+def _kn_sections(locale: str, data: dict) -> str:
+    """Render the shared section shapes used by history and glossary."""
+    blocks = []
+    for sec in data["sections"]:
+        part = [f'<h2 id="{sec["id"]}">{html.escape(sec["title"])}</h2>']
+        if sec.get("intro"):
+            part.append(f'<p>{inline_rich(sec["intro"])}</p>')
+        kind = sec.get("kind")
+        if kind == "code":
+            part.append(f'<pre><code>{html.escape(sec["code"])}</code></pre>')
+        elif kind == "prose":
+            part.append(_prose(sec.get("body", [])))
+            if sec.get("bullets"):
+                part.append(_bullets(sec["bullets"]))
+        else:
+            part.append(_table(sec["head"], sec["rows"]))
+        if sec.get("after"):
+            part.append(_prose(sec["after"]))
+        blocks.append("".join(part))
+    return "".join(blocks)
+
+
+def history_page(locale: str) -> str:
+    """How COBOL came to be: people, disputes, standards."""
+    data = HISTORY[locale]
+    return (
+        _knowledge_nav(locale, "history", Path("history.html"))
+        + f'<p class="eyebrow">{data["eyebrow"]}</p>'
+        + f'<h1>{html.escape(data["title"])}</h1>'
+        + f'<p class="plugin-lead">{inline_rich(data["lead"])}</p>'
+        + _kn_sections(locale, data)
+        + f'<p class="plugin-license">{inline_rich(data["note"])}</p>'
+    )
+
+
+def glossary_page(locale: str) -> str:
+    """Terminology lookup, filterable in place."""
+    data = GLOSSARY[locale]
+    blocks = []
+    for group in data["groups"]:
+        rows = "".join(
+            f'<tr><th scope="row">{inline_rich(term)}</th><td>{inline_rich(desc)}</td></tr>'
+            for term, desc in group["terms"]
+        )
+        blocks.append(
+            f'<h2 id="{group["id"]}">{html.escape(group["title"])}</h2>'
+            f'<div class="table-wrap"><table class="term-table"><tbody>{rows}</tbody></table></div>'
+        )
+    return (
+        _knowledge_nav(locale, "glossary", Path("glossary.html"))
+        + f'<p class="eyebrow">{data["eyebrow"]}</p>'
+        + f'<h1>{html.escape(data["title"])}</h1>'
+        + f'<p class="plugin-lead">{inline_rich(data["lead"])}</p>'
+        + f'<label class="ref-search"><span aria-hidden="true">⌕</span>'
+        + f'<input id="ref-search" type="search" placeholder="{html.escape(data["search_placeholder"])}" '
+        + f'aria-label="{html.escape(data["search_placeholder"])}" autocomplete="off"></label>'
+        + f'<p class="ref-empty" id="ref-empty" hidden>{html.escape(data["no_match"])}</p>'
+        + '<div class="ref-body" id="ref-body">' + "".join(blocks) + '</div>'
+    )
+
+
+def knowledge_page(locale: str) -> str:
+    """Hub that indexes the four knowledge pages."""
+    labels = LOCALES[locale]
+    cards = [
+        ("about", labels["kn_about_desc"]),
+        ("history", labels["kn_history_desc"]),
+        ("reference", labels["kn_reference_desc"]),
+        ("glossary", labels["kn_glossary_desc"]),
+    ]
+    items = "".join(
+        f'<a class="kn-card" href="{key}.html"><strong>{html.escape(labels[f"kn_{key}"])}</strong>'
+        f'<span>{inline_rich(desc)}</span><b>→</b></a>'
+        for key, desc in cards
+    )
+    return (
+        f'<p class="eyebrow">{labels["kn_eyebrow"]}</p>'
+        f'<h1>{html.escape(labels["kn_title"])}</h1>'
+        f'<p class="plugin-lead">{inline_rich(labels["kn_lead"])}</p>'
+        f'<div class="kn-cards">{items}</div>'
+        f'<p class="plugin-license">{inline_rich(labels["kn_note"])}</p>'
+    )
+
+
 def gnucobol_page(locale: str) -> str:
     """The page that documents how this site is paired with GnuCOBOL itself."""
     labels = LOCALES[locale]
@@ -896,7 +1038,7 @@ def homepage(locale: str) -> str:
 <section class="start-row"><div><p class="eyebrow">{labels["start_eyebrow"]}</p><h2>{labels["start_title"]}</h2><p>{labels["start_text"]}</p></div><div class="start-command"><span>{labels["start_term"]}</span><code>sudo apt install gnucobol make</code><a href="lessons/01_hello-cobol/README.html">{labels["start_open"]} <b>↗</b></a></div></section>
 {plugin_section(locale)}
 <section class="compiler-band"><div><p class="eyebrow">{labels["gnucobol_eyebrow"]}</p><h2>GnuCOBOL</h2><p>{inline_code(labels["gnucobol_lead"])}</p><a class="primary" href="gnucobol.html">{labels["nav_gnucobol"]} <span>→</span></a></div><a class="text-link" href="https://gnucobol.sourceforge.io/" rel="noopener">gnucobol.sourceforge.io ↗</a></section>
-<section class="more-reading"><div><p class="eyebrow">{labels["more_eyebrow"]}</p><h2>{labels["more_title"]}</h2></div><a href="extensions/README.html"><span>{labels["more_ext"]}</span><strong>{labels["more_ext_desc"]}</strong><b>→</b></a><a href="https://github.com/iamcheyan/cobol"><span>{labels["more_src"]}</span><strong>{labels["more_src_desc"]}</strong><b>→</b></a></section>'''
+<section class="more-reading"><div><p class="eyebrow">{labels["more_eyebrow"]}</p><h2>{labels["more_title"]}</h2></div><a href="knowledge.html"><span>{labels["more_kn"]}</span><strong>{labels["more_kn_desc"]}</strong><b>→</b></a><a href="extensions/README.html"><span>{labels["more_ext"]}</span><strong>{labels["more_ext_desc"]}</strong><b>→</b></a><a href="https://github.com/iamcheyan/cobol"><span>{labels["more_src"]}</span><strong>{labels["more_src_desc"]}</strong><b>→</b></a></section>'''
     return shell(locale, labels["nav_home"], body, Path("index.html"), home=True)
 
 
@@ -933,6 +1075,12 @@ def build_locale(locale: str) -> int:
         shell(locale, LOCALES[locale]["about_title"], about_page(locale), Path("about.html")), encoding="utf-8")
     (root / "reference.html").write_text(
         shell(locale, LOCALES[locale]["reference_title"], reference_page(locale), Path("reference.html")), encoding="utf-8")
+    (root / "history.html").write_text(
+        shell(locale, LOCALES[locale]["kn_history"], history_page(locale), Path("history.html")), encoding="utf-8")
+    (root / "glossary.html").write_text(
+        shell(locale, LOCALES[locale]["kn_glossary"], glossary_page(locale), Path("glossary.html")), encoding="utf-8")
+    (root / "knowledge.html").write_text(
+        shell(locale, LOCALES[locale]["kn_title"], knowledge_page(locale), Path("knowledge.html")), encoding="utf-8")
     return pages
 
 

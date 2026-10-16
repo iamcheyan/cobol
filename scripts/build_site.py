@@ -75,12 +75,12 @@ LOCALES = {
         "plugin_lead": "`cobol.nvim` 是本课程配套的 Neovim 插件，把固定格式 COBOL 的列规则、记录布局和编译器反馈直接放进编辑器：写代码时就能看到穿孔卡标尺、结构和错误。",
         "plugin_features_title": "它能做什么",
         "plugin_features": [
-            ("固定格式标尺与 Winbar", "在第 7、8、12、73 列绘制标尺，越界到识别区会告警"),
-            ("结构大纲", "Aerial 侧边栏展示 Division / Section / Paragraph / 数据层级，可双向跳转"),
-            ("定义直达与 Copybook 预览", "`gd` 跳段落或字段定义，`gf` 打开 `COPY` 引用的 Copybook，`K` 就地预览"),
-            ("PIC 与记录字节计算", "把 `PIC X(20)`、`PIC S9(7) COMP-3` 等换算成字节数，并对 `01` 记录递归求和"),
-            ("保存即语法飞检", "异步调用 `cobc -fsyntax-only`，把编译器诊断映射到对应行"),
-            ("折叠与格式化", "按 Division / Section / Paragraph 折叠，批量把保留字规整为大写"),
+            ("固定格式标尺与 Winbar", "在第 7、8、12、73 列绘制标尺，越界到识别区会告警", "ruler-winbar.png", "光标所在行实时显示记录字节数；Winbar 显示当前 Division / Section / Paragraph 位置"),
+            ("结构大纲", "Aerial 侧边栏展示 Division / Section / Paragraph / 数据层级，可双向跳转", "aerial-outline.png", "左侧大纲与右侧代码同步高亮，可直接跳转任意段落或数据项"),
+            ("定义直达与 Copybook 预览", "`gd` 跳段落或字段定义，`gf` 打开 `COPY` 引用的 Copybook，`K` 就地预览", "copybook-preview.png", "`K` 在不离开当前文件的情况下弹出 Copybook 内容"),
+            ("PIC 与记录字节计算", "把 `PIC X(20)`、`PIC S9(7) COMP-3` 等换算成字节数，并对 `01` 记录递归求和", "record-layout.png", "`:CobolCalcRecord` 输出字段偏移、PIC、字节数与记录总长"),
+            ("保存即语法飞检", "异步调用 `cobc -fsyntax-only`，把编译器诊断映射到对应行", "diagnostics.png", "保存后行内标出编译器错误，无需离开编辑器"),
+            ("折叠与格式化", "按 Division / Section / Paragraph 折叠，批量把保留字规整为大写", "folding.png", "按结构折叠长程序，只展开当前在看的段落"),
         ],
         "plugin_install": "用 lazy.nvim 安装",
         "plugin_repo": "GitHub 仓库",
@@ -88,6 +88,7 @@ LOCALES = {
         "plugin_requirements": "需要 Neovim 与 GnuCOBOL；实时语法诊断依赖 `cobc`，结构大纲侧边栏依赖可选的 `aerial.nvim`。",
         "plugin_license": "MIT 许可，源码公开。",
         "plugin_open": "了解并安装 cobol.nvim",
+        "plugin_figure": "Neovim 里的实际效果：Aerial 结构大纲、固定格式标尺与 Winbar 面包屑、COBOL 语法高亮。",
     },
     "en": {
         "html": "en", "name": "English", "brand_sub": "Practical Course",
@@ -123,12 +124,12 @@ LOCALES = {
         "plugin_lead": "`cobol.nvim` is the Neovim plugin built alongside this course. It brings fixed-format COBOL rules, record layout and compiler feedback into the editor, so the punch-card ruler, structure and errors are visible while you type.",
         "plugin_features_title": "What it does",
         "plugin_features": [
-            ("Fixed-format ruler and Winbar", "Draws the column ruler at 7, 8, 12 and 73, and warns when text crosses into the identification area"),
-            ("Structure outline", "An Aerial sidebar for Division / Section / Paragraph and the data hierarchy, with jump-to and follow-cursor"),
-            ("Definition jump and Copybook preview", "`gd` jumps to a paragraph or field definition, `gf` opens the `COPY` copybook, `K` previews it in place"),
-            ("PIC and record size calculation", "Converts `PIC X(20)`, `PIC S9(7) COMP-3` and friends into byte counts, and sums an `01` record recursively"),
-            ("Syntax check on save", "Runs `cobc -fsyntax-only` asynchronously and maps compiler diagnostics onto the lines that caused them"),
-            ("Folding and formatting", "Folds by Division / Section / Paragraph and normalises reserved words to upper case"),
+            ("Fixed-format ruler and Winbar", "Draws the column ruler at 7, 8, 12 and 73, and warns when text crosses into the identification area", "ruler-winbar.png", "The record size is shown on the current line; the Winbar shows the Division / Section / Paragraph you are in"),
+            ("Structure outline", "An Aerial sidebar for Division / Section / Paragraph and the data hierarchy, with jump-to and follow-cursor", "aerial-outline.png", "The outline highlights in step with the code and jumps to any paragraph or data item"),
+            ("Definition jump and Copybook preview", "`gd` jumps to a paragraph or field definition, `gf` opens the `COPY` copybook, `K` previews it in place", "copybook-preview.png", "`K` shows the copybook contents without leaving the file"),
+            ("PIC and record size calculation", "Converts `PIC X(20)`, `PIC S9(7) COMP-3` and friends into byte counts, and sums an `01` record recursively", "record-layout.png", "`:CobolCalcRecord` lists each field offset, PIC, size and the record total"),
+            ("Syntax check on save", "Runs `cobc -fsyntax-only` asynchronously and maps compiler diagnostics onto the lines that caused them", "diagnostics.png", "Compiler errors appear inline after saving, without leaving the editor"),
+            ("Folding and formatting", "Folds by Division / Section / Paragraph and normalises reserved words to upper case", "folding.png", "Fold a long program by structure and keep only the paragraph you are reading open"),
         ],
         "plugin_install": "Install with lazy.nvim",
         "plugin_repo": "GitHub repository",
@@ -136,6 +137,7 @@ LOCALES = {
         "plugin_requirements": "Neovim and GnuCOBOL are required; live diagnostics need `cobc`, and the outline sidebar needs the optional `aerial.nvim`.",
         "plugin_license": "MIT licensed, open source.",
         "plugin_open": "Get cobol.nvim",
+        "plugin_figure": "In Neovim: the Aerial structure outline, fixed-format guides with the Winbar breadcrumb, and COBOL syntax highlighting.",
     },
     "ja": {
         "html": "ja", "name": "日本語", "brand_sub": "実践コース",
@@ -171,12 +173,12 @@ LOCALES = {
         "plugin_lead": "`cobol.nvim` は本コースとともに育てている Neovim プラグインです。固定形式 COBOL の桁ルール、レコードレイアウト、コンパイラのフィードバックをエディタに持ち込み、書いているそばから桁定規・構造・エラーが見えます。",
         "plugin_features_title": "できること",
         "plugin_features": [
-            ("固定形式の桁定規と Winbar", "7・8・12・73 列に定規を描き、識別領域へのはみ出しを警告します"),
-            ("構造アウトライン", "Division / Section / Paragraph とデータ階層を Aerial サイドバーに表示し、双方向にジャンプできます"),
-            ("定義ジャンプと Copybook プレビュー", "`gd` で段落や項目定義へ、`gf` で `COPY` の Copybook を開き、`K` でその場にプレビューします"),
-            ("PIC とレコード長の計算", "`PIC X(20)` や `PIC S9(7) COMP-3` をバイト数に換算し、`01` レコードを再帰的に合計します"),
-            ("保存時の構文チェック", "`cobc -fsyntax-only` を非同期に実行し、コンパイラ診断を該当行に表示します"),
-            ("折りたたみと整形", "Division / Section / Paragraph 単位で折りたたみ、予約語を大文字に揃えます"),
+            ("固定形式の桁定規と Winbar", "7・8・12・73 列に定規を描き、識別領域へのはみ出しを警告します", "ruler-winbar.png", "カーソル行にレコード長を表示し、Winbar に現在の Division / Section / Paragraph を出します"),
+            ("構造アウトライン", "Division / Section / Paragraph とデータ階層を Aerial サイドバーに表示し、双方向にジャンプできます", "aerial-outline.png", "アウトラインとコードが連動してハイライトされ、任意の段落や項目へ移動できます"),
+            ("定義ジャンプと Copybook プレビュー", "`gd` で段落や項目定義へ、`gf` で `COPY` の Copybook を開き、`K` でその場にプレビューします", "copybook-preview.png", "`K` でファイルを離れずに Copybook の中身を確認できます"),
+            ("PIC とレコード長の計算", "`PIC X(20)` や `PIC S9(7) COMP-3` をバイト数に換算し、`01` レコードを再帰的に合計します", "record-layout.png", "`:CobolCalcRecord` が各項目のオフセット・PIC・サイズとレコード合計を一覧表示します"),
+            ("保存時の構文チェック", "`cobc -fsyntax-only` を非同期に実行し、コンパイラ診断を該当行に表示します", "diagnostics.png", "保存するとコンパイラエラーが行内に表示され、エディタを離れる必要がありません"),
+            ("折りたたみと整形", "Division / Section / Paragraph 単位で折りたたみ、予約語を大文字に揃えます", "folding.png", "長いプログラムを構造単位で折りたたみ、読んでいる段落だけを開けます"),
         ],
         "plugin_install": "lazy.nvim でインストール",
         "plugin_repo": "GitHub リポジトリ",
@@ -184,6 +186,7 @@ LOCALES = {
         "plugin_requirements": "Neovim と GnuCOBOL が必要です。リアルタイム診断には `cobc`、アウトライン表示には任意の `aerial.nvim` を使います。",
         "plugin_license": "MIT ライセンスで公開しています。",
         "plugin_open": "cobol.nvim を導入する",
+        "plugin_figure": "Neovim での実際の表示：Aerial の構造アウトライン、固定形式の桁定規と Winbar パンくず、COBOL の構文ハイライト。",
     },
 }
 
@@ -576,17 +579,21 @@ def plugin_section(locale: str) -> str:
 def plugins_page(locale: str) -> str:
     labels = LOCALES[locale]
     features = "".join(
-        f'<li><strong>{name}</strong><span>{inline_code(desc)}</span></li>'
-        for name, desc in labels["plugin_features"]
+        f'<figure class="plugin-feature"><img src="assets/plugin/{shot}" alt="{html.escape(name)}" loading="lazy">'
+        f'<figcaption><strong>{html.escape(name)}</strong><span>{inline_code(desc)}</span>'
+        f'<small>{inline_code(note)}</small></figcaption></figure>'
+        for name, desc, shot, note in labels["plugin_features"]
     )
     return (
         f'<p class="eyebrow">{labels["plugin_eyebrow"]}</p>'
         f'<h1>cobol.nvim</h1>'
         f'<p class="plugin-lead">{inline_code(labels["plugin_lead"])}</p>'
+        f'<figure class="plugin-figure"><img src="assets/plugin/overview.png" alt="cobol.nvim in Neovim: Aerial outline, fixed-format guides and COBOL syntax highlighting">'
+        f'<figcaption>{labels["plugin_figure"]}</figcaption></figure>'
         f'<h2>{labels["plugin_install"]}</h2>'
         f'<pre><code>{html.escape(PLUGIN_SNIPPET)}</code></pre>'
         f'<h2>{labels["plugin_features_title"]}</h2>'
-        f'<ul class="plugin-features">{features}</ul>'
+        f'<div class="plugin-features">{features}</div>'
         f'<p class="plugin-note">{inline_code(labels["plugin_requirements"])}</p>'
         f'<div class="plugin-actions"><a class="primary" href="{PLUGIN_REPO}">{labels["plugin_repo"]} ↗</a>'
         f'<a class="text-link" href="extensions/neovim-tooling/README.html">{labels["plugin_tutorials"]} →</a></div>'
@@ -660,6 +667,9 @@ def main() -> None:
     (OUT / "assets").mkdir(parents=True)
     for name in ("site.css", "site.js", "shire_200.png"):
         shutil.copy2(ROOT / "site-src" / name, OUT / "assets" / name)
+    plugin_images = ROOT / "site-src" / "plugin"
+    if plugin_images.is_dir():
+        shutil.copytree(plugin_images, OUT / "assets" / "plugin", dirs_exist_ok=True)
     total = 0
     for locale in LOCALES:
         total += build_locale(locale)

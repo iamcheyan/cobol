@@ -58,6 +58,24 @@ LOCALES = {
         "more_eyebrow": "BEYOND THE MAIN COURSE", "more_title": "继续探索",
         "more_ext": "拓展课程", "more_ext_desc": "旧版专题、企业批处理与编辑器教程",
         "more_src": "课程源码", "more_src_desc": "查看代码、夹具与构建脚本",
+        "nav_plugins": "编辑器插件",
+        "plugin_eyebrow": "EDITOR PLUGIN",
+        "plugin_lead": "`cobol.nvim` 是本课程配套的 Neovim 插件，把固定格式 COBOL 的列规则、记录布局和编译器反馈直接放进编辑器：写代码时就能看到穿孔卡标尺、结构和错误。",
+        "plugin_features_title": "它能做什么",
+        "plugin_features": [
+            ("固定格式标尺与 Winbar", "在第 7、8、12、73 列绘制标尺，越界到识别区会告警"),
+            ("结构大纲", "Aerial 侧边栏展示 Division / Section / Paragraph / 数据层级，可双向跳转"),
+            ("定义直达与 Copybook 预览", "`gd` 跳段落或字段定义，`gf` 打开 `COPY` 引用的 Copybook，`K` 就地预览"),
+            ("PIC 与记录字节计算", "把 `PIC X(20)`、`PIC S9(7) COMP-3` 等换算成字节数，并对 `01` 记录递归求和"),
+            ("保存即语法飞检", "异步调用 `cobc -fsyntax-only`，把编译器诊断映射到对应行"),
+            ("折叠与格式化", "按 Division / Section / Paragraph 折叠，批量把保留字规整为大写"),
+        ],
+        "plugin_install": "用 lazy.nvim 安装",
+        "plugin_repo": "GitHub 仓库",
+        "plugin_tutorials": "配套教程",
+        "plugin_requirements": "需要 Neovim 与 GnuCOBOL；实时语法诊断依赖 `cobc`，结构大纲侧边栏依赖可选的 `aerial.nvim`。",
+        "plugin_license": "MIT 许可，源码公开。",
+        "plugin_open": "了解并安装 cobol.nvim",
     },
     "en": {
         "html": "en", "name": "English", "brand_sub": "Practical Course",
@@ -88,6 +106,24 @@ LOCALES = {
         "more_eyebrow": "BEYOND THE MAIN COURSE", "more_title": "Keep exploring",
         "more_ext": "Extensions", "more_ext_desc": "Legacy topics, enterprise batch and editor tutorials",
         "more_src": "Course source", "more_src_desc": "Code, fixtures and build scripts",
+        "nav_plugins": "Editor plugin",
+        "plugin_eyebrow": "EDITOR PLUGIN",
+        "plugin_lead": "`cobol.nvim` is the Neovim plugin built alongside this course. It brings fixed-format COBOL rules, record layout and compiler feedback into the editor, so the punch-card ruler, structure and errors are visible while you type.",
+        "plugin_features_title": "What it does",
+        "plugin_features": [
+            ("Fixed-format ruler and Winbar", "Draws the column ruler at 7, 8, 12 and 73, and warns when text crosses into the identification area"),
+            ("Structure outline", "An Aerial sidebar for Division / Section / Paragraph and the data hierarchy, with jump-to and follow-cursor"),
+            ("Definition jump and Copybook preview", "`gd` jumps to a paragraph or field definition, `gf` opens the `COPY` copybook, `K` previews it in place"),
+            ("PIC and record size calculation", "Converts `PIC X(20)`, `PIC S9(7) COMP-3` and friends into byte counts, and sums an `01` record recursively"),
+            ("Syntax check on save", "Runs `cobc -fsyntax-only` asynchronously and maps compiler diagnostics onto the lines that caused them"),
+            ("Folding and formatting", "Folds by Division / Section / Paragraph and normalises reserved words to upper case"),
+        ],
+        "plugin_install": "Install with lazy.nvim",
+        "plugin_repo": "GitHub repository",
+        "plugin_tutorials": "Tutorials",
+        "plugin_requirements": "Neovim and GnuCOBOL are required; live diagnostics need `cobc`, and the outline sidebar needs the optional `aerial.nvim`.",
+        "plugin_license": "MIT licensed, open source.",
+        "plugin_open": "Get cobol.nvim",
     },
     "ja": {
         "html": "ja", "name": "日本語", "brand_sub": "実践コース",
@@ -118,6 +154,24 @@ LOCALES = {
         "more_eyebrow": "BEYOND THE MAIN COURSE", "more_title": "さらに学ぶ",
         "more_ext": "発展教材", "more_ext_desc": "旧版のトピック、企業バッチ、エディタのチュートリアル",
         "more_src": "コースのソース", "more_src_desc": "コード、フィクスチャ、ビルドスクリプト",
+        "nav_plugins": "エディタプラグイン",
+        "plugin_eyebrow": "EDITOR PLUGIN",
+        "plugin_lead": "`cobol.nvim` は本コースとともに育てている Neovim プラグインです。固定形式 COBOL の桁ルール、レコードレイアウト、コンパイラのフィードバックをエディタに持ち込み、書いているそばから桁定規・構造・エラーが見えます。",
+        "plugin_features_title": "できること",
+        "plugin_features": [
+            ("固定形式の桁定規と Winbar", "7・8・12・73 列に定規を描き、識別領域へのはみ出しを警告します"),
+            ("構造アウトライン", "Division / Section / Paragraph とデータ階層を Aerial サイドバーに表示し、双方向にジャンプできます"),
+            ("定義ジャンプと Copybook プレビュー", "`gd` で段落や項目定義へ、`gf` で `COPY` の Copybook を開き、`K` でその場にプレビューします"),
+            ("PIC とレコード長の計算", "`PIC X(20)` や `PIC S9(7) COMP-3` をバイト数に換算し、`01` レコードを再帰的に合計します"),
+            ("保存時の構文チェック", "`cobc -fsyntax-only` を非同期に実行し、コンパイラ診断を該当行に表示します"),
+            ("折りたたみと整形", "Division / Section / Paragraph 単位で折りたたみ、予約語を大文字に揃えます"),
+        ],
+        "plugin_install": "lazy.nvim でインストール",
+        "plugin_repo": "GitHub リポジトリ",
+        "plugin_tutorials": "チュートリアル",
+        "plugin_requirements": "Neovim と GnuCOBOL が必要です。リアルタイム診断には `cobc`、アウトライン表示には任意の `aerial.nvim` を使います。",
+        "plugin_license": "MIT ライセンスで公開しています。",
+        "plugin_open": "cobol.nvim を導入する",
     },
 }
 
@@ -379,6 +433,7 @@ def shell(locale: str, title: str, body: str, page: Path, home: bool = False) ->
     home_href = site_href(Path(locale) / "index.html", locale, page)
     directory = site_href(Path(locale) / "lessons/DIRECTORY.html", locale, page)
     extensions = site_href(Path(locale) / "extensions/README.html", locale, page)
+    plugins = site_href(Path(locale) / "plugins.html", locale, page)
     languages = "".join(
         f'<a lang="{LOCALES[key]["html"]}" hreflang="{LOCALES[key]["html"]}"'
         f' class="{"current" if key == locale else ""}" href="{site_href(Path(key) / page, locale, page)}">{LOCALES[key]["name"]}</a>'
@@ -415,12 +470,59 @@ def shell(locale: str, title: str, body: str, page: Path, home: bool = False) ->
 <div class="notice">GnuCOBOL {html.escape(labels["brand_sub"])} <span>·</span> {html.escape(title)}</div>
 <header class="masthead">
 <a class="brand" href="{home_href}"><img src="{site_href(Path(locale) / "assets/shire_200.png", locale, page)}" alt="GnuCOBOL Shire horse mascot"><span><strong>GnuCOBOL</strong><small>{html.escape(labels["brand_sub"])}</small></span></a>
-<nav><a href="{home_href}">{labels["nav_home"]}</a><a href="{directory}">{labels["nav_directory"]}</a><a href="{extensions}">{labels["nav_extensions"]}</a><a href="https://github.com/iamcheyan/cobol">{labels["nav_source"]}</a><div class="language-menu" aria-label="{labels["nav_lang"]}">{languages}</div></nav>
+<nav><a href="{home_href}">{labels["nav_home"]}</a><a href="{directory}">{labels["nav_directory"]}</a><a href="{extensions}">{labels["nav_extensions"]}</a><a href="{plugins}">{labels["nav_plugins"]}</a><a href="https://github.com/iamcheyan/cobol">{labels["nav_source"]}</a><div class="language-menu" aria-label="{labels["nav_lang"]}">{languages}</div></nav>
 </header>
 {main}
 <footer><span>GnuCOBOL {html.escape(labels["brand_sub"])}</span><span>{html.escape(labels["footer"])} · <a href="https://github.com/iamcheyan/cobol">iamcheyan/cobol</a></span></footer>
 <script src="{site_href(Path(locale) / "assets/site.js", locale, page)}" defer></script>
 </body></html>'''
+
+
+PLUGIN_REPO = "https://github.com/iamcheyan/cobol.nvim"
+PLUGIN_SNIPPET = '{\n  "iamcheyan/cobol.nvim",\n  ft = { "cobol", "cbl", "cob" },\n  opts = {},\n}'
+
+
+def inline_code(text: str) -> str:
+    """Escape text but render `backticked` fragments as inline code."""
+    parts = re.split(r"`([^`]+)`", text)
+    out = []
+    for index, part in enumerate(parts):
+        out.append(f"<code>{html.escape(part)}</code>" if index % 2 else html.escape(part))
+    return "".join(out)
+
+
+def plugin_section(locale: str) -> str:
+    labels = LOCALES[locale]
+    return (
+        f'<section class="plugin-band"><div class="plugin-copy">'
+        f'<p class="eyebrow">{labels["plugin_eyebrow"]}</p><h2>cobol.nvim</h2>'
+        f'<p>{inline_code(labels["plugin_lead"])}</p>'
+        f'<div class="plugin-actions"><a class="primary" href="plugins.html">{labels["plugin_open"]} <span>→</span></a>'
+        f'<a class="text-link" href="{PLUGIN_REPO}">{labels["plugin_repo"]} ↗</a></div></div>'
+        f'<div class="plugin-snippet"><span>{labels["plugin_install"]}</span>'
+        f'<pre><code>{html.escape(PLUGIN_SNIPPET)}</code></pre></div></section>'
+    )
+
+
+def plugins_page(locale: str) -> str:
+    labels = LOCALES[locale]
+    features = "".join(
+        f'<li><strong>{name}</strong><span>{inline_code(desc)}</span></li>'
+        for name, desc in labels["plugin_features"]
+    )
+    return (
+        f'<p class="eyebrow">{labels["plugin_eyebrow"]}</p>'
+        f'<h1>cobol.nvim</h1>'
+        f'<p class="plugin-lead">{inline_code(labels["plugin_lead"])}</p>'
+        f'<h2>{labels["plugin_install"]}</h2>'
+        f'<pre><code>{html.escape(PLUGIN_SNIPPET)}</code></pre>'
+        f'<h2>{labels["plugin_features_title"]}</h2>'
+        f'<ul class="plugin-features">{features}</ul>'
+        f'<p class="plugin-note">{inline_code(labels["plugin_requirements"])}</p>'
+        f'<div class="plugin-actions"><a class="primary" href="{PLUGIN_REPO}">{labels["plugin_repo"]} ↗</a>'
+        f'<a class="text-link" href="extensions/neovim-tooling/README.html">{labels["plugin_tutorials"]} →</a></div>'
+        f'<p class="plugin-license">{labels["plugin_license"]}</p>'
+    )
 
 
 def homepage(locale: str) -> str:
@@ -433,6 +535,7 @@ def homepage(locale: str) -> str:
     body = f'''<section class="hero"><div class="hero-copy"><p class="eyebrow">{labels["hero_eyebrow"]}</p><h1>{labels["hero_h1"]}<br><em>{labels["hero_h1_em"]}</em></h1><p class="intro">{labels["hero_intro"]}</p><div class="hero-actions"><a class="primary" href="lessons/01_hello-cobol/README.html">{labels["hero_cta"]} <span>→</span></a><a class="text-link" href="lessons/DIRECTORY.html">{labels["hero_cta2"]}</a></div></div><div class="horse"><img src="assets/shire_200.png" alt="GnuCOBOL Shire horse mascot"><span>GNU COBOL</span></div></section>
 <section class="course-overview"><div class="section-title"><div><p class="eyebrow">{labels["path_eyebrow"]}</p><h2>{labels["path_title"]}</h2></div><a href="lessons/DIRECTORY.html">{labels["path_link"]}</a></div><div class="stages">{stages}</div></section>
 <section class="start-row"><div><p class="eyebrow">{labels["start_eyebrow"]}</p><h2>{labels["start_title"]}</h2><p>{labels["start_text"]}</p></div><div class="start-command"><span>{labels["start_term"]}</span><code>sudo apt install gnucobol make</code><a href="lessons/01_hello-cobol/README.html">{labels["start_open"]} <b>↗</b></a></div></section>
+{plugin_section(locale)}
 <section class="more-reading"><div><p class="eyebrow">{labels["more_eyebrow"]}</p><h2>{labels["more_title"]}</h2></div><a href="extensions/README.html"><span>{labels["more_ext"]}</span><strong>{labels["more_ext_desc"]}</strong><b>→</b></a><a href="https://github.com/iamcheyan/cobol"><span>{labels["more_src"]}</span><strong>{labels["more_src_desc"]}</strong><b>→</b></a></section>'''
     return shell(locale, labels["nav_home"], body, Path("index.html"), home=True)
 
@@ -462,6 +565,8 @@ def build_locale(locale: str) -> int:
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(chosen or source, target)
     (root / "index.html").write_text(homepage(locale), encoding="utf-8")
+    (root / "plugins.html").write_text(
+        shell(locale, "cobol.nvim", plugins_page(locale), Path("plugins.html")), encoding="utf-8")
     return pages
 
 

@@ -7,10 +7,11 @@ if (themeToggle) {
   };
   const syncTheme = () => {
     const dark = root.dataset.theme === 'dark';
+    const label = dark ? themeToggle.dataset.lightLabel : themeToggle.dataset.darkLabel;
     themeToggle.setAttribute('aria-pressed', String(dark));
-    themeToggle.setAttribute('aria-label', dark ? themeToggle.dataset.lightLabel : themeToggle.dataset.darkLabel);
-    themeToggle.querySelector('.theme-label').textContent = dark ? themeToggle.dataset.lightShort : themeToggle.dataset.darkShort;
-    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#151c22' : '#f5f5ed');
+    themeToggle.setAttribute('aria-label', label);
+    themeToggle.setAttribute('title', label);
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#161c22' : '#f5f5ed');
   };
   syncTheme();
   themeToggle.addEventListener('click', () => {

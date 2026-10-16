@@ -1,57 +1,107 @@
-/* Theme controls are shared by the home page, course pages and plugin guides. */
-.masthead nav{margin-left:auto}
-.theme-toggle{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:38px;min-width:78px;margin-left:20px;padding:7px 10px;border:1px solid var(--line);border-radius:4px;background:#faf9f4;color:var(--ink);font:500 12px var(--sans);cursor:pointer;white-space:nowrap}
-.theme-toggle:hover{border-color:var(--purple);color:var(--purple)}
-.theme-toggle:focus-visible,.nav-toggle:focus-visible,.course-toggle:focus-visible{outline:2px solid var(--purple);outline-offset:3px}
-.theme-icon{font-size:18px;line-height:1}
-@media(max-width:980px){.masthead nav{margin-left:0}}
-@media(max-width:760px){.theme-toggle{margin-left:auto;min-width:70px;padding:7px 9px}.nav-toggle{margin-left:0}.masthead nav{margin-left:0}}
-@media(max-width:360px){.theme-toggle{min-width:38px}.theme-toggle .theme-label{display:none}}
+/* ---------------------------------------------------------------------------
+   Theme layer.
 
+   site.css defines the light palette as semantic tokens (--surface, --ink,
+   --code-bg, ...). This file only redefines those tokens for dark mode, so a
+   component that reads a token is themed automatically. Never patch individual
+   selectors here to "fix" one element — add or reuse a token instead.
+   --------------------------------------------------------------------------- */
+
+/* Theme toggle: icon-only control at the right edge of the masthead. */
+.theme-toggle{
+  flex:0 0 auto;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:36px;
+  height:36px;
+  margin-left:14px;
+  align-self:center;
+  padding:0;
+  border:1px solid var(--line);
+  border-radius:50%;
+  background:transparent;
+  color:var(--muted-2);
+  cursor:pointer;
+  transition:color .16s ease,border-color .16s ease,background-color .16s ease;
+}
+.theme-toggle:hover{color:var(--purple);border-color:var(--purple);background:var(--hover)}
+.theme-toggle:focus-visible,.nav-toggle:focus-visible,.course-toggle:focus-visible{outline:2px solid var(--purple);outline-offset:3px}
+.theme-toggle svg{width:17px;height:17px;display:block}
+/* Show the icon of the mode a click switches to. */
+.theme-toggle .icon-sun{display:none}
+:root[data-theme="dark"] .theme-toggle .icon-sun{display:block}
+:root[data-theme="dark"] .theme-toggle .icon-moon{display:none}
+
+@media(max-width:980px){.masthead nav{margin-left:auto;order:3;flex-basis:100%}.theme-toggle{margin-left:auto;order:2}}
+@media(max-width:760px){
+  .theme-toggle{margin-left:auto;order:2}
+  .nav-toggle{margin-left:10px;order:3}
+}
+@media(prefers-reduced-motion:reduce){.theme-toggle{transition:none}}
+
+/* ---------------------------------------------------------------------------
+   Dark palette. Every token used by site.css is redefined here.
+   --------------------------------------------------------------------------- */
 :root[data-theme="dark"]{
   color-scheme:dark;
-  --paper:#151c22;--cream:#273039;--ink:#e5e9e6;--muted:#adb8b8;
-  --line:#384650;--purple:#c99ff2;--blue:#87bce0;--white:#1c252d
+
+  /* base surfaces */
+  --paper:#161c22;
+  --cream:#222b33;
+  --surface:#1b232a;
+  --surface-2:#212a32;
+  --surface-3:#25303a;
+  --field:#1d262e;
+  --hover:#2a353f;
+  --line:#36434e;
+  --line-soft:#2c3742;
+
+  /* text */
+  --ink:#e6ebef;
+  --muted:#a8b4bd;
+  --muted-2:#94a1ab;
+  --nav-ink:#c2ccd4;
+  --body-ink:#d3dbe1;
+
+  /* accents */
+  --purple:#c79bf0;
+  --blue:#8dc0e8;
+  --accent-strong:#a874d6;
+  --accent-hover:#2a353f;
+  --on-accent:#1a121f;
+
+  /* code blocks stay dark in both themes */
+  --code-bg:#0f151b;
+  --code-ink:#e7ecf0;
+  --code-line:#2a3641;
+
+  /* notice + footer bars */
+  --notice-bg:#10161b;
+  --notice-ink:#dde4e9;
+  --notice-dim:#93a1ab;
+  --footer-bg:#121920;
+  --footer-ink:#aab6bf;
+  --footer-line:#2a343d;
+  --footer-strong:#e6ebef;
+
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px rgba(0,0,0,.35);
 }
-:root[data-theme="dark"] body{background:var(--paper);color:var(--ink)}
-:root[data-theme="dark"] .notice{background:#10161b;color:#dee5e2}
-:root[data-theme="dark"] .notice span{color:#b3bfbd}
-:root[data-theme="dark"] .masthead{background:#1b242b}
-:root[data-theme="dark"] .masthead nav a{color:#d5dddc}
-:root[data-theme="dark"] .masthead nav a:hover,:root[data-theme="dark"] .article a:hover{color:var(--purple)}
-:root[data-theme="dark"] .language-menu a.current{background:#303840;color:var(--purple)}
-:root[data-theme="dark"] .nav-toggle,:root[data-theme="dark"] .theme-toggle{background:#263139;color:var(--ink)}
-:root[data-theme="dark"] .theme-toggle:hover{color:var(--purple)}
-:root[data-theme="dark"] .intro,:root[data-theme="dark"] .start-row p:not(.eyebrow),:root[data-theme="dark"] .plugin-copy>p:not(.eyebrow){color:var(--muted)}
-:root[data-theme="dark"] .primary{background:#8955ab;color:#fff!important}
-:root[data-theme="dark"] .primary:hover{background:#9d6abb;color:#fff!important}
-:root[data-theme="dark"] .article article a.primary,:root[data-theme="dark"] .plugin-actions a.primary{color:#fff}
-:root[data-theme="dark"] .horse img{mix-blend-mode:normal}
-:root[data-theme="dark"] .horse span,:root[data-theme="dark"] .stages small,:root[data-theme="dark"] .start-command>span{color:var(--muted)}
-:root[data-theme="dark"] .stages>a{color:var(--ink)}
-:root[data-theme="dark"] .stages>a:hover,:root[data-theme="dark"] .more-reading>a:hover{background:#28333b}
-:root[data-theme="dark"] .stages .capstone,:root[data-theme="dark"] .course-nav,:root[data-theme="dark"] .plugin-band{background:#212b32}
-:root[data-theme="dark"] .start-command,:root[data-theme="dark"] .plugin-snippet{background:#1c252d}
-:root[data-theme="dark"] .start-command pre,:root[data-theme="dark"] .plugin-snippet pre{background:#101820;color:#eef0ed}
-:root[data-theme="dark"] .more-reading>a,:root[data-theme="dark"] .text-link{color:var(--ink)}
-:root[data-theme="dark"] .lesson-list a{color:#c6d0cf}
-:root[data-theme="dark"] .lesson-list a span,:root[data-theme="dark"] .article-top,:root[data-theme="dark"] .plugin-license{color:#aab5b5}
-:root[data-theme="dark"] .lesson-list a:hover,:root[data-theme="dark"] .resource-choice:hover,:root[data-theme="dark"] .resource-choice.selected{background:#35414a;color:var(--purple)}
-:root[data-theme="dark"] .search,:root[data-theme="dark"] .lesson-list,:root[data-theme="dark"] .resource-browser{background:#1b252c;color:var(--ink)}
-:root[data-theme="dark"] .search input{color:var(--ink)}
-:root[data-theme="dark"] .search input::placeholder{color:#aab6b7}
-:root[data-theme="dark"] .article article blockquote,:root[data-theme="dark"] .translation-pending{background:#263642;color:#e0e7e7}
-:root[data-theme="dark"] .article article code,:root[data-theme="dark"] .article article kbd{background:#293540;border-color:#43515b}
-:root[data-theme="dark"] .article article pre,:root[data-theme="dark"] .resource-content pre{background:#101820;color:#ebeff0;border-color:#35444e}
-:root[data-theme="dark"] .article article th{background:#27323b}
-:root[data-theme="dark"] .resource-choices{background:#222d36}
-:root[data-theme="dark"] .resource-choice{color:#cbd6d7}
-:root[data-theme="dark"] .plugin-feature span{color:#d4dedf}
-:root[data-theme="dark"] .plugin-feature small,:root[data-theme="dark"] .plugin-figure figcaption{color:var(--muted)}
-:root[data-theme="dark"] .plugin-figure img,:root[data-theme="dark"] .plugin-feature img{border-color:#43515b}
-:root[data-theme="dark"] footer{background:#10171c;border-color:#35424a;color:#c6d1d0}
-@media(max-width:760px){
-  :root[data-theme="dark"] .masthead nav>a,:root[data-theme="dark"] .language-menu{border-color:var(--line)}
-  :root[data-theme="dark"] .lesson-list a{background:transparent;border-color:var(--line)}
-  :root[data-theme="dark"] .lesson-list a:hover{background:#35414a}
+
+/* The mascot is a black PNG. multiply-blending is correct on light paper; in
+   dark mode it would vanish, so invert it to a light line-art rendition. */
+:root[data-theme="dark"] .horse img,
+:root[data-theme="dark"] .brand img{
+  mix-blend-mode:normal;
+  filter:invert(1) contrast(.92) brightness(1.08);
+  opacity:.9;
 }
+
+/* Subtle depth for the few surfaces that sit on top of the page. */
+:root[data-theme="dark"] .start-command,
+:root[data-theme="dark"] .plugin-snippet,
+:root[data-theme="dark"] .resource-browser{box-shadow:var(--shadow)}
+
+/* Images are light screenshots; give them a hairline so they do not bleed. */
+:root[data-theme="dark"] .plugin-figure img,
+:root[data-theme="dark"] .plugin-feature img{border-color:var(--line)}

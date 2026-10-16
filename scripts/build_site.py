@@ -74,7 +74,6 @@ LOCALES = {
         "nav_menu": "菜单",
         "nav_close": "关闭",
         "theme_dark": "切换到深色主题", "theme_light": "切换到浅色主题",
-        "theme_dark_short": "深色", "theme_light_short": "浅色",
         "course_toggle": "课程目录",
         "lessons_label": "课",
         "plugin_eyebrow": "EDITOR PLUGIN",
@@ -129,7 +128,6 @@ LOCALES = {
         "nav_menu": "Menu",
         "nav_close": "Close",
         "theme_dark": "Switch to dark theme", "theme_light": "Switch to light theme",
-        "theme_dark_short": "Dark", "theme_light_short": "Light",
         "course_toggle": "Lessons",
         "lessons_label": "lessons",
         "plugin_eyebrow": "EDITOR PLUGIN",
@@ -184,7 +182,6 @@ LOCALES = {
         "nav_menu": "メニュー",
         "nav_close": "閉じる",
         "theme_dark": "ダークテーマに切り替える", "theme_light": "ライトテーマに切り替える",
-        "theme_dark_short": "ダーク", "theme_light_short": "ライト",
         "course_toggle": "レッスン一覧",
         "lessons_label": "レッスン",
         "plugin_eyebrow": "EDITOR PLUGIN",
@@ -565,9 +562,9 @@ def shell(locale: str, title: str, body: str, page: Path, home: bool = False) ->
 <div class="notice"><span class="notice-text">GnuCOBOL {html.escape(labels["brand_sub"])} <span>·</span> {html.escape(title)}</span></div>
 <header class="masthead">
 <a class="brand" href="{home_href}"><img src="{site_href(Path(locale) / "assets/shire_200.png", locale, page)}" alt="GnuCOBOL Shire horse mascot"><span><strong>GnuCOBOL</strong><small>{html.escape(labels["brand_sub"])}</small></span></a>
-<button class="theme-toggle" type="button" aria-label="{html.escape(labels["theme_dark"])}" aria-pressed="false" data-dark-label="{html.escape(labels["theme_dark"])}" data-light-label="{html.escape(labels["theme_light"])}" data-dark-short="{html.escape(labels["theme_dark_short"])}" data-light-short="{html.escape(labels["theme_light_short"])}"><span class="theme-icon" aria-hidden="true">◐</span><span class="theme-label">{html.escape(labels["theme_dark_short"])}</span></button>
 <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="{labels["nav_menu"]}"><span class="nav-bars" aria-hidden="true"></span><span class="nav-toggle-label">{labels["nav_menu"]}</span></button>
 <nav id="site-nav"><a href="{home_href}">{labels["nav_home"]}</a><a href="{directory}">{labels["nav_directory"]}</a><a href="{extensions}">{labels["nav_extensions"]}</a><a href="{plugins}">{labels["nav_plugins"]}</a><a href="https://github.com/iamcheyan/cobol">{labels["nav_source"]}</a><div class="language-menu" aria-label="{labels["nav_lang"]}">{languages}</div></nav>
+<button class="theme-toggle" type="button" aria-label="{html.escape(labels["theme_dark"])}" aria-pressed="false" data-dark-label="{html.escape(labels["theme_dark"])}" data-light-label="{html.escape(labels["theme_light"])}" title="{html.escape(labels["theme_dark"])}"><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.6A8.6 8.6 0 1 1 9.4 3.5a6.9 6.9 0 0 0 11.1 11.1Z"/></svg><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M4.2 12H2M22 12h-2.2M6.5 6.5 5 5M19 19l-1.5-1.5M17.5 6.5 19 5M5 19l1.5-1.5"/></svg></button>
 </header>
 {main}
 <footer><span>GnuCOBOL {html.escape(labels["brand_sub"])}</span><span>{html.escape(labels["footer"])} · <a href="https://github.com/iamcheyan/cobol">iamcheyan/cobol</a></span></footer>

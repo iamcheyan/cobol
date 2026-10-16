@@ -1,109 +1,64 @@
-# 第 7 课：cobol.nvim 综合练习与回归清单
+# cobol.nvim 插件功能演练
 
-本课把前 6 课的 COBOL 示例和 `cobol.nvim` 的编辑器功能串起来。目标不是只
-“看见插件有效”，而是每完成一个 COBOL 练习，就用插件检查结构、数据布局、
-Copybook 和编译器反馈。
+本篇使用 `extensions/standalone-examples/` 中的 COBOL 示例，演示插件功能如何配合日常源码阅读。插件不是 GnuCOBOL 的替代品；语法检查和项目构建仍由 `cobc` 或项目命令完成。
 
-## 1. 环境准备
+## 准备
 
-在本仓库根目录执行：
+在 Neovim 中打开示例：
 
-```bash
-make check
-nvim ../../standalone-examples/INPUTCSV.COB
+```sh
+nvim extensions/standalone-examples/INPUTCSV.COB
 ```
 
-插件通过 lazy.nvim 安装：
+插件支持 `cobol`、`cbl`、`cob` filetype。固定格式案例可先看列标尺；如果解析器不可用，Tree-sitter 的配对标记、面包屑和文本对象不会显示。Aerial 与 blink.cmp 是可选依赖。
 
-```lua
-{
-  "iamcheyan/cobol.nvim",
-  ft = { "cobol", "cbl", "cob" },
-  opts = {},
-}
-```
+## 列标尺与编辑
 
-Aerial 是一个为 Neovim 提供代码结构 Outline 侧边栏的插件；在这里它负责显示
-`cobol.nvim` 识别出的 Division、Section、Paragraph 和数据记录。它只是可选依赖，
-插件核心功能不依赖 Aerial。
+1. `g7`、`g8`、`g12`、`g73` 跳到固定格式的重要列。
+2. 在行首空白处进入 Insert，试按 `<Tab>` / `<S-Tab>`，观察 7、8、12 列停靠。
+3. `:CobolGuideToggle` 切换列标尺及 Winbar；`:CobolGuideEnable` / `:CobolGuideDisable` 可显式启用或停用提示与诊断附着。
+4. 用 `gcc`、Visual `gc` 或 `<leader>c*` 切换注释；用 `:CobolFormatCase` 格式化保留字。命令无范围时处理整个缓冲区，有范围时只处理该范围。
 
-如果 Neovim 不是从本仓库目录启动，建议设置项目根目录：
+![固定格式列标尺与 Winbar](images/fixed-format-ruler.png)
 
-```lua
-opts = {
-  project_root = vim.fn.expand("~/cobol-practice"),
-  copybook_paths = { ".", "./cpy", "./copybooks", "./include" },
-}
-```
+截图展示第 7、8、12、73 列标尺和当前位置面包屑。用 `:CobolGuideToggle` 切换；`:CobolGuideDisable` 还会清理当前诊断，但会保留已装入的映射和折叠设置。
 
-## 2. 按示例练习
+## 结构导航、大纲与 Copybook
 
-| 文件 | 学习重点 | 建议操作 |
-|---|---|---|
-| `INPUTCSV.COB` + `EMP-REC.CPY` | Division、层级数据、Copybook、PIC | `g8`/`g12`、`gd`、`gf`、`K`、`<leader>cr` |
-| `FIXEDREC.COB` + `TX-REC.CPY` | 固定格式、`REDEFINES`、`88` 条件名 | 标尺、Aerial、`gd`、记录布局计算 |
-| `TBLSRCH.COB` | `OCCURS`、数组和 `SEARCH ALL` | Aerial、`<leader>cr`、诊断 |
-| `BATCHRPT.COB` | Section、Paragraph、Control Break | 大纲、折叠、格式化、编译运行 |
+1. 在 `PERFORM 1000-INITIALIZE` 的段落名上按 `gd`，再按 `<C-o>` 返回；`<C-i>` 沿 jumplist 前进。
+2. 在 `COPY "EMP-REC.CPY".` 上按 `gf` 打开 Copybook，按 `K` 预览。
+3. 解析器可用时，将光标放在 IF 块内观察最内层结构的彩色起止标记、连接线与 ELSE/WHEN 标记；按 `%` 在结构起止词间移动，`vaf` / `vif` 选择 IF 外部/内部。
+4. Aerial 需要单独安装并启用本插件提供的 COBOL backend。用 `:AerialToggle` 打开；插件本身不默认绑定 `<leader>cs`。
 
-每个文件都建议先执行 `make check`，再从编辑器内按 `<leader>cl` 检查同一份代码。
+![IF/ELSE/END-IF 结构范围与 Syms 大纲](images/structure-scope.png)
 
-## 3. 插件功能练习
+此真实画面显示 Syms 大纲和已配对 IF 范围标记。Syms 是用户配置的外部 UI；本插件提供的是 Aerial 后端。
 
-### 3.1 固定格式与结构
+![Aerial COBOL 大纲](images/aerial-outline.png)
 
-在 `INPUTCSV.COB` 中依次练习：
+![Copybook 浮窗预览](images/copybook-preview.png)
 
-1. 用 `g7`、`g8`、`g12`、`g73` 在穿孔卡列之间移动。
-2. 在空行使用 `<Tab>`，观察 Area A（第 8 列）和 Area B（第 12 列）的吸附。
-3. 使用 `<leader>uc` 开关标尺和 Winbar。
-4. 在 `DATA DIVISION`、Section 和 Paragraph 上按 `za`，验证结构折叠；用 `zc`/`zo`
-   分别关闭/打开折叠。
-5. 在第 7 列使用 `<leader>c*`，验证单行和 Visual 多行注释切换。
+## PIC 估算、诊断与折叠
 
-### 3.2 大纲、跳转和 Copybook
+1. 在 01 记录上运行 `<leader>cr` / `:CobolCalcRecord` 查看字段偏移和大小估算。组级 `OCCURS` 不会乘算子字段合计，较大的 `REDEFINES` 覆盖也不会扩大合计，因此不要将结果当作 ABI 保证。
+2. 用 `<leader>cl` / `:CobolLint` 立即运行 GnuCOBOL 检查；`<leader>cq` / `:CobolQuickfix` 打开 Quickfix。诊断也可在保存、编辑防抖和离开 Insert 时自动触发。
+3. `za`、`zc`、`zo` 操作 Division、Section、Paragraph 和数据项折叠。原生折叠不自行创建 IF/EVALUATE 折叠；若其它 fold provider 建立控制块折叠，插件可提供结构摘要。
 
-1. 安装 Aerial 后按 `<leader>cs`，从 Division 找到 `2000-PROCESS-FILE`。
-2. 在 `PERFORM 2000-PROCESS-FILE` 上按 `gd`，再按 `<C-o>` 返回调用点。
-3. 在 `COPY "EMP-REC.CPY".` 上按 `gf` 打开 Copybook，按 `K` 只预览内容。
-4. 在 `FIXEDREC.COB` 中重复上述操作，确认 `TX-REC.CPY` 可被找到。
+![PIC 和记录布局估算](images/record-layout.png)
 
-### 3.3 PIC、数组和重定义
+![GnuCOBOL 编译器诊断](images/compiler-diagnostics.png)
 
-1. 在 `INPUTCSV.COB` 的 `01 WS-INPUT-FIELDS` 上观察行尾总字节提示。
-2. 按 `<leader>cr` 或运行 `:CobolCalcRecord`，检查字段偏移量。
-3. 在 `FIXEDREC.COB` 中观察 `REDEFINES` 字段共享偏移量。
-4. 在 `TBLSRCH.COB` 中观察 `OCCURS` 的重复大小。
-5. 额外练习 `COMP-1`、`COMP-2`、`COMP-3`、`BINARY` 和 `SIGN IS SEPARATE`，注意计算器
-   是常见 ABI 下的估算值，不替代目标平台编译器的最终布局。
+![COBOL 结构折叠](images/folding.png)
 
-### 3.4 格式化与诊断
+## 快捷键与命令
 
-在临时副本或可恢复的 Git 分支中进行：
+| 操作 | 功能 |
+| --- | --- |
+| `g7` / `g8` / `g12` / `g73` | 跳到固定格式列 |
+| `gd` / `gf` / `K` | 定义跳转 / 打开 Copybook / 预览 |
+| `%`、`af`/`if`、`ae`/`ie`、`ap`/`ip` | Tree-sitter 配对移动与结构文本对象 |
+| `<leader>cr` / `<leader>cl` / `<leader>cq` | 记录估算 / 立即诊断 / Quickfix |
+| `:CobolGuideToggle` | 切换列标尺和 Winbar |
+| `:CobolLint` / `:CobolBuild` / `:CobolRun` / `:CobolTest` | 检查、构建、运行与项目测试 |
 
-1. 把一行中的 `move`、`if`、`end-if` 改成小写，运行 `:CobolFormatCase`。
-2. 用 Visual 选中多行再次运行命令；不应修改变量名、字符串或注释。
-3. 故意把 `PERFORM` 改成不存在的段落，运行 `<leader>cl` 或 `:CobolLint`。
-4. 使用 `<leader>cq` / `:CobolQuickfix` 查看错误并回到代码。
-5. 不保存时修改代码，等待约 600ms 或离开插入模式，确认 `TextChanged`/`InsertLeave`
-   诊断仍然能工作。
-6. 修复错误并保存，确认旧诊断消失。如果全局关闭了 Neovim diagnostics，插件会提示
-   编译结果不可见；重新启用后再检查。
-
-## 4. 完成标准
-
-完成本课后，应能回答：
-
-- 为什么 Division、Section、Paragraph 可以折叠？
-- 为什么 `PIC S9(7)V99 COMP-3` 是 5 字节？
-- `REDEFINES` 为什么不一定增加总长度？
-- `COPY` 文件如何被 `gf` 找到？
-- 为什么没有 LSP 也能获得 `cobc` 的实时诊断？
-- `:CobolFormatCase` 为什么不会改字符串和变量名？
-
-插件源码仓库中的 `docs/TASKS.md` 和本仓库的 `Makefile` 分别负责插件回归测试和
-COBOL 示例编译检查。完成练习后建议运行：
-
-```bash
-make check
-make run
-```
+完整配置和命令见插件仓库 README 与 Neovim 帮助 `:help cobol.nvim`。

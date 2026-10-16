@@ -27,12 +27,22 @@ PROCEDURE DIVISION.            <-- 执行逻辑区：各种节（SECTION）与�
 ## 2. 插件配备的导航利器
 
 1. **Winbar 动态面包屑**：标尺右侧常驻更新当前光标所在的 Division > Section > Paragraph 路径。
-2. **Aerial 3 层符号侧边栏（`<leader>cs`）**：Aerial 是 Neovim 的代码结构 Outline 插件；本插件的 COBOL backend 会自动提取 Divisions -> Sections -> Paragraphs/Records，支持搜索与回车跳转。
+2. **Aerial 结构大纲**：Aerial 是可选的 Neovim Outline 插件；本插件的 Aerial backend 提供 Division、Section、Paragraph、FD/SD 与 01 记录符号。使用 `:AerialToggle` 打开；本插件不默认绑定 `<leader>cs`。
 3. **段落与数据定义一键直达（`gd`）**：光标停在 `PERFORM 1000-INITIALIZE` 或变量名上按 `gd` 瞬间跳至定义行。
-4. **原生标签栈回跳（`<C-o>` / `<C-t>`）**：利用 Neovim 原生 Jumplist/Tagstack，看完定义后一键原路返回，绝不迷路。
-5. **Copybook 悬停浮窗预览（`K`）**：光标在 `COPY "EMP-REC.CPY".` 上按 `K`，居中弹出语法高亮浮窗就地查阅，按 `q` 随手关闭。
-6. **Copybook 实体文件直接打开（`gf`）**：按 `gf` 在当前窗口直接打开引用的 `.CPY` 实体文件。
-7. **数据宿主行尾回溯**：深层嵌套字段行尾自动显示 `← 05 PARENT (01 ROOT)`。
+4. **跳转返回（`<C-o>` / `<C-i>`）**：使用 Neovim 原生 jumplist 返回上一个位置或前进。
+5. **Copybook 预览（`K`）**：光标在 `COPY "EMP-REC.CPY".` 上按 `K`，在浮窗中查看内容；按 `q` 或 `<Esc>` 关闭。
+6. **Copybook 文件跳转（`gf`）**：按 `gf` 打开当前 `COPY` 引用的 `.CPY` 文件。
+7. **数据宿主提示**：深层字段旁显示父级名称，便于追踪数据层级。
+8. **Tree-sitter 结构范围**：解析器可用时，高亮光标所在最内层已配对结构的起止关键字，并绘制连接线；`ELSE` / `WHEN` 分支也可显示标记。
+9. **结构配对移动与文本对象**：`%` 在开始/结束关键字间移动；`af`/`if`、`ae`/`ie`、`ap`/`ip` 分别选中 IF、EVALUATE、PERFORM 内外范围。
+
+![IF、ELSE、END-IF 结构范围标记与结构大纲](images/structure-scope.png)
+
+此真实 Neovim 截图显示 Syms 大纲、Winbar 面包屑，以及当前 IF 块的开始、分支、结束标记和连接虚线。Syms 是截图中的外部大纲界面；插件自带的 Aerial 后端另见下图。
+
+![Aerial COBOL 结构大纲](images/aerial-outline.png)
+
+Aerial 是可选依赖。图中展示大纲与 COBOL 源码的联动；本插件不默认绑定 `<leader>cs`，打开大纲可用 `:AerialToggle`，快捷键须由用户配置。
 
 ---
 
@@ -41,8 +51,8 @@ PROCEDURE DIVISION.            <-- 执行逻辑区：各种节（SECTION）与�
 打开测试源码继续演练：
 
 ```bash
-cd /home/tetsuya/development/cobol
-nvim ../../standalone-examples/INPUTCSV.COB
+cd <仓库根目录>
+nvim extensions/standalone-examples/INPUTCSV.COB
 ```
 
 ### 任务 2.1：体验 Winbar 实时动态面包屑
@@ -54,10 +64,8 @@ nvim ../../standalone-examples/INPUTCSV.COB
 
 ### 任务 2.2：使用 Aerial 3 层大纲侧边栏
 
-Aerial 是 Neovim 的代码结构大纲（Outline）侧边栏插件。它不是 COBOL 编译器，
-也不是语言服务器；在本练习中，它只负责把 `cobol.nvim` 识别出的程序结构显示
-在侧边栏中。
-1. 在 Normal 模式下按下 **`<leader>cs`**（或执行 `:AerialToggle!`）；
+Aerial 是可选的 Neovim 代码结构大纲插件。安装并配置后，`:AerialToggle` 打开大纲；本插件提供 COBOL 符号后端，但不默认绑定 `<leader>cs`。
+1. 执行 `:AerialToggle` 打开可选 Aerial 大纲；
 2. **观察左侧侧边栏**：
    - 顶层根节点：4 大 Division（带模块图标）；
    - 次层节点：`WORKING-STORAGE SECTION`、`1000-INIT-SECTION` 等；
@@ -65,18 +73,18 @@ Aerial 是 Neovim 的代码结构大纲（Outline）侧边栏插件。它不是 
 3. 在左侧侧边栏中用 `j`/`k` 光标移动到 `3000-PARSE-RECORD`，按下 **`<CR>`（回车）**；
 4. **观察**：主编辑窗口瞬间精准平滑地跳转到 `3000-PARSE-RECORD.` 段落；
 5. 在主窗口中按 `j`/`k` 移动代码光标，观察左侧侧边栏对应节点会双向联动高亮；
-6. 再次按下 **`<leader>cs`** 随手收起大纲。
+6. 再次执行 `:AerialToggle` 收起大纲。
 
 ### 任务 2.3：段落与变量直达跳转（`gd` / `<C-o>`）
 这是日常开发中最常用的高频组合技：
 1. 移动光标到 `PERFORM 1000-INITIALIZE`；
 2. 将光标放在单词 `1000-INITIALIZE` 上，按下 **`gd`**（Go to Definition）；
-3. **观察**：光标瞬间跨越数十行，直达 `1000-INITIALIZE.` 段落定义顶格处；
+3. **观察**：光标跳到 `1000-INITIALIZE.` 段落定义；
 4. 确认完逻辑后，按下 **`<C-o>`**；
 5. **观察**：光标原路飞回 `PERFORM` 调用处！
 6. 移动光标到 `INITIALIZE WS-FLAGS WS-COUNTERS.`；
 7. 将光标停在变量名 `WS-FLAGS` 上，按下 **`gd`**；
-8. **观察**：光标直飞到 `01  WS-FLAGS.` 变量声明行！
+8. **观察**：光标跳到 `01 WS-FLAGS` 变量声明行。
 9. 再次按下 **`<C-o>`** 原路跳回调用处。
 
 > 💡 **技巧**：`gd` 与 `<C-o>` 在 Neovim 中形成完美的“前进-后退”工作流，彻底消除在多个定义间反复搜索的疲惫。
@@ -85,7 +93,7 @@ Aerial 是 Neovim 的代码结构大纲（Outline）侧边栏插件。它不是 
 COBOL 大量依靠 Copybook（类似 C 语言的 `#include`）复用数据结构。
 1. 移动光标到 `COPY "EMP-REC.CPY".`；
 2. 按下 **`K`**（悬停预览快捷键）；
-3. **观察效果**：屏幕中央弹出一个带圆角边框的高亮浮动窗口，清晰展示了 `EMP-REC.CPY` 的内部代码：
+3. **观察效果**：屏幕中央弹出预览浮窗，显示 `EMP-REC.CPY` 的内容：
    ```cobol
           01  EMP-RECORD.
               05  EMP-ID             PIC X(20).
@@ -101,18 +109,22 @@ COBOL 大量依靠 Copybook（类似 C 语言的 `#include`）复用数据结构
 
 ### 任务 2.5：查看深层嵌套字段的宿主回溯
 1. 移动光标到 `10  IN-FULL-NAME         PIC X(80).`；
-2. **观察行尾**：自动出现淡灰色斜体虚拟文本：`  ← 05 IN-NAME-GROUP (01 WS-INPUT-FIELDS)`；
+2. **观察行尾**：若层级提示已启用，会显示类似 `← 05 IN-NAME-GROUP (01 WS-INPUT-FIELDS)` 的父级信息；
 3. 移动光标到 `88  CONVERT-SUCCESS      VALUE "S".`；
-4. **观察行尾**：自动显示 `  ← 05 WS-CONVERT-FLAG (01 WS-FLAGS)`；
+4. **观察行尾**：同样可查看其父级字段信息。
 5. **思考**：面对 5-10 层嵌套的超大 COBOL 报文时，再也不用往上数缩进找父对象了。
 
 ---
+
+![Copybook 预览浮窗](images/copybook-preview.png)
+
+在 `COPY` 语句上按 `K` 后，浮窗显示 Copybook 内容，无需离开当前编辑位置。
 
 ## 4. 本课速查总结
 
 | 快捷键 | 模式 | 作用说明 |
 |---|---|---|
-| `<leader>cs` | Normal | 呼出/隐藏 Aerial 3 层层级大纲树（按回车跳转） |
+| `:AerialToggle` | 命令行 | 打开或关闭可选 Aerial 大纲（需先安装并配置） |
 | `gd` | Normal | 光标在段落名、变量名或 Copybook 上时，直达其定义所在行 |
 | `<C-o>` | Normal | 原生跳回上一位置（与 `gd` 完美成对使用） |
 | `K` | Normal | 悬停浮窗就地预览 Copybook 内容或目标段落代码片段，按 `q` 退出 |

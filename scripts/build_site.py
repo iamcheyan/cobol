@@ -33,7 +33,7 @@ TEXT_SUFFIXES = {".md", ".cob", ".cpy", ".cbsql", ".sql", ".txt", ".csv", ".dat"
 def asset_version() -> str:
     """Content hash so a CSS/JS change is never masked by an edge cache."""
     digest = hashlib.sha1()
-    for name in ("site.css", "site.js"):
+    for name in ("site.css", "theme.css", "site.js"):
         digest.update((ROOT / "site-src" / name).read_bytes())
     return digest.hexdigest()[:10]
 
@@ -73,6 +73,8 @@ LOCALES = {
         "nav_plugins": "编辑器插件",
         "nav_menu": "菜单",
         "nav_close": "关闭",
+        "theme_dark": "切换到深色主题", "theme_light": "切换到浅色主题",
+        "theme_dark_short": "深色", "theme_light_short": "浅色",
         "course_toggle": "课程目录",
         "lessons_label": "课",
         "plugin_eyebrow": "EDITOR PLUGIN",
@@ -92,7 +94,7 @@ LOCALES = {
         "plugin_requirements": "需要 Neovim 与 GnuCOBOL；实时语法诊断依赖 `cobc`，结构大纲侧边栏依赖可选的 `aerial.nvim`。",
         "plugin_license": "MIT 许可，源码公开。",
         "plugin_open": "了解并安装 cobol.nvim",
-        "plugin_figure": "Neovim 里的实际效果：Aerial 结构大纲、固定格式标尺与 Winbar 面包屑、COBOL 语法高亮。",
+        "plugin_figure": "Neovim 实际画面：Syms 大纲、固定格式列标尺、Winbar 和 IF / ELSE / END-IF 的彩色配对及连接虚线。Syms 是另装的界面；插件另提供 Aerial 后端。",
     },
     "en": {
         "html": "en", "name": "English", "brand_sub": "Practical Course",
@@ -126,6 +128,8 @@ LOCALES = {
         "nav_plugins": "Editor plugin",
         "nav_menu": "Menu",
         "nav_close": "Close",
+        "theme_dark": "Switch to dark theme", "theme_light": "Switch to light theme",
+        "theme_dark_short": "Dark", "theme_light_short": "Light",
         "course_toggle": "Lessons",
         "lessons_label": "lessons",
         "plugin_eyebrow": "EDITOR PLUGIN",
@@ -145,7 +149,7 @@ LOCALES = {
         "plugin_requirements": "Neovim and GnuCOBOL are required; live diagnostics need `cobc`, and the outline sidebar needs the optional `aerial.nvim`.",
         "plugin_license": "MIT licensed, open source.",
         "plugin_open": "Get cobol.nvim",
-        "plugin_figure": "In Neovim: the Aerial structure outline, fixed-format guides with the Winbar breadcrumb, and COBOL syntax highlighting.",
+        "plugin_figure": "A real Neovim session: the optional Syms outline, column guides, Winbar, and paired IF / ELSE / END-IF badges with a connecting line. The plugin also includes a separate Aerial backend.",
     },
     "ja": {
         "html": "ja", "name": "日本語", "brand_sub": "実践コース",
@@ -179,6 +183,8 @@ LOCALES = {
         "nav_plugins": "エディタプラグイン",
         "nav_menu": "メニュー",
         "nav_close": "閉じる",
+        "theme_dark": "ダークテーマに切り替える", "theme_light": "ライトテーマに切り替える",
+        "theme_dark_short": "ダーク", "theme_light_short": "ライト",
         "course_toggle": "レッスン一覧",
         "lessons_label": "レッスン",
         "plugin_eyebrow": "EDITOR PLUGIN",
@@ -198,7 +204,7 @@ LOCALES = {
         "plugin_requirements": "Neovim と GnuCOBOL が必要です。リアルタイム診断には `cobc`、アウトライン表示には任意の `aerial.nvim` を使います。",
         "plugin_license": "MIT ライセンスで公開しています。",
         "plugin_open": "cobol.nvim を導入する",
-        "plugin_figure": "Neovim での実際の表示：Aerial の構造アウトライン、固定形式の桁定規と Winbar パンくず、COBOL の構文ハイライト。",
+        "plugin_figure": "Neovim の実画面：別途導入した Syms アウトライン、桁ガイド、Winbar、IF / ELSE / END-IF の対応表示と接続線。プラグインには Aerial 用バックエンドも含まれます。",
     },
 }
 
@@ -548,15 +554,18 @@ def shell(locale: str, title: str, body: str, page: Path, home: bool = False) ->
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#f5f5ed">
+<script>(function(){{var theme;try{{theme=localStorage.getItem('cobol-theme')}}catch(e){{}}if(theme!=='light'&&theme!=='dark')theme=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.dataset.theme=theme;}})();</script>
 <meta name="description" content="GnuCOBOL 实战课程 · 32 lessons from COBOL basics to a bank nightly reconciliation system.">
 <title>{html.escape(title)} · GnuCOBOL</title>
 <link rel="icon" type="image/png" href="{site_href(Path(locale) / "assets/shire_200.png", locale, page)}">
 <link rel="stylesheet" href="{site_href(Path(locale) / "assets/site.css", locale, page)}?v={ASSET_VERSION}">
+<link rel="stylesheet" href="{site_href(Path(locale) / "assets/theme.css", locale, page)}?v={ASSET_VERSION}">
 </head>
 <body>
 <div class="notice"><span class="notice-text">GnuCOBOL {html.escape(labels["brand_sub"])} <span>·</span> {html.escape(title)}</span></div>
 <header class="masthead">
 <a class="brand" href="{home_href}"><img src="{site_href(Path(locale) / "assets/shire_200.png", locale, page)}" alt="GnuCOBOL Shire horse mascot"><span><strong>GnuCOBOL</strong><small>{html.escape(labels["brand_sub"])}</small></span></a>
+<button class="theme-toggle" type="button" aria-label="{html.escape(labels["theme_dark"])}" aria-pressed="false" data-dark-label="{html.escape(labels["theme_dark"])}" data-light-label="{html.escape(labels["theme_light"])}" data-dark-short="{html.escape(labels["theme_dark_short"])}" data-light-short="{html.escape(labels["theme_light_short"])}"><span class="theme-icon" aria-hidden="true">◐</span><span class="theme-label">{html.escape(labels["theme_dark_short"])}</span></button>
 <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="{labels["nav_menu"]}"><span class="nav-bars" aria-hidden="true"></span><span class="nav-toggle-label">{labels["nav_menu"]}</span></button>
 <nav id="site-nav"><a href="{home_href}">{labels["nav_home"]}</a><a href="{directory}">{labels["nav_directory"]}</a><a href="{extensions}">{labels["nav_extensions"]}</a><a href="{plugins}">{labels["nav_plugins"]}</a><a href="https://github.com/iamcheyan/cobol">{labels["nav_source"]}</a><div class="language-menu" aria-label="{labels["nav_lang"]}">{languages}</div></nav>
 </header>
@@ -604,7 +613,7 @@ def plugins_page(locale: str) -> str:
         f'<p class="eyebrow">{labels["plugin_eyebrow"]}</p>'
         f'<h1>cobol.nvim</h1>'
         f'<p class="plugin-lead">{inline_code(labels["plugin_lead"])}</p>'
-        f'<figure class="plugin-figure"><img src="assets/plugin/overview.png" alt="cobol.nvim in Neovim: Aerial outline, fixed-format guides and COBOL syntax highlighting">'
+        f'<figure class="plugin-figure"><img src="assets/plugin/structure-scope.png" alt="Neovim: Syms outline, Winbar and paired IF ELSE END-IF scope badges with dashed line" width="2726" height="2104">'
         f'<figcaption>{labels["plugin_figure"]}</figcaption></figure>'
         f'<h2>{labels["plugin_install"]}</h2>'
         f'<pre><code>{html.escape(PLUGIN_SNIPPET)}</code></pre>'
@@ -681,7 +690,7 @@ def main() -> None:
     if OUT.exists():
         shutil.rmtree(OUT)
     (OUT / "assets").mkdir(parents=True)
-    for name in ("site.css", "site.js", "shire_200.png"):
+    for name in ("site.css", "theme.css", "site.js", "shire_200.png"):
         shutil.copy2(ROOT / "site-src" / name, OUT / "assets" / name)
     plugin_images = ROOT / "site-src" / "plugin"
     if plugin_images.is_dir():

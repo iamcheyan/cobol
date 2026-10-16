@@ -40,6 +40,10 @@ Winbar:..SEQ.  *    A...    B............................................72  IDE
 5. **智能 Tab 吸附**：行首按 Tab 自动对齐到第 8 列或第 12 列。
 6. **第 7 列智能注释**：精准在第 7 列切换 `*`，绝不改动代码原有缩进。
 
+![Neovim 中的 COBOL 列标尺与 Winbar](images/fixed-format-ruler.png)
+
+图中标尺位于第 7、8、12、73 列，Winbar 显示源码格式与当前位置；越过第 72 列的内容会高亮。此截图展示实际 Neovim 插件画面。
+
 ---
 
 ## 3. 实操任务清单 (Step-by-Step)
@@ -47,8 +51,8 @@ Winbar:..SEQ.  *    A...    B............................................72  IDE
 请在终端中打开测试文件开始演练：
 
 ```bash
-cd /home/tetsuya/development/cobol
-nvim ../../standalone-examples/INPUTCSV.COB
+cd <仓库根目录>
+nvim extensions/standalone-examples/INPUTCSV.COB
 ```
 
 ### 任务 1.1：观察标尺与刻度对齐
@@ -68,18 +72,15 @@ nvim ../../standalone-examples/INPUTCSV.COB
 
 > 💡 **练习技巧**：多连续按几次 `g8` -> `g12` -> `g7`，形成列穿梭的肌肉记忆。
 
-### 任务 1.3：标尺与刻度一键开合
-1. 在 Normal 模式下按下 **`<leader>uc`**；
-2. **观察效果**：整个 COBOL 标尺线与顶部的打孔卡刻度瞬间隐藏，界面回归干净的极简模式；
-3. 再次按下 **`<leader>uc`**：标尺与 Winbar 刻度瞬间重新唤醒。
+### 任务 1.3：标尺与 Winbar 开合
+运行 `:CobolGuideToggle` 切换可视提示，再运行一次恢复。也可使用 `:CobolGuideDisable` 与 `:CobolGuideEnable`。
 
 ### 任务 1.4：体验智能 Tab 自动吸附
 COBOL 规则要求段落在第 8 列，语句在第 12 列。以往需要狂按空格键，现在只需按 Tab：
 1. 找到一个空行，按下 `o` 进入插入模式；
-2. 此时光标位于第 1 列，按下一次 **`<Tab>`** 键；
-3. **观察**：光标没有按普通 4 空格缩进，而是**智能吸附并精准停在第 8 列（Area A）**！此时适合输入段落名（如 `3100-MY-LOGIC.`）；
-4. 再次按下一次 **`<Tab>`** 键；
-5. **观察**：光标**智能吸附并停在第 12 列（Area B）**！此时适合输入具体语句（如 `DISPLAY "HELLO".`）；
+2. 此时光标位于第 1 列，按一次 **`<Tab>`**；
+3. **观察**：前导空白移动到第 7 列（指示区）；再按一次到第 8 列（Area A）；
+4. 再按 `<Tab>` 到第 12 列（Area B）；此时适合输入语句（如 `DISPLAY "HELLO".`）；第 12 列之后继续按 Tab 会按 `shiftwidth` 缩进。
 6. 按 `<Esc>` 退出插入模式。
 
 ### 任务 1.5：第 7 列智能注释切换
@@ -106,6 +107,6 @@ COBOL 规则要求段落在第 8 列，语句在第 12 列。以往需要狂按�
 | `g8` | Normal | 直跳第 8 列（Area A 起始） |
 | `g12` | Normal | 直跳第 12 列（Area B 起始） |
 | `g73` | Normal | 直跳第 73 列（Identification 识别区起始） |
-| `<leader>uc` | Normal | 一键开启/关闭细线标尺与打孔卡刻度 |
+| `:CobolGuideToggle` | 命令行 | 切换可视提示与诊断附着 |
 | `<leader>c*` | Normal / Visual | 在第 7 列智能切换 `*` 注释标记（单行或批量多行） |
 | `<Tab>` | Insert | 行首或前导空白处按 Tab：1~6 列吸附到 8 列，7~11 列吸附到 12 列 |

@@ -1,3 +1,30 @@
+const themeToggle = document.querySelector('.theme-toggle');
+if (themeToggle) {
+  const root = document.documentElement;
+  const preference = window.matchMedia('(prefers-color-scheme: dark)');
+  const savedTheme = () => {
+    try { return localStorage.getItem('cobol-theme'); } catch { return null; }
+  };
+  const syncTheme = () => {
+    const dark = root.dataset.theme === 'dark';
+    themeToggle.setAttribute('aria-pressed', String(dark));
+    themeToggle.setAttribute('aria-label', dark ? themeToggle.dataset.lightLabel : themeToggle.dataset.darkLabel);
+    themeToggle.querySelector('.theme-label').textContent = dark ? themeToggle.dataset.lightShort : themeToggle.dataset.darkShort;
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#151c22' : '#f5f5ed');
+  };
+  syncTheme();
+  themeToggle.addEventListener('click', () => {
+    root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    try { localStorage.setItem('cobol-theme', root.dataset.theme); } catch { /* Private mode can block storage. */ }
+    syncTheme();
+  });
+  preference.addEventListener?.('change', event => {
+    if (savedTheme() === 'light' || savedTheme() === 'dark') return;
+    root.dataset.theme = event.matches ? 'dark' : 'light';
+    syncTheme();
+  });
+}
+
 const search = document.querySelector('#course-search');
 if (search) {
   const links = [...document.querySelectorAll('#lesson-list a')];

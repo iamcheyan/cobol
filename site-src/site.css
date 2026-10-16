@@ -90,3 +90,58 @@
   footer{flex-direction:column;align-items:flex-start;gap:6px;padding:14px 18px;font-size:10px}
   footer span:last-child{text-align:left}
 }
+
+/* Home hierarchy: keep course setup quiet and give our plugin the clearest
+   visual weight on the page. */
+.start-row{padding-top:30px;padding-bottom:30px;border-bottom:0}
+.start-row>div:first-child{max-width:700px}
+.start-command{max-width:390px;border:0;border-left:2px solid var(--line);background:transparent;padding:7px 0 7px 17px}
+.start-command>a{border:0;padding-top:4px}
+.plugin-band{position:relative;grid-template-columns:.85fr 1.15fr;gap:52px;padding:52px 7.3%;border:1px solid var(--line);background:var(--surface);box-shadow:var(--shadow)}
+.plugin-band:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--purple)}
+.plugin-band h2{font-size:clamp(27px,3vw,36px);letter-spacing:-.05em}
+.plugin-copy>p:not(.eyebrow){font-size:14px;line-height:1.8}
+.plugin-preview{display:block;min-width:0;color:var(--ink);text-decoration:none}
+.plugin-preview img{display:block;width:100%;height:auto;max-height:320px;object-fit:cover;object-position:top;border:1px solid var(--line);background:var(--code-bg)}
+.plugin-preview>span{display:flex;justify-content:space-between;align-items:center;padding-top:10px;color:var(--muted);font:11px var(--mono)}
+.plugin-preview b{color:var(--purple);font:18px var(--sans)}
+.more-reading{padding-top:40px;padding-bottom:40px;border-top:0}
+.more-reading>a{padding:11px 0;border-top:0;border-bottom:1px solid var(--line-soft)}
+/* The header keeps two primary destinations visible. Supporting pages live
+   under one keyboard accessible disclosure; GitHub is a labelled icon link. */
+.masthead nav{gap:20px}
+.masthead nav>a.nav-plugin{color:var(--purple);font-weight:700;letter-spacing:.01em}
+.nav-library{position:relative;font-size:13px;color:var(--nav-ink)}
+.nav-library summary{list-style:none;cursor:pointer;white-space:nowrap}
+.nav-library summary::-webkit-details-marker{display:none}
+.nav-library summary:after{content:"⌄";margin-left:6px;color:var(--muted);font-size:12px}
+.nav-library[open] summary:after{content:"⌃"}
+.nav-library-menu{position:absolute;z-index:20;right:0;top:calc(100% + 12px);min-width:190px;padding:6px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow)}
+.masthead nav .nav-library-menu a{display:block;padding:9px 11px;color:var(--nav-ink);text-decoration:none;white-space:nowrap}
+.masthead nav .nav-library-menu a:hover{background:var(--surface-2);color:var(--purple)}
+.masthead nav>a.nav-source{width:32px;height:32px;display:grid;place-items:center;color:var(--ink);border:1px solid var(--line-soft);border-radius:50%}
+.nav-source svg{width:17px;height:17px;fill:currentColor}
+.nav-source:hover{background:var(--surface-2)}
+.article article h1 + pre,.article article h2 + pre,
+.article article h1 + .table-wrap,.article article h2 + .table-wrap,
+.article article h2 + .flow-list > li:first-child,
+.article article h2 + .timeline > li:first-child,
+.article article h2 + .resource-rows > .resource-row:first-child,
+.article article h2 + .kn-cards,.article article h2 + .plain-list,
+.article article h1 + .plugin-lead,.article article h2 + .plugin-lead{border-top:0}
+.article article h1:has(+ .plugin-figure),.article article h2:has(+ .plugin-figure),.article article h2:has(+ img){border-bottom:0}
+.article article pre + pre{border-top:0}
+@media(max-width:980px){.masthead nav{gap:14px}.plugin-band{gap:30px;padding-left:5%;padding-right:5%}}
+@media(max-width:760px){
+ .start-row{padding-top:24px;padding-bottom:24px}
+ .start-command{max-width:none;margin-top:12px;padding-left:12px}
+ .plugin-band{display:grid;grid-template-columns:1fr;gap:20px;padding:27px 18px;margin:0 -1px}
+ .plugin-band:before{width:3px}
+ .plugin-preview img{max-height:none}
+ .more-reading{padding-top:30px}
+ .nav-library{padding:12px 2px;border-bottom:1px solid var(--line-soft)}
+ .nav-library summary{font-size:14px}
+ .nav-library-menu{position:static;box-shadow:none;border:0;border-left:2px solid var(--line);margin:8px 0 0 4px;padding:0 0 0 8px}
+ .masthead nav .nav-library-menu a{padding:10px 9px}
+ .masthead nav>a.nav-source{width:40px;height:40px;margin-top:10px}
+}

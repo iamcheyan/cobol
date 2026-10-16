@@ -8,6 +8,7 @@ Chinese original and is clearly marked as pending.
 """
 from __future__ import annotations
 
+import hashlib
 import html
 import json
 import os
@@ -27,6 +28,16 @@ EXCLUDED_PARTS = {"instructor", "tasks", "validation", "evidence", "grading"}
 EXCLUDED_NAMES = {"AGENTS.md", "INSTRUCTOR.md", "manual-review-signoff.md", "SESSION-REPORT.md"}
 EXCLUDED_SUFFIXES = {".pyc", ".db", ".sqlite", ".o", ".so", ".swp", ".tmp"}
 TEXT_SUFFIXES = {".md", ".cob", ".cpy", ".cbsql", ".sql", ".txt", ".csv", ".dat", ".json", ".yml", ".yaml", ".sh", ".py"}
+
+def asset_version() -> str:
+    """Content hash so a CSS/JS change is never masked by an edge cache."""
+    digest = hashlib.sha1()
+    for name in ("site.css", "site.js"):
+        digest.update((ROOT / "site-src" / name).read_bytes())
+    return digest.hexdigest()[:10]
+
+
+ASSET_VERSION = asset_version()
 
 LOCALES = {
     "zh-cn": {
@@ -464,7 +475,7 @@ def shell(locale: str, title: str, body: str, page: Path, home: bool = False) ->
 <meta name="description" content="GnuCOBOL 实战课程 · 32 lessons from COBOL basics to a bank nightly reconciliation system.">
 <title>{html.escape(title)} · GnuCOBOL</title>
 <link rel="icon" type="image/png" href="{site_href(Path(locale) / "assets/shire_200.png", locale, page)}">
-<link rel="stylesheet" href="{site_href(Path(locale) / "assets/site.css", locale, page)}">
+<link rel="stylesheet" href="{site_href(Path(locale) / "assets/site.css", locale, page)}?v={ASSET_VERSION}">
 </head>
 <body>
 <div class="notice">GnuCOBOL {html.escape(labels["brand_sub"])} <span>·</span> {html.escape(title)}</div>
@@ -474,7 +485,7 @@ def shell(locale: str, title: str, body: str, page: Path, home: bool = False) ->
 </header>
 {main}
 <footer><span>GnuCOBOL {html.escape(labels["brand_sub"])}</span><span>{html.escape(labels["footer"])} · <a href="https://github.com/iamcheyan/cobol">iamcheyan/cobol</a></span></footer>
-<script src="{site_href(Path(locale) / "assets/site.js", locale, page)}" defer></script>
+<script src="{site_href(Path(locale) / "assets/site.js", locale, page)}?v={ASSET_VERSION}" defer></script>
 </body></html>'''
 
 

@@ -182,7 +182,7 @@ def translated(source: Path, locale: str) -> Path | None:
 
 def title_of(source: Path, locale: str = "zh-cn") -> str:
     chosen = translated(source, locale) or source
-    text = chosen.read_text(encoding="utf-8")
+    text = strip_frontmatter(chosen.read_text(encoding="utf-8"))
     match = re.search(r"^#\s+(.+?)\s*#*\s*$", text, re.M)
     return match.group(1) if match else source.stem.replace("-", " ").replace("_", " ")
 
@@ -263,10 +263,19 @@ def fix_links(content: str, source: Path) -> str:
     return re.sub(r"\]\(([^)\s]+)(?:\s+[^)]*)?\)", replace, content)
 
 
+FRONTMATTER = re.compile(r"\A---\r?\n.*?\r?\n---\r?\n", re.S)
+
+
+def strip_frontmatter(text: str) -> str:
+    """Drop leading YAML metadata (translation provenance) so it never renders."""
+    return FRONTMATTER.sub("", text, count=1)
+
+
 def render_markdown(source: Path, locale: str) -> str:
     chosen = translated(source, locale) or source
     MD.reset()
-    return MD.convert(fix_links(chosen.read_text(encoding="utf-8"), source))
+    text = strip_frontmatter(chosen.read_text(encoding="utf-8"))
+    return MD.convert(fix_links(text, source))
 
 
 def inline_page_target(source: Path) -> tuple[Path, str]:

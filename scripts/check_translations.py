@@ -48,6 +48,14 @@ def sources() -> list[Path]:
     return found
 
 
+FRONTMATTER = re.compile(r"\A---\r?\n.*?\r?\n---\r?\n", re.S)
+
+
+def strip_frontmatter(text: str) -> str:
+    """Translation provenance metadata is allowed in the repository but never compared."""
+    return FRONTMATTER.sub("", text, count=1)
+
+
 def markdown_shape(text: str) -> dict[str, int]:
     fences = len(re.findall(r"^\s*```", text, re.M))
     return {
@@ -98,6 +106,9 @@ def main() -> int:
             done[locale] += 1
             original = source.read_text(encoding="utf-8")
             translated = candidate.read_text(encoding="utf-8")
+            if source.suffix.lower() == ".md":
+                original = strip_frontmatter(original)
+                translated = strip_frontmatter(translated)
             if source.suffix.lower() == ".md":
                 before, after = markdown_shape(original), markdown_shape(translated)
                 for key in ("headings", "fences", "table_rows", "links"):

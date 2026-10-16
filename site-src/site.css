@@ -130,6 +130,9 @@
 .article article h2 + .kn-cards,.article article h2 + .plain-list,
 .article article h1 + .plugin-lead,.article article h2 + .plugin-lead{border-top:0}
 .article article h1:has(+ .plugin-figure),.article article h2:has(+ .plugin-figure),.article article h2:has(+ img){border-bottom:0}
+/* The first feature screenshot sits immediately under an h2. Keep the heading
+   divider and the image's side frame, but remove its second horizontal rule. */
+.article article h2 + .plugin-features .plugin-feature:first-child img{border-top:0}
 .article article pre + pre{border-top:0}
 @media(max-width:980px){.masthead nav{gap:14px}.plugin-band{gap:30px;padding-left:5%;padding-right:5%}}
 @media(max-width:760px){

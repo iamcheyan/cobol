@@ -92,7 +92,9 @@ if (search) {
   search.addEventListener('input', () => {
     const query = search.value.trim().toLocaleLowerCase();
     for (const link of links) {
-      link.hidden = !link.textContent.toLocaleLowerCase().includes(query);
+      const matches = link.textContent.toLocaleLowerCase().includes(query)
+        || (link.getAttribute('title') || '').toLocaleLowerCase().includes(query);
+      link.hidden = !matches;
     }
   });
 }

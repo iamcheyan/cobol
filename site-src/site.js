@@ -9,6 +9,24 @@ if (search) {
   });
 }
 
+const navToggle = document.querySelector('.nav-toggle');
+const siteNav = document.querySelector('#site-nav');
+if (navToggle && siteNav) {
+  navToggle.addEventListener('click', () => {
+    const open = siteNav.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', String(open));
+  });
+}
+
+const courseToggle = document.querySelector('.course-toggle');
+const courseBody = document.querySelector('#course-body');
+if (courseToggle && courseBody) {
+  courseToggle.addEventListener('click', () => {
+    const open = courseBody.classList.toggle('open');
+    courseToggle.setAttribute('aria-expanded', String(open));
+  });
+}
+
 const workspace = document.querySelector('.lesson-workspace');
 if (workspace) {
   const tabs = [...workspace.querySelectorAll('.lesson-tab')];

@@ -71,6 +71,10 @@ LOCALES = {
         "more_ext": "拓展课程", "more_ext_desc": "旧版专题、企业批处理与编辑器教程",
         "more_src": "课程源码", "more_src_desc": "查看代码、夹具与构建脚本",
         "nav_plugins": "编辑器插件",
+        "nav_menu": "菜单",
+        "nav_close": "关闭",
+        "course_toggle": "课程目录",
+        "lessons_label": "课",
         "plugin_eyebrow": "EDITOR PLUGIN",
         "plugin_lead": "`cobol.nvim` 是本课程配套的 Neovim 插件，把固定格式 COBOL 的列规则、记录布局和编译器反馈直接放进编辑器：写代码时就能看到穿孔卡标尺、结构和错误。",
         "plugin_features_title": "它能做什么",
@@ -120,6 +124,10 @@ LOCALES = {
         "more_ext": "Extensions", "more_ext_desc": "Legacy topics, enterprise batch and editor tutorials",
         "more_src": "Course source", "more_src_desc": "Code, fixtures and build scripts",
         "nav_plugins": "Editor plugin",
+        "nav_menu": "Menu",
+        "nav_close": "Close",
+        "course_toggle": "Lessons",
+        "lessons_label": "lessons",
         "plugin_eyebrow": "EDITOR PLUGIN",
         "plugin_lead": "`cobol.nvim` is the Neovim plugin built alongside this course. It brings fixed-format COBOL rules, record layout and compiler feedback into the editor, so the punch-card ruler, structure and errors are visible while you type.",
         "plugin_features_title": "What it does",
@@ -169,6 +177,10 @@ LOCALES = {
         "more_ext": "発展教材", "more_ext_desc": "旧版のトピック、企業バッチ、エディタのチュートリアル",
         "more_src": "コースのソース", "more_src_desc": "コード、フィクスチャ、ビルドスクリプト",
         "nav_plugins": "エディタプラグイン",
+        "nav_menu": "メニュー",
+        "nav_close": "閉じる",
+        "course_toggle": "レッスン一覧",
+        "lessons_label": "レッスン",
         "plugin_eyebrow": "EDITOR PLUGIN",
         "plugin_lead": "`cobol.nvim` は本コースとともに育てている Neovim プラグインです。固定形式 COBOL の桁ルール、レコードレイアウト、コンパイラのフィードバックをエディタに持ち込み、書いているそばから桁定規・構造・エラーが見えます。",
         "plugin_features_title": "できること",
@@ -520,10 +532,13 @@ def shell(locale: str, title: str, body: str, page: Path, home: bool = False) ->
     else:
         main = (
             f'<div class="reading-layout"><aside class="course-nav">'
+            f'<button class="course-toggle" type="button" aria-expanded="false" aria-controls="course-body">'
+            f'<span>{labels["course_toggle"]}</span><b>32 {labels["lessons_label"]}</b></button>'
+            f'<div class="course-body" id="course-body">'
             f'<div class="nav-heading">{labels["course_nav"]} <span>32</span></div>'
             f'<label class="search"><span>⌕</span><input id="course-search" type="search" '
             f'placeholder="{labels["search"]}" autocomplete="off"></label>'
-            f'<div class="lesson-list" id="lesson-list">{lessons}</div>'
+            f'<div class="lesson-list" id="lesson-list">{lessons}</div></div>'
             f'<a class="directory-link" href="{directory}">{labels["directory_link"]}</a></aside>'
             f'<main class="article"><div class="article-top"><a href="{home_href}">{labels["nav_home"]}</a>'
             f'<span>/</span><span>{html.escape(title)}</span></div><article>{body}</article></main></div>'
@@ -539,10 +554,11 @@ def shell(locale: str, title: str, body: str, page: Path, home: bool = False) ->
 <link rel="stylesheet" href="{site_href(Path(locale) / "assets/site.css", locale, page)}?v={ASSET_VERSION}">
 </head>
 <body>
-<div class="notice">GnuCOBOL {html.escape(labels["brand_sub"])} <span>·</span> {html.escape(title)}</div>
+<div class="notice"><span class="notice-text">GnuCOBOL {html.escape(labels["brand_sub"])} <span>·</span> {html.escape(title)}</span></div>
 <header class="masthead">
 <a class="brand" href="{home_href}"><img src="{site_href(Path(locale) / "assets/shire_200.png", locale, page)}" alt="GnuCOBOL Shire horse mascot"><span><strong>GnuCOBOL</strong><small>{html.escape(labels["brand_sub"])}</small></span></a>
-<nav><a href="{home_href}">{labels["nav_home"]}</a><a href="{directory}">{labels["nav_directory"]}</a><a href="{extensions}">{labels["nav_extensions"]}</a><a href="{plugins}">{labels["nav_plugins"]}</a><a href="https://github.com/iamcheyan/cobol">{labels["nav_source"]}</a><div class="language-menu" aria-label="{labels["nav_lang"]}">{languages}</div></nav>
+<button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="{labels["nav_menu"]}"><span class="nav-bars" aria-hidden="true"></span><span class="nav-toggle-label">{labels["nav_menu"]}</span></button>
+<nav id="site-nav"><a href="{home_href}">{labels["nav_home"]}</a><a href="{directory}">{labels["nav_directory"]}</a><a href="{extensions}">{labels["nav_extensions"]}</a><a href="{plugins}">{labels["nav_plugins"]}</a><a href="https://github.com/iamcheyan/cobol">{labels["nav_source"]}</a><div class="language-menu" aria-label="{labels["nav_lang"]}">{languages}</div></nav>
 </header>
 {main}
 <footer><span>GnuCOBOL {html.escape(labels["brand_sub"])}</span><span>{html.escape(labels["footer"])} · <a href="https://github.com/iamcheyan/cobol">iamcheyan/cobol</a></span></footer>

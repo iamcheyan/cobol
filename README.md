@@ -2,6 +2,8 @@
 
 **从第一条 COBOL 语句，走到可运行的银行夜间对账系统。**
 
+课程网站：[cobol.iamcheyan.com](https://cobol.iamcheyan.com)（由 GitHub Actions 从本仓库 Markdown 自动生成静态页面）。
+
 仓库首页就是课程入口。32 课循序渐进，覆盖 COBOL 基础、数据布局、文件处理、排序突合、数据库和模块化批处理，最终完成银行夜间对账毕业项目。
 
 ## 开始上课

@@ -25,6 +25,9 @@ sales_report.txt
 __pycache__/
 *.py[cod]
 
+# Generated static course website
+/build/
+
 # COBOL build products in the legacy root checkout
 /INPUTCSV
 /FIXEDREC

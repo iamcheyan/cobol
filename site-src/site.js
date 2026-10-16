@@ -26,6 +26,66 @@ if (themeToggle) {
   });
 }
 
+
+// Reference sheet: filter the cheat-sheet sections in place.
+const refInput = document.querySelector('#ref-search');
+if (refInput) {
+  const body = document.querySelector('#ref-body');
+  const empty = document.querySelector('#ref-empty');
+  // Every filterable unit is one heading plus everything up to the next heading.
+  const units = [];
+  let current = null;
+  for (const node of [...body.children]) {
+    if (/^H[23]$/.test(node.tagName)) {
+      current = { nodes: [node], text: node.textContent };
+      units.push(current);
+    } else if (current) {
+      current.nodes.push(node);
+      current.text += ' ' + node.textContent;
+    } else {
+      units.push({ nodes: [node], text: node.textContent });
+    }
+  }
+  for (const unit of units) {
+    unit.haystack = unit.text.toLocaleLowerCase();
+    // Tables are filtered row by row so a single matching row stays visible.
+    unit.tables = unit.nodes
+      .filter(n => n.classList.contains('table-wrap'))
+      .map(wrap => ({ wrap, rows: [...wrap.querySelectorAll('tbody tr')] }));
+  }
+  const applyFilter = () => {
+    const query = refInput.value.trim().toLocaleLowerCase();
+    let anyVisible = false;
+    for (const unit of units) {
+      const headingHit = !query || unit.haystack.includes(query);
+      let unitVisible = false;
+      for (const { wrap, rows } of unit.tables) {
+        let rowHit = false;
+        for (const row of rows) {
+          const show = headingHit || row.textContent.toLocaleLowerCase().includes(query);
+          row.hidden = !show;
+          if (show) rowHit = true;
+        }
+        wrap.hidden = !rowHit;
+        if (rowHit) unitVisible = true;
+      }
+      const nonTable = unit.nodes.filter(n => !n.classList.contains('table-wrap'));
+      const showNonTable = headingHit;
+      for (const node of nonTable) node.hidden = !showNonTable;
+      if (showNonTable || unitVisible) {
+        unitVisible = true;
+      }
+      // Keep the heading visible whenever any row under it is shown.
+      if (unitVisible && !showNonTable) {
+        for (const node of nonTable) node.hidden = false;
+      }
+      if (unitVisible) anyVisible = true;
+    }
+    if (empty) empty.hidden = anyVisible;
+  };
+  refInput.addEventListener('input', applyFilter);
+}
+
 const search = document.querySelector('#course-search');
 if (search) {
   const links = [...document.querySelectorAll('#lesson-list a')];

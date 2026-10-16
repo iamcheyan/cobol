@@ -20,6 +20,9 @@ from urllib.parse import quote
 
 import markdown
 
+from site_about import ABOUT
+from site_reference import REFERENCE
+
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "build" / "site"
 LESSONS = ROOT / "lessons"
@@ -73,6 +76,8 @@ LOCALES = {
         "more_src": "课程源码", "more_src_desc": "查看代码、夹具与构建脚本",
         "nav_plugins": "编辑器插件",
         "nav_gnucobol": "GnuCOBOL 官方",
+        "nav_about": "COBOL 是什么", "nav_reference": "速查手册",
+        "about_title": "COBOL 是什么", "reference_title": "COBOL 速查手册",
         "gnucobol_title": "GnuCOBOL 官方编译器",
         "gnucobol_eyebrow": "OFFICIAL COMPILER",
         "gnucobol_lead": "本课程与 `cobol.nvim` 插件都以 GnuCOBOL（`cobc`）为编译器。课程里的每个示例都由它编译运行，插件也把它的诊断结果接进编辑器。两者都不自带编译器，而是配套使用 GnuCOBOL。",
@@ -161,6 +166,8 @@ LOCALES = {
         "more_src": "Course source", "more_src_desc": "Code, fixtures and build scripts",
         "nav_plugins": "Editor plugin",
         "nav_gnucobol": "GnuCOBOL",
+        "nav_about": "What is COBOL", "nav_reference": "Reference",
+        "about_title": "What is COBOL", "reference_title": "COBOL reference sheet",
         "gnucobol_title": "The GnuCOBOL compiler",
         "gnucobol_eyebrow": "OFFICIAL COMPILER",
         "gnucobol_lead": "This course and the `cobol.nvim` plugin both use the GnuCOBOL compiler (`cobc`). Every example is compiled and run by it, and the plugin feeds its diagnostics back into the editor. Neither ships a compiler: they are built to work with GnuCOBOL.",
@@ -249,6 +256,8 @@ LOCALES = {
         "more_src": "コースのソース", "more_src_desc": "コード、フィクスチャ、ビルドスクリプト",
         "nav_plugins": "エディタプラグイン",
         "nav_gnucobol": "GnuCOBOL 公式",
+        "nav_about": "COBOL とは", "nav_reference": "リファレンス",
+        "about_title": "COBOL とは", "reference_title": "COBOL クイックリファレンス",
         "gnucobol_title": "GnuCOBOL コンパイラ",
         "gnucobol_eyebrow": "OFFICIAL COMPILER",
         "gnucobol_lead": "本コースと `cobol.nvim` プラグインは、どちらも GnuCOBOL（`cobc`）をコンパイラとして使います。すべてのサンプルはこれでコンパイル・実行され、プラグインはその診断結果をエディタに表示します。どちらもコンパイラを同梱せず、GnuCOBOL と組み合わせて使う前提です。",
@@ -623,6 +632,8 @@ def shell(locale: str, title: str, body: str, page: Path, home: bool = False) ->
     extensions = site_href(Path(locale) / "extensions/README.html", locale, page)
     plugins = site_href(Path(locale) / "plugins.html", locale, page)
     gnucobol = site_href(Path(locale) / "gnucobol.html", locale, page)
+    about = site_href(Path(locale) / "about.html", locale, page)
+    reference = site_href(Path(locale) / "reference.html", locale, page)
     languages = "".join(
         f'<a lang="{LOCALES[key]["html"]}" hreflang="{LOCALES[key]["html"]}"'
         f' class="{"current" if key == locale else ""}" href="{site_href(Path(key) / page, locale, page)}">{LOCALES[key]["name"]}</a>'
@@ -666,7 +677,7 @@ def shell(locale: str, title: str, body: str, page: Path, home: bool = False) ->
 <header class="masthead">
 <a class="brand" href="{home_href}"><img src="{site_href(Path(locale) / "assets/shire_200.png", locale, page)}" alt="GnuCOBOL Shire horse mascot"><span><strong>GnuCOBOL</strong><small>{html.escape(labels["brand_sub"])}</small></span></a>
 <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="{labels["nav_menu"]}"><span class="nav-bars" aria-hidden="true"></span><span class="nav-toggle-label">{labels["nav_menu"]}</span></button>
-<nav id="site-nav"><a href="{home_href}">{labels["nav_home"]}</a><a href="{directory}">{labels["nav_directory"]}</a><a href="{extensions}">{labels["nav_extensions"]}</a><a href="{plugins}">{labels["nav_plugins"]}</a><a href="{gnucobol}">{labels["nav_gnucobol"]}</a><a href="https://github.com/iamcheyan/cobol">{labels["nav_source"]}</a><div class="language-menu" aria-label="{labels["nav_lang"]}">{languages}</div></nav>
+<nav id="site-nav"><a href="{home_href}">{labels["nav_home"]}</a><a href="{directory}">{labels["nav_directory"]}</a><a href="{extensions}">{labels["nav_extensions"]}</a><a href="{about}">{labels["nav_about"]}</a><a href="{reference}">{labels["nav_reference"]}</a><a href="{plugins}">{labels["nav_plugins"]}</a><a href="{gnucobol}">{labels["nav_gnucobol"]}</a><a href="https://github.com/iamcheyan/cobol">{labels["nav_source"]}</a><div class="language-menu" aria-label="{labels["nav_lang"]}">{languages}</div></nav>
 <button class="theme-toggle" type="button" aria-label="{html.escape(labels["theme_dark"])}" aria-pressed="false" data-dark-label="{html.escape(labels["theme_dark"])}" data-light-label="{html.escape(labels["theme_light"])}" title="{html.escape(labels["theme_dark"])}"><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.6A8.6 8.6 0 1 1 9.4 3.5a6.9 6.9 0 0 0 11.1 11.1Z"/></svg><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M4.2 12H2M22 12h-2.2M6.5 6.5 5 5M19 19l-1.5-1.5M17.5 6.5 19 5M5 19l1.5-1.5"/></svg></button>
 </header>
 {main}
@@ -685,6 +696,29 @@ def inline_code(text: str) -> str:
     out = []
     for index, part in enumerate(parts):
         out.append(f"<code>{html.escape(part)}</code>" if index % 2 else html.escape(part))
+    return "".join(out)
+
+
+# `[label](href)`, `**bold**` and `` `code` `` in one pass. Bold and link text
+# recurse, so `**`COMP-3` 公式**` renders code inside bold.
+_INLINE_RE = re.compile(r"\[([^\]]+)\]\(([^)\s]+)\)|\*\*(.+?)\*\*|`([^`]+)`", re.S)
+
+
+def inline_rich(text: str) -> str:
+    """Escape text, rendering links, bold and inline code."""
+    out, pos = [], 0
+    for m in _INLINE_RE.finditer(text):
+        out.append(html.escape(text[pos:m.start()]))
+        if m.group(1) is not None:
+            out.append(
+                f'<a href="{html.escape(m.group(2), quote=True)}">{inline_rich(m.group(1))}</a>'
+            )
+        elif m.group(3) is not None:
+            out.append(f"<strong>{inline_rich(m.group(3))}</strong>")
+        else:
+            out.append(f"<code>{html.escape(m.group(4))}</code>")
+        pos = m.end()
+    out.append(html.escape(text[pos:]))
     return "".join(out)
 
 
@@ -725,6 +759,100 @@ def plugins_page(locale: str) -> str:
         f'<p class="plugin-license">{labels["plugin_license"]}</p>'
     )
 
+
+
+
+def _prose(paragraphs, css_class: str = "") -> str:
+    cls = f' class="{css_class}"' if css_class else ""
+    return f'<div{cls}>' + "".join(f'<p>{inline_rich(p)}</p>' for p in paragraphs) + "</div>"
+
+
+def _bullets(items) -> str:
+    return '<ul class="plain-list">' + "".join(f'<li>{inline_rich(i)}</li>' for i in items) + "</ul>"
+
+
+def _table(head, rows) -> str:
+    thead = "".join(f"<th>{inline_rich(h)}</th>" for h in head)
+    tbody = "".join(
+        "<tr>" + "".join(f"<td>{inline_rich(c)}</td>" for c in row) + "</tr>" for row in rows
+    )
+    return f'<div class="table-wrap"><table><thead><tr>{thead}</tr></thead><tbody>{tbody}</tbody></table></div>'
+
+
+def about_page(locale: str) -> str:
+    """What COBOL is: origin, standard history, industries, current relevance."""
+    data = ABOUT[locale]
+    blocks = []
+    for sec in data["sections"]:
+        part = [f'<h2 id="{sec["id"]}">{html.escape(sec["title"])}</h2>']
+        if sec.get("intro"):
+            part.append(f'<p>{inline_rich(sec["intro"])}</p>')
+        kind = sec["kind"]
+        if kind == "prose":
+            part.append(_prose(sec.get("body", [])))
+            if sec.get("bullets"):
+                part.append(_bullets(sec["bullets"]))
+            if sec.get("after"):
+                part.append(_prose(sec["after"]))
+        elif kind == "timeline":
+            items = "".join(
+                f'<li><span class="tl-date">{html.escape(date)}</span>'
+                f'<div class="tl-body"><strong>{html.escape(name)}</strong>'
+                f'<span>{inline_rich(desc)}</span></div></li>'
+                for date, name, desc in sec["items"]
+            )
+            part.append(f'<ol class="timeline">{items}</ol>')
+            if sec.get("after"):
+                part.append(_prose(sec["after"]))
+        elif kind == "table":
+            part.append(_table(sec["head"], sec["rows"]))
+            if sec.get("after"):
+                part.append(_prose(sec["after"]))
+        elif kind == "code":
+            part.append(f'<pre><code>{html.escape(sec["code"])}</code></pre>')
+            if sec.get("after"):
+                part.append(_prose(sec["after"]))
+        blocks.append("".join(part))
+    return (
+        f'<p class="eyebrow">{data["eyebrow"]}</p>'
+        f'<h1>{html.escape(data["title"])}</h1>'
+        f'<p class="plugin-lead">{inline_rich(data["lead"])}</p>'
+        + "".join(blocks)
+        + f'<p class="plugin-license">{inline_rich(data["source_note"])}</p>'
+    )
+
+
+def reference_page(locale: str) -> str:
+    """Cheat sheet: format, skeleton, data, PIC, USAGE, statements, status codes."""
+    data = REFERENCE[locale]
+    blocks = []
+    for sec in data["sections"]:
+        part = [f'<h2 id="{sec["id"]}">{html.escape(sec["title"])}</h2>']
+        if sec.get("intro"):
+            part.append(f'<p>{inline_rich(sec["intro"])}</p>')
+        if sec.get("kind") == "code":
+            part.append(f'<pre><code>{html.escape(sec["code"])}</code></pre>')
+        else:
+            part.append(_table(sec["head"], sec["rows"]))
+        if sec.get("table2_title"):
+            part.append(f'<h3>{html.escape(sec["table2_title"])}</h3>')
+            part.append(_table(sec["table2_head"], sec["table2_rows"]))
+        if sec.get("after"):
+            part.append(_prose(sec["after"]))
+        blocks.append("".join(part))
+    return (
+        f'<p class="eyebrow">{data["eyebrow"]}</p>'
+        f'<h1>{html.escape(data["title"])}</h1>'
+        f'<p class="plugin-lead">{inline_rich(data["lead"])}</p>'
+        f'<label class="ref-search"><span aria-hidden="true">⌕</span>'
+        f'<input id="ref-search" type="search" placeholder="{html.escape(data["search_placeholder"])}" '
+        f'aria-label="{html.escape(data["search_label"])}" autocomplete="off"></label>'
+        f'<p class="ref-empty" id="ref-empty" hidden>{html.escape(data["no_match"])}</p>'
+        '<div class="ref-body" id="ref-body">'
+        + "".join(blocks)
+        + '</div>'
+        + f'<p class="plugin-license">{inline_rich(data["note"])}</p>'
+    )
 
 
 def gnucobol_page(locale: str) -> str:
@@ -801,6 +929,10 @@ def build_locale(locale: str) -> int:
         shell(locale, "cobol.nvim", plugins_page(locale), Path("plugins.html")), encoding="utf-8")
     (root / "gnucobol.html").write_text(
         shell(locale, LOCALES[locale]["gnucobol_title"], gnucobol_page(locale), Path("gnucobol.html")), encoding="utf-8")
+    (root / "about.html").write_text(
+        shell(locale, LOCALES[locale]["about_title"], about_page(locale), Path("about.html")), encoding="utf-8")
+    (root / "reference.html").write_text(
+        shell(locale, LOCALES[locale]["reference_title"], reference_page(locale), Path("reference.html")), encoding="utf-8")
     return pages
 
 

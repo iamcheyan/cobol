@@ -1,0 +1,50 @@
+      * 第03課：MOVE と COMPUTE の金額計算サンプル。
+      * データはサンプル定数。実口座ではない。
+      * ROUNDED なしは切捨て、ありは受信項目で丸め。
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. MOVE03.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 WS-OPENING-BALANCE PIC 9(7)V99 VALUE 1000.00.
+       01 WS-DEPOSIT PIC 9(7)V99 VALUE 250.55.
+       01 WS-WITHDRAWAL PIC 9(7)V99 VALUE 40.10.
+       01 WS-SERVICE-FEE PIC 9(5)V99 VALUE 5.25.
+      * 利率サンプル：日数規定なし、1 回だけ乗算。
+       01 WS-PERIOD-RATE PIC 9(1)V9(4) VALUE 0.0125.
+       01 WS-PRE-INTEREST-BALANCE PIC 9(7)V99 VALUE ZERO.
+      * 中間値は 4 桁保持し、切捨てと丸めを比較。
+       01 WS-INTEREST-RAW PIC 9(5)V9999 VALUE ZERO.
+       01 WS-INTEREST-MOVE PIC 9(5)V99 VALUE ZERO.
+       01 WS-INTEREST-TRUNC PIC 9(5)V99 VALUE ZERO.
+      * ROUNDED は受信項目の精度で丸める。
+       01 WS-INTEREST-ROUNDED PIC 9(5)V99 VALUE ZERO.
+      * 計上：本課では丸め後利息を計上する。
+       01 WS-CLOSING-BALANCE PIC 9(7)V99 VALUE ZERO.
+       PROCEDURE DIVISION.
+           COMPUTE WS-PRE-INTEREST-BALANCE =
+               WS-OPENING-BALANCE + WS-DEPOSIT
+                   - WS-WITHDRAWAL - WS-SERVICE-FEE.
+           COMPUTE WS-INTEREST-RAW =
+               WS-PRE-INTEREST-BALANCE * WS-PERIOD-RATE.
+           MOVE WS-INTEREST-RAW TO WS-INTEREST-MOVE.
+           COMPUTE WS-INTEREST-TRUNC = WS-INTEREST-RAW.
+           COMPUTE WS-INTEREST-ROUNDED ROUNDED =
+               WS-INTEREST-RAW.
+           COMPUTE WS-CLOSING-BALANCE =
+               WS-PRE-INTEREST-BALANCE + WS-INTEREST-ROUNDED.
+           DISPLAY "期首残高=" WS-OPENING-BALANCE
+           DISPLAY "預入額=" WS-DEPOSIT
+           DISPLAY "払戻額=" WS-WITHDRAWAL
+           DISPLAY "手数料=" WS-SERVICE-FEE
+           DISPLAY "期間利率=" WS-PERIOD-RATE
+           DISPLAY "利息加算前残高="
+               WS-PRE-INTEREST-BALANCE
+           DISPLAY "利息（4桁）=" WS-INTEREST-RAW
+           DISPLAY "MOVE後利息（2桁）=" WS-INTEREST-MOVE
+           DISPLAY "COMPUTE切捨て利息=" WS-INTEREST-TRUNC
+           DISPLAY "COMPUTE四捨五入利息="
+               WS-INTEREST-ROUNDED
+           DISPLAY "期末残高=" WS-CLOSING-BALANCE
+      * あふれ時は桁落ち、実行時エラーなし。
+      * 検出は明示的に行う必要あり（第26課）。
+           STOP RUN.

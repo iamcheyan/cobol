@@ -51,6 +51,11 @@ if (workspace) {
   resourceChoices.forEach((button, index) => button.addEventListener('click', () => activateResource(index)));
   if (resourceChoices.length) activateResource(0);
 
-  const hashTab = location.hash.match(/^#tab-(guide|exercise|answer|resources)$/)?.[1];
-  if (hashTab) activateTab(hashTab, false);
+  const tabFromHash = () => location.hash.match(/^#tab-(guide|exercise|answer|resources)$/)?.[1];
+  const initial = tabFromHash();
+  if (initial) activateTab(initial, false);
+  window.addEventListener('hashchange', () => {
+    const key = tabFromHash();
+    if (key) activateTab(key, false);
+  });
 }

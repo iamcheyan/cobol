@@ -1,0 +1,70 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. DATA02.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+      * Contract: account key is text, not number;
+      * X keeps leading zeros; amounts use 9.
+       01 WS-ACCOUNT-KEY PIC X(12) VALUE "000123456789".
+       01 WS-CUSTOMER-NAME PIC A(12) VALUE "ADA LOVELACE".
+       01 WS-CUSTOMER-TYPE PIC A(1) VALUE "P".
+       01 WS-ACCOUNT-STATUS PIC X(1) VALUE "A".
+       01 WS-BRANCH-CODE PIC 9(4) VALUE 2048.
+       01 WS-CURRENCY-CODE PIC X(3) VALUE "USD".
+      * Contract: PIC 9(8) only enforces eight digits,
+      * not month, day, or leap-year validity.
+       01 WS-OPEN-DATE-DIGITS PIC 9(8) VALUE 20261013.
+       01 WS-CUSTOMER-NUMBER PIC X(10) VALUE "0002046819".
+       01 WS-PRODUCT-CODE PIC X(4) VALUE "SAV1".
+      * V claims no storage; DISPLAY still prints it.
+      * (Same effect on DISPLAY output.)
+       01 WS-LEDGER-BALANCE PIC 9(7)V99 VALUE 125000.75.
+       01 WS-AVAILABLE-BALANCE PIC 9(7)V99 VALUE 123500.25.
+       01 WS-OVERDRAFT-LIMIT PIC 9(7)V99 VALUE 2500.00.
+      * SIGN LEADING SEPARATE adds one sign character
+      * (so this field is one column wider).
+       01 WS-LAST-CREDIT PIC S9(7)V99 SIGN LEADING SEPARATE
+           CHARACTER VALUE 1250.50.
+       01 WS-LAST-DEBIT PIC S9(7)V99 SIGN LEADING SEPARATE
+           CHARACTER VALUE -75.25.
+       01 WS-INTEREST-RATE PIC 9(2)V9(4) VALUE 0.0125.
+       01 WS-FEE-RATE PIC 9(2)V9(4) VALUE 0.0030.
+       01 WS-MONTHLY-TXN-COUNT PIC 9(4) VALUE 18.
+       01 WS-LAST-BATCH-SEQ PIC 9(6) VALUE 521.
+       01 WS-STATEMENT-DAY PIC 9(2) VALUE 25.
+       01 WS-POSTAL-CODE PIC X(9) VALUE "00100-200".
+       01 WS-COUNTRY-CODE PIC A(2) VALUE "JP".
+       01 WS-TRANSFER-REF PIC X(15) VALUE "TRF-20261013-01".
+       01 WS-BATCH-ID PIC X(14) VALUE "BATCH-20261013".
+       01 WS-CUSTOMER-INITIAL PIC A(1) VALUE "A".
+       01 WS-LANGUAGE-CODE PIC A(2) VALUE "EN".
+       PROCEDURE DIVISION.
+           DISPLAY "口座データ型"
+           DISPLAY "テキストキーは定義文字を保持："
+           DISPLAY "口座キー=" WS-ACCOUNT-KEY
+           DISPLAY "顧客名=" WS-CUSTOMER-NAME
+           DISPLAY "顧客区分=" WS-CUSTOMER-TYPE
+           DISPLAY "口座状態=" WS-ACCOUNT-STATUS
+           DISPLAY "支店コード=" WS-BRANCH-CODE
+           DISPLAY "通貨コード=" WS-CURRENCY-CODE
+           DISPLAY "口座開設日=" WS-OPEN-DATE-DIGITS
+           DISPLAY "顧客番号=" WS-CUSTOMER-NUMBER
+           DISPLAY "商品コード=" WS-PRODUCT-CODE
+           DISPLAY "金額と利率（数値）："
+           DISPLAY "帳簿残高=" WS-LEDGER-BALANCE
+           DISPLAY "利用可能残高=" WS-AVAILABLE-BALANCE
+           DISPLAY "当座貸越限度額=" WS-OVERDRAFT-LIMIT
+           DISPLAY "直近入金額=" WS-LAST-CREDIT
+           DISPLAY "直近出金額=" WS-LAST-DEBIT
+           DISPLAY "利率=" WS-INTEREST-RATE
+           DISPLAY "手数料率=" WS-FEE-RATE
+           DISPLAY "月間取引件数=" WS-MONTHLY-TXN-COUNT
+           DISPLAY "最終バッチ番号=" WS-LAST-BATCH-SEQ
+           DISPLAY "明細日=" WS-STATEMENT-DAY
+           DISPLAY "その他の口座項目："
+           DISPLAY "郵便番号=" WS-POSTAL-CODE
+           DISPLAY "国コード=" WS-COUNTRY-CODE
+           DISPLAY "振込参照番号=" WS-TRANSFER-REF
+           DISPLAY "バッチID=" WS-BATCH-ID
+           DISPLAY "顧客イニシャル=" WS-CUSTOMER-INITIAL
+           DISPLAY "言語コード=" WS-LANGUAGE-CODE
+           STOP RUN.

@@ -51,6 +51,7 @@ LOCALES = {
         "pending_resource": "此文件暂无该语言版本，下面显示中文原文。",
         "view_source": "查看中文原文 →", "unsupported": "此资源不适合直接预览，可下载后在本地打开。",
         "footer": "课程源码与练习材料",
+        "footer_compiler": "配套编译器",
         "hero_eyebrow": "GNU COBOL · PRACTICAL COURSE",
         "hero_h1": "从第一条 COBOL 语句，", "hero_h1_em": "走到银行夜间对账系统。",
         "hero_intro": "一套循序渐进的 GnuCOBOL 实战课程。读讲解、运行程序、完成练习，逐步构建完整的批处理项目。",
@@ -71,6 +72,39 @@ LOCALES = {
         "more_ext": "拓展课程", "more_ext_desc": "旧版专题、企业批处理与编辑器教程",
         "more_src": "课程源码", "more_src_desc": "查看代码、夹具与构建脚本",
         "nav_plugins": "编辑器插件",
+        "nav_gnucobol": "GnuCOBOL 官方",
+        "gnucobol_title": "GnuCOBOL 官方编译器",
+        "gnucobol_eyebrow": "OFFICIAL COMPILER",
+        "gnucobol_lead": "本课程与 `cobol.nvim` 插件都以 GnuCOBOL（`cobc`）为编译器。课程里的每个示例都由它编译运行，插件也把它的诊断结果接进编辑器。两者都不自带编译器，而是配套使用 GnuCOBOL。",
+        "gnucobol_flow_title": "课程、插件与编译器的关系",
+        "gnucobol_flow": [
+            ("课程与示例", "固定格式 COBOL 源码，含 Copybook、夹具与练习"),
+            ("`cobc` 编译", "GnuCOBOL 做语法检查并生成原生可执行程序"),
+            ("编辑器插件", "`cobol.nvim` 在 Neovim 内调用 `cobc`，显示结构、布局与诊断"),
+        ],
+        "gnucobol_resources_title": "GnuCOBOL 官方资料",
+        "gnucobol_resources": [
+            ("GnuCOBOL 3.2 Programmer's Guide", "官方程序员指南（HTML）", "https://gnucobol.sourceforge.io/HTML/gnucobpg.html"),
+            ("GnuCOBOL 3.2 Quick Reference", "语句与语法速查", "https://gnucobol.sourceforge.io/HTML/gnucobqr.html"),
+            ("GnuCOBOL 3.2 Sample Programs", "官方示例程序", "https://gnucobol.sourceforge.io/HTML/gnucobsp.html"),
+            ("GnuCOBOL 语言参考", "`cobc` 与运行时手册", "https://gnucobol.sourceforge.io/doc/gnucobol.html"),
+            ("FAQ and HOWTO", "常见问题与具体做法", "https://gnucobol.sourceforge.io/faq/index.html"),
+            ("Guides 总目录", "PDF / Info / 语法文档等全部官方资料", "https://gnucobol.sourceforge.io/guides.html"),
+            ("下载与镜像", "GNU FTP 镜像（源码包）", "https://ftpmirror.gnu.org/gnucobol/"),
+            ("项目与社区", "SourceForge 工单、讨论与邮件列表", "https://sourceforge.net/p/gnucobol/"),
+        ],
+        "gnucobol_features_title": "GnuCOBOL 提供的能力",
+        "gnucobol_features": [
+            "19 种 COBOL 方言，含 COBOL 85/2002/2014、IBM、Micro Focus、RM/COBOL 等",
+            "REPORT SECTION、SCREEN SECTION、FUNCTION-ID",
+            "与 C 无缝集成，可直接调用 C 库",
+            "`EXEC SQL` 预处理器：PostgreSQL、Firebird、ODBC、DB2",
+            "通过 9740 余项 NIST COBOL 85 测试套件",
+            "把 COBOL 源码转译为 C，再链接成原生可执行程序",
+        ],
+        "gnucobol_versions_title": "版本与方言",
+        "gnucobol_versions": "官方最新发布为 3.2（2023-07-28），本课程与示例以 3.2 验证。除非确有必要，不要给现代 GnuCOBOL 传 `-std=cobol85`：严格的 COBOL 85 不含 `COMP-3`（该标准中名为 `PACKED-DECIMAL`）与 `FUNCTION TRIM` 等现代函数。",
+        "gnucobol_note": "GnuCOBOL 是 GNU 工程的一部分，由 Free Software Foundation 以 GPL 发布；官方文档另有其授权条款。本页只提供指向官方站点的链接，不对其内容作任何再分发。",
         "nav_menu": "菜单",
         "nav_close": "关闭",
         "theme_dark": "切换到深色主题", "theme_light": "切换到浅色主题",
@@ -105,6 +139,7 @@ LOCALES = {
         "pending_resource": "This file has no English version yet; the Chinese original is shown below.",
         "view_source": "Read the Chinese original →", "unsupported": "Preview is unavailable for this file; download it to open locally.",
         "footer": "Course source and practice material",
+        "footer_compiler": "compiler",
         "hero_eyebrow": "GNU COBOL · PRACTICAL COURSE",
         "hero_h1": "From your first COBOL statement", "hero_h1_em": "to a bank nightly reconciliation system.",
         "hero_intro": "A step-by-step GnuCOBOL course. Read the lesson, run the program, finish the exercise, and build a real batch project.",
@@ -125,6 +160,39 @@ LOCALES = {
         "more_ext": "Extensions", "more_ext_desc": "Legacy topics, enterprise batch and editor tutorials",
         "more_src": "Course source", "more_src_desc": "Code, fixtures and build scripts",
         "nav_plugins": "Editor plugin",
+        "nav_gnucobol": "GnuCOBOL",
+        "gnucobol_title": "The GnuCOBOL compiler",
+        "gnucobol_eyebrow": "OFFICIAL COMPILER",
+        "gnucobol_lead": "This course and the `cobol.nvim` plugin both use the GnuCOBOL compiler (`cobc`). Every example is compiled and run by it, and the plugin feeds its diagnostics back into the editor. Neither ships a compiler: they are built to work with GnuCOBOL.",
+        "gnucobol_flow_title": "How the course, plugin and compiler fit together",
+        "gnucobol_flow": [
+            ("Course and examples", "Fixed-format COBOL source with copybooks, fixtures and exercises"),
+            ("`cobc` compiles", "GnuCOBOL syntax-checks the source and produces a native executable"),
+            ("Editor plugin", "`cobol.nvim` calls `cobc` inside Neovim and shows structure, layout and diagnostics"),
+        ],
+        "gnucobol_resources_title": "Official GnuCOBOL documentation",
+        "gnucobol_resources": [
+            ("GnuCOBOL 3.2 Programmer's Guide", "The official guide (HTML)", "https://gnucobol.sourceforge.io/HTML/gnucobpg.html"),
+            ("GnuCOBOL 3.2 Quick Reference", "Statement and syntax reference", "https://gnucobol.sourceforge.io/HTML/gnucobqr.html"),
+            ("GnuCOBOL 3.2 Sample Programs", "Official sample programs", "https://gnucobol.sourceforge.io/HTML/gnucobsp.html"),
+            ("GnuCOBOL language reference", "`cobc` and runtime manual", "https://gnucobol.sourceforge.io/doc/gnucobol.html"),
+            ("FAQ and HOWTO", "Common questions and recipes", "https://gnucobol.sourceforge.io/faq/index.html"),
+            ("Guides index", "Every official document: PDF, Info, grammar", "https://gnucobol.sourceforge.io/guides.html"),
+            ("Download and mirrors", "GNU FTP mirror (source packages)", "https://ftpmirror.gnu.org/gnucobol/"),
+            ("Project and community", "SourceForge tickets, discussion and mailing lists", "https://sourceforge.net/p/gnucobol/"),
+        ],
+        "gnucobol_features_title": "What GnuCOBOL gives you",
+        "gnucobol_features": [
+            "19 COBOL dialects, including COBOL 85/2002/2014, IBM, Micro Focus and RM/COBOL",
+            "REPORT SECTION, SCREEN SECTION and FUNCTION-ID",
+            "Seamless C integration: call C libraries directly",
+            "`EXEC SQL` preprocessors for PostgreSQL, Firebird, ODBC and DB2",
+            "Passes over 9740 NIST COBOL 85 test suite tests",
+            "Translates COBOL to C, then links a native executable",
+        ],
+        "gnucobol_versions_title": "Versions and dialects",
+        "gnucobol_versions": "The latest official release is 3.2 (28 July 2023), which this course and its examples are verified against. Do not pass `-std=cobol85` to a modern GnuCOBOL unless you must: strict COBOL 85 lacks `COMP-3` (named `PACKED-DECIMAL` in that standard) and modern functions such as `FUNCTION TRIM`.",
+        "gnucobol_note": "GnuCOBOL is part of the GNU Project, released under the GPL by the Free Software Foundation; its documentation carries its own terms. This page only links to the official site and does not redistribute its content.",
         "nav_menu": "Menu",
         "nav_close": "Close",
         "theme_dark": "Switch to dark theme", "theme_light": "Switch to light theme",
@@ -159,6 +227,7 @@ LOCALES = {
         "pending_resource": "このファイルの日本語版は未作成です。以下は中国語の原文です。",
         "view_source": "中国語の原文を見る →", "unsupported": "このファイルはプレビューできません。ダウンロードして開いてください。",
         "footer": "コースのソースと演習資料",
+        "footer_compiler": "対応コンパイラ",
         "hero_eyebrow": "GNU COBOL · PRACTICAL COURSE",
         "hero_h1": "最初の COBOL ステートメントから、", "hero_h1_em": "銀行の夜間照合システムまで。",
         "hero_intro": "段階的に学ぶ GnuCOBOL 実践コース。解説を読み、プログラムを動かし、演習をこなし、実際のバッチ処理を組み上げます。",
@@ -179,6 +248,39 @@ LOCALES = {
         "more_ext": "発展教材", "more_ext_desc": "旧版のトピック、企業バッチ、エディタのチュートリアル",
         "more_src": "コースのソース", "more_src_desc": "コード、フィクスチャ、ビルドスクリプト",
         "nav_plugins": "エディタプラグイン",
+        "nav_gnucobol": "GnuCOBOL 公式",
+        "gnucobol_title": "GnuCOBOL コンパイラ",
+        "gnucobol_eyebrow": "OFFICIAL COMPILER",
+        "gnucobol_lead": "本コースと `cobol.nvim` プラグインは、どちらも GnuCOBOL（`cobc`）をコンパイラとして使います。すべてのサンプルはこれでコンパイル・実行され、プラグインはその診断結果をエディタに表示します。どちらもコンパイラを同梱せず、GnuCOBOL と組み合わせて使う前提です。",
+        "gnucobol_flow_title": "コース・プラグイン・コンパイラの関係",
+        "gnucobol_flow": [
+            ("コースとサンプル", "固定形式 COBOL のソース、Copybook、フィクスチャ、演習"),
+            ("`cobc` でコンパイル", "GnuCOBOL が構文を検査し、ネイティブ実行ファイルを生成"),
+            ("エディタプラグイン", "`cobol.nvim` が Neovim 内で `cobc` を呼び、構造・レイアウト・診断を表示"),
+        ],
+        "gnucobol_resources_title": "GnuCOBOL 公式ドキュメント",
+        "gnucobol_resources": [
+            ("GnuCOBOL 3.2 Programmer's Guide", "公式プログラマーズガイド（HTML）", "https://gnucobol.sourceforge.io/HTML/gnucobpg.html"),
+            ("GnuCOBOL 3.2 Quick Reference", "文法・文のクイックリファレンス", "https://gnucobol.sourceforge.io/HTML/gnucobqr.html"),
+            ("GnuCOBOL 3.2 Sample Programs", "公式サンプルプログラム", "https://gnucobol.sourceforge.io/HTML/gnucobsp.html"),
+            ("GnuCOBOL 言語リファレンス", "`cobc` とランタイムのマニュアル", "https://gnucobol.sourceforge.io/doc/gnucobol.html"),
+            ("FAQ and HOWTO", "よくある質問と実践的な手順", "https://gnucobol.sourceforge.io/faq/index.html"),
+            ("Guides 一覧", "PDF・Info・文法資料など公式資料の全体", "https://gnucobol.sourceforge.io/guides.html"),
+            ("ダウンロードとミラー", "GNU FTP ミラー（ソースパッケージ）", "https://ftpmirror.gnu.org/gnucobol/"),
+            ("プロジェクトとコミュニティ", "SourceForge のチケット・議論・メーリングリスト", "https://sourceforge.net/p/gnucobol/"),
+        ],
+        "gnucobol_features_title": "GnuCOBOL が提供するもの",
+        "gnucobol_features": [
+            "19 種の COBOL 方言（COBOL 85/2002/2014、IBM、Micro Focus、RM/COBOL など）",
+            "REPORT SECTION、SCREEN SECTION、FUNCTION-ID",
+            "C とのシームレスな連携。C ライブラリを直接呼び出せます",
+            "`EXEC SQL` プリプロセッサ（PostgreSQL、Firebird、ODBC、DB2）",
+            "NIST COBOL 85 テストスイートを 9740 件以上通過",
+            "COBOL を C に変換し、ネイティブ実行ファイルとしてリンク",
+        ],
+        "gnucobol_versions_title": "バージョンと方言",
+        "gnucobol_versions": "公式の最新リリースは 3.2（2023-07-28）で、本コースとサンプルはこれで検証しています。必要がない限り、現代の GnuCOBOL に `-std=cobol85` を渡さないでください。厳格な COBOL 85 には `COMP-3`（同標準での名称は `PACKED-DECIMAL`）や `FUNCTION TRIM` などの現代的な機能が含まれません。",
+        "gnucobol_note": "GnuCOBOL は GNU プロジェクトの一部で、Free Software Foundation により GPL で公開されています。公式ドキュメントには独自のライセンス条件があります。本ページは公式サイトへのリンクのみを提供し、その内容を再配布しません。",
         "nav_menu": "メニュー",
         "nav_close": "閉じる",
         "theme_dark": "ダークテーマに切り替える", "theme_light": "ライトテーマに切り替える",
@@ -520,6 +622,7 @@ def shell(locale: str, title: str, body: str, page: Path, home: bool = False) ->
     directory = site_href(Path(locale) / "lessons/DIRECTORY.html", locale, page)
     extensions = site_href(Path(locale) / "extensions/README.html", locale, page)
     plugins = site_href(Path(locale) / "plugins.html", locale, page)
+    gnucobol = site_href(Path(locale) / "gnucobol.html", locale, page)
     languages = "".join(
         f'<a lang="{LOCALES[key]["html"]}" hreflang="{LOCALES[key]["html"]}"'
         f' class="{"current" if key == locale else ""}" href="{site_href(Path(key) / page, locale, page)}">{LOCALES[key]["name"]}</a>'
@@ -563,11 +666,11 @@ def shell(locale: str, title: str, body: str, page: Path, home: bool = False) ->
 <header class="masthead">
 <a class="brand" href="{home_href}"><img src="{site_href(Path(locale) / "assets/shire_200.png", locale, page)}" alt="GnuCOBOL Shire horse mascot"><span><strong>GnuCOBOL</strong><small>{html.escape(labels["brand_sub"])}</small></span></a>
 <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="{labels["nav_menu"]}"><span class="nav-bars" aria-hidden="true"></span><span class="nav-toggle-label">{labels["nav_menu"]}</span></button>
-<nav id="site-nav"><a href="{home_href}">{labels["nav_home"]}</a><a href="{directory}">{labels["nav_directory"]}</a><a href="{extensions}">{labels["nav_extensions"]}</a><a href="{plugins}">{labels["nav_plugins"]}</a><a href="https://github.com/iamcheyan/cobol">{labels["nav_source"]}</a><div class="language-menu" aria-label="{labels["nav_lang"]}">{languages}</div></nav>
+<nav id="site-nav"><a href="{home_href}">{labels["nav_home"]}</a><a href="{directory}">{labels["nav_directory"]}</a><a href="{extensions}">{labels["nav_extensions"]}</a><a href="{plugins}">{labels["nav_plugins"]}</a><a href="{gnucobol}">{labels["nav_gnucobol"]}</a><a href="https://github.com/iamcheyan/cobol">{labels["nav_source"]}</a><div class="language-menu" aria-label="{labels["nav_lang"]}">{languages}</div></nav>
 <button class="theme-toggle" type="button" aria-label="{html.escape(labels["theme_dark"])}" aria-pressed="false" data-dark-label="{html.escape(labels["theme_dark"])}" data-light-label="{html.escape(labels["theme_light"])}" title="{html.escape(labels["theme_dark"])}"><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.6A8.6 8.6 0 1 1 9.4 3.5a6.9 6.9 0 0 0 11.1 11.1Z"/></svg><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M4.2 12H2M22 12h-2.2M6.5 6.5 5 5M19 19l-1.5-1.5M17.5 6.5 19 5M5 19l1.5-1.5"/></svg></button>
 </header>
 {main}
-<footer><span>GnuCOBOL {html.escape(labels["brand_sub"])}</span><span>{html.escape(labels["footer"])} · <a href="https://github.com/iamcheyan/cobol">iamcheyan/cobol</a></span></footer>
+<footer><span>GnuCOBOL {html.escape(labels["brand_sub"])} · {labels["footer_compiler"]} <a href="https://gnucobol.sourceforge.io/" rel="noopener">GnuCOBOL</a></span><span>{html.escape(labels["footer"])} · <a href="https://github.com/iamcheyan/cobol">iamcheyan/cobol</a></span></footer>
 <script src="{site_href(Path(locale) / "assets/site.js", locale, page)}?v={ASSET_VERSION}" defer></script>
 </body></html>'''
 
@@ -623,6 +726,36 @@ def plugins_page(locale: str) -> str:
     )
 
 
+
+def gnucobol_page(locale: str) -> str:
+    """The page that documents how this site is paired with GnuCOBOL itself."""
+    labels = LOCALES[locale]
+    flow = "".join(
+        f'<li><strong>{inline_code(name)}</strong><span>{inline_code(desc)}</span></li>'
+        for name, desc in labels["gnucobol_flow"]
+    )
+    resources = "".join(
+        f'<a class="resource-row" href="{url}" rel="noopener"><span>{html.escape(name)}</span>'
+        f'<strong>{inline_code(desc)}</strong><b>↗</b></a>'
+        for name, desc, url in labels["gnucobol_resources"]
+    )
+    features = "".join(f'<li>{inline_code(item)}</li>' for item in labels["gnucobol_features"])
+    return (
+        f'<p class="eyebrow">{labels["gnucobol_eyebrow"]}</p>'
+        f'<h1>GnuCOBOL</h1>'
+        f'<p class="plugin-lead">{inline_code(labels["gnucobol_lead"])}</p>'
+        f'<h2>{labels["gnucobol_flow_title"]}</h2>'
+        f'<ol class="flow-list">{flow}</ol>'
+        f'<h2>{labels["gnucobol_features_title"]}</h2>'
+        f'<ul class="plain-list">{features}</ul>'
+        f'<h2>{labels["gnucobol_resources_title"]}</h2>'
+        f'<div class="resource-rows">{resources}</div>'
+        f'<h2>{labels["gnucobol_versions_title"]}</h2>'
+        f'<p>{inline_code(labels["gnucobol_versions"])}</p>'
+        f'<p class="plugin-license">{inline_code(labels["gnucobol_note"])}</p>'
+    )
+
+
 def homepage(locale: str) -> str:
     labels = LOCALES[locale]
     stages = "".join(
@@ -634,6 +767,7 @@ def homepage(locale: str) -> str:
 <section class="course-overview"><div class="section-title"><div><p class="eyebrow">{labels["path_eyebrow"]}</p><h2>{labels["path_title"]}</h2></div><a href="lessons/DIRECTORY.html">{labels["path_link"]}</a></div><div class="stages">{stages}</div></section>
 <section class="start-row"><div><p class="eyebrow">{labels["start_eyebrow"]}</p><h2>{labels["start_title"]}</h2><p>{labels["start_text"]}</p></div><div class="start-command"><span>{labels["start_term"]}</span><code>sudo apt install gnucobol make</code><a href="lessons/01_hello-cobol/README.html">{labels["start_open"]} <b>↗</b></a></div></section>
 {plugin_section(locale)}
+<section class="compiler-band"><div><p class="eyebrow">{labels["gnucobol_eyebrow"]}</p><h2>GnuCOBOL</h2><p>{inline_code(labels["gnucobol_lead"])}</p><a class="primary" href="gnucobol.html">{labels["nav_gnucobol"]} <span>→</span></a></div><a class="text-link" href="https://gnucobol.sourceforge.io/" rel="noopener">gnucobol.sourceforge.io ↗</a></section>
 <section class="more-reading"><div><p class="eyebrow">{labels["more_eyebrow"]}</p><h2>{labels["more_title"]}</h2></div><a href="extensions/README.html"><span>{labels["more_ext"]}</span><strong>{labels["more_ext_desc"]}</strong><b>→</b></a><a href="https://github.com/iamcheyan/cobol"><span>{labels["more_src"]}</span><strong>{labels["more_src_desc"]}</strong><b>→</b></a></section>'''
     return shell(locale, labels["nav_home"], body, Path("index.html"), home=True)
 
@@ -665,6 +799,8 @@ def build_locale(locale: str) -> int:
     (root / "index.html").write_text(homepage(locale), encoding="utf-8")
     (root / "plugins.html").write_text(
         shell(locale, "cobol.nvim", plugins_page(locale), Path("plugins.html")), encoding="utf-8")
+    (root / "gnucobol.html").write_text(
+        shell(locale, LOCALES[locale]["gnucobol_title"], gnucobol_page(locale), Path("gnucobol.html")), encoding="utf-8")
     return pages
 
 

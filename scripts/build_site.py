@@ -24,6 +24,7 @@ def page_files() -> list[Path]:
         p for base in (LESSONS, EXTENSIONS) for p in base.rglob("*.md")
         if p.name not in EXCLUDED_NAMES
         and not (set(p.relative_to(ROOT).parts) & EXCLUDED_PARTS)
+        and not (base == LESSONS and re.match(r"^\d{2}_", p.relative_to(LESSONS).parts[0]) and p.name in {"exercise.md", "answer.md"})
         and ".git" not in p.parts
     )
 
@@ -63,6 +64,11 @@ def fix_links(content: str, source: Path, dest: Path) -> str:
             return "](#)"
         if not resolved.exists():
             return match.group(0)
+        if len(rel.parts) >= 3 and rel.parts[0] == "lessons" and re.match(r"^\d{2}_", rel.parts[1]) and rel.name in {"exercise.md", "answer.md"}:
+            tab = "exercise" if rel.name == "exercise.md" else "answer"
+            lesson_page = Path("lessons") / rel.parts[1] / "README.html"
+            page_relative = Path(__import__("os").path.relpath(lesson_page.as_posix(), output_rel(source).parent.as_posix())).as_posix()
+            return f"]({quote(page_relative, safe='/._-')}#tab-{tab})"
         if resolved.is_dir():
             if (resolved / "README.md").is_file():
                 rel = rel / "README.md"
@@ -81,6 +87,68 @@ def render_markdown(source: Path, dest: Path) -> str:
     text = fix_links(source.read_text(encoding="utf-8"), source, dest)
     MD.reset()
     return MD.convert(text)
+
+
+def lesson_source(source: Path) -> Path | None:
+    try:
+        relative = source.relative_to(LESSONS)
+    except ValueError:
+        return None
+    if len(relative.parts) >= 2 and re.match(r"^\d{2}_", relative.parts[0]) and source.name == "README.md":
+        return source.parent
+    return None
+
+
+def lesson_files(folder: Path) -> list[Path]:
+    result = []
+    for path in sorted(folder.rglob("*")):
+        if not path.is_file():
+            continue
+        rel = path.relative_to(folder)
+        if set(rel.parts) & {"build", ".git", "__pycache__"} or path.name.startswith(".") or path.name in {"README.md", "exercise.md", "answer.md"} or path.suffix.lower() in {".log", ".pyc", ".db", ".sqlite", ".o", ".so"}:
+            continue
+        result.append(path)
+    return result
+
+
+def render_lesson_workspace(readme: Path, output: Path) -> str:
+    folder = readme.parent
+    items = lesson_files(folder)
+    parts = []
+    for key, label, source in [
+        ("guide", "课程讲义", readme),
+        ("exercise", "动手练习", folder / "exercise.md"),
+        ("answer", "参考答案", folder / "answer.md"),
+    ]:
+        if source.is_file():
+            active = " active" if key == "guide" else ""
+            parts.append(f'<section class="lesson-panel{active}" id="panel-{key}" data-panel="{key}"><article>{render_markdown(source, output)}</article></section>')
+    resources = []
+    for index, path in enumerate(items):
+        rel_from_root = path.relative_to(ROOT)
+        rel_from_page = Path(__import__("os").path.relpath(rel_from_root.as_posix(), output_rel(readme).parent.as_posix())).as_posix()
+        label = path.relative_to(folder).as_posix()
+        ext = path.suffix.lower()
+        text_file = ext in {".cob", ".cpy", ".cbsql", ".sql", ".txt", ".csv", ".dat", ".json", ".yml", ".yaml", ".sh", ".py", ".md"} or not ext
+        file_id = f"resource-{index}"
+        if text_file:
+            try:
+                content = path.read_text(encoding="utf-8")
+                if len(content) <= 300_000:
+                    language = html.escape(ext.lstrip(".") or "text")
+                    display = html.escape(content)
+                    resources.append(f'<div class="resource-view" id="{file_id}" data-resource="{index}" hidden><div class="resource-heading"><span>{html.escape(label)}</span><a href="{quote(rel_from_page, safe="/._-")}" download>下载文件 ↓</a></div><pre><code class="language-{language}">{display}</code></pre></div>')
+                    continue
+            except (UnicodeDecodeError, OSError):
+                pass
+        resources.append(f'<div class="resource-view" id="{file_id}" data-resource="{index}" hidden><div class="resource-heading"><span>{html.escape(label)}</span><a href="{quote(rel_from_page, safe="/._-")}" download>下载文件 ↓</a></div><p class="resource-download">此资源不适合直接预览，可下载后在本地打开。</p></div>')
+    if resources:
+        choices = "".join(f'<button type="button" class="resource-choice{" selected" if i == 0 else ""}" data-resource-choice="{i}">{html.escape(path.relative_to(folder).as_posix())}</button>' for i, path in enumerate(items))
+        resources_panel = f'<section class="lesson-panel" id="panel-resources" data-panel="resources"><div class="resource-browser"><nav class="resource-choices">{choices}</nav><div class="resource-content">{"".join(resources)}</div></div></section>'
+        parts.append(resources_panel)
+    tabs = [("guide", "课程讲义"), ("exercise", "动手练习"), ("answer", "参考答案"), ("resources", f"源码与资料 · {len(items)}")]
+    tab_buttons = "".join(f'<button type="button" class="lesson-tab{" selected" if i == 0 else ""}" role="tab" aria-selected="{"true" if i == 0 else "false"}" data-tab="{key}" id="tab-{key}">{label}</button>' for i, (key, label) in enumerate(tabs) if key in {re.search(r'data-panel="([^"]+)', p).group(1) for p in parts})
+    return f'<div class="lesson-workspace"><nav class="lesson-tabs" role="tablist" aria-label="本课材料">{tab_buttons}</nav>{"".join(parts)}</div>'
 
 
 def shell(title: str, body: str, current: Path | None = None, home: bool = False) -> str:
@@ -130,7 +198,8 @@ def main() -> None:
     for source in [ROOT / "README.md", *page_files()]:
         dest = OUT / output_rel(source)
         dest.parent.mkdir(parents=True, exist_ok=True)
-        dest.write_text(shell(title_of(source), render_markdown(source, dest), output_rel(source)), encoding="utf-8")
+        content = render_lesson_workspace(source, dest) if lesson_source(source) else render_markdown(source, dest)
+        dest.write_text(shell(title_of(source), content, output_rel(source)), encoding="utf-8")
     # Copy course code, fixtures, scripts, and other linked learning assets for download.
     for tree in (LESSONS, EXTENSIONS):
         for source in tree.rglob("*"):

@@ -8,3 +8,49 @@ if (search) {
     }
   });
 }
+
+const workspace = document.querySelector('.lesson-workspace');
+if (workspace) {
+  const tabs = [...workspace.querySelectorAll('.lesson-tab')];
+  const panels = [...workspace.querySelectorAll('.lesson-panel')];
+  const activateTab = (key, updateHash = true) => {
+    const tab = tabs.find(item => item.dataset.tab === key);
+    if (!tab) return;
+    tabs.forEach(item => {
+      const active = item === tab;
+      item.classList.toggle('selected', active);
+      item.setAttribute('aria-selected', String(active));
+      item.tabIndex = active ? 0 : -1;
+    });
+    panels.forEach(panel => {
+      const active = panel.dataset.panel === key;
+      panel.classList.toggle('active', active);
+      panel.hidden = !active;
+    });
+    if (updateHash) history.replaceState(null, '', `#tab-${key}`);
+  };
+
+  tabs.forEach((tab, index) => {
+    tab.addEventListener('click', () => activateTab(tab.dataset.tab));
+    tab.addEventListener('keydown', event => {
+      if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+      event.preventDefault();
+      const next = event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1
+        : (index + (event.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length;
+      tabs[next].focus();
+      activateTab(tabs[next].dataset.tab);
+    });
+  });
+
+  const resourceChoices = [...workspace.querySelectorAll('.resource-choice')];
+  const resourceViews = [...workspace.querySelectorAll('.resource-view')];
+  const activateResource = index => {
+    resourceChoices.forEach((button, i) => button.classList.toggle('selected', i === index));
+    resourceViews.forEach((view, i) => { view.hidden = i !== index; });
+  };
+  resourceChoices.forEach((button, index) => button.addEventListener('click', () => activateResource(index)));
+  if (resourceChoices.length) activateResource(0);
+
+  const hashTab = location.hash.match(/^#tab-(guide|exercise|answer|resources)$/)?.[1];
+  if (hashTab) activateTab(hashTab, false);
+}

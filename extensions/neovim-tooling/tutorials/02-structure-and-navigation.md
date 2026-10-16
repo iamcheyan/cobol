@@ -1,8 +1,8 @@
-# 第 2 课：结构概览、大纲树与代码定义直达 (Structure, Outline & Jumps)
+# 结构概览、大纲与定义跳转
 
 在大型机商业项目中，COBOL 程序会由多个 `PERFORM` 段落和 Copybook（`.CPY`）共同组成，阅读时需要追踪业务流程与数据定义之间的关系。
 
-如果没有现代 IDE 辅助，老程序员只能靠 `/` 手工搜索段落名，频繁在多个文件中切屏，极易打断思路。本课教你如何像现代开发一样，在 Neovim 中实现秒级大纲浏览、一键跳到定义、无缝原路跳回以及浮窗就地预览。
+如果没有现代 IDE 辅助，老程序员只能靠 `/` 手工搜索段落名，频繁在多个文件中切屏，极易打断思路。本页演示如何用 `cobol.nvim` 在 Neovim 中浏览大纲、跳到定义、原路跳回以及浮窗就地预览。
 
 ---
 
@@ -26,7 +26,7 @@ PROCEDURE DIVISION.            <-- 执行逻辑区：各种节（SECTION）与�
 
 ## 2. 插件配备的导航利器
 
-1. **Winbar 动态面包屑**：标尺右侧常驻更新当前光标所在的 Division > Section > Paragraph 路径。
+1. **Winbar 动态面包屑**：窗口顶部常驻更新当前光标所在的 Division / Section / Paragraph 路径。
 2. **Aerial 结构大纲**：Aerial 是可选的 Neovim Outline 插件；本插件的 Aerial backend 提供 Division、Section、Paragraph、FD/SD 与 01 记录符号。使用 `:AerialToggle` 打开；本插件不默认绑定 `<leader>cs`。
 3. **段落与数据定义一键直达（`gd`）**：光标停在 `PERFORM 1000-INITIALIZE` 或变量名上按 `gd` 瞬间跳至定义行。
 4. **跳转返回（`<C-o>` / `<C-i>`）**：使用 Neovim 原生 jumplist 返回上一个位置或前进。
@@ -56,10 +56,10 @@ nvim extensions/standalone-examples/INPUTCSV.COB
 ```
 
 ### 任务 2.1：体验 Winbar 实时动态面包屑
-1. 观察窗口顶部 Winbar 最右侧的彩色面包屑标签；
-2. 移动光标至 `IDENTIFICATION DIVISION`，Winbar 显示 `[ IDENTIFICATION ]`；
-3. 移动光标至 `WORKING-STORAGE SECTION`，Winbar 变为绿色的 `[ DATA > WORKING-STORAGE ]`；
-4. 移动光标至 `2100-PROCESS-RECORD`，Winbar 变为亮蓝色的 `[ PROCEDURE > 2000-PROCESS-SECTION > 2100-PROCESS-RECORD ]`；
+1. 观察窗口顶部的面包屑，它随光标所在位置实时更新；
+2. 移动光标至 `IDENTIFICATION DIVISION`，Winbar 显示 `[ IDENTIFICATION DIVISION ]`；
+3. 移动光标至 `WORKING-STORAGE SECTION` 下任一数据行，Winbar 显示 `[ DATA DIVISION ]`；
+4. 移动光标至 `2100-PROCESS-RECORD`，Winbar 显示 `[ PROCEDURE DIVISION > 2000-PROCESS-SECTION > 2100-PROCESS-RECORD ]`；
 5. **体验收获**：无论你在代码中如何快速滚动，抬头一眼就能知道当前代码块位于整个系统架构的哪一个分支。
 
 ### 任务 2.2：使用 Aerial 3 层大纲侧边栏
@@ -96,12 +96,16 @@ COBOL 大量依靠 Copybook（类似 C 语言的 `#include`）复用数据结构
 3. **观察效果**：屏幕中央弹出预览浮窗，显示 `EMP-REC.CPY` 的内容：
    ```cobol
           01  EMP-RECORD.
-              05  EMP-ID             PIC X(20).
+              05  EMP-ID                   PIC X(05).
               05  EMP-NAME.
-                  10  EMP-FIRST-NAME PIC X(40).
-                  10  EMP-LAST-NAME  PIC X(40).
-              05  EMP-AGE            PIC 9(03).
-              05  EMP-SALARY         PIC S9(07)V99 COMP-3.
+                  10  EMP-FIRST-NAME       PIC X(10).
+                  10  EMP-LAST-NAME        PIC X(10).
+              05  EMP-DEPT                 PIC X(02).
+                  88  DEPT-SALES           VALUE "01".
+                  88  DEPT-DEV             VALUE "02".
+                  88  DEPT-HR              VALUE "03".
+              05  EMP-SALARY               PIC S9(7) COMP-3.
+              05  EMP-STATUS               PIC X(01).
    ```
 4. 看完后按 **`q`** 或 **`<Esc>`**，浮窗平滑关闭，原编辑现场完好如初；
 5. 在同一行按下 **`gf`**（Go to File）：Neovim 自动搜寻路径并直接打开该 `.CPY` 实体文件供你编辑；输入 `:bd` 或 `:b INPUTCSV.COB` 可切回主文件。
@@ -120,7 +124,7 @@ COBOL 大量依靠 Copybook（类似 C 语言的 `#include`）复用数据结构
 
 在 `COPY` 语句上按 `K` 后，浮窗显示 Copybook 内容，无需离开当前编辑位置。
 
-## 4. 本课速查总结
+## 4. 速查总结
 
 | 快捷键 | 模式 | 作用说明 |
 |---|---|---|

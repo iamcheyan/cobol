@@ -9,7 +9,7 @@
 | 范例程序 | 业务应用场景 | 核心 COBOL 技术考点 | 配合插件的关键操作体验 |
 |---|---|---|---|
 | **1. `INPUTCSV.COB`** | 管道符文本清洗与 CSV 导出 | • `ORGANIZATION IS LINE SEQUENTIAL`<br>• `UNSTRING ... DELIMITED BY` 拆分<br>• `STRING` 与 `FUNCTION TRIM` 裁剪<br>• Copybook 引入 (`EMP-REC.CPY`) | `gf` 跳入 Copybook、`K` 悬停浮窗预览、`gd`/`<C-o>` 段落秒级跳转 |
-| **2. `FIXEDREC.COB`** | 80 列银行定长交易报文处理 | • 无分隔符纯位置物理读取<br>• **`REDEFINES` 内存共享与结构重定义**<br>• `88` 级交易状态条件名（`EVALUATE TRUE`）<br>• `COMP-3` 紧凑十进制金额高精度累加 | `<leader>cr` 计算含 `REDEFINES` 结构体内存排布（观察偏移量不递增）、行尾字节换算提示 |
+| **2. `FIXEDREC.COB`** | 80 列银行定长交易报文处理 | • 无分隔符纯位置物理读取<br>• **`REDEFINES` 内存共享与结构重定义**<br>• `88` 级交易状态条件名（`EVALUATE TRUE`）<br>• `COMP-3` 紧凑十进制金额高精度累加 | `<leader>cr` 查看布局表；注意重定义分支的偏移与总长不折叠，需以编译器为准 |
 | **3. `TBLSRCH.COB`** | 多币种汇率矩阵与二分查找 | • COBOL 内存表（数组）：`OCCURS n TIMES`<br>• 专属指针与下标：`INDEXED BY`<br>• **`SEARCH ALL`（语言级极速二分查找）**<br>• 浮点精度汇率乘法与四舍五入 | 查看基本字段的 OCCURS 大小估算；用 `gd` 搜索字段定义（组级 OCCURS 不完整计入子字段总长） |
 | **4. `BATCHRPT.COB`** | 经典两级控制中断审计报表 | • **两级控制中断（Control Break）算法**<br>• 部门小计（Subtotal）与分公司总计<br>• 编辑型货币输出符（`PIC $$$,$$$,$$9.99`、`ZZ9`）<br>• 结构化分页与双重分隔符打印 | 段落跳跃（`gd` / `<C-o>` 在 Header、Detail、Break 间往返）、72 列越界防线测试 |
 
@@ -47,7 +47,7 @@
 1. 打开文件：`nvim extensions/standalone-examples/INPUTCSV.COB`；
 2. 光标停在 `COPY "EMP-REC.CPY".`，按 **`K`** 弹出浮窗就地预览结构，按 **`q`** 退出；
 3. 光标停在 `PERFORM 1000-INITIALIZE` 上按 **`gd`** 直达定义，按 **`<C-o>`** 原路跳回；
-4. 运行验证：`make run-csv`，查看终端打印与生成的 `output.csv`。
+4. 运行验证：`make -C extensions/standalone-examples run-csv`，查看终端打印与生成的 `output.csv`。
 
 ---
 
@@ -88,16 +88,14 @@
 ```
 
 ### 推荐动手实操
-1. 打开 Copybook 文件：`nvim TX-REC.CPY`；
+1. 打开 Copybook 文件：`nvim extensions/standalone-examples/TX-REC.CPY`；
 2. 光标停在 `01 TX-RECORD` 上，按下 **`<leader>cr`**（或 `:CobolCalcRecord`）；
-3. **观察内存排布 ASCII 表格**：
-   - `TX-BODY` 的偏移量为 `+27`，长度为 `42 B`；
-   - `TX-DEP-INFO` 的偏移量也是 `+27`！
-   - `TX-XFR-INFO` 的偏移量依然是 `+27`！
-   - *感悟*：这生动证明了 `REDEFINES` 在物理内存中不额外申请空间，而是与目标字段共享同一段内存！
-4. 打开主程序：`nvim extensions/standalone-examples/FIXEDREC.COB`；
-5. 光标停在 `TX-DEPOSIT` 上按 **`gd`**，直达 `TX-REC.CPY` 中的 `88` 级定义，按 **`<C-o>`** 跳回；
-6. 运行验证：`make run-fixed`，查看生成的清算报表 `tx_report.txt`。
+3. **观察布局表**：表格按源码顺序列出基本项及其偏移量，例如 `TX-BODY` 在 `+38`、`TX-AMOUNT` 在 `+27`；
+4. **注意 `REDEFINES` 的估算边界**：当前计算器不会把 `TX-DEP-INFO` / `TX-XFR-INFO` 两个重定义分支折叠到同一偏移量，而是把它们的子字段依次排开（实测 `TX-DEP-ACCOUNT` 为 `+80`、`TX-XFR-FROM-ACCT` 为 `+122`），因此显示的 `Total Size` 会把重叠内存重复计入。
+   - 换句话说：**不要把这个总长当作 `TX-RECORD` 的真实长度**；`REDEFINES` 分支的真实共享偏移需以编译器或接口规范为准。
+5. 打开主程序：`nvim extensions/standalone-examples/FIXEDREC.COB`；
+6. 光标停在 `TX-DEPOSIT` 上按 **`gd`**，直达 `TX-REC.CPY` 中的 `88` 级定义，按 **`<C-o>`** 跳回；
+7. 运行验证：`make -C extensions/standalone-examples run-fixed`，查看生成的清算报表 `tx_report.txt`。
 
 ---
 
@@ -131,7 +129,7 @@
 1. 打开文件：`nvim extensions/standalone-examples/TBLSRCH.COB`；
 2. 查看声明附近的 PIC 估算，并用 `:CobolCalcRecord` 检查可识别的字段大小；计算器不会把组级 OCCURS 次数完整乘入所有成员。
 3. 光标停在 `SEARCH ALL CURR-ENTRY` 上，体会 COBOL 原生二分查找语法的简洁；
-4. 运行验证：`make run-table`，观察 EUR, JPY, CNY, GBP 成功换算，以及未知货币 `XYZ` 触发 `AT END` 分支。
+4. 运行验证：`make -C extensions/standalone-examples run-table`，观察 EUR, JPY, CNY, GBP 成功换算，以及未知货币 `XYZ` 触发 `AT END` 分支。
 
 ---
 
@@ -166,7 +164,7 @@
 1. 打开文件：`nvim extensions/standalone-examples/BATCHRPT.COB`；
 2. 观察 `FMT-AMOUNT PIC $$,$$$,$$9.99.`；
 3. 在安装并配置 Aerial 后，执行 `:AerialToggle` 浏览程序符号；也可在段落名上用 `gd` 查看定义。
-4. 运行验证：`make run-report`，查看格式美观的 `sales_report.txt` 报表！
+4. 运行验证：`make -C extensions/standalone-examples run-report`，查看格式美观的 `sales_report.txt` 报表！
 
 ---
 

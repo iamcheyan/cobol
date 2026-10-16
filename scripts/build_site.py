@@ -8,6 +8,7 @@ Chinese original and is clearly marked as pending.
 """
 from __future__ import annotations
 
+import functools
 import hashlib
 import html
 import json
@@ -270,11 +271,67 @@ def site_href(target_page: Path, locale: str, page: Path, absolute: bool = False
     return quote(os.path.relpath(target_page.as_posix(), current_root.parent.as_posix()), safe="/._-")
 
 
-def lesson_items(locale: str) -> list[tuple[Path, str]]:
+# Short navigation labels; the full lesson title stays in the page heading and tooltip.
+LESSON_LABELS = {
+    "01_hello-cobol": "Hello COBOL",
+    "02_data-types": "Data Types",
+    "03_move-compute": "MOVE & COMPUTE",
+    "04_if-conditions": "IF",
+    "05_evaluate": "EVALUATE",
+    "06_perform-loops": "PERFORM",
+    "07_paragraphs": "Paragraphs",
+    "08_control-flow-practice": "Control Flow Practice",
+    "09_group-items": "Group Item",
+    "10_redefines": "REDEFINES",
+    "11_occurs-tables": "OCCURS Tables",
+    "12_indexed-by": "INDEXED BY",
+    "13_search-tables": "SEARCH Tables",
+    "14_data-structures-practice": "Data Structures Practice",
+    "15_sequential-file-read": "Sequential File Read",
+    "16_file-writing": "File Writing",
+    "17_fixed-length-files": "Fixed-Length Files",
+    "18_csv-processing": "CSV Processing",
+    "19_multiple-files": "Multiple Files",
+    "20_file-matching": "File Matching",
+    "21_sort": "SORT",
+    "22_file-processing-practice": "File Processing Practice",
+    "23_copybooks": "COPYBOOK",
+    "24_call-subprograms": "CALL Subprograms",
+    "25_using-parameters": "USING Parameters",
+    "26_error-handling": "Error Handling",
+    "27_logging": "Logging",
+    "28_modular-batch-project": "Modular Batch Project",
+    "29_embedded-sql": "Embedded SQL",
+    "30_sql-cursors": "SQL Cursors",
+    "31_data-synchronization": "Data Synchronization",
+    "32_bank-reconciliation-project": "Bank Reconciliation",
+}
+
+
+@functools.lru_cache(maxsize=None)
+def directory_short_names(locale: str) -> dict[str, str]:
+    """Short lesson names from the course index (translated index wins when present)."""
+    index = translated(LESSONS / "DIRECTORY.md", locale)
+    if index is None:
+        return {}
+    names: dict[str, str] = {}
+    for line in index.read_text(encoding="utf-8").splitlines():
+        match = re.match(r"^\|\s*(\d{2})\s*\|\s*([^|]+?)\s*\|", line)
+        if match:
+            names[match.group(1)] = match.group(2)
+    return names
+
+
+@functools.lru_cache(maxsize=None)
+def lesson_items(locale: str) -> tuple[tuple[Path, str, str], ...]:
+    """(page, short label, full title) for the course navigation."""
+    names = directory_short_names(locale)
     items = []
     for source in sorted(LESSONS.glob("[0-9][0-9]*/README.md")):
-        items.append((output_rel(source), title_of(source, locale)))
-    return items
+        folder = source.parent.name
+        short = names.get(folder[:2]) if locale == "zh-cn" else None
+        items.append((output_rel(source), short or LESSON_LABELS.get(folder, folder), title_of(source, locale)))
+    return tuple(items)
 
 
 def is_lesson_workspace(source: Path) -> bool:
@@ -451,8 +508,9 @@ def shell(locale: str, title: str, body: str, page: Path, home: bool = False) ->
         for key in LOCALES
     )
     lessons = "\n".join(
-        f'<a href="{site_href(Path(locale) / item, locale, page)}"><span>{html.escape(item.parts[1][:2])}</span>{html.escape(name)}</a>'
-        for item, name in lesson_items(locale)
+        f'<a href="{site_href(Path(locale) / item, locale, page)}" title="{html.escape(full)}">'
+        f'<span>{html.escape(item.parts[1][:2])}</span><em>{html.escape(short)}</em></a>'
+        for item, short, full in lesson_items(locale)
     )
     if home:
         main = f'<main class="home">{body}</main>'

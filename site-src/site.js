@@ -117,6 +117,72 @@ if (courseToggle && courseBody) {
   });
 }
 
+// Fixed-format COBOL source viewer: preserve the source columns, add an ISPF-style
+// ruler/sequence gutter, and tokenise locally without a third-party highlighter.
+const cobolViews = document.querySelectorAll('[data-cobol-source="true"]');
+if (cobolViews.length) {
+  const keywords = new Set(`ACCEPT ADD ALL ALTER AND CALL CANCEL CLOSE COMPUTE CONTINUE COPY
+    DATA DELETE DISPLAY DIVIDE DIVISION ELSE END-CALL END-COMPUTE END-IF END-PERFORM
+    END-READ END-SEARCH END-START END-STRING END-UNSTRING END-WRITE ENTRY ENVIRONMENT
+    EVALUATE EXIT FD FILE SECTION FROM GIVING GO GOBACK IF INITIALIZE INSPECT INTO IS
+    LINKAGE MOVE MULTIPLY NOT OCCURS OPEN OR PERFORM PROCEDURE PROGRAM-ID READ REDEFINES
+    REPLACING RETURN REWRITE SEARCH SECTION SELECT SET SORT START STOP STRING SUBTRACT
+    THEN TO UNSTRING UNTIL VALUE WHEN WORKING-STORAGE WRITE`.trim().split(/\s+/));
+  const escape = text => text.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const tokenPattern = /("(?:""|[^"])*"|'(?:''|[^'])*'|\b(?:PIC|PICTURE)\b|\b(?:COMP-3|COMP|DISPLAY|BINARY|PACKED-DECIMAL|INDEXED|SEQUENTIAL|LINE\s+SEQUENTIAL)\b|\b(?:[0-9]{1,2})\b|[A-Z][A-Z0-9-]*(?=\s*\.)|[A-Z][A-Z0-9-]*|\d+(?:\.\d+)?|[.,;()])/gi;
+  const highlight = text => {
+    let out = '', last = 0;
+    for (const m of text.matchAll(tokenPattern)) {
+      const token = m[0], at = m.index;
+      out += escape(text.slice(last, at));
+      const upper = token.toUpperCase();
+      let cls = '';
+      if (/^["']/.test(token)) cls = ' cobol-string';
+      else if (/^(PIC|PICTURE)$/i.test(token)) cls = ' cobol-picture-key';
+      else if (/^(COMP-3|COMP|DISPLAY|BINARY|PACKED-DECIMAL|INDEXED|SEQUENTIAL)$/i.test(token)) cls = ' cobol-clause';
+      else if (/^\d/.test(token)) cls = ' cobol-number';
+      else if (keywords.has(upper)) cls = ' cobol-keyword';
+      else if (/^[A-Z][A-Z0-9-]*$/i.test(token)) cls = ' cobol-identifier';
+      else if (/^[.,;()]$/.test(token)) cls = ' cobol-punctuation';
+      out += cls ? `<span class="${cls.trim()}">${escape(token)}</span>` : escape(token);
+      last = at + token.length;
+    }
+    return out + escape(text.slice(last));
+  };
+  for (const view of cobolViews) {
+    const code = view.querySelector('pre code');
+    const pre = view.querySelector('pre');
+    if (!code || !pre) continue;
+    const source = code.textContent.replace(/\r\n?/g, '\n');
+    const lines = source.split('\n');
+    const ruler = document.createElement('div');
+    ruler.className = 'cobol-ruler';
+    ruler.setAttribute('aria-hidden', 'true');
+    ruler.innerHTML = '<span class="ruler-segment ruler-sequence">1───6</span><span class="ruler-segment ruler-indicator">7</span><span class="ruler-segment ruler-area-a">8-11</span><span class="ruler-segment ruler-area-b"><span>12</span><span>72</span></span><span class="ruler-segment ruler-identification">73──80</span>';
+    const rows = document.createElement('div');
+    rows.className = 'cobol-lines';
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      const row = document.createElement('div');
+      row.className = 'cobol-line';
+      const number = document.createElement('span');
+      number.className = 'cobol-line-number';
+      number.textContent = String(i + 1).padStart(5, '0');
+      number.setAttribute('aria-hidden', 'true');
+      const text = document.createElement('span');
+      text.className = 'cobol-line-text';
+      // In fixed format, asterisk/slash in column 7 marks a comment/page eject.
+      const indicator = line.charAt(6);
+      text.innerHTML = indicator === '*' || indicator === '/' ? `<span class="cobol-comment">${escape(line)}</span>` : highlight(line);
+      row.append(number, text);
+      rows.append(row);
+    }
+    pre.classList.add('cobol-editor');
+    pre.replaceChildren(ruler, rows);
+    pre.setAttribute('aria-label', 'COBOL source with fixed-format column ruler');
+  }
+}
+
 const workspace = document.querySelector('.lesson-workspace');
 if (workspace) {
   const tabs = [...workspace.querySelectorAll('.lesson-tab')];

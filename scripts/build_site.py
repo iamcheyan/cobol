@@ -56,6 +56,7 @@ LOCALES = {
         "tab_guide": "课程讲义", "tab_exercise": "动手练习", "tab_answer": "参考答案", "tab_resources": "源码与资料",
         "download": "下载文件 ↓", "pending_page": "此内容的翻译正在准备中。以下先显示中文原文。",
         "pending_resource": "此文件暂无该语言版本，下面显示中文原文。",
+        "source_format": "固定格式 COBOL · 80 列刻度",
         "view_source": "查看中文原文 →", "unsupported": "此资源不适合直接预览，可下载后在本地打开。",
         "footer": "课程源码与练习材料",
         "footer_compiler": "配套编译器",
@@ -165,6 +166,7 @@ LOCALES = {
         "tab_guide": "Lesson", "tab_exercise": "Exercise", "tab_answer": "Answer key", "tab_resources": "Code & files",
         "download": "Download ↓", "pending_page": "This translation is being prepared. The Chinese original is shown below.",
         "pending_resource": "This file has no English version yet; the Chinese original is shown below.",
+        "source_format": "FIXED FORMAT · 80-COLUMN RULER",
         "view_source": "Read the Chinese original →", "unsupported": "Preview is unavailable for this file; download it to open locally.",
         "footer": "Course source and practice material",
         "footer_compiler": "compiler",
@@ -274,6 +276,7 @@ LOCALES = {
         "tab_guide": "レッスン", "tab_exercise": "演習", "tab_answer": "解答例", "tab_resources": "コード・資料",
         "download": "ダウンロード ↓", "pending_page": "このページは翻訳準備中です。以下は中国語の原文です。",
         "pending_resource": "このファイルの日本語版は未作成です。以下は中国語の原文です。",
+        "source_format": "固定形式 COBOL · 80 桁ルーラー",
         "view_source": "中国語の原文を見る →", "unsupported": "このファイルはプレビューできません。ダウンロードして開いてください。",
         "footer": "コースのソースと演習資料",
         "footer_compiler": "対応コンパイラ",
@@ -660,11 +663,17 @@ def resource_browser(locale: str, source: Path, page: Path) -> str:
             if body is not None and len(body) <= 400_000:
                 language = html.escape(suffix.lstrip(".") or "text")
                 note = f'<p class="translation-pending">{labels["pending_resource"]}</p>' if with_original else ""
+                cobol_source = suffix in {".cob", ".cbl", ".cobol", ".cpy"}
+                source_badge = (f'<span class="source-format">{html.escape(labels["source_format"])}</span>'
+                                if cobol_source else "")
+                editor_class = " cobol-source-view" if cobol_source else ""
+                editor_attr = ' data-cobol-source="true"' if cobol_source else ""
                 views.append(
-                    f'<div class="resource-view" id="resource-{index}" data-resource="{index}" hidden>'
+                    f'<div class="resource-view{editor_class}" id="resource-{index}" data-resource="{index}"{editor_attr} hidden>'
                     f'<div class="resource-heading"><span>{html.escape(label)}</span>'
-                    f'<a href="{rel_from_page}" download>{labels["download"]}</a></div>'
-                    f'{note}<pre><code class="language-{language}">{body}</code></pre></div>'
+                    f'<span class="resource-heading-tools">{source_badge}'
+                    f'<a href="{rel_from_page}" download>{labels["download"]}</a></span></div>'
+                    f'{note}<pre class="source-pre"><code class="language-{language}">{body}</code></pre></div>'
                 )
                 continue
         views.append(

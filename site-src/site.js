@@ -159,15 +159,28 @@ if (cobolViews.length) {
     ruler.className = 'cobol-ruler';
     ruler.setAttribute('aria-hidden', 'true');
     ruler.innerHTML = '<span class="ruler-segment ruler-sequence">1───6</span><span class="ruler-segment ruler-indicator">7</span><span class="ruler-segment ruler-area-a">8-11</span><span class="ruler-segment ruler-area-b"><span>12</span><span>72</span></span><span class="ruler-segment ruler-identification">73──80</span>';
-    const mobileLegend = document.createElement('div');
-    mobileLegend.className = 'cobol-mobile-legend';
-    mobileLegend.setAttribute('aria-label', 'Fixed-format column regions');
-    const legendLabels = document.documentElement.lang === 'ja'
-      ? ['1–6 連番', '7 指示', '8–11 Area A', '12–72 Area B', '73–80 識別']
+    const mobileTools = document.createElement('div');
+    mobileTools.className = 'cobol-mobile-tools';
+    const fixedToggle = document.createElement('button');
+    fixedToggle.className = 'cobol-fixed-toggle';
+    fixedToggle.type = 'button';
+    const labels = document.documentElement.lang === 'ja'
+      ? {read: '読みやすく表示', fixed: '固定形式で表示', hint: '列位置を確認するときだけ固定形式に切り替えます'}
       : document.documentElement.lang === 'en'
-        ? ['1–6 Sequence', '7 Indicator', '8–11 Area A', '12–72 Area B', '73–80 Identification']
-        : ['1–6 序列', '7 指示', '8–11 Area A', '12–72 Area B', '73–80 识别'];
-    mobileLegend.innerHTML = legendLabels.map((label, i) => `<span class="legend-region legend-${['sequence','indicator','a','b','id'][i]}">${label}</span>`).join('');
+        ? {read: 'Readable view', fixed: 'Fixed columns', hint: 'Switch to fixed columns only when checking source positions'}
+        : {read: '易读模式', fixed: '固定列模式', hint: '需要核对列位置时再切换固定列模式'};
+    fixedToggle.textContent = labels.fixed;
+    fixedToggle.setAttribute('aria-pressed', 'false');
+    const mobileHint = document.createElement('span');
+    mobileHint.className = 'cobol-mobile-hint';
+    mobileHint.textContent = labels.hint;
+    mobileTools.append(mobileHint, fixedToggle);
+    fixedToggle.addEventListener('click', () => {
+      const fixed = pre.classList.toggle('mobile-fixed');
+      pre.scrollLeft = 0;
+      fixedToggle.textContent = fixed ? labels.read : labels.fixed;
+      fixedToggle.setAttribute('aria-pressed', String(fixed));
+    });
     const rows = document.createElement('div');
     rows.className = 'cobol-lines';
     for (let i = 0; i < lines.length; i++) {
@@ -180,14 +193,23 @@ if (cobolViews.length) {
       number.setAttribute('aria-hidden', 'true');
       const text = document.createElement('span');
       text.className = 'cobol-line-text';
-      // In fixed format, asterisk/slash in column 7 marks a comment/page eject.
+      // Keep a full-width desktop/fixed view and a mobile reading view that omits
+      // the six sequence columns plus indicator, then wraps within the viewport.
+      const desktopText = document.createElement('span');
+      desktopText.className = 'cobol-desktop-text';
+      const readingText = document.createElement('span');
+      readingText.className = 'cobol-reading-text';
       const indicator = line.charAt(6);
-      text.innerHTML = indicator === '*' || indicator === '/' ? `<span class="cobol-comment">${escape(line)}</span>` : highlight(line);
+      const comment = indicator === '*' || indicator === '/';
+      desktopText.innerHTML = comment ? `<span class="cobol-comment">${escape(line)}</span>` : highlight(line);
+      const bodyText = line.slice(7);
+      readingText.innerHTML = comment ? `<span class="cobol-comment">${escape(bodyText)}</span>` : highlight(bodyText);
+      text.append(desktopText, readingText);
       row.append(number, text);
       rows.append(row);
     }
     pre.classList.add('cobol-editor');
-    pre.replaceChildren(ruler, mobileLegend, rows);
+    pre.replaceChildren(mobileTools, ruler, rows);
     pre.setAttribute('aria-label', 'COBOL source with fixed-format column ruler');
   }
 }

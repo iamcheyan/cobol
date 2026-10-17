@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 372" role="img" aria-labelledby="t d" font-family="'DM Sans','Noto Sans SC','Noto Sans JP',system-ui,sans-serif">
+  <title id="t">COBOL fixed-format 80-column layout</title>
+  <desc id="d">Traditional 80-column fixed format</desc>
+  <style>
+    .range { font-size: 15px; font-weight: 600; fill: #3f3b3b; }
+    .area  { font-size: 13px; font-weight: 500; fill: #3f3b3b; }
+    .cols  { font-size: 11px; fill: #77736c; }
+    .note  { font-size: 12px; fill: #5f5b52; }
+    .brk   { font-size: 12.5px; fill: #76319f; font-weight: 500; }
+  </style>
+  <rect x="1" y="1" width="658" height="370" rx="10" fill="#fcfbf7" stroke="#d8d2c3"/>
+  <text class="note" x="330" y="30" text-anchor="middle">Traditional 80-column fixed format</text>
+  <path d="M78.0 128 V86" stroke="#d97706" stroke-width="1.2" stroke-dasharray="3 2"/><circle cx="78.0" cy="128" r="2.4" fill="#d97706"/><text class="area" x="78.0" y="80" text-anchor="middle">Indicator</text><text class="cols" x="78.0" y="65" text-anchor="middle">col 7</text>
+  <path d="M123.0 128 V128" stroke="#0d9488" stroke-width="1.2" stroke-dasharray="3 2"/><circle cx="123.0" cy="128" r="2.4" fill="#0d9488"/><text class="area" x="123.0" y="122" text-anchor="middle">Area A</text><text class="cols" x="123.0" y="107" text-anchor="middle">cols 8–11</text>
+  <rect x="26" y="132" width="34" height="56" rx="2" fill="#64748b" fill-opacity="0.16" stroke="#64748b" stroke-width="1.5"/>
+  <rect x="63" y="132" width="30" height="56" rx="2" fill="#d97706" fill-opacity="0.16" stroke="#d97706" stroke-width="1.5"/>
+  <rect x="96" y="132" width="54" height="56" rx="2" fill="#0d9488" fill-opacity="0.16" stroke="#0d9488" stroke-width="1.5"/>
+  <rect x="153" y="132" width="400" height="56" rx="2" fill="#2563eb" fill-opacity="0.16" stroke="#2563eb" stroke-width="1.5"/>
+  <rect x="556" y="132" width="78" height="56" rx="2" fill="#64748b" fill-opacity="0.16" stroke="#64748b" stroke-width="1.5"/>
+  <text class="range" x="43.0" y="210" text-anchor="middle">1-6</text>
+  <text class="range" x="78.0" y="210" text-anchor="middle">7</text>
+  <text class="range" x="123.0" y="210" text-anchor="middle">8-11</text>
+  <text class="range" x="353.0" y="210" text-anchor="middle">12-72</text>
+  <text class="range" x="595.0" y="210" text-anchor="middle">73-80</text>
+  <text class="area" x="43.0" y="232" text-anchor="middle">Sequence</text><text class="cols" x="43.0" y="248" text-anchor="middle">cols 1–6</text>
+  <text class="area" x="353.0" y="232" text-anchor="middle">Area B</text><text class="cols" x="353.0" y="248" text-anchor="middle">cols 12–72</text>
+  <text class="area" x="595.0" y="232" text-anchor="middle">Identification</text><text class="cols" x="595.0" y="248" text-anchor="middle">cols 73–80</text>
+  <path d="M96 280 V293 H556 V280" fill="none" stroke="#76319f" stroke-width="1.6"/>
+  <text class="brk" x="326" y="314" text-anchor="middle">COBOL source code area (columns 8–72)</text>
+  <text class="note" x="330" y="330" text-anchor="middle">Columns 73 onward are ignored by the compiler; source written there silently disappears.</text>
+  <text class="cols" x="330" y="356" text-anchor="middle">Column 7 holds * for a comment and - for a continuation line.</text>
+</svg>

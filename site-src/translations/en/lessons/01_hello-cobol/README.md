@@ -84,6 +84,8 @@ Note that **`DATA DIVISION` is missing here.** Not because it was forgotten, but
 
 When this language was young, input came through punched cards, so it carries hard rules about "which column" all the way to today:
 
+![COBOL fixed-format 80-column layout: sequence, indicator, Area A, Area B and identification areas](assets/fixed-format-columns.svg)
+
 - **Column 7**: the indicator area. Putting `*` here means this whole line is a comment; putting `-` here means line continuation.
 - **Columns 8–11 (Area A)**: Division names, `FD`, `01`-level declarations, and paragraph names must begin here.
 - **Columns 12–72 (Area B)**: statements such as `DISPLAY` and `MOVE` are written here.

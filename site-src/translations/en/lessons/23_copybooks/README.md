@@ -80,6 +80,10 @@ The Lesson 17 account record is 27 bytes: account number 10, customer ID 8, bala
 
 ### `COPY` Inserts Text at Compile Time
 
+![Compile-time expansion of a Copybook declaration](assets/copybook-compile-expansion.svg)
+
+The program source and Copybook declaration enter the compiler together. Each program gets its own expanded declaration; the declaration is shared, not runtime data.
+
 When the compiler sees `COPY "ACCOUNT-REC.CPY".`, it inserts the file’s text at that location. The declaration is needed at compile time through an `-I` directory, not when the program runs. Its contents must be valid data declarations at the inclusion point, here `WORKING-STORAGE SECTION`. It is not `CALL`: there is no program unit, argument passing, or runtime cost. `COPY` changes **what is compiled**; `CALL` changes **where runtime control goes**.
 
 ### Why Not Keep Separate Declarations?

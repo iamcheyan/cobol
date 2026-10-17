@@ -184,6 +184,8 @@ The three rules in the table above are all that the code validates. What is **no
 
 ## Where Boundary Values Branch
 
+![IF decision flow from the first failed rule to acceptance or rejection](assets/if-decision-flow.svg)
+
 Remember one thing first: rejections here are all business rejections, and the process exit code is still `0`; there is no system failure branch in the program at all. Every line in the table below was compiled and run on this machine:
 
 | Amount | Status | Where Comparison Branches | `判定=` | `理由=` |

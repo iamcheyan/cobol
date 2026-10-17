@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" role="img" aria-labelledby="title desc" font-family="'DM Sans','Noto Sans SC','Noto Sans JP',system-ui,sans-serif">
+  <title id="title">COPY expands declarations during compilation</title>
+  <desc id="desc">Program source and a Copybook declaration enter the compiler; the result contains the expanded declarations in the compiled program. Separate consumers receive separate storage at runtime.</desc>
+  <style>
+    .title { font-size: 16px; font-weight: 600; fill: #3f3b3b; }
+    .label { font-size: 12px; font-weight: 600; fill: #3f3b3b; }
+    .code { font-size: 12px; fill: #3f3b3b; font-family: 'DM Mono',ui-monospace,monospace; }
+    .note { font-size: 12px; fill: #5f5b52; }
+    .strong { font-size: 14px; font-weight: 600; fill: #76319f; }
+  </style>
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#2563eb"/></marker>
+    <marker id="runtime-arrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#64748b"/></marker>
+  </defs>
+  <rect x="1" y="1" width="898" height="398" rx="10" fill="#fcfbf7" stroke="#d8d2c3" stroke-width="1.5"/>
+  <text class="title" x="36" y="40">COPY is source expansion at compile time</text>
+
+  <rect x="36" y="68" width="300" height="110" rx="4" fill="#64748b" fill-opacity="0.12" stroke="#64748b" stroke-width="1.5"/>
+  <text class="label" x="54" y="92">PROGRAM SOURCE</text>
+  <text class="code" x="54" y="119">WORKING-STORAGE SECTION.</text>
+  <text class="code" x="54" y="143">COPY "ACCOUNT-REC.CPY".</text>
+
+  <rect x="36" y="202" width="300" height="86" rx="4" fill="#0d9488" fill-opacity="0.14" stroke="#0d9488" stroke-width="1.5"/>
+  <text class="label" x="54" y="227">COPYBOOK</text>
+  <text class="code" x="54" y="252">01 WS-ACCOUNT-RECORD.</text>
+  <text class="code" x="54" y="273">05 WS-ACCOUNT-NUMBER PIC X(10).</text>
+
+  <path d="M350 121 H428" fill="none" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <path d="M350 245 H389 V151 H428" fill="none" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="438" y="92" width="128" height="98" rx="4" fill="#2563eb" fill-opacity="0.14" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="label" x="502" y="129" text-anchor="middle">COMPILE</text>
+  <text class="note" x="502" y="153" text-anchor="middle">text insertion</text>
+
+  <path d="M578 141 H641" fill="none" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="650" y="68" width="214" height="220" rx="4" fill="#d97706" fill-opacity="0.12" stroke="#d97706" stroke-width="1.5"/>
+  <text class="label" x="670" y="94">EXPANDED PROGRAM</text>
+  <text class="code" x="670" y="126">WORKING-STORAGE</text>
+  <text class="code" x="670" y="148">SECTION.</text>
+  <text class="code" x="670" y="184">01 WS-ACCOUNT-RECORD.</text>
+  <text class="code" x="670" y="207">05 WS-ACCOUNT-NUMBER</text>
+  <text class="code" x="686" y="230">PIC X(10).</text>
+  <text class="note" x="670" y="263">compiled into this program</text>
+
+  <line x1="36" y1="310" x2="864" y2="310" stroke="#d8d2c3" stroke-width="1.5"/>
+  <text class="strong" x="450" y="341" text-anchor="middle">Shared declaration ≠ shared runtime data</text>
+  <rect x="170" y="355" width="220" height="30" rx="4" fill="#64748b" fill-opacity="0.12" stroke="#64748b" stroke-width="1.5"/>
+  <rect x="510" y="355" width="220" height="30" rx="4" fill="#64748b" fill-opacity="0.12" stroke="#64748b" stroke-width="1.5"/>
+  <text class="label" x="280" y="375" text-anchor="middle">PROGRAM A STORAGE</text>
+  <text class="label" x="620" y="375" text-anchor="middle">PROGRAM B STORAGE</text>
+  <path d="M395 370 H500" fill="none" stroke="#64748b" stroke-width="1.5" stroke-dasharray="5 4" marker-start="url(#runtime-arrow)" marker-end="url(#runtime-arrow)"/>
+</svg>

@@ -47,6 +47,8 @@ ASSET_VERSION = asset_version()
 
 LOCALES = {
     "zh-cn": {
+        "pager_prev": "上一课", "pager_next": "下一课",
+        "pager_all": "全部课程", "pager_end": "完成全部 32 课",
         "html": "zh-CN", "name": "简体中文", "brand_sub": "实战课程",
         "nav_home": "课程首页", "nav_directory": "32 课目录", "nav_extensions": "拓展课程",
         "nav_source": "GitHub 源码", "nav_lang": "语言", "course_nav": "课程导航",
@@ -154,6 +156,8 @@ LOCALES = {
         "plugin_figure": "Neovim 实际画面：Syms 大纲、固定格式列标尺、Winbar 和 IF / ELSE / END-IF 的彩色配对及连接虚线。Syms 是另装的界面；插件另提供 Aerial 后端。",
     },
     "en": {
+        "pager_prev": "Previous lesson", "pager_next": "Next lesson",
+        "pager_all": "All lessons", "pager_end": "You have reached the last lesson",
         "html": "en", "name": "English", "brand_sub": "Practical Course",
         "nav_home": "Home", "nav_directory": "32 lessons", "nav_extensions": "Extensions",
         "nav_source": "GitHub source", "nav_lang": "Language", "course_nav": "Course contents",
@@ -261,6 +265,8 @@ LOCALES = {
         "plugin_figure": "A real Neovim session: the optional Syms outline, column guides, Winbar, and paired IF / ELSE / END-IF badges with a connecting line. The plugin also includes a separate Aerial backend.",
     },
     "ja": {
+        "pager_prev": "前のレッスン", "pager_next": "次のレッスン",
+        "pager_all": "全レッスン", "pager_end": "最後のレッスンです",
         "html": "ja", "name": "日本語", "brand_sub": "実践コース",
         "nav_home": "ホーム", "nav_directory": "全32レッスン", "nav_extensions": "発展教材",
         "nav_source": "GitHub ソース", "nav_lang": "言語", "course_nav": "コース目次",
@@ -599,7 +605,7 @@ def pending(locale: str, source: Path, page: Path) -> str:
     return f'<aside class="translation-pending"><p>{labels["pending_page"]}</p><a href="{link}">{labels["view_source"]}</a></aside>'
 
 
-def lesson_panel(locale: str, key: str, source: Path, page: Path) -> str:
+def lesson_panel(locale: str, key: str, source: Path, page: Path, extra: str = "") -> str:
     labels = LOCALES[locale]
     has_translation = translated(source, locale) is not None
     notice = "" if has_translation or locale == "zh-cn" else pending(locale, source, page)
@@ -607,7 +613,7 @@ def lesson_panel(locale: str, key: str, source: Path, page: Path) -> str:
     hidden = "" if key == "guide" else " hidden"
     return (
         f'<section class="lesson-panel{active}" id="panel-{key}" data-panel="{key}"{hidden}>'
-        f'{notice}<article>{render_markdown(source, locale)}</article></section>'
+        f'{notice}<article>{render_markdown(source, locale)}</article>{extra}</section>'
     )
 
 
@@ -661,7 +667,7 @@ def resource_browser(locale: str, source: Path, page: Path) -> str:
 def lesson_workspace(locale: str, source: Path, page: Path) -> str:
     labels = LOCALES[locale]
     panels = [
-        lesson_panel(locale, "guide", source, page),
+        lesson_panel(locale, "guide", source, page, extra=lesson_pager(locale, source, page)),
         lesson_panel(locale, "exercise", source.parent / "exercise.md", page),
         lesson_panel(locale, "answer", source.parent / "answer.md", page),
     ]
@@ -677,6 +683,38 @@ def lesson_workspace(locale: str, source: Path, page: Path) -> str:
         for index, (key, label) in enumerate((key, label) for key, label in order if key in present)
     )
     return f'<div class="lesson-workspace"><nav class="lesson-tabs" role="tablist">{tabs}</nav>{"".join(panels)}</div>'
+
+
+def lesson_pager(locale: str, source: Path, page: Path) -> str:
+    """Previous / next links at the end of a lesson, plus a way back to the index."""
+    labels = LOCALES[locale]
+    items = lesson_items(locale)
+    current = output_rel(source)
+    index = next((i for i, (target, _short, _full) in enumerate(items) if target == current), None)
+    if index is None:
+        return ""
+    parts = []
+    if index > 0:
+        target, short, full = items[index - 1]
+        parts.append(
+            f'<a class="pager-link pager-prev" href="{site_href(Path(locale) / target, locale, page)}">'
+            f'<span class="pager-dir">← {labels["pager_prev"]}</span>'
+            f'<span class="pager-title">{html.escape(short)}</span></a>')
+    else:
+        parts.append('<span class="pager-link pager-empty"></span>')
+    if index + 1 < len(items):
+        target, short, full = items[index + 1]
+        parts.append(
+            f'<a class="pager-link pager-next" href="{site_href(Path(locale) / target, locale, page)}">'
+            f'<span class="pager-dir">{labels["pager_next"]} →</span>'
+            f'<span class="pager-title">{html.escape(short)}</span></a>')
+    else:
+        parts.append(
+            f'<a class="pager-link pager-next pager-finish" href="{site_href(Path(locale) / "lessons/DIRECTORY.html", locale, page)}">'
+            f'<span class="pager-dir">{labels["pager_end"]}</span>'
+            f'<span class="pager-title">{labels["pager_all"]} →</span></a>')
+    return (f'<nav class="lesson-pager" aria-label="{labels["pager_all"]}">'
+            f'{"".join(parts)}</nav>')
 
 
 def shell(locale: str, title: str, body: str, page: Path, home: bool = False) -> str:

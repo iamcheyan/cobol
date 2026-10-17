@@ -179,6 +179,8 @@ COBOL 也支持用 `AND` / `OR` 把多个条件拼成一个复合条件，本课
 
 ## 边界值在何处分叉
 
+![IF decision flow from the first failed rule to acceptance or rejection](assets/if-decision-flow.svg)
+
 先记住一件事：这里的拒绝全都是业务拒绝，退出码照样是 `0`，程序里根本没有系统故障那条分支。下表每一行都在本机实际编译运行过：
 
 | 金额 | 状态 | 在哪个比较处分叉 | `判定=` | `理由=` |

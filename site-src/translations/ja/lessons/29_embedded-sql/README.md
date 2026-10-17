@@ -72,6 +72,8 @@ _translated_by: site-src/translation agent
 
 ## ツールチェーン：なぜプリコンパイラーが必要なのか
 
+![Embedded SQL precompile, compile, link, and runtime pipeline](assets/embedded-sql-pipeline.svg)
+
 `cobc` は `EXEC SQL` を解析できないため、第29～32課のデータ処理経路は次のようになります。
 
 ```text

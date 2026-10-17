@@ -75,6 +75,8 @@ COBOL には値による検索方法が二つあります。
 
 ## SEARCH と SEARCH ALL
 
+![SEARCH scans the four accounts in order; SEARCH ALL narrows the ordered table to the target](assets/search-methods.svg)
+
 `SEARCH WS-ACCOUNT-ENTRY` は逐次検索です。まず `SET WS-ACCOUNT-IDX TO 1` で索引を第 1 項に置き、各 `WHEN` で現在項目の口座番号と検索対象を比較します。一致しなければ `SEARCH` が自動的に一つ進みます。末尾まで一致しなければ `AT END` に進みます。つまり、**開始位置はこちらが指定し、検索が順に進みます。**
 
 `SEARCH ALL WS-ACCOUNT-ENTRY` は二分検索です。最初にどこを調べ、次にどちら半分を捨てるかを検索が決めるため、比較回数を大幅に減らせます。その分、前提があります。テーブルに `INDEXED BY` 索引と `ASCENDING KEY`（または `DESCENDING KEY`）宣言が必要で、**実際に格納したキー順が宣言と一致し**、キーが一意でなければなりません。一つでも満たさなければ結果は保証されません。

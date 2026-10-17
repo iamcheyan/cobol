@@ -56,6 +56,8 @@ COBOLでは `SORT` がこの処理を担います。キーとレコードの入�
 
 ## レコードレイアウトとデータの流れ
 
+![SORT pipeline from input procedure through ordering to output procedure](assets/sort-data-flow.svg)
+
 [`accounts-unsorted.txt`](./accounts-unsorted.txt) には、未整列の27文字レコードが4件あります。
 
 | フィールド | `PIC` | 長さ |

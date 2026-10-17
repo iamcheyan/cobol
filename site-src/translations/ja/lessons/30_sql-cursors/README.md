@@ -147,6 +147,8 @@ echo $?                # 查看退出码
 
 ## カーソルのライフサイクルとソースの読み方
 
+![ACCOUNT-CURSOR lifecycle and SQLCODE branches](assets/cursor-lifecycle.svg)
+
 ソースは [`lesson.cob`](./lesson.cob) を参照してください。以下では行番号順ではなく「データがいつ実際に動くか」の順に説明します。そうすると、頭の中の時間軸とコードが一致します。
 
 ### 1. `DECLARE` はクエリを登録するだけで、まだ一行も読まない

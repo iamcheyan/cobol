@@ -78,6 +78,10 @@ Copybook 就是冲着这件事来的：把这份声明从程序里搬出来，�
 
 ### `COPY` 是编译期插入，不是运行时调用
 
+![Compile-time expansion of a Copybook declaration](assets/copybook-compile-expansion.svg)
+
+图中主程序源码与 Copybook 声明一起进入编译器；展开后的声明编入各自程序。共享的是声明，不是运行期数据。
+
 编译器遇到 `COPY "ACCOUNT-REC.CPY".`，会把该文件的文本原样插到这一行所在的位置，再照常编译。三个直接后果：
 
 - 声明文件必须在**编译时**找得到（靠 `-I` 目录），程序运行时反而不再需要它；

@@ -65,6 +65,10 @@ Copybookは宣言をプログラムから独立したファイルに移し、必
 
 ### `COPY` はコンパイル時の挿入で、実行時呼び出しではない
 
+![Compile-time expansion of a Copybook declaration](assets/copybook-compile-expansion.svg)
+
+プログラムソースとCopybook宣言を一緒にコンパイラーへ渡します。展開された宣言は各プログラムに組み込まれます。共有するのは宣言であり、実行時データではありません。
+
 コンパイラーは `COPY "ACCOUNT-REC.CPY".` の位置にファイル内容を挿入します。宣言ファイルは `-I` で指定した場所にコンパイル時必要で、実行時には不要です。取り込み位置（この課では `WORKING-STORAGE SECTION`）に有効なCOBOL宣言を書きます。`CALL` と違い、プログラム単位、引数受け渡し、実行時コストはありません。`COPY` はコンパイル対象の形を変え、`CALL` は実行時の制御先を変えます。
 
 ### なぜ個別宣言を続けないのか

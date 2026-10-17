@@ -72,6 +72,8 @@ Limits: This lesson reads no terminal, file, or database inputs; sample values a
 
 ## One Sequence of Bytes, Two Layouts
 
+![Two views over the same 27-byte payload: the first 10 bytes mean the same thing, the last 17 are read as different fields depending on the type code](assets/redefines-overlay.svg)
+
 In `lesson.cob` there is only a single `01` record: byte 1 is the transaction code (**not** in the redefined area), and bytes 2–28 form the 27-byte payload area. The deposit (`D`) payload is "account number, amount, reference", and the transfer (`T`) payload is "source account, target account, amount"; both views start at byte 1 of the payload area and both occupy 27 bytes, aligning them over the exact same physical storage.
 
 `REDEFINES` allows the redefining item (object) to occupy the same physical storage as the redefined item (subject). It is not a second copy of storage, nor a conversion: **it is the exact same bytes, depending on which field name you use to read them**. Writing through the second view simply overwrites that old space using the new field names.

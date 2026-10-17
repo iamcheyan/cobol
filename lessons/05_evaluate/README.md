@@ -76,6 +76,8 @@ END-IF
 
 ### EVALUATE 怎么写
 
+![EVALUATE routes D, W, T, and other transaction codes to four explicit branches](assets/transaction-code-routing.svg)
+
 批处理上游按接口契约给出单字符交易码，程序要在同一处把每个已知代码映射到对应的处理类别，并让没人处理的代码也有明确出路。写法就是“一个 subject 对多个常量”：
 
 ```cobol

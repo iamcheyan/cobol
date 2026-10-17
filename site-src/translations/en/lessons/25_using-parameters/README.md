@@ -73,6 +73,8 @@ Limits: this lesson implements no business rules. It demonstrates only the data 
 
 ## One Argument, Three Ways to Pass It
 
+![Data direction for BY REFERENCE, BY CONTENT, and BY VALUE](assets/using-data-directions.svg)
+
 The main program runs three experiments with the same argument. Each asks just one thing: who owns this storage?
 
 | Passing mode | What the caller writes | What the subprogram sees | Can the subprogram change the caller’s field? | Caller’s field after the call in this lesson |

@@ -95,6 +95,8 @@ FD TRANSACTION-FILE.
 
 ### `FILE STATUS` 和 EOF 不是一码事
 
+![Open status branches to failure or into the read loop; AT END exits on EOF](assets/sequential-read-flow.svg)
+
 `FILE STATUS IS WS-FILE-STATUS` 让每次文件操作之后的状态码落进 `WS-FILE-STATUS`。本课只检查 `OPEN` 和 `CLOSE` 之后的值：
 
 | 操作 | 状态码 | 含义 |

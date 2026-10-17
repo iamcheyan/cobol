@@ -100,6 +100,8 @@ This can cause an incident: the maximum line length must be agreed with upstream
 
 ### `FILE STATUS` and EOF are different
 
+![Open status branches to failure or into the read loop; AT END exits on EOF](assets/sequential-read-flow.svg)
+
 `FILE STATUS IS WS-FILE-STATUS` stores the status after each file operation in `WS-FILE-STATUS`. This lesson checks the value after `OPEN` and `CLOSE`:
 
 | Operation | Status | Meaning |

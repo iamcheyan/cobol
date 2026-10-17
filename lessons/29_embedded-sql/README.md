@@ -67,6 +67,8 @@
 
 ## 工具链：为什么还要多装一个预编译器
 
+![Embedded SQL precompile, compile, link, and runtime pipeline](assets/embedded-sql-pipeline.svg)
+
 `cobc` 不解析 `EXEC SQL`，所以第 29–32 课的数据链路长这样：
 
 ```text

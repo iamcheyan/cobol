@@ -81,6 +81,8 @@ Limits: This lesson does not read files, perform arithmetic, update balances, or
 
 ### How EVALUATE Is Written
 
+![EVALUATE routes D, W, T, and other transaction codes to four explicit branches](assets/transaction-code-routing.svg)
+
 Upstream batch systems provide single-character transaction codes per interface contracts; the program must map each known code to its corresponding processing category in a single place, while giving unhandled codes an explicit destination. The syntax is "one subject against multiple constants":
 
 ```cobol

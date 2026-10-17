@@ -72,6 +72,8 @@ Limits: this lesson only performs a single-row primary-key lookup. It does not l
 
 ## The toolchain: why a precompiler is needed
 
+![Embedded SQL precompile, compile, link, and runtime pipeline](assets/embedded-sql-pipeline.svg)
+
 `cobc` does not parse `EXEC SQL`, so the data path for lessons 29–32 looks like this:
 
 ```text

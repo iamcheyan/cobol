@@ -69,6 +69,8 @@ That easily-overlooked boundary must be repeated: `PIC` describes shape, not bus
 
 ### The PIC symbols used in this lesson
 
+![Field ruler showing PIC declarations and storage bytes](assets/pic-storage-ruler.svg)
+
 - `A`: accepts only letters and blanks. Here it describes the customer name, customer type, and country code.
 - `X`: an alphanumeric position that accepts letters, digits, punctuation, and blanks. Here the account number, customer number, postal code, currency, reference number, and batch number are all treated as text.
 - `9`: a digit position. `9(4)` is four `9`s; the branch code, transaction count, sequence number, and date-digit fields all use it here.

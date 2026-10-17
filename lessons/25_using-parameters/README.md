@@ -68,6 +68,8 @@
 
 ## 同一个参数，三种交法
 
+![Data direction for BY REFERENCE, BY CONTENT, and BY VALUE](assets/using-data-directions.svg)
+
 主程序拿同一个参数做三次实验，就看一件事：这份存储到底归谁。
 
 | 传递方式 | 调用方写什么 | 子程序看到什么 | 子程序能否改到调用方字段 | 本课调用后调用方字段 |

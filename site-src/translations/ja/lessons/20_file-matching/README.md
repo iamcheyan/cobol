@@ -65,6 +65,8 @@
 
 ## 入力レコードのレイアウト
 
+![Ordered account and transaction streams merge by key](assets/file-matching-flow.svg)
+
 どちらのフィクスチャも口座番号の昇順で並んだ行順テキストファイルです。各行は定長フィールドを区切り文字なしで直接連結しています。行末文字は物理行を分けるだけで、`FD` のレコードフィールドには含まれません。
 
 | ファイル | フィールド | 長さ | 行の例 |

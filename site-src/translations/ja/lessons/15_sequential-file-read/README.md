@@ -100,6 +100,8 @@ FD TRANSACTION-FILE.
 
 ### `FILE STATUS` と EOF は別のもの
 
+![Open status branches to failure or into the read loop; AT END exits on EOF](assets/sequential-read-flow.svg)
+
 `FILE STATUS IS WS-FILE-STATUS` は、各ファイル操作後の状態コードを `WS-FILE-STATUS` に格納します。本課では `OPEN` と `CLOSE` の後に確認します。
 
 | 操作 | 状態コード | 意味 |

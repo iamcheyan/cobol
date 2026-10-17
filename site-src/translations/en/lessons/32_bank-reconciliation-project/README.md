@@ -201,6 +201,12 @@ No answer is provided.
 
 ## Walk Through a Real Workflow
 
+### End-to-End Data Flow
+
+![Bank reconciliation batch data flow](assets/bank-reconciliation-flow.svg)
+
+The diagram follows the account master and daily transactions through file posting: the master is validated and loaded, then each transaction is matched to an account and posted or rejected. Only a system-error-free file phase proceeds to comparison and synchronization with the database snapshot. Reports, the batch log, count checks, and the return code close the run.
+
 Connect this step to a real overnight schedule:
 
 1. **0:40** The core system exports the day’s transactions to a fixed-width file (Lessons 15 and 17) and exports an account master snapshot.

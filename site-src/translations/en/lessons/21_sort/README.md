@@ -58,6 +58,8 @@ Scope: this lesson sorts and displays data. It does **not** create a sorted outp
 
 ## Record Layout and Data Flow
 
+![SORT pipeline from input procedure through ordering to output procedure](assets/sort-data-flow.svg)
+
 [`accounts-unsorted.txt`](./accounts-unsorted.txt) contains four unsorted records, each 27 characters:
 
 | Field | `PIC` | Length |

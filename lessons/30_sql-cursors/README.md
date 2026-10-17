@@ -142,6 +142,8 @@ echo $?                # 查看退出码
 
 ## 游标生命周期与源码阅读路径
 
+![ACCOUNT-CURSOR lifecycle and SQLCODE branches](assets/cursor-lifecycle.svg)
+
 源码见 [`lesson.cob`](./lesson.cob)。下面按"数据什么时候真的动起来"的顺序走，不是按行号顺序——这样你读代码时脑子里那条时间线才对得上。
 
 ### 1. `DECLARE` 只是登记查询，一行都还没读

@@ -56,6 +56,8 @@ COBOL 的答案是把这段活包起来：`SORT`。你只负责说清两件事�
 
 ## 记录布局与数据流
 
+![SORT pipeline from input procedure through ordering to output procedure](assets/sort-data-flow.svg)
+
 [`accounts-unsorted.txt`](./accounts-unsorted.txt) 有 4 条 27 字符记录，**没排过序**：
 
 | 字段 | `PIC` | 长度 |

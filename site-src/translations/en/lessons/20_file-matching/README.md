@@ -65,6 +65,8 @@ Boundary: the program compares keys and displays pairing details; it does not to
 
 ## Input Record Layout
 
+![Ordered account and transaction streams merge by key](assets/file-matching-flow.svg)
+
 Both fixtures are line-sequential text files sorted in ascending account-number order. Each line consists of fixed-width fields concatenated directly, with no separators; the line ending separates physical lines and is not part of the `FD` record fields.
 
 | File | Fields | Length | Example line |

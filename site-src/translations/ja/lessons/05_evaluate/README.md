@@ -81,6 +81,8 @@ END-IF
 
 ### EVALUATE の書き方
 
+![EVALUATE routes D, W, T, and other transaction codes to four explicit branches](assets/transaction-code-routing.svg)
+
 バッチ処理の上流はインターフェース規約に従って 1 文字の取引コードを渡してきます。プログラムは同一の箇所で既知の各コードを対応する処理区分にマッピングし、処理対象外のコードにも明確な出口を用意しなければなりません。その書き方が「1 つの subject に対する複数の定数」です：
 
 ```cobol

@@ -70,6 +70,8 @@ COBOL 给你两条按值查找的路：
 
 ## SEARCH 与 SEARCH ALL
 
+![SEARCH scans the four accounts in order; SEARCH ALL narrows the ordered table to the target](assets/search-methods.svg)
+
 `SEARCH WS-ACCOUNT-ENTRY` 是顺序查找。程序先 `SET WS-ACCOUNT-IDX TO 1` 把索引摆到第 1 项，然后每个 `WHEN` 拿当前项的账户号和目标比；没比中，`SEARCH` 自己往前走一项；全走完了还没中，就落到 `AT END`。一句话：**起点你给，路它自己走。**
 
 `SEARCH ALL WS-ACCOUNT-ENTRY` 是二分查找。它自己决定先看表的哪个位置、下一次砍掉哪半边，所以比较次数少得多。代价全在前提上：表格要有 `INDEXED BY` 索引，要有 `ASCENDING KEY`（或 `DESCENDING KEY`）声明，而且**实际装进表的键值顺序必须和声明一致**，键还必须唯一。这四条少一条，结果就没有保证。

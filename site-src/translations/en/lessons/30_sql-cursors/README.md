@@ -147,6 +147,8 @@ Standard output for `run-empty` (empty table):
 
 ## Cursor Lifecycle and Source Reading Path
 
+![ACCOUNT-CURSOR lifecycle and SQLCODE branches](assets/cursor-lifecycle.svg)
+
 See [`lesson.cob`](./lesson.cob) for the source. The walkthrough below follows when the data actually moves, not source line numbers, so the timeline in your head matches the program.
 
 ### 1. `DECLARE` only registers the query; it has not read any rows yet

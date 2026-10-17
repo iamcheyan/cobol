@@ -110,6 +110,8 @@ Ownership, sequence, and total length are resolved at once: group names enable c
 
 ### Group Items in Memory Are Contiguous Bytes
 
+![58-byte record groups, elementary items, and byte offsets](assets/transaction-record-layout.svg)
+
 Group items have no delimiters in memory; they are contiguous storage whose length equals the sum of byte counts of subordinate items in declaration order. `X(n)` occupies n bytes; `9(5)V99` occupies 7 bytes because `V` is an assumed decimal point and occupies no storage bytes — this often surprises newcomers: `00125.50` prints as 8 characters, but occupies only 7 bytes in storage.
 
 The three subgroups occupy 20, 11, and 27 bytes respectively, totaling 58:

@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 560" role="img" aria-labelledby="title desc" font-family="'DM Sans','Noto Sans SC','Noto Sans JP',system-ui,sans-serif">
+  <title id="title">Transaction acceptance decision flow</title>
+  <desc id="desc">Nested checks reject nonpositive amounts first, then amounts above 1000.00, then account statuses other than A. Exactly 1000.00 is accepted when status is A.</desc>
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#5f5b52"/></marker></defs>
+  <style>
+    .title{font-size:17px;font-weight:600;fill:#3f3b3b}.label{font-size:12px;font-weight:600;fill:#3f3b3b}.note{font-size:11px;fill:#5f5b52}.mono{font-size:11px;fill:#3f3b3b;font-family:'DM Mono',ui-monospace,monospace}.line{fill:none;stroke:#5f5b52;stroke-width:1.5;marker-end:url(#arrow)}
+  </style>
+  <rect x="1" y="1" width="918" height="528" rx="10" fill="#fcfbf7" stroke="#d8d2c3"/>
+  <text class="title" x="32" y="36">IF transaction decision — first failed rule wins</text>
+  <rect x="345" y="54" width="230" height="44" rx="5" fill="#64748b" fill-opacity=".16" stroke="#64748b" stroke-width="1.5"/>
+  <text class="label" x="460" y="81" text-anchor="middle">Transaction amount + account status</text>
+  <path class="line" d="M460 98 V125"/>
+  <path d="M460 126 L570 168 L460 210 L350 168 Z" fill="#2563eb" fill-opacity=".16" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="mono" x="460" y="166" text-anchor="middle">AMOUNT &lt;= 0?</text><text class="note" x="460" y="182" text-anchor="middle">zero and negative values</text>
+  <path class="line" d="M350 168 H190 V198"/><text class="label" x="270" y="157" text-anchor="middle">Yes</text>
+  <rect x="80" y="200" width="220" height="56" rx="5" fill="#b91c1c" fill-opacity=".16" stroke="#b91c1c" stroke-width="1.5"/>
+  <text class="label" x="190" y="223" text-anchor="middle">REJECTED</text><text class="mono" x="190" y="243" text-anchor="middle">AMOUNT_NOT_POSITIVE</text>
+  <path class="line" d="M460 210 V260"/><text class="label" x="475" y="239">No</text>
+  <path d="M460 261 L570 303 L460 345 L350 303 Z" fill="#2563eb" fill-opacity=".16" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="mono" x="460" y="301" text-anchor="middle">AMOUNT &gt; MAXIMUM?</text><text class="note" x="460" y="317" text-anchor="middle">MAXIMUM = 1000.00</text>
+  <path class="line" d="M350 303 H190 V354"/><text class="label" x="270" y="292" text-anchor="middle">Yes</text>
+  <rect x="80" y="356" width="220" height="56" rx="5" fill="#b91c1c" fill-opacity=".16" stroke="#b91c1c" stroke-width="1.5"/>
+  <text class="label" x="190" y="379" text-anchor="middle">REJECTED</text><text class="mono" x="190" y="399" text-anchor="middle">AMOUNT_OVER_LIMIT</text>
+  <path class="line" d="M460 345 V395"/><text class="label" x="475" y="375">No</text>
+  <path d="M460 396 L570 438 L460 480 L350 438 Z" fill="#2563eb" fill-opacity=".16" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="mono" x="460" y="436" text-anchor="middle">STATUS = "A"?</text>
+  <path class="line" d="M570 438 H670 V410"/><text class="label" x="615" y="427">Yes</text>
+  <rect x="570" y="350" width="250" height="58" rx="5" fill="#0d9488" fill-opacity=".16" stroke="#0d9488" stroke-width="1.5"/>
+  <text class="label" x="695" y="373" text-anchor="middle">ACCEPTED</text><text class="mono" x="695" y="393" text-anchor="middle">WITHIN_RULES</text>
+  <path class="line" d="M460 480 V492 H810 V468"/><text class="label" x="483" y="506">No</text>
+  <rect x="700" y="410" width="185" height="58" rx="5" fill="#b91c1c" fill-opacity=".16" stroke="#b91c1c" stroke-width="1.5"/>
+  <text class="label" x="792" y="433" text-anchor="middle">REJECTED</text><text class="mono" x="792" y="453" text-anchor="middle">ACCOUNT_INACTIVE</text>
+  <text class="note" x="32" y="545">Boundary: 0.00 is rejected; 0.01 is eligible. 1000.00 is included; 1000.01 is rejected.</text>
+</svg>

@@ -65,6 +65,8 @@
 
 ## 输入记录布局
 
+![Ordered account and transaction streams merge by key](assets/file-matching-flow.svg)
+
 两个夹具都是按账户号升序排列的行顺序文本文件，每行由定长字段直接拼接、不含分隔符；行结束符只分隔物理行，不计入 `FD` 记录字段。
 
 | 文件 | 字段 | 长度 | 示例行 |

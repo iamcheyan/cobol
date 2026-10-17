@@ -73,6 +73,8 @@ _translated_by: site-src/translation agent
 
 ## 同じ引数を 3 通りで渡す
 
+![Data direction for BY REFERENCE, BY CONTENT, and BY VALUE](assets/using-data-directions.svg)
+
 メインプログラムは同じ引数で 3 回実験します。確かめるのは一つだけです。この記憶域を持っているのは誰でしょうか。
 
 | 渡し方 | 呼び出し元が渡すもの | サブプログラムが見るもの | サブプログラムは呼び出し元のフィールドを変更できるか | 本課での呼び出し後の呼び出し元フィールド |

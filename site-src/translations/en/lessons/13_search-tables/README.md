@@ -75,6 +75,8 @@ The program searches for two targets twice each: `0002468101`, which is present,
 
 ## SEARCH and SEARCH ALL
 
+![SEARCH scans the four accounts in order; SEARCH ALL narrows the ordered table to the target](assets/search-methods.svg)
+
 `SEARCH WS-ACCOUNT-ENTRY` is sequential search. The program first positions the index at entry 1 with `SET WS-ACCOUNT-IDX TO 1`, then each `WHEN` compares the current entry’s account number to the target. If there is no match, `SEARCH` advances automatically. If it reaches the end, control goes to `AT END`. In short: **you provide the starting point; it walks the table**.
 
 `SEARCH ALL WS-ACCOUNT-ENTRY` is binary search. It chooses which entry to inspect and which half of the remaining range to discard, so it needs far fewer comparisons. The trade-off is in its preconditions: the table needs an `INDEXED BY` index and an `ASCENDING KEY` (or `DESCENDING KEY`) declaration; the **actual loaded keys must be in the declared order**, and they must be unique. If any condition is missing, the result is not guaranteed.

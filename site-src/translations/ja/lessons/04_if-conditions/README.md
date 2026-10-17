@@ -184,6 +184,8 @@ COBOL は `AND` / `OR` を用いて複数の条件を 1 つの複合条件にま
 
 ## 境界値はどこで分岐するか
 
+![IF decision flow from the first failed rule to acceptance or rejection](assets/if-decision-flow.svg)
+
 先记住一件事：这里的拒绝全都是业务拒绝，退出码照样是 `0`，程序里根本没有系统故障那条分支。下表每一行都在本机实际编译运行过：
 
 | 金额 | 状态 | 在哪个比较处分叉 | `判定=` | `理由=` |

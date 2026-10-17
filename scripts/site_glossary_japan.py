@@ -1,0 +1,58 @@
+"""Japanese production vocabulary with English and Chinese equivalents."""
+
+JAPAN_TERMS = {
+    "zh-cn": {
+        "id": "japan-operations",
+        "title": "日本现场用语（日／英／中）",
+        "terms": [
+            ("突合（とつごう） / reconciliation / 对账、核对", "将两份有序数据按业务键逐条匹配，区分一致、仅在一侧存在及不一致记录。常见于银行账务、交易与主档比对；本课程在第 20 课实现归并突合。"),
+            ("桁（けた） / digit position / 位数、数位", "日语业务现场常用「桁」描述数字位数、字段宽度或定长记录中的位置。注意：COBOL 源码的列位置（column）和数据项的数字位数（digit count）是不同概念。"),
+            ("勘定系（かんじょうけい） / core banking system / 核心银行系统", "负责账户、存取款、转账、利息等账务处理的系统。批处理通常与联机交易系统协作，处理日终入账与余额更新。"),
+            ("基幹系（きかんけい） / core business system / 核心业务系统", "支撑企业主要业务运行的系统总称；具体范围随企业而异，银行的勘定系是典型例子。"),
+            ("夜間バッチ（やかんバッチ） / overnight batch / 夜间批处理", "在夜间维护窗口调度运行的批处理作业，常用于日终结算、利息计算、账务过账和数据汇总。"),
+            ("日中バッチ（にっちゅうバッチ） / daytime batch / 日间批处理", "在日间运行的批量作业，例如定期数据交换或报表生成；通常需要与在线业务共享资源并考虑运行窗口。"),
+            ("口座マスター（こうざマスター） / account master / 账户主档", "保存账户编号、状态、余额等权威字段的主数据文件或表，是交易核对和账户更新的参照。"),
+            ("勘定処理（かんじょうしょり） / posting / 账务处理、入账", "根据交易记录更新账户余额和账务记录。执行前后都要保证金额、符号、精度和审计记录符合业务规则。"),
+            ("締め処理（しめしょり） / end-of-day close / 日终结账", "按业务日期汇总并确认当日交易，完成余额、账务和后续日次处理的切换。具体作业顺序由机构和系统决定。"),
+            ("項目（こうもく） / field / 字段、数据项", "记录中的一个具名值。COBOL 中通常由层级编号和 `PIC` 定义名称、层级及格式。"),
+            ("定長レコード（ていちょうレコード） / fixed-length record / 定长记录", "每条记录的字节长度固定，字段偏移构成接口约定；多一个或少一个字节都可能导致后续字段错位。"),
+            ("運用（うんよう） / operations / 运维、生产运行", "确保作业按计划执行、监控结束状态、处理告警并保存可追踪记录的生产运行工作。"),
+        ],
+    },
+    "en": {
+        "id": "japan-operations",
+        "title": "Japanese production vocabulary (JA / EN / ZH)",
+        "terms": [
+            ("突合（とつごう） / reconciliation / 对账、核对", "Match two ordered datasets record by record on a business key, separating matches, one-sided records, and mismatches. Common for bank postings, transactions, and master data; Lesson 20 implements a merge reconciliation."),
+            ("桁（けた） / digit position / 位数、数位", "Japanese teams use 桁 for digit count, field width, or a position in a fixed-length record. Keep it distinct from COBOL source columns and byte offsets: these describe different measurements."),
+            ("勘定系（かんじょうけい） / core banking system / 核心银行系统", "The system responsible for accounts, deposits, withdrawals, transfers, and interest. Batch jobs commonly work with online transaction systems to post end-of-day activity and update balances."),
+            ("基幹系（きかんけい） / core business system / 核心业务系统", "A general term for systems that support an organisation's primary business. Its scope varies; a bank's core accounting system is a typical example."),
+            ("夜間バッチ（やかんバッチ） / overnight batch / 夜间批处理", "A batch job scheduled in an overnight maintenance window, often for end-of-day settlement, interest calculation, posting, and aggregation."),
+            ("日中バッチ（にっちゅうバッチ） / daytime batch / 日间批处理", "A batch job that runs during the day, such as a scheduled data exchange or report. It must account for shared resources and the available run window."),
+            ("口座マスター（こうざマスター） / account master / 账户主档", "The authoritative file or table of account identifiers, status, balances, and related fields; used as the reference for transaction matching and account updates."),
+            ("勘定処理（かんじょうしょり） / posting / 账务处理、入账", "Updating account balances and accounting records from transaction entries. Amount, sign, precision, and audit trail must satisfy business rules before and after the update."),
+            ("締め処理（しめしょり） / end-of-day close / 日终结账", "Summarising and confirming activity for a business date, then completing the transition for balances, accounting, and the next daily cycle. Exact job order varies by organisation."),
+            ("項目（こうもく） / field / 字段、数据项", "A named value in a record. In COBOL, its name, level, and format are usually declared with a level number and `PIC`."),
+            ("定長レコード（ていちょうレコード） / fixed-length record / 定长记录", "A record with a fixed byte length. Field offsets form an interface contract; one extra or missing byte can shift every following field."),
+            ("運用（うんよう） / operations / 运维、生产运行", "Production work that ensures jobs run on schedule, monitors completion status, handles alerts, and keeps traceable records."),
+        ],
+    },
+    "ja": {
+        "id": "japan-operations",
+        "title": "日本の現場用語（日・英・中）",
+        "terms": [
+            ("突合（とつごう） / reconciliation / 对账、核对", "2 つの整列済みデータを業務キーで 1 件ずつ照合し、一致・片側のみ・不一致を分類します。銀行の計上、取引、マスターの照合で使われます。本コースでは第 20 課でマージ突合を実装します。"),
+            ("桁（けた） / digit position / 位数、数位", "数字の桁数、項目幅、定長レコード内の位置を指す現場用語です。COBOL ソースの列位置（column）やバイトオフセットとは、異なる尺度として区別します。"),
+            ("勘定系（かんじょうけい） / core banking system / 核心银行系统", "口座、入出金、振込、利息などの勘定処理を担うシステムです。オンライン取引と連携し、日次の計上や残高更新をバッチで行うことがあります。"),
+            ("基幹系（きかんけい） / core business system / 核心业务系统", "企業の主要業務を支えるシステムの総称です。範囲は組織によって異なり、銀行の勘定系はその代表例です。"),
+            ("夜間バッチ（やかんバッチ） / overnight batch / 夜间批处理", "夜間の運用時間帯にスケジュール実行するバッチです。日次決済、利息計算、計上、データ集計などに使われます。"),
+            ("日中バッチ（にっちゅうバッチ） / daytime batch / 日间批处理", "日中に実行する一括処理です。定期データ交換や帳票生成などがあり、オンライン業務との資源共有や実行時間帯を考慮します。"),
+            ("口座マスター（こうざマスター） / account master / 账户主档", "口座番号、状態、残高などの正本となるファイルまたはテーブルです。取引照合や口座更新の参照元になります。"),
+            ("勘定処理（かんじょうしょり） / posting / 账务处理、入账", "取引明細に基づいて口座残高や勘定記録を更新します。前後で金額、符号、精度、監査記録が業務規則を満たす必要があります。"),
+            ("締め処理（しめしょり） / end-of-day close / 日终结账", "営業日単位で取引を集計・確認し、残高や勘定記録を確定して次の日次処理へ移行します。具体的なジョブ順序は機関やシステムによって異なります。"),
+            ("項目（こうもく） / field / 字段、数据项", "レコード内の名前付きデータです。COBOL ではレベル番号と `PIC` で名前、階層、形式を定義します。"),
+            ("定長レコード（ていちょうレコード） / fixed-length record / 定长记录", "1 レコードのバイト長が固定された形式です。項目オフセットがインターフェース契約となり、1 バイトの過不足でも後続項目がずれる可能性があります。"),
+            ("運用（うんよう） / operations / 运维、生产运行", "ジョブの定時実行、終了状態の監視、アラート対応、追跡可能な記録の保存を担う本番運用業務です。"),
+        ],
+    },
+}

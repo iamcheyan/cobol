@@ -24,6 +24,8 @@ from site_about import ABOUT
 from site_reference import REFERENCE
 from site_history import HISTORY
 from site_glossary import GLOSSARY
+from lesson_context import LESSON_CONTEXT
+from site_glossary_japan import JAPAN_TERMS
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "build" / "site"
@@ -52,6 +54,7 @@ LOCALES = {
         "html": "zh-CN", "name": "简体中文", "brand_sub": "实战课程",
         "nav_home": "课程首页", "nav_directory": "32 课目录", "nav_extensions": "拓展课程",
         "nav_source": "GitHub 源码", "nav_lang": "语言", "course_nav": "课程导航",
+        "lesson_context_label": "现场工作",
         "search": "筛选课程", "directory_link": "查看完整课程目录 →",
         "tab_guide": "课程讲义", "tab_exercise": "动手练习", "tab_answer": "参考答案", "tab_resources": "源码与资料",
         "download": "下载文件 ↓", "pending_page": "此内容的翻译正在准备中。以下先显示中文原文。",
@@ -162,6 +165,7 @@ LOCALES = {
         "html": "en", "name": "English", "brand_sub": "Practical Course",
         "nav_home": "Home", "nav_directory": "32 lessons", "nav_extensions": "Extensions",
         "nav_source": "GitHub source", "nav_lang": "Language", "course_nav": "Course contents",
+        "lesson_context_label": "IN PRACTICE",
         "search": "Filter lessons", "directory_link": "View the full curriculum →",
         "tab_guide": "Lesson", "tab_exercise": "Exercise", "tab_answer": "Answer key", "tab_resources": "Code & files",
         "download": "Download ↓", "pending_page": "This translation is being prepared. The Chinese original is shown below.",
@@ -272,6 +276,7 @@ LOCALES = {
         "html": "ja", "name": "日本語", "brand_sub": "実践コース",
         "nav_home": "ホーム", "nav_directory": "全32レッスン", "nav_extensions": "発展教材",
         "nav_source": "GitHub ソース", "nav_lang": "言語", "course_nav": "コース目次",
+        "lesson_context_label": "現場との接点",
         "search": "レッスンを絞り込む", "directory_link": "全カリキュラムを見る →",
         "tab_guide": "レッスン", "tab_exercise": "演習", "tab_answer": "解答例", "tab_resources": "コード・資料",
         "download": "ダウンロード ↓", "pending_page": "このページは翻訳準備中です。以下は中国語の原文です。",
@@ -630,9 +635,15 @@ def lesson_panel(locale: str, key: str, source: Path, page: Path, extra: str = "
     notice = "" if has_translation or locale == "zh-cn" else pending(locale, source, page)
     active = " active" if key == "guide" else ""
     hidden = "" if key == "guide" else " hidden"
+    article = render_markdown(source, locale)
+    if key == "guide" and source.parent.parent == LESSONS:
+        lesson_dirs = sorted(p for p in LESSONS.iterdir() if p.is_dir() and p.name[:2].isdigit())
+        index = lesson_dirs.index(source.parent)
+        context = LESSON_CONTEXT[locale][index]
+        article = re.sub(r'(</h1>)', rf'\1<aside class="lesson-context"><span>{html.escape(labels["lesson_context_label"])}</span>{html.escape(context)}</aside>', article, count=1)
     return (
         f'<section class="lesson-panel{active}" id="panel-{key}" data-panel="{key}"{hidden}>'
-        f'{notice}<article>{render_markdown(source, locale)}</article>{extra}</section>'
+        f'{notice}<article>{article}</article>{extra}</section>'
     )
 
 
@@ -1026,7 +1037,7 @@ def glossary_page(locale: str) -> str:
     """Terminology lookup, filterable in place."""
     data = GLOSSARY[locale]
     blocks = []
-    for group in data["groups"]:
+    for group in [*data["groups"], JAPAN_TERMS[locale]]:
         rows = "".join(
             f'<tr><th scope="row">{inline_rich(term)}</th><td>{inline_rich(desc)}</td></tr>'
             for term, desc in group["terms"]

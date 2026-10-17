@@ -40,11 +40,45 @@ def covered(path: Path) -> bool:
     return True
 
 
+CJK_RE = re.compile(r"[\u3400-\u4dbf\u4e00-\u9fff\u3040-\u30ff]")
+
+
+def needs_translation(path: Path) -> bool:
+    """True when a file has prose that should differ per language.
+
+    Excluded on purpose:
+    * binary content;
+    * files without Chinese/Japanese characters (already language-neutral);
+    * literal artifacts -- expected program output, fixtures and sample data --
+      because translating them would stop matching what the programs actually
+      print.
+    """
+    rel_parts = set(path.parts)
+    if rel_parts & {"expected", "fixtures", "db"}:
+        return False
+    if path.name.startswith("expected"):
+        return False
+    if path.suffix.lower() in {".dat", ".csv", ".png", ".jpg", ".gif", ".pdf"}:
+        return False
+    try:
+        raw = path.read_bytes()[:16384]
+    except OSError:
+        return False
+    if b"\0" in raw:
+        return False
+    try:
+        text = path.read_text(encoding="utf-8")
+    except (UnicodeDecodeError, OSError):
+        return False
+    return bool(CJK_RE.search(text))
+
+
 def sources() -> list[Path]:
     found: list[Path] = [ROOT / "README.md"]
     for base in (LESSONS, EXTENSIONS):
         found.extend(p for p in sorted(base.rglob("*"))
-                     if p.is_file() and p.suffix.lower() in TEXT_SUFFIXES and covered(p))
+                     if p.is_file() and p.suffix.lower() in TEXT_SUFFIXES
+                     and covered(p) and needs_translation(p))
     return found
 
 
@@ -91,6 +125,35 @@ def cobol_check(original: str, candidate: str) -> list[str]:
     return problems
 
 
+FENCE_RE = re.compile(r"```.*?```", re.S)
+INLINE_RE = re.compile(r"`[^`\n]*`")
+HAN_RE = re.compile(r"[\u4e00-\u9fff]")
+KANA_RE = re.compile(r"[\u3040-\u30ff]")
+LATIN_RE = re.compile(r"[A-Za-z]")
+
+
+def prose_only(text: str) -> str:
+    """Strip code so quoted program output does not look like prose."""
+    return INLINE_RE.sub(" ", FENCE_RE.sub(" ", text))
+
+
+def language_problem(locale: str, text: str) -> str | None:
+    """Catch files that are structurally fine but written in the wrong language."""
+    body = prose_only(text)
+    han = len(HAN_RE.findall(body))
+    kana = len(KANA_RE.findall(body))
+    latin = len(LATIN_RE.findall(body))
+    if locale == "en":
+        if kana > 25:
+            return f"{kana} kana characters in English prose"
+        if han > 25 and han / max(1, han + latin) > 0.15:
+            return f"{han} Chinese characters in English prose"
+    else:
+        if han > 25 and kana / max(1, han + kana) < 0.10:
+            return f"{han} kanji with almost no kana (looks like Chinese)"
+    return None
+
+
 def main() -> int:
     missing = {"en": [], "ja": []}
     failures: list[str] = []
@@ -122,6 +185,10 @@ def main() -> int:
                     failures.append(f"{locale}/{rel}: {len(lost)} link target(s) lost, e.g. {sorted(lost)[0]}")
                 if added:
                     failures.append(f"{locale}/{rel}: {len(added)} link target(s) added, e.g. {sorted(added)[0]}")
+            if source.suffix.lower() == ".md":
+                problem = language_problem(locale, translated)
+                if problem:
+                    failures.append(f"{locale}/{rel}: {problem}")
             elif source.suffix.lower() in COBOL_SUFFIXES:
                 for problem in cobol_check(original, translated):
                     failures.append(f"{locale}/{rel}: {problem}")

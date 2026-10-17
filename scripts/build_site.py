@@ -623,7 +623,8 @@ def resource_browser(locale: str, source: Path, page: Path) -> str:
         label = path.relative_to(source.parent).as_posix()
         localized = translated(path, locale)
         suffix = path.suffix.lower()
-        with_original = locale != "zh-cn" and localized is None and suffix in TEXT_SUFFIXES
+        with_original = (locale != "zh-cn" and localized is None
+                         and suffix in TEXT_SUFFIXES and needs_translation(path))
         choices.append(
             f'<button type="button" class="resource-choice{" selected" if index == 0 else ""}" '
             f'data-resource-choice="{index}">{html.escape(label)}</button>'
@@ -1093,10 +1094,44 @@ def build_locale(locale: str) -> int:
     return pages
 
 
+CJK_RE = re.compile(r"[\u3400-\u4dbf\u4e00-\u9fff\u3040-\u30ff]")
+
+
+def needs_translation(path: Path) -> bool:
+    """True when a file has prose that should differ per language.
+
+    Excluded on purpose:
+    * binary content;
+    * files without Chinese/Japanese characters (already language-neutral);
+    * literal artifacts -- expected program output, fixtures and sample data --
+      because translating them would stop matching what the programs actually
+      print.
+    """
+    rel_parts = set(path.parts)
+    if rel_parts & {"expected", "fixtures", "db"}:
+        return False
+    if path.name.startswith("expected"):
+        return False
+    if path.suffix.lower() in {".dat", ".csv", ".png", ".jpg", ".gif", ".pdf"}:
+        return False
+    try:
+        raw = path.read_bytes()[:16384]
+    except OSError:
+        return False
+    if b"\0" in raw:
+        return False
+    try:
+        text = path.read_text(encoding="utf-8")
+    except (UnicodeDecodeError, OSError):
+        return False
+    return bool(CJK_RE.search(text))
+
+
 def write_manifest() -> None:
-    files = sorted(rel.as_posix() for rel in
-                   [s.relative_to(ROOT) for s in page_sources()] +
-                   [s.relative_to(ROOT) for s in resource_sources()])
+    candidates = sorted(rel.as_posix() for rel in
+                        [s.relative_to(ROOT) for s in page_sources()] +
+                        [s.relative_to(ROOT) for s in resource_sources()])
+    files = [rel for rel in candidates if needs_translation(ROOT / rel)]
     manifest = {
         "source_language": "zh-cn",
         "target_languages": ["en", "ja"],

@@ -63,6 +63,8 @@ Boundary: the program only reads and echoes each whole line. It **does not parse
 Both are line-sequential text files: one physical line is one record, with fields separated by `|`. This lesson does not interpret the fields; it displays each line exactly as read. Both `FD` record areas are `PIC X(100)`, and the longest line in these fixtures is 34 bytes, well below that limit, so records will not be truncated and two lines will not be joined into one.
 
 ## How to Advance Both Streams Together
+![Two input streams advance independently in one loop: each paragraph owns its EOF flag, count and status check, and AT END only covers status 10](assets/two-stream-loop.svg)
+
 
 The program's structure comes down to one sentence: **keep reading while any file still has unread records.**
 

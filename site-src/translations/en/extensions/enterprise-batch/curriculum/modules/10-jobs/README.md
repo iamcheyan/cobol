@@ -10,6 +10,8 @@ Recommended: 9 hours. Prerequisites: Module 06 (file contracts) and Module 07 (S
 
 ## 1. Why Does the Business Need This / What Requirement Were You Given?
 
+![The nine-job nightly chain: a non-zero RC stops the chain, and the crash boundaries mark where a rerun resumes](assets/nightly-job-flow.svg)
+
 Every night, a bank must safely post the day's transactions, reconcile them, and publish them to downstream consumers, while **there is no atomic commit across files, the DB, and downstream publication** (FR-08). Your assignment is an operations requirement: connect 9 JOBs into a nightly flow that ensures **downstream jobs do not run after a prerequisite fails, concurrent starts are rejected, reruns on the same business date do not debit twice, and recovery at all four crash boundaries restores a consistent state**.
 
 ## 2. Inputs, Sources, Formats, and Guaranteed Preconditions

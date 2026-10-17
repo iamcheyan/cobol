@@ -62,6 +62,8 @@
 - 语法检查与编译在 `build/` 下生成可执行文件，随时可以删掉重来。
 
 ## 循环到底怎么写
+![PERFORM VARYING 的执行顺序：先判条件，再跑循环体，最后自增索引；条件用严格大于，所以上限那一笔也会被处理](assets/perform-varying-loop.svg)
+
 
 ```cobol
 PERFORM VARYING WS-SAMPLE-INDEX FROM 1 BY 1

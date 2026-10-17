@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 470" role="img" aria-labelledby="t d" font-family="'DM Sans','Noto Sans SC','Noto Sans JP',system-ui,sans-serif">
+  <title id="t">Nightly job chain: nine jobs, gated by a lock and a manifest</title>
+  <desc id="d">JOB001 to JOB009 run in order. Each job fails closed: a non-zero return code stops the chain, and four crash boundaries define where a rerun may resume.</desc>
+  <style>
+    .h1 { font-size: 16px; font-weight: 600; fill: #3f3b3b; }
+    .sub { font-size: 12px; fill: #5f5b52; }
+    .job { font-size: 11.5px; font-weight: 600; fill: #3f3b3b; }
+    .what { font-size: 10.5px; fill: #5f5b52; }
+    .mono { font-size: 10px; fill: #77736c; font-family: 'DM Mono',ui-monospace,monospace; }
+    .note { font-size: 11px; fill: #5f5b52; }
+    .crash { font-size: 10px; fill: #b91c1c; font-weight: 600; }
+  </style>
+
+  <rect x="1" y="1" width="938" height="468" rx="10" fill="#fcfbf7" stroke="#d8d2c3"/>
+  <text class="h1" x="30" y="38">Nightly job chain</text>
+  <text class="sub" x="30" y="58">Fail closed: any non-zero RC stops the chain, so downstream jobs never run on bad input.</text>
+
+  <!-- gate -->
+  <rect x="30" y="80" width="150" height="54" rx="3" fill="#64748b" fill-opacity="0.16" stroke="#64748b" stroke-width="1.5"/>
+  <text class="job" x="44" y="102">MANIFEST + LOCK</text>
+  <text class="what" x="44" y="118">business day, SHA256</text>
+
+  <!-- jobs row 1 -->
+  <g>
+    <rect x="210" y="80" width="150" height="54" rx="3" fill="#2563eb" fill-opacity="0.16" stroke="#2563eb" stroke-width="1.5"/>
+    <text class="job" x="224" y="102">JOB001 receive</text>
+    <text class="what" x="224" y="118">verify SHA256</text>
+
+    <rect x="390" y="80" width="150" height="54" rx="3" fill="#2563eb" fill-opacity="0.16" stroke="#2563eb" stroke-width="1.5"/>
+    <text class="job" x="404" y="102">JOB002 validate</text>
+    <text class="what" x="404" y="118">layout + rules</text>
+
+    <rect x="570" y="80" width="150" height="54" rx="3" fill="#2563eb" fill-opacity="0.16" stroke="#2563eb" stroke-width="1.5"/>
+    <text class="job" x="584" y="102">JOB003 sort</text>
+    <text class="what" x="584" y="118">ordered by key</text>
+
+    <rect x="750" y="80" width="160" height="54" rx="3" fill="#0d9488" fill-opacity="0.16" stroke="#0d9488" stroke-width="1.5"/>
+    <text class="job" x="764" y="102">JOB004 db snapshot</text>
+    <text class="what" x="764" y="118">read-only extract</text>
+  </g>
+
+  <!-- jobs row 2 -->
+  <g>
+    <rect x="750" y="190" width="160" height="54" rx="3" fill="#2563eb" fill-opacity="0.16" stroke="#2563eb" stroke-width="1.5"/>
+    <text class="job" x="764" y="212">JOB005 match</text>
+    <text class="what" x="764" y="228">file vs snapshot</text>
+
+    <rect x="570" y="190" width="150" height="54" rx="3" fill="#0d9488" fill-opacity="0.16" stroke="#0d9488" stroke-width="1.5"/>
+    <text class="job" x="584" y="212">JOB006 db apply</text>
+    <text class="what" x="584" y="228">idempotent post</text>
+
+    <rect x="390" y="190" width="150" height="54" rx="3" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="1.5"/>
+    <text class="job" x="404" y="212">JOB007 control</text>
+    <text class="what" x="404" y="228">totals must tie</text>
+
+    <rect x="210" y="190" width="150" height="54" rx="3" fill="#2563eb" fill-opacity="0.16" stroke="#2563eb" stroke-width="1.5"/>
+    <text class="job" x="224" y="212">JOB008 publish</text>
+    <text class="what" x="224" y="228">downstream files</text>
+  </g>
+
+  <!-- final job -->
+  <rect x="210" y="300" width="150" height="54" rx="3" fill="#0d9488" fill-opacity="0.16" stroke="#0d9488" stroke-width="1.5"/>
+  <text class="job" x="224" y="322">JOB009 complete</text>
+  <text class="what" x="224" y="338">release lock, mark day</text>
+
+  <!-- arrows: row 1 left to right -->
+  <defs>
+    <marker id="a" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#64748b"/></marker>
+  </defs>
+  <g stroke="#64748b" stroke-width="1.4" fill="none" marker-end="url(#a)">
+    <line x1="182" y1="107" x2="206" y2="107"/>
+    <line x1="362" y1="107" x2="386" y2="107"/>
+    <line x1="542" y1="107" x2="566" y2="107"/>
+    <line x1="722" y1="107" x2="746" y2="107"/>
+    <!-- row 2 right to left -->
+    <line x1="748" y1="217" x2="724" y2="217"/>
+    <line x1="568" y1="217" x2="544" y2="217"/>
+    <line x1="388" y1="217" x2="364" y2="217"/>
+    <!-- down to JOB009 -->
+    <line x1="285" y1="246" x2="285" y2="296"/>
+  </g>
+
+  <!-- crash boundaries -->
+  <g stroke="#b91c1c" stroke-width="1.2" stroke-dasharray="4 3">
+    <line x1="370" y1="150" x2="370" y2="266"/>
+    <line x1="550" y1="150" x2="550" y2="266"/>
+    <line x1="730" y1="150" x2="730" y2="266"/>
+  </g>
+  <g class="crash" text-anchor="middle">
+    <text x="370" y="282">crash A</text>
+    <text x="550" y="282">crash B</text>
+    <text x="730" y="282">crash C</text>
+  </g>
+  <text class="note" x="30" y="382">Reruns resume from the last completed job: JOB006 is idempotent per business day, so a second run does not post twice.</text>
+  <text class="note" x="30" y="402">JOB007 compares posted + rejected against the input count and the account totals; a mismatch fails the night before JOB008 publishes.</text>
+  <text class="note" x="30" y="422">The lock is taken before JOB001 and released only by JOB009, so two concurrent nights cannot interleave.</text>
+  <text class="mono" x="30" y="448">RC 0 = success · RC 1 = job failure · RC 2 = unverified prerequisite (for example a missing DB route)</text>
+</svg>

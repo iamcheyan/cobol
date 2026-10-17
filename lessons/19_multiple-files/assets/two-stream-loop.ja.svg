@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 470" role="img" aria-labelledby="t d" font-family="'DM Sans','Noto Sans SC','Noto Sans JP',system-ui,sans-serif">
+  <title id="t">Two input streams advance independently inside one loop</title>
+  <desc id="d">The main loop keeps running while either file is not at EOF. Each READ paragraph owns its own EOF flag, count and status check; AT END only covers status 10, so both paragraphs check the status field explicitly.</desc>
+  <style>
+    .h1 { font-size: 16px; font-weight: 600; fill: #3f3b3b; }
+    .sub { font-size: 12px; fill: #5f5b52; }
+    .step { font-size: 11.5px; font-weight: 600; fill: #3f3b3b; }
+    .mono { font-size: 10.5px; fill: #3f3b3b; font-family: 'DM Mono',ui-monospace,monospace; }
+    .note { font-size: 11px; fill: #5f5b52; }
+    .bad { font-size: 10.5px; fill: #b91c1c; font-weight: 600; }
+  </style>
+  <rect x="1" y="1" width="918" height="468" rx="10" fill="#fcfbf7" stroke="#d8d2c3"/>
+  <text class="h1" x="28" y="34">2 つのストリーム、1 つのループ</text>
+  <text class="sub" x="28" y="54">どちらかのファイルにレコードが残っている間は読み続ける。</text>
+
+  <defs>
+    <marker id="m" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#64748b"/></marker>
+  </defs>
+
+  <!-- open sequence -->
+  <rect x="28" y="76" width="150" height="48" rx="3" fill="#64748b" fill-opacity="0.16" stroke="#64748b" stroke-width="1.5"/>
+  <text class="step" x="42" y="96">マスタを開く</text>
+  <text class="mono" x="42" y="113">status = "00"?</text>
+
+  <rect x="204" y="76" width="170" height="48" rx="3" fill="#64748b" fill-opacity="0.16" stroke="#64748b" stroke-width="1.5"/>
+  <text class="step" x="218" y="96">取引ファイルを開く</text>
+  <text class="mono" x="218" y="113">失敗時はマスタを閉じる</text>
+
+  <!-- loop test -->
+  <rect x="400" y="76" width="200" height="48" rx="3" fill="#2563eb" fill-opacity="0.16" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="step" x="414" y="96">ループ条件</text>
+  <text class="mono" x="414" y="113">both EOF = "Y" ?</text>
+
+  <g stroke="#64748b" stroke-width="1.4" fill="none" marker-end="url(#m)">
+    <line x1="180" y1="100" x2="200" y2="100"/>
+    <line x1="376" y1="100" x2="396" y2="100"/>
+  </g>
+
+  <!-- two branches -->
+  <rect x="400" y="170" width="200" height="66" rx="3" fill="#0d9488" fill-opacity="0.16" stroke="#0d9488" stroke-width="1.5"/>
+  <text class="step" x="414" y="190">1000-READ-ACCOUNT</text>
+  <text class="mono" x="414" y="207">各自の EOF と件数</text>
+  <text class="mono" x="414" y="224">状態を明示的に確認</text>
+
+  <rect x="650" y="170" width="240" height="66" rx="3" fill="#0d9488" fill-opacity="0.16" stroke="#0d9488" stroke-width="1.5"/>
+  <text class="step" x="664" y="190">2000-READ-TRANSACTION</text>
+  <text class="mono" x="664" y="207">各自の EOF と件数</text>
+  <text class="mono" x="664" y="224">状態を明示的に確認</text>
+
+  <g stroke="#64748b" stroke-width="1.4" fill="none" marker-end="url(#m)">
+    <path d="M470 126 V150 H500 V166"/>
+    <path d="M530 126 V150 H770 V166"/>
+  </g>
+  <text class="note" x="352" y="146">末尾でなければ読む</text>
+
+  <!-- status handling -->
+  <rect x="400" y="278" width="200" height="60" rx="3" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="1.5"/>
+  <text class="step" x="414" y="298">status "00"</text>
+  <text class="mono" x="414" y="315">件数を加算し 1 行出力</text>
+
+  <rect x="650" y="278" width="240" height="60" rx="3" fill="#64748b" fill-opacity="0.16" stroke="#64748b" stroke-width="1.5"/>
+  <text class="step" x="664" y="298">status "10"</text>
+  <text class="mono" x="664" y="315">自分の EOF のみ設定、件数は増やさない</text>
+
+  <rect x="650" y="352" width="240" height="52" rx="3" fill="#b91c1c" fill-opacity="0.10" stroke="#b91c1c" stroke-width="1.5"/>
+  <text class="bad" x="664" y="376">それ以外の状態</text>
+  <text class="mono" x="664" y="393">ファイル名と状態を出力し、I/O エラーを立てて終了</text>
+
+  <g stroke="#64748b" stroke-width="1.4" fill="none" marker-end="url(#m)">
+    <line x1="500" y1="236" x2="500" y2="274"/>
+    <line x1="770" y1="236" x2="770" y2="274"/>
+    <line x1="770" y1="338" x2="770" y2="352"/>
+    <!-- loop back -->
+    <path d="M400 308 H300 V100 H396"/>
+  </g>
+  <text class="note" x="150" y="330">次の回</text>
+
+  <text class="note" x="28" y="446">AT END は状態 "10" しか扱わない。読み込み失敗は別の状態を返すため、各段落は AT END に頼らず READ の後で状態を自分で確認する。</text>
+</svg>

@@ -67,6 +67,8 @@ Limits: this lesson's "transactions" are only three, and they are fixed samples 
 - Syntax check and compilation generate executables inside `build/`; you may remove and rebuild at any time.
 
 ## How the Loop Is Actually Written
+![How PERFORM VARYING runs: test the condition, run the body, then increment. The test is strictly greater, so the last record is processed too](assets/perform-varying-loop.svg)
+
 
 ```cobol
 PERFORM VARYING WS-SAMPLE-INDEX FROM 1 BY 1

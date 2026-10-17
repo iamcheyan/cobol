@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 330" role="img" aria-labelledby="t d" font-family="'DM Sans','Noto Sans SC','Noto Sans JP',system-ui,sans-serif">
+  <title id="t">PERFORM VARYING checks the condition before each pass</title>
+  <desc id="d">The loop sets its own index from 1, adds 1 each pass, and stops when the index is greater than the last sample. Because the test is strictly greater, index equal to the limit still runs.</desc>
+  <style>
+    .h1 { font-size: 16px; font-weight: 600; fill: #3f3b3b; }
+    .sub { font-size: 12px; fill: #5f5b52; }
+    .step { font-size: 12px; font-weight: 600; fill: #3f3b3b; }
+    .small { font-size: 11px; fill: #5f5b52; }
+    .mono { font-size: 11px; fill: #3f3b3b; font-family: 'DM Mono',ui-monospace,monospace; }
+    .note { font-size: 11px; fill: #5f5b52; }
+  </style>
+  <rect x="1" y="1" width="898" height="328" rx="10" fill="#fcfbf7" stroke="#d8d2c3"/>
+  <text class="h1" x="30" y="36">PERFORM VARYING · condition is checked before each pass</text>
+  <text class="sub" x="30" y="56">Index starts at 1 by the loop itself; the DATA DIVISION value is irrelevant.</text>
+
+  <defs>
+    <marker id="ar" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#64748b"/></marker>
+  </defs>
+
+  <!-- init -->
+  <rect x="30" y="82" width="150" height="52" rx="3" fill="#64748b" fill-opacity="0.16" stroke="#64748b" stroke-width="1.5"/>
+  <text class="step" x="44" y="104">initialise</text>
+  <text class="mono" x="44" y="122">INDEX = 1</text>
+
+  <!-- test -->
+  <rect x="220" y="82" width="190" height="52" rx="3" fill="#2563eb" fill-opacity="0.16" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="step" x="234" y="104">test UNTIL</text>
+  <text class="mono" x="234" y="122">INDEX &gt; LAST ?</text>
+
+  <!-- body -->
+  <rect x="450" y="82" width="170" height="52" rx="3" fill="#0d9488" fill-opacity="0.16" stroke="#0d9488" stroke-width="1.5"/>
+  <text class="step" x="464" y="104">run body</text>
+  <text class="small" x="464" y="122">one pass</text>
+
+  <!-- increment -->
+  <rect x="660" y="82" width="170" height="52" rx="3" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="1.5"/>
+  <text class="step" x="674" y="104">BY 1</text>
+  <text class="mono" x="674" y="122">INDEX = INDEX + 1</text>
+
+  <!-- done -->
+  <rect x="450" y="196" width="170" height="46" rx="3" fill="#64748b" fill-opacity="0.16" stroke="#64748b" stroke-width="1.5"/>
+  <text class="step" x="464" y="224">END-PERFORM</text>
+
+  <g stroke="#64748b" stroke-width="1.4" fill="none" marker-end="url(#ar)">
+    <line x1="182" y1="108" x2="216" y2="108"/>
+    <line x1="412" y1="108" x2="446" y2="108"/>
+    <line x1="622" y1="108" x2="656" y2="108"/>
+    <!-- loop back to test -->
+    <path d="M745 136 V170 H315 V136"/>
+    <!-- exit when condition true -->
+    <path d="M315 82 V219 H446"/>
+  </g>
+  <text class="small" x="500" y="188">condition false → another pass</text>
+  <text class="small" x="330" y="212">true → exit</text>
+
+  <!-- the boundary that matters -->
+  <rect x="30" y="262" width="800" height="44" rx="3" fill="#b91c1c" fill-opacity="0.10" stroke="#b91c1c" stroke-width="1.5"/>
+  <text class="note" x="44" y="290">Strictly greater: when INDEX equals LAST the test is still false, so the final record is processed. With 3 samples the body runs for 1, 2 and 3.</text>
+</svg>

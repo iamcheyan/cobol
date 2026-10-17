@@ -67,6 +67,8 @@ _translated_by: site-src/translation agent
 - 構文チェックとコンパイルは `build/` の下に実行ファイルを生成する。いつでも削除してやり直せる。
 
 ## ループの書き方
+![PERFORM VARYING の実行順序：条件判定、本体実行、索引の加算。判定は厳密な大なりなので上限の1件も処理される](assets/perform-varying-loop.svg)
+
 
 ```cobol
 PERFORM VARYING WS-SAMPLE-INDEX FROM 1 BY 1

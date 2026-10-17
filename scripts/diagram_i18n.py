@@ -21,6 +21,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 LESSONS = ROOT / "lessons"
+EXTENSIONS = ROOT / "extensions"
 TABLE = ROOT / "site-src" / "diagram-i18n.json"
 LOCALES = ("zh-cn", "ja")
 
@@ -30,10 +31,11 @@ TEXT_RE = re.compile(r"(<text\b[^>]*>)(.*?)(</text>)", re.S)
 def figures() -> list[Path]:
     """Canonical English figures (localized variants are skipped)."""
     out = []
-    for path in sorted(LESSONS.rglob("assets/*.svg")):
-        if path.stem.endswith(tuple(f".{loc}" for loc in LOCALES)):
-            continue
-        out.append(path)
+    for base in (LESSONS, EXTENSIONS):
+        for path in sorted(base.rglob("assets/*.svg")):
+            if path.stem.endswith(tuple(f".{loc}" for loc in LOCALES)):
+                continue
+            out.append(path)
     return out
 
 
@@ -54,7 +56,12 @@ def load_table() -> dict:
 
 
 def key_for(path: Path) -> str:
-    return path.relative_to(LESSONS).as_posix()
+    for base in (LESSONS, EXTENSIONS):
+        try:
+            return path.relative_to(base).as_posix()
+        except ValueError:
+            continue
+    return path.name
 
 
 def cmd_extract() -> None:

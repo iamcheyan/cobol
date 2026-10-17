@@ -1408,5 +1408,267 @@
       "zh-cn": "系统故障会设置非零返回码；业务拒绝仍作为已计数结果处理。",
       "ja": "システム障害では戻りコードが0以外になります。業務上の却下も件数に含まれます。"
     }
+  },
+  "06_perform-loops/assets/perform-varying-loop.svg": {
+    "PERFORM VARYING · condition is checked before each pass": {
+      "zh-cn": "PERFORM VARYING · 每轮开始前先判条件",
+      "ja": "PERFORM VARYING · 各回の前に条件を判定"
+    },
+    "Index starts at 1 by the loop itself; the DATA DIVISION value is irrelevant.": {
+      "zh-cn": "索引由循环自己从 1 开始，DATA DIVISION 里写的初值在这里不起作用。",
+      "ja": "索引はループ自身が 1 から設定する。DATA DIVISION の初期値はここでは効かない。"
+    },
+    "initialise": {
+      "zh-cn": "初始化",
+      "ja": "初期化"
+    },
+    "INDEX = 1": {
+      "zh-cn": "INDEX = 1",
+      "ja": "INDEX = 1"
+    },
+    "test UNTIL": {
+      "zh-cn": "判 UNTIL 条件",
+      "ja": "UNTIL 条件の判定"
+    },
+    "INDEX &gt; LAST ?": {
+      "zh-cn": "INDEX &gt; LAST ?",
+      "ja": "INDEX &gt; LAST ?"
+    },
+    "run body": {
+      "zh-cn": "执行循环体",
+      "ja": "本体を実行"
+    },
+    "one pass": {
+      "zh-cn": "一轮",
+      "ja": "1 回分"
+    },
+    "BY 1": {
+      "zh-cn": "BY 1",
+      "ja": "BY 1"
+    },
+    "INDEX = INDEX + 1": {
+      "zh-cn": "INDEX = INDEX + 1",
+      "ja": "INDEX = INDEX + 1"
+    },
+    "END-PERFORM": {
+      "zh-cn": "END-PERFORM",
+      "ja": "END-PERFORM"
+    },
+    "condition false → another pass": {
+      "zh-cn": "条件为假 → 再来一轮",
+      "ja": "条件が偽 → 次の回へ"
+    },
+    "true → exit": {
+      "zh-cn": "为真 → 退出",
+      "ja": "真 → 終了"
+    },
+    "Strictly greater: when INDEX equals LAST the test is still false, so the final record is processed. With 3 samples the body runs for 1, 2 and 3.": {
+      "zh-cn": "用的是严格大于：INDEX 等于 LAST 时条件仍为假，所以上限那一笔照跑。三笔样例会执行 1、2、3 三轮。",
+      "ja": "厳密な大なりを使うため、INDEX が LAST と等しいときも条件は偽で、上限の 1 件も処理される。3 件なら 1・2・3 の 3 回実行される。"
+    }
+  },
+  "19_multiple-files/assets/two-stream-loop.svg": {
+    "Two streams, one loop": {
+      "zh-cn": "两条流，一个循环",
+      "ja": "2 つのストリーム、1 つのループ"
+    },
+    "Keep reading while either file still has records.": {
+      "zh-cn": "只要还有一个文件没读完，就继续读。",
+      "ja": "どちらかのファイルにレコードが残っている間は読み続ける。"
+    },
+    "open master": {
+      "zh-cn": "打开主档",
+      "ja": "マスタを開く"
+    },
+    "status = \"00\"?": {
+      "zh-cn": "status = \"00\"?",
+      "ja": "status = \"00\"?"
+    },
+    "open transactions": {
+      "zh-cn": "打开交易文件",
+      "ja": "取引ファイルを開く"
+    },
+    "close master on error": {
+      "zh-cn": "失败时先关主档",
+      "ja": "失敗時はマスタを閉じる"
+    },
+    "loop test": {
+      "zh-cn": "循环条件",
+      "ja": "ループ条件"
+    },
+    "both EOF = \"Y\" ?": {
+      "zh-cn": "both EOF = \"Y\" ?",
+      "ja": "both EOF = \"Y\" ?"
+    },
+    "1000-READ-ACCOUNT": {
+      "zh-cn": "1000-READ-ACCOUNT",
+      "ja": "1000-READ-ACCOUNT"
+    },
+    "own EOF, own count": {
+      "zh-cn": "各自的 EOF 与计数",
+      "ja": "各自の EOF と件数"
+    },
+    "checks status explicitly": {
+      "zh-cn": "显式检查状态码",
+      "ja": "状態を明示的に確認"
+    },
+    "2000-READ-TRANSACTION": {
+      "zh-cn": "2000-READ-TRANSACTION",
+      "ja": "2000-READ-TRANSACTION"
+    },
+    "not at EOF → read it": {
+      "zh-cn": "未到文件尾 → 读一条",
+      "ja": "末尾でなければ読む"
+    },
+    "status \"00\"": {
+      "zh-cn": "status \"00\"",
+      "ja": "status \"00\""
+    },
+    "count + print line": {
+      "zh-cn": "计数加一、打印整行",
+      "ja": "件数を加算し 1 行出力"
+    },
+    "status \"10\"": {
+      "zh-cn": "status \"10\"",
+      "ja": "status \"10\""
+    },
+    "set own EOF only, no count": {
+      "zh-cn": "只置自己的 EOF，不计数",
+      "ja": "自分の EOF のみ設定、件数は増やさない"
+    },
+    "any other status": {
+      "zh-cn": "其他任何状态",
+      "ja": "それ以外の状態"
+    },
+    "print file + status, set I/O error, exit": {
+      "zh-cn": "打印文件名与状态、置 I/O 错误、退出",
+      "ja": "ファイル名と状態を出力し、I/O エラーを立てて終了"
+    },
+    "next pass": {
+      "zh-cn": "下一轮",
+      "ja": "次の回"
+    },
+    "AT END only covers status \"10\". A failed read returns another status, so each paragraph checks the field itself instead of relying on AT END.": {
+      "zh-cn": "AT END 只覆盖状态码 \"10\"。读失败会返回其他状态，所以两个段落都在 READ 之后自己检查状态字段，而不是依赖 AT END。",
+      "ja": "AT END は状態 \"10\" しか扱わない。読み込み失敗は別の状態を返すため、各段落は AT END に頼らず READ の後で状態を自分で確認する。"
+    }
+  },
+  "enterprise-batch/curriculum/modules/10-jobs/assets/nightly-job-flow.svg": {
+    "Nightly job chain": {
+      "zh-cn": "夜间作业链",
+      "ja": "夜間ジョブチェーン"
+    },
+    "Fail closed: any non-zero RC stops the chain, so downstream jobs never run on bad input.": {
+      "zh-cn": "失败即中止：任一非零 RC 都会中止链条，下游作业不会在坏输入上运行。",
+      "ja": "フェイルクローズ：非ゼロ RC でチェーンを中止し、下流ジョブは不正な入力では実行されない。"
+    },
+    "MANIFEST + LOCK": {
+      "zh-cn": "MANIFEST + LOCK",
+      "ja": "MANIFEST + LOCK"
+    },
+    "business day, SHA256": {
+      "zh-cn": "营业日、SHA256",
+      "ja": "営業日、SHA256"
+    },
+    "JOB001 receive": {
+      "zh-cn": "JOB001 receive",
+      "ja": "JOB001 receive"
+    },
+    "verify SHA256": {
+      "zh-cn": "校验 SHA256",
+      "ja": "SHA256 を検証"
+    },
+    "JOB002 validate": {
+      "zh-cn": "JOB002 validate",
+      "ja": "JOB002 validate"
+    },
+    "layout + rules": {
+      "zh-cn": "布局与规则",
+      "ja": "レイアウトと規則"
+    },
+    "JOB003 sort": {
+      "zh-cn": "JOB003 sort",
+      "ja": "JOB003 sort"
+    },
+    "ordered by key": {
+      "zh-cn": "按键排序",
+      "ja": "キーで整列"
+    },
+    "JOB004 db snapshot": {
+      "zh-cn": "JOB004 db snapshot",
+      "ja": "JOB004 db snapshot"
+    },
+    "read-only extract": {
+      "zh-cn": "只读抽取",
+      "ja": "読み取り専用の抽出"
+    },
+    "JOB005 match": {
+      "zh-cn": "JOB005 match",
+      "ja": "JOB005 match"
+    },
+    "file vs snapshot": {
+      "zh-cn": "文件与快照比对",
+      "ja": "ファイルとスナップショットの照合"
+    },
+    "JOB006 db apply": {
+      "zh-cn": "JOB006 db apply",
+      "ja": "JOB006 db apply"
+    },
+    "idempotent post": {
+      "zh-cn": "幂等入账",
+      "ja": "冪等な計上"
+    },
+    "JOB007 control": {
+      "zh-cn": "JOB007 control",
+      "ja": "JOB007 control"
+    },
+    "totals must tie": {
+      "zh-cn": "总数必须对上",
+      "ja": "合計が一致すること"
+    },
+    "JOB008 publish": {
+      "zh-cn": "JOB008 publish",
+      "ja": "JOB008 publish"
+    },
+    "downstream files": {
+      "zh-cn": "下游文件",
+      "ja": "下流ファイル"
+    },
+    "JOB009 complete": {
+      "zh-cn": "JOB009 complete",
+      "ja": "JOB009 complete"
+    },
+    "release lock, mark day": {
+      "zh-cn": "释放锁、标记营业日",
+      "ja": "ロック解放、営業日を記録"
+    },
+    "crash A": {
+      "zh-cn": "crash A",
+      "ja": "crash A"
+    },
+    "crash B": {
+      "zh-cn": "crash B",
+      "ja": "crash B"
+    },
+    "crash C": {
+      "zh-cn": "crash C",
+      "ja": "crash C"
+    },
+    "Reruns resume from the last completed job: JOB006 is idempotent per business day, so a second run does not post twice.": {
+      "zh-cn": "重跑从最后一个完成的作业继续：JOB006 按营业日幂等，第二次运行不会重复入账。",
+      "ja": "再実行は最後に完了したジョブから再開する。JOB006 は営業日ごとに冪等なので、2 回目でも二重計上しない。"
+    },
+    "JOB007 compares posted + rejected against the input count and the account totals; a mismatch fails the night before JOB008 publishes.": {
+      "zh-cn": "JOB007 用「已入账 + 已拒绝」核对输入笔数与账户总额；对不上就在 JOB008 发布前终止当晚。",
+      "ja": "JOB007 は「計上 + 拒否」を入力件数と口座合計に照合する。一致しなければ JOB008 の公開前にその夜を失敗させる。"
+    },
+    "The lock is taken before JOB001 and released only by JOB009, so two concurrent nights cannot interleave.": {
+      "zh-cn": "锁在 JOB001 之前获取，只有 JOB009 释放，因此两个并发夜间作业不会交错。",
+      "ja": "ロックは JOB001 の前に取得し、JOB009 だけが解放する。同時に走る 2 つの夜が交錯することはない。"
+    },
+    "RC 0 = success · RC 1 = job failure · RC 2 = unverified prerequisite (for example a missing DB route)": {
+      "zh-cn": "RC 0 = 成功 · RC 1 = 作业失败 · RC 2 = 前置条件未验证（例如缺少 DB 路线）",
+      "ja": "RC 0 = 成功 · RC 1 = ジョブ失敗 · RC 2 = 前提が未検証（DB 経路が無い場合など）"
+    }
   }
 }

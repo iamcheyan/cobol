@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" role="img" aria-labelledby="t d" font-family="'DM Sans','Noto Sans SC','Noto Sans JP',system-ui,sans-serif">
+  <title id="t">One 27-byte payload, two REDEFINES views</title>
+  <desc id="d">The transaction code selects which layout is read from the same 27 bytes: deposit reads account number, amount and reference; transfer reads source account, target account and amount.</desc>
+  <style>
+    .h1 { font-size: 16px; font-weight: 600; fill: #3f3b3b; }
+    .sub { font-size: 12px; fill: #5f5b52; }
+    .lbl { font-size: 12px; font-weight: 600; fill: #3f3b3b; }
+    .seg { font-size: 11.5px; fill: #3f3b3b; }
+    .off { font-size: 10.5px; fill: #77736c; font-family: 'DM Mono',ui-monospace,monospace; }
+    .note { font-size: 11.5px; fill: #5f5b52; }
+    .kbd { font-size: 12px; font-weight: 600; fill: #2563eb; font-family: 'DM Mono',ui-monospace,monospace; }
+  </style>
+
+  <rect x="1" y="1" width="898" height="398" rx="10" fill="#fcfbf7" stroke="#d8d2c3"/>
+
+  <text class="h1" x="40" y="44">相同的 27 字节载荷，按类型码选择两种视图</text>
+  <text class="sub" x="40" y="66">REDEFINES 在同一存储区声明第二种布局。它不会选择视图，也不会验证内容。</text>
+
+  <!-- type byte -->
+  <rect x="118" y="96" width="22" height="34" rx="2" fill="#64748b" fill-opacity="0.16" stroke="#64748b" stroke-width="1.5"/>
+  <text class="off" x="129" y="88" text-anchor="middle">1B</text>
+  <text class="seg" x="129" y="118" text-anchor="middle">T</text>
+
+  <!-- payload strip -->
+  <rect x="140" y="96" width="594" height="34" rx="2" fill="#64748b" fill-opacity="0.10" stroke="#64748b" stroke-width="1.5"/>
+  <text class="off" x="437" y="88" text-anchor="middle">27 字节载荷</text>
+
+  <!-- byte ruler -->
+  <g class="off" text-anchor="middle">
+    <text x="140" y="150">0</text>
+    <text x="360" y="150">10</text>
+    <text x="514" y="150">17</text>
+    <text x="580" y="150">20</text>
+    <text x="734" y="150">27</text>
+  </g>
+  <g stroke="#d8d2c3" stroke-width="1">
+    <line x1="140" y1="130" x2="140" y2="136"/>
+    <line x1="360" y1="130" x2="360" y2="136"/>
+    <line x1="514" y1="130" x2="514" y2="136"/>
+    <line x1="580" y1="130" x2="580" y2="136"/>
+    <line x1="734" y1="130" x2="734" y2="136"/>
+  </g>
+
+  <!-- View A -->
+  <text class="kbd" x="110" y="200" text-anchor="end">D</text>
+  <text class="lbl" x="110" y="216" text-anchor="end">存款</text>
+  <g>
+    <rect x="140" y="176" width="220" height="46" rx="2" fill="#0d9488" fill-opacity="0.16" stroke="#0d9488" stroke-width="1.5"/>
+    <text class="seg" x="250" y="204" text-anchor="middle">ACCOUNT-NUMBER X(10)</text>
+
+    <rect x="360" y="176" width="154" height="46" rx="2" fill="#2563eb" fill-opacity="0.16" stroke="#2563eb" stroke-width="1.5"/>
+    <text class="seg" x="437" y="204" text-anchor="middle">AMOUNT 9(5)V99</text>
+
+    <rect x="514" y="176" width="220" height="46" rx="2" fill="#64748b" fill-opacity="0.16" stroke="#64748b" stroke-width="1.5"/>
+    <text class="seg" x="624" y="204" text-anchor="middle">REFERENCE X(10)</text>
+  </g>
+
+  <!-- View B -->
+  <text class="kbd" x="110" y="292" text-anchor="end">T</text>
+  <text class="lbl" x="110" y="308" text-anchor="end">转账</text>
+  <g>
+    <rect x="140" y="268" width="220" height="46" rx="2" fill="#0d9488" fill-opacity="0.16" stroke="#0d9488" stroke-width="1.5"/>
+    <text class="seg" x="250" y="296" text-anchor="middle">SOURCE-ACCOUNT X(10)</text>
+
+    <rect x="360" y="268" width="220" height="46" rx="2" fill="#2563eb" fill-opacity="0.16" stroke="#2563eb" stroke-width="1.5"/>
+    <text class="seg" x="470" y="296" text-anchor="middle">TARGET-ACCOUNT X(10)</text>
+
+    <rect x="580" y="268" width="154" height="46" rx="2" fill="#d97706" fill-opacity="0.20" stroke="#d97706" stroke-width="1.5"/>
+    <text class="seg" x="657" y="296" text-anchor="middle">AMOUNT 9(5)V99</text>
+  </g>
+
+  <!-- shared prefix and divergence markers -->
+  <line x1="360" y1="164" x2="360" y2="322" stroke="#0d9488" stroke-width="1.2" stroke-dasharray="4 3"/>
+  <text class="note" x="250" y="344" text-anchor="middle">0-9：两种视图中的同一字段</text>
+  <text class="note" x="546" y="344" text-anchor="middle">10-26：相同字节，不同字段</text>
+
+  <text class="note" x="40" y="376">使用错误视图读取仍会以 0 退出：字节有效，只是含义错误。</text>
+</svg>

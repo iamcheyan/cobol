@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" role="img" aria-labelledby="title desc" font-family="'DM Sans','Noto Sans SC','Noto Sans JP',system-ui,sans-serif">
+  <title id="title">SQL cursor lifecycle and status branches</title>
+  <desc id="desc">ACCOUNT-CURSOR moves from DECLARE to OPEN to repeated FETCH. SQLCODE zero continues fetching, 100 reaches normal EOF, and another value follows the error path. An opened cursor is closed before disconnect.</desc>
+  <style>
+    .h1 { font-size: 18px; font-weight: 600; fill: #3f3b3b; }
+    .sub { font-size: 12px; fill: #5f5b52; }
+    .label { font-size: 13px; font-weight: 600; fill: #3f3b3b; }
+    .mono { font-size: 12px; fill: #3f3b3b; font-family: 'DM Mono',ui-monospace,monospace; }
+    .note { font-size: 11px; fill: #5f5b52; }
+    .branch { font-size: 11px; font-weight: 600; fill: #5f5b52; }
+  </style>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#76319f"/>
+    </marker>
+    <marker id="error-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#b91c1c"/>
+    </marker>
+  </defs>
+  <rect x="1" y="1" width="898" height="418" rx="10" fill="#fcfbf7" stroke="#d8d2c3" stroke-width="1.5"/>
+  <text class="h1" x="32" y="39">ACCOUNT-CURSOR 生命周期</text>
+  <text class="sub" x="32" y="61">DECLARE 注册查询；OPEN 启动查询；FETCH 根据 SQLCODE 分支。</text>
+
+  <g stroke="#76319f" stroke-width="1.5" fill="none" marker-end="url(#arrow)">
+    <line x1="181" y1="148" x2="226" y2="148"/>
+    <line x1="373" y1="148" x2="418" y2="148"/>
+    <path d="M555 148 H598 V142 H623"/>
+    <path d="M691 176 V220 H511 V176"/>
+    <path d="M680 176 V267 H320 V289"/>
+  </g>
+  <g stroke="#b91c1c" stroke-width="1.5" fill="none" marker-end="url(#error-arrow)">
+    <path d="M748 176 V326 H646 V350"/>
+  </g>
+
+  <rect x="32" y="112" width="149" height="72" rx="4" fill="#64748b" fill-opacity="0.16" stroke="#64748b" stroke-width="1.5"/>
+  <text class="label" x="106.5" y="139" text-anchor="middle">声明</text>
+  <text class="mono" x="106.5" y="162" text-anchor="middle">注册 SELECT</text>
+
+  <rect x="226" y="112" width="147" height="72" rx="4" fill="#2563eb" fill-opacity="0.16" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="label" x="299.5" y="139" text-anchor="middle">打开</text>
+  <text class="mono" x="299.5" y="162" text-anchor="middle">SQLCODE = 0？</text>
+
+  <rect x="418" y="112" width="137" height="64" rx="4" fill="#2563eb" fill-opacity="0.16" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="label" x="486.5" y="138" text-anchor="middle">取一行</text>
+  <text class="mono" x="486.5" y="159" text-anchor="middle">一行</text>
+
+  <rect x="623" y="112" width="135" height="64" rx="4" fill="#0d9488" fill-opacity="0.16" stroke="#0d9488" stroke-width="1.5"/>
+  <text class="label" x="690.5" y="138" text-anchor="middle">SQLCODE = 0</text>
+  <text class="note" x="690.5" y="159" text-anchor="middle">处理行</text>
+  <text class="branch" x="563" y="133">0</text>
+  <text class="branch" x="557" y="212">继续</text>
+
+  <rect x="246" y="289" width="148" height="64" rx="4" fill="#d97706" fill-opacity="0.16" stroke="#d97706" stroke-width="1.5"/>
+  <text class="label" x="320" y="315" text-anchor="middle">SQLCODE = 100</text>
+  <text class="note" x="320" y="337" text-anchor="middle">EOF：正常结束</text>
+  <text class="branch" x="407" y="259">100</text>
+
+  <rect x="574" y="350" width="144" height="52" rx="4" fill="#b91c1c" fill-opacity="0.16" stroke="#b91c1c" stroke-width="1.5"/>
+  <text class="label" x="646" y="373" text-anchor="middle">SQL 错误</text>
+  <text class="note" x="646" y="391" text-anchor="middle">其他 SQLCODE</text>
+  <text class="branch" x="759" y="311">其他</text>
+
+  <path d="M320 353 V380 H431" fill="none" stroke="#76319f" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <path d="M646 402 V410 H431 V380" fill="none" stroke="#76319f" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="431" y="357" width="105" height="46" rx="4" fill="#0d9488" fill-opacity="0.16" stroke="#0d9488" stroke-width="1.5"/>
+  <text class="label" x="483.5" y="386" text-anchor="middle">关闭</text>
+  <text class="note" x="32" y="396">仅在 OPEN 成功后执行 CLOSE；然后断开连接。</text>
+</svg>

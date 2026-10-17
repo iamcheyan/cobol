@@ -1,0 +1,1412 @@
+{
+  "01_hello-cobol/assets/fixed-format-columns.svg": {
+    "传统 80 列固定格式（Fixed Format）": {
+      "zh-cn": "传统 80 列固定格式（Fixed Format）",
+      "ja": "従来の80桁固定形式"
+    },
+    "指示符区": {
+      "zh-cn": "指示符区",
+      "ja": "標識領域"
+    },
+    "第 7 列": {
+      "zh-cn": "第 7 列",
+      "ja": "7桁目"
+    },
+    "Area A": {
+      "zh-cn": "A 区",
+      "ja": "Area A"
+    },
+    "8–11 列": {
+      "zh-cn": "8–11 列",
+      "ja": "8–11桁"
+    },
+    "1-6": {
+      "zh-cn": "1-6",
+      "ja": "1-6"
+    },
+    "7": {
+      "zh-cn": "7",
+      "ja": "7"
+    },
+    "8-11": {
+      "zh-cn": "8-11",
+      "ja": "8-11"
+    },
+    "12-72": {
+      "zh-cn": "12-72",
+      "ja": "12-72"
+    },
+    "73-80": {
+      "zh-cn": "73-80",
+      "ja": "73-80"
+    },
+    "序号区": {
+      "zh-cn": "序号区",
+      "ja": "連番領域"
+    },
+    "1–6 列": {
+      "zh-cn": "1–6 列",
+      "ja": "1–6桁"
+    },
+    "Area B": {
+      "zh-cn": "B 区",
+      "ja": "Area B"
+    },
+    "12–72 列": {
+      "zh-cn": "12–72 列",
+      "ja": "12–72桁"
+    },
+    "识别区": {
+      "zh-cn": "识别区",
+      "ja": "識別領域"
+    },
+    "73–80 列": {
+      "zh-cn": "73–80 列",
+      "ja": "73–80桁"
+    },
+    "COBOL 源码区（第 8–72 列）": {
+      "zh-cn": "COBOL 源码区（第 8–72 列）",
+      "ja": "COBOLソース領域（8–72桁）"
+    },
+    "第 73 列起的识别区被编译器完全忽略，代码写到这里会静默消失。": {
+      "zh-cn": "第 73 列起的识别区会被编译器完全忽略，代码写在这里会悄然消失。",
+      "ja": "73桁目以降の識別領域はコンパイラーに完全に無視され、コードは何も告げずに消えます。"
+    },
+    "第 7 列写 * 是注释，写 - 是续行。": {
+      "zh-cn": "第 7 列写 * 表示注释，写 - 表示续行。",
+      "ja": "7桁目の * はコメント、- は継続行です。"
+    }
+  },
+  "02_data-types/assets/pic-storage-ruler.svg": {
+    "PIC declaration → DISPLAY storage bytes": {
+      "zh-cn": "PIC 声明 → DISPLAY 存储字节数",
+      "ja": "PIC宣言 → DISPLAYの記憶バイト数"
+    },
+    "FIELD": {
+      "zh-cn": "字段",
+      "ja": "項目"
+    },
+    "PIC": {
+      "zh-cn": "PIC",
+      "ja": "PIC"
+    },
+    "BYTE RULER": {
+      "zh-cn": "字节标尺",
+      "ja": "バイト目盛"
+    },
+    "BYTES": {
+      "zh-cn": "字节",
+      "ja": "バイト"
+    },
+    "0": {
+      "zh-cn": "0",
+      "ja": "0"
+    },
+    "1": {
+      "zh-cn": "1",
+      "ja": "1"
+    },
+    "2": {
+      "zh-cn": "2",
+      "ja": "2"
+    },
+    "3": {
+      "zh-cn": "3",
+      "ja": "3"
+    },
+    "4": {
+      "zh-cn": "4",
+      "ja": "4"
+    },
+    "5": {
+      "zh-cn": "5",
+      "ja": "5"
+    },
+    "6": {
+      "zh-cn": "6",
+      "ja": "6"
+    },
+    "7": {
+      "zh-cn": "7",
+      "ja": "7"
+    },
+    "8": {
+      "zh-cn": "8",
+      "ja": "8"
+    },
+    "9": {
+      "zh-cn": "9",
+      "ja": "9"
+    },
+    "10": {
+      "zh-cn": "10",
+      "ja": "10"
+    },
+    "11": {
+      "zh-cn": "11",
+      "ja": "11"
+    },
+    "12": {
+      "zh-cn": "12",
+      "ja": "12"
+    },
+    "WS-ACCOUNT-KEY": {
+      "zh-cn": "WS-ACCOUNT-KEY",
+      "ja": "WS-ACCOUNT-KEY"
+    },
+    "X(12)": {
+      "zh-cn": "X(12)",
+      "ja": "X(12)"
+    },
+    "12 B": {
+      "zh-cn": "12 字节",
+      "ja": "12 バイト"
+    },
+    "WS-CUSTOMER-NAME": {
+      "zh-cn": "WS-CUSTOMER-NAME",
+      "ja": "WS-CUSTOMER-NAME"
+    },
+    "A(12)": {
+      "zh-cn": "A(12)",
+      "ja": "A(12)"
+    },
+    "WS-BRANCH-CODE": {
+      "zh-cn": "WS-BRANCH-CODE",
+      "ja": "WS-BRANCH-CODE"
+    },
+    "9(4)": {
+      "zh-cn": "9(4)",
+      "ja": "9(4)"
+    },
+    "4 B": {
+      "zh-cn": "4 字节",
+      "ja": "4 バイト"
+    },
+    "WS-LEDGER-BALANCE": {
+      "zh-cn": "WS-LEDGER-BALANCE",
+      "ja": "WS-LEDGER-BALANCE"
+    },
+    "9(7)V99": {
+      "zh-cn": "9(7)V99",
+      "ja": "9(7)V99"
+    },
+    "9 B": {
+      "zh-cn": "9 字节",
+      "ja": "9 バイト"
+    },
+    "WS-LAST-CREDIT": {
+      "zh-cn": "WS-LAST-CREDIT",
+      "ja": "WS-LAST-CREDIT"
+    },
+    "S9(7)V99 SIGN LEADING": {
+      "zh-cn": "S9(7)V99 SIGN LEADING",
+      "ja": "S9(7)V99 先行符号"
+    },
+    "SEPARATE CHARACTER": {
+      "zh-cn": "独立符号字符",
+      "ja": "分離文字"
+    },
+    "10 B": {
+      "zh-cn": "10 字节",
+      "ja": "10 バイト"
+    },
+    "WS-INTEREST-RATE": {
+      "zh-cn": "WS-INTEREST-RATE",
+      "ja": "WS-INTEREST-RATE"
+    },
+    "9(2)V9(4)": {
+      "zh-cn": "9(2)V9(4)",
+      "ja": "9(2)V9(4)"
+    },
+    "6 B": {
+      "zh-cn": "6 字节",
+      "ja": "6 バイト"
+    },
+    "Each ruler unit = 1 byte · V uses no byte · separate sign uses 1 byte · default DISPLAY usage": {
+      "zh-cn": "标尺每格 = 1 字节 · V 不占字节 · 独立符号占 1 字节 · 默认 DISPLAY 用法",
+      "ja": "目盛り1つは1バイト · Vはバイトを使わない · 符号分離形式は1バイト使用 · 既定のDISPLAY使用法"
+    }
+  },
+  "04_if-conditions/assets/if-decision-flow.svg": {
+    "IF transaction decision — first failed rule wins": {
+      "zh-cn": "IF 交易判定 — 首条失败规则生效",
+      "ja": "IFによる取引判定 — 最初に失敗した規則を適用"
+    },
+    "Transaction amount + account status": {
+      "zh-cn": "交易金额 + 账户状态",
+      "ja": "取引金額 + 口座状態"
+    },
+    "AMOUNT &lt;= 0?": {
+      "zh-cn": "AMOUNT &lt;= 0?",
+      "ja": "AMOUNT &lt;= 0?"
+    },
+    "zero and negative values": {
+      "zh-cn": "零和负数",
+      "ja": "ゼロおよび負の値"
+    },
+    "Yes": {
+      "zh-cn": "是",
+      "ja": "はい"
+    },
+    "REJECTED": {
+      "zh-cn": "拒绝",
+      "ja": "拒否"
+    },
+    "AMOUNT_NOT_POSITIVE": {
+      "zh-cn": "AMOUNT_NOT_POSITIVE",
+      "ja": "AMOUNT_NOT_POSITIVE"
+    },
+    "No": {
+      "zh-cn": "否",
+      "ja": "いいえ"
+    },
+    "AMOUNT &gt; MAXIMUM?": {
+      "zh-cn": "AMOUNT &gt; MAXIMUM?",
+      "ja": "AMOUNT &gt; MAXIMUM?"
+    },
+    "MAXIMUM = 1000.00": {
+      "zh-cn": "MAXIMUM = 1000.00",
+      "ja": "MAXIMUM = 1000.00"
+    },
+    "AMOUNT_OVER_LIMIT": {
+      "zh-cn": "AMOUNT_OVER_LIMIT",
+      "ja": "AMOUNT_OVER_LIMIT"
+    },
+    "STATUS = \"A\"?": {
+      "zh-cn": "STATUS = \"A\"?",
+      "ja": "STATUS = \"A\"?"
+    },
+    "ACCEPTED": {
+      "zh-cn": "接受",
+      "ja": "受付"
+    },
+    "WITHIN_RULES": {
+      "zh-cn": "WITHIN_RULES",
+      "ja": "WITHIN_RULES"
+    },
+    "ACCOUNT_INACTIVE": {
+      "zh-cn": "ACCOUNT_INACTIVE",
+      "ja": "ACCOUNT_INACTIVE"
+    },
+    "Boundary: 0.00 is rejected; 0.01 is eligible. 1000.00 is included; 1000.01 is rejected.": {
+      "zh-cn": "边界：0.00 被拒绝；0.01 可处理。1000.00 包含在内；1000.01 被拒绝。",
+      "ja": "境界値: 0.00は拒否、0.01は受付対象。1000.00は含み、1000.01は拒否。"
+    }
+  },
+  "05_evaluate/assets/transaction-code-routing.svg": {
+    "EVALUATE WS-TRANSACTION-CODE": {
+      "zh-cn": "EVALUATE WS-TRANSACTION-CODE",
+      "ja": "EVALUATE WS-TRANSACTION-CODE"
+    },
+    "Exact one-character match": {
+      "zh-cn": "精确匹配单字符",
+      "ja": "1文字の完全一致"
+    },
+    "WHEN \"D\"": {
+      "zh-cn": "WHEN \"D\"",
+      "ja": "WHEN \"D\""
+    },
+    "WHEN \"W\"": {
+      "zh-cn": "WHEN \"W\"",
+      "ja": "WHEN \"W\""
+    },
+    "WHEN \"T\"": {
+      "zh-cn": "WHEN \"T\"",
+      "ja": "WHEN \"T\""
+    },
+    "WHEN OTHER": {
+      "zh-cn": "WHEN OTHER",
+      "ja": "WHEN OTHER"
+    },
+    "DEPOSIT": {
+      "zh-cn": "存款",
+      "ja": "入金"
+    },
+    "ADD_TO_ACCOUNT": {
+      "zh-cn": "ADD_TO_ACCOUNT",
+      "ja": "ADD_TO_ACCOUNT"
+    },
+    "WITHDRAWAL": {
+      "zh-cn": "取款",
+      "ja": "出金"
+    },
+    "SUBTRACT_FROM_ACCOUNT": {
+      "zh-cn": "SUBTRACT_FROM_ACCOUNT",
+      "ja": "SUBTRACT_FROM_ACCOUNT"
+    },
+    "TRANSFER": {
+      "zh-cn": "转账",
+      "ja": "振込"
+    },
+    "PROCESS_BOTH_ACCOUNTS": {
+      "zh-cn": "PROCESS_BOTH_ACCOUNTS",
+      "ja": "PROCESS_BOTH_ACCOUNTS"
+    },
+    "UNKNOWN": {
+      "zh-cn": "未知",
+      "ja": "不明"
+    },
+    "REJECT_FOR_REVIEW": {
+      "zh-cn": "REJECT_FOR_REVIEW",
+      "ja": "REJECT_FOR_REVIEW"
+    },
+    "Lowercase, spaces, and all other values match WHEN OTHER. Labels describe routing; no posting occurs.": {
+      "zh-cn": "小写字母、空格及其他所有值都匹配 WHEN OTHER。标签描述路由；不会实际入账。",
+      "ja": "小文字、空白、その他すべての値はWHEN OTHERに一致します。ラベルは振り分け先を示し、記帳は行いません。"
+    }
+  },
+  "09_group-items/assets/transaction-record-layout.svg": {
+    "WS-TRANSACTION-RECORD · 58 bytes": {
+      "zh-cn": "WS-TRANSACTION-RECORD · 58 字节",
+      "ja": "WS-TRANSACTION-RECORD · 58 バイト"
+    },
+    "01": {
+      "zh-cn": "01",
+      "ja": "01"
+    },
+    "WS-TRANSACTION-RECORD": {
+      "zh-cn": "WS-TRANSACTION-RECORD",
+      "ja": "WS-TRANSACTION-RECORD"
+    },
+    "05 WS-CUSTOMER-INFO": {
+      "zh-cn": "05 WS-CUSTOMER-INFO",
+      "ja": "05 WS-CUSTOMER-INFO"
+    },
+    "20 B · 1–20": {
+      "zh-cn": "20 字节 · 1–20",
+      "ja": "20 バイト · 1–20"
+    },
+    "05 WS-ACCOUNT-INFO": {
+      "zh-cn": "05 WS-ACCOUNT-INFO",
+      "ja": "05 WS-ACCOUNT-INFO"
+    },
+    "11 B · 21–31": {
+      "zh-cn": "11 字节 · 21–31",
+      "ja": "11 バイト · 21–31"
+    },
+    "05 WS-TXN-INFO": {
+      "zh-cn": "05 WS-TXN-INFO",
+      "ja": "05 WS-TXN-INFO"
+    },
+    "27 B · 32–58": {
+      "zh-cn": "27 字节 · 32–58",
+      "ja": "27 バイト · 32–58"
+    },
+    "10 ELEMENTARY ITEMS · declaration order · 1-based byte ranges": {
+      "zh-cn": "10 个基本字段 · 声明顺序 · 从 1 开始的字节范围",
+      "ja": "10個の基本項目 · 宣言順 · 1始まりのバイト範囲"
+    },
+    "1": {
+      "zh-cn": "1",
+      "ja": "1"
+    },
+    "9": {
+      "zh-cn": "9",
+      "ja": "9"
+    },
+    "21": {
+      "zh-cn": "21",
+      "ja": "21"
+    },
+    "31": {
+      "zh-cn": "31",
+      "ja": "31"
+    },
+    "32": {
+      "zh-cn": "32",
+      "ja": "32"
+    },
+    "44": {
+      "zh-cn": "44",
+      "ja": "44"
+    },
+    "45": {
+      "zh-cn": "45",
+      "ja": "45"
+    },
+    "52": {
+      "zh-cn": "52",
+      "ja": "52"
+    },
+    "59": {
+      "zh-cn": "59",
+      "ja": "59"
+    },
+    "WS-CUSTOMER-ID": {
+      "zh-cn": "WS-CUSTOMER-ID",
+      "ja": "WS-CUSTOMER-ID"
+    },
+    "X(8) · 8 B": {
+      "zh-cn": "X(8) · 8 字节",
+      "ja": "X(8) · 8 バイト"
+    },
+    "1–8": {
+      "zh-cn": "1–8",
+      "ja": "1–8"
+    },
+    "WS-CUSTOMER-NAME": {
+      "zh-cn": "WS-CUSTOMER-NAME",
+      "ja": "WS-CUSTOMER-NAME"
+    },
+    "X(12) · 12 B": {
+      "zh-cn": "X(12) · 12 字节",
+      "ja": "X(12) · 12 バイト"
+    },
+    "9–20": {
+      "zh-cn": "9–20",
+      "ja": "9–20"
+    },
+    "WS-ACCOUNT-NUMBER": {
+      "zh-cn": "WS-ACCOUNT-NUMBER",
+      "ja": "WS-ACCOUNT-NUMBER"
+    },
+    "X(10) · 10 B": {
+      "zh-cn": "X(10) · 10 字节",
+      "ja": "X(10) · 10 バイト"
+    },
+    "21–30": {
+      "zh-cn": "21–30",
+      "ja": "21–30"
+    },
+    "WS-STATUS OF WS-ACCOUNT-INFO": {
+      "zh-cn": "WS-STATUS OF WS-ACCOUNT-INFO",
+      "ja": "WS-STATUS OF WS-ACCOUNT-INFO"
+    },
+    "X · 1 B": {
+      "zh-cn": "X · 1 字节",
+      "ja": "X · 1 バイト"
+    },
+    "WS-TXN-ID": {
+      "zh-cn": "WS-TXN-ID",
+      "ja": "WS-TXN-ID"
+    },
+    "32–43": {
+      "zh-cn": "32–43",
+      "ja": "32–43"
+    },
+    "WS-TXN-CODE": {
+      "zh-cn": "WS-TXN-CODE",
+      "ja": "WS-TXN-CODE"
+    },
+    "WS-TXN-AMOUNT": {
+      "zh-cn": "WS-TXN-AMOUNT",
+      "ja": "WS-TXN-AMOUNT"
+    },
+    "9(5)V99 · 7 B": {
+      "zh-cn": "9(5)V99 · 7 字节",
+      "ja": "9(5)V99 · 7 バイト"
+    },
+    "45–51": {
+      "zh-cn": "45–51",
+      "ja": "45–51"
+    },
+    "WS-STATUS OF WS-TXN-INFO": {
+      "zh-cn": "WS-STATUS OF WS-TXN-INFO",
+      "ja": "WS-STATUS OF WS-TXN-INFO"
+    },
+    "X(7) · 7 B": {
+      "zh-cn": "X(7) · 7 字节",
+      "ja": "X(7) · 7 バイト"
+    },
+    "52–58": {
+      "zh-cn": "52–58",
+      "ja": "52–58"
+    },
+    "20 + 11 + 27 = 58 bytes": {
+      "zh-cn": "20 + 11 + 27 = 58 字节",
+      "ja": "20 + 11 + 27 = 58 バイト"
+    }
+  },
+  "10_redefines/assets/redefines-overlay.svg": {
+    "Same 27 bytes, two views select by the type code": {
+      "zh-cn": "相同的 27 字节载荷，按类型码选择两种视图",
+      "ja": "同じ27バイトを型コードで2通りに解釈"
+    },
+    "REDEFINES declares a second layout on the same storage. It never picks a view and never validates the content.": {
+      "zh-cn": "REDEFINES 在同一存储区声明第二种布局。它不会选择视图，也不会验证内容。",
+      "ja": "REDEFINESは同じ領域に別レイアウトを宣言します。ビューの選択や内容の検証はしません。"
+    },
+    "1B": {
+      "zh-cn": "1B",
+      "ja": "1B"
+    },
+    "T": {
+      "zh-cn": "T",
+      "ja": "T"
+    },
+    "27-byte payload": {
+      "zh-cn": "27 字节载荷",
+      "ja": "27バイトのデータ"
+    },
+    "0": {
+      "zh-cn": "0",
+      "ja": "0"
+    },
+    "10": {
+      "zh-cn": "10",
+      "ja": "10"
+    },
+    "17": {
+      "zh-cn": "17",
+      "ja": "17"
+    },
+    "20": {
+      "zh-cn": "20",
+      "ja": "20"
+    },
+    "27": {
+      "zh-cn": "27",
+      "ja": "27"
+    },
+    "D": {
+      "zh-cn": "D",
+      "ja": "D"
+    },
+    "deposit": {
+      "zh-cn": "存款",
+      "ja": "入金"
+    },
+    "ACCOUNT-NUMBER X(10)": {
+      "zh-cn": "ACCOUNT-NUMBER X(10)",
+      "ja": "ACCOUNT-NUMBER X(10)"
+    },
+    "AMOUNT 9(5)V99": {
+      "zh-cn": "AMOUNT 9(5)V99",
+      "ja": "AMOUNT 9(5)V99"
+    },
+    "REFERENCE X(10)": {
+      "zh-cn": "REFERENCE X(10)",
+      "ja": "REFERENCE X(10)"
+    },
+    "transfer": {
+      "zh-cn": "转账",
+      "ja": "振替"
+    },
+    "SOURCE-ACCOUNT X(10)": {
+      "zh-cn": "SOURCE-ACCOUNT X(10)",
+      "ja": "SOURCE-ACCOUNT X(10)"
+    },
+    "TARGET-ACCOUNT X(10)": {
+      "zh-cn": "TARGET-ACCOUNT X(10)",
+      "ja": "TARGET-ACCOUNT X(10)"
+    },
+    "0-9: same field in both views": {
+      "zh-cn": "0-9：两种视图中的同一字段",
+      "ja": "0–9：両ビューで同じ項目"
+    },
+    "10-26: same bytes, different fields": {
+      "zh-cn": "10-26：相同字节，不同字段",
+      "ja": "10–26：同じバイト、異なる項目"
+    },
+    "Reading with the wrong view still exits 0: the bytes are valid, only their meaning is wrong.": {
+      "zh-cn": "使用错误视图读取仍会以 0 退出：字节有效，只是含义错误。",
+      "ja": "誤ったビューで読んでも終了コードは0です。バイト列は有効で、意味だけが異なります。"
+    }
+  },
+  "13_search-tables/assets/search-methods.svg": {
+    "Same key, two search paths through 4 ascending account entries": {
+      "zh-cn": "相同键在 4 个升序账户条目中的两种查找路径",
+      "ja": "同じキーを昇順の4口座エントリーから検索する2つの方法"
+    },
+    "Target: 0002468101  ·  match: entry 3  ·  balance: 520.00": {
+      "zh-cn": "目标：0002468101  ·  匹配：条目 3  ·  余额：520.00",
+      "ja": "対象：0002468101 · 一致：エントリー3 · 残高：520.00"
+    },
+    "SEARCH": {
+      "zh-cn": "顺序查找",
+      "ja": "SEARCH"
+    },
+    "Sequential": {
+      "zh-cn": "顺序查找",
+      "ja": "逐次"
+    },
+    "ENTRY 1": {
+      "zh-cn": "条目 1",
+      "ja": "エントリー1"
+    },
+    "0000000042": {
+      "zh-cn": "0000000042",
+      "ja": "0000000042"
+    },
+    "ENTRY 2": {
+      "zh-cn": "条目 2",
+      "ja": "エントリー2"
+    },
+    "0001234567": {
+      "zh-cn": "0001234567",
+      "ja": "0001234567"
+    },
+    "ENTRY 3 · MATCH": {
+      "zh-cn": "条目 3 · 匹配",
+      "ja": "エントリー3 · 一致"
+    },
+    "0002468101": {
+      "zh-cn": "0002468101",
+      "ja": "0002468101"
+    },
+    "ENTRY 4": {
+      "zh-cn": "条目 4",
+      "ja": "エントリー4"
+    },
+    "0007654321": {
+      "zh-cn": "0007654321",
+      "ja": "0007654321"
+    },
+    "Start at index 1; compare each entry in order until the key matches.": {
+      "zh-cn": "从索引 1 开始，依次比较条目，直到键匹配。",
+      "ja": "インデックス1から順に各エントリーを比較し、一致するキーを探します。"
+    },
+    "SEARCH ALL": {
+      "zh-cn": "二分查找",
+      "ja": "SEARCH ALL"
+    },
+    "Binary": {
+      "zh-cn": "二分查找",
+      "ja": "二分"
+    },
+    "ENTRY 2 · PROBE": {
+      "zh-cn": "条目 2 · 探测",
+      "ja": "エントリー2 · 試行"
+    },
+    "Probe the middle entry (2); target is greater, so continue in the upper half to entry 3.": {
+      "zh-cn": "探测中间条目（2）；目标更大，因此在上半部分继续查找到条目 3。",
+      "ja": "中央のエントリー（2）を調べます。対象の方が大きいため、上半分のエントリー3へ進みます。"
+    },
+    "Precondition": {
+      "zh-cn": "前提条件",
+      "ja": "前提条件"
+    },
+    "INDEXED BY + unique keys + actual order matches ASCENDING KEY": {
+      "zh-cn": "INDEXED BY + 键唯一 + 实际顺序符合 ASCENDING KEY",
+      "ja": "INDEXED BY + キーが一意 + 実際の並びがASCENDING KEYと一致"
+    }
+  },
+  "15_sequential-file-read/assets/sequential-read-flow.svg": {
+    "Open → read one record → test EOF → exit": {
+      "zh-cn": "打开 → 读取一条记录 → 检查 EOF → 退出",
+      "ja": "OPEN → レコードを1件読む → EOF判定 → 終了"
+    },
+    "READ repeats until AT END sets the end-of-file flag.": {
+      "zh-cn": "READ 会重复执行，直到 AT END 设置文件结束标志。",
+      "ja": "AT ENDがEOFフラグを立てるまでREADを繰り返します。"
+    },
+    "OPEN INPUT": {
+      "zh-cn": "打开输入",
+      "ja": "OPEN INPUT"
+    },
+    "TRANSACTION-FILE": {
+      "zh-cn": "TRANSACTION-FILE",
+      "ja": "TRANSACTION-FILE"
+    },
+    "FILE STATUS": {
+      "zh-cn": "文件状态",
+      "ja": "FILE STATUS"
+    },
+    "= \"00\"?": {
+      "zh-cn": "= \"00\"？",
+      "ja": "= \"00\"?"
+    },
+    "No · e.g. \"35\"": {
+      "zh-cn": "否 · 例如 \"35\"",
+      "ja": "いいえ · 例：\"35\""
+    },
+    "Report open failure": {
+      "zh-cn": "报告打开失败",
+      "ja": "OPEN失敗を報告"
+    },
+    "STOP RUN · no READ": {
+      "zh-cn": "STOP RUN · 不执行 READ",
+      "ja": "STOP RUN · READなし"
+    },
+    "Yes": {
+      "zh-cn": "是",
+      "ja": "はい"
+    },
+    "READ one record": {
+      "zh-cn": "READ 一条记录",
+      "ja": "レコードを1件READ"
+    },
+    "LINE SEQUENTIAL": {
+      "zh-cn": "行顺序",
+      "ja": "LINE SEQUENTIAL"
+    },
+    "AT END?": {
+      "zh-cn": "AT END？",
+      "ja": "AT END?"
+    },
+    "READ result": {
+      "zh-cn": "READ 结果",
+      "ja": "READ結果"
+    },
+    "NOT AT END": {
+      "zh-cn": "非文件末尾",
+      "ja": "NOT AT END"
+    },
+    "Process record": {
+      "zh-cn": "处理记录",
+      "ja": "レコードを処理"
+    },
+    "count + 1": {
+      "zh-cn": "计数 + 1",
+      "ja": "カウント + 1"
+    },
+    "Yes · EOF": {
+      "zh-cn": "是 · EOF",
+      "ja": "はい · EOF"
+    },
+    "Exit loop": {
+      "zh-cn": "退出循环",
+      "ja": "ループを終了"
+    },
+    "report count · CLOSE": {
+      "zh-cn": "报告计数 · CLOSE",
+      "ja": "件数を報告 · CLOSE"
+    },
+    "FILE STATUS describes the OPEN result here.": {
+      "zh-cn": "此处的 FILE STATUS 描述 OPEN 结果。",
+      "ja": "ここでFILE STATUSが示すのはOPENの結果です。"
+    },
+    "EOF is the READ AT END branch, not a FILE STATUS test.": {
+      "zh-cn": "EOF 对应 READ 的 AT END 分支，不是 FILE STATUS 检查。",
+      "ja": "EOFはREADのAT END分岐で判定し、FILE STATUSでは判定しません。"
+    }
+  },
+  "20_file-matching/assets/file-matching-flow.svg": {
+    "Merge two ordered streams by account key": {
+      "zh-cn": "按账户键归并两个有序流",
+      "ja": "口座キーで2つの整列済みストリームを統合"
+    },
+    "ACCOUNT-MASTER · FD-ACCOUNT-RECORD": {
+      "zh-cn": "ACCOUNT-MASTER · FD-ACCOUNT-RECORD",
+      "ja": "ACCOUNT-MASTER · FD-ACCOUNT-RECORD"
+    },
+    "FD-ACCOUNT-NUMBER X(10)": {
+      "zh-cn": "FD-ACCOUNT-NUMBER X(10)",
+      "ja": "FD-ACCOUNT-NUMBER X(10)"
+    },
+    "CUSTOMER-ID X(8) · BALANCE 9(7)V99": {
+      "zh-cn": "CUSTOMER-ID X(8) · BALANCE 9(7)V99",
+      "ja": "CUSTOMER-ID X(8) · BALANCE 9(7)V99"
+    },
+    "DAILY-TRANSACTIONS · FD-TRANSACTION-RECORD": {
+      "zh-cn": "DAILY-TRANSACTIONS · FD-TRANSACTION-RECORD",
+      "ja": "DAILY-TRANSACTIONS · FD-TRANSACTION-RECORD"
+    },
+    "FD-TRANSACTION-ACCOUNT X(10)": {
+      "zh-cn": "FD-TRANSACTION-ACCOUNT X(10)",
+      "ja": "FD-TRANSACTION-ACCOUNT X(10)"
+    },
+    "TRANSACTION-TYPE X · TRANSACTION-AMOUNT 9(7)V99": {
+      "zh-cn": "TRANSACTION-TYPE X · TRANSACTION-AMOUNT 9(7)V99",
+      "ja": "TRANSACTION-TYPE X · TRANSACTION-AMOUNT 9(7)V99"
+    },
+    "Compare current keys": {
+      "zh-cn": "比较当前键",
+      "ja": "現在のキーを比較"
+    },
+    "MASTER KEY  ?  TRANSACTION KEY": {
+      "zh-cn": "主档键  ?  交易键",
+      "ja": "MASTER KEY  ?  TRANSACTION KEY"
+    },
+    "MASTER KEY &lt; TRANSACTION KEY": {
+      "zh-cn": "主档键 &lt; 交易键",
+      "ja": "MASTER KEY &lt; TRANSACTION KEY"
+    },
+    "KEYS EQUAL": {
+      "zh-cn": "键相等",
+      "ja": "キーが一致"
+    },
+    "MASTER KEY &gt; TRANSACTION KEY": {
+      "zh-cn": "主档键 &gt; 交易键",
+      "ja": "MASTER KEY &gt; TRANSACTION KEY"
+    },
+    "MASTER ONLY": {
+      "zh-cn": "仅主档",
+      "ja": "マスターのみ"
+    },
+    "Report current master record": {
+      "zh-cn": "报告当前主档记录",
+      "ja": "現在のマスターレコードを報告"
+    },
+    "Advance master stream": {
+      "zh-cn": "推进主档流",
+      "ja": "マスターストリームを進める"
+    },
+    "MATCHED": {
+      "zh-cn": "已匹配",
+      "ja": "一致"
+    },
+    "Report paired records": {
+      "zh-cn": "报告配对记录",
+      "ja": "対応するレコードを報告"
+    },
+    "Advance both streams": {
+      "zh-cn": "推进两个流",
+      "ja": "両方のストリームを進める"
+    },
+    "TRANSACTION ONLY": {
+      "zh-cn": "仅交易",
+      "ja": "トランザクションのみ"
+    },
+    "Report current transaction": {
+      "zh-cn": "报告当前交易",
+      "ja": "現在のトランザクションを報告"
+    },
+    "Advance transaction stream": {
+      "zh-cn": "推进交易流",
+      "ja": "トランザクションストリームを進める"
+    },
+    "EOF CHECK BEFORE KEY COMPARISON": {
+      "zh-cn": "比较键之前先检查 EOF",
+      "ja": "キー比較前にEOFを確認"
+    },
+    "One side ends: drain the other side to its ONLY path · Both end: stop": {
+      "zh-cn": "一侧结束：将另一侧剩余记录送入对应的“仅此侧”路径 · 两侧都结束：停止",
+      "ja": "片側が終了：もう一方をONLY経路で処理 · 両側が終了：停止"
+    },
+    "Each decision consumes one or both current records; no record is buffered beyond the current pair.": {
+      "zh-cn": "每次判断都会消耗一条或两条当前记录；不会缓存当前记录对以外的记录。",
+      "ja": "各判定で現在のレコードを片方または両方消費します。現在のペアを超えてレコードを保持しません。"
+    }
+  },
+  "21_sort/assets/sort-data-flow.svg": {
+    "SORT pipeline · ascending account number": {
+      "zh-cn": "SORT 流水线 · 账户编号升序",
+      "ja": "SORTパイプライン · 口座番号の昇順"
+    },
+    "INPUT PROCEDURE": {
+      "zh-cn": "输入过程",
+      "ja": "INPUT PROCEDURE"
+    },
+    "1000-LOAD-INPUT": {
+      "zh-cn": "1000-LOAD-INPUT",
+      "ja": "1000-LOAD-INPUT"
+    },
+    "READ input record": {
+      "zh-cn": "READ 输入记录",
+      "ja": "入力レコードをREAD"
+    },
+    "RELEASE SD-SORT-RECORD": {
+      "zh-cn": "RELEASE SD-SORT-RECORD",
+      "ja": "RELEASE SD-SORT-RECORD"
+    },
+    "27 chars · X(10)+X(8)+9(7)V99": {
+      "zh-cn": "27 字符 · X(10)+X(8)+9(7)V99",
+      "ja": "27文字 · X(10)+X(8)+9(7)V99"
+    },
+    "RELEASE": {
+      "zh-cn": "RELEASE",
+      "ja": "RELEASE"
+    },
+    "SORT-WORK · SD": {
+      "zh-cn": "SORT-WORK · SD",
+      "ja": "SORT-WORK · SD"
+    },
+    "SORT ... ON ASCENDING KEY": {
+      "zh-cn": "SORT ... ON ASCENDING KEY",
+      "ja": "SORT ... ON ASCENDING KEY"
+    },
+    "SD-ACCOUNT-NUMBER": {
+      "zh-cn": "SD-ACCOUNT-NUMBER",
+      "ja": "SD-ACCOUNT-NUMBER"
+    },
+    "Runtime orders released records": {
+      "zh-cn": "运行时会为已 RELEASE 的记录排序",
+      "ja": "ランタイムがRELEASE済みレコードを並べ替え"
+    },
+    "RETURN": {
+      "zh-cn": "RETURN",
+      "ja": "RETURN"
+    },
+    "OUTPUT PROCEDURE": {
+      "zh-cn": "输出过程",
+      "ja": "OUTPUT PROCEDURE"
+    },
+    "2000-RETURN-SORTED": {
+      "zh-cn": "2000-RETURN-SORTED",
+      "ja": "2000-RETURN-SORTED"
+    },
+    "RETURN one sorted record": {
+      "zh-cn": "RETURN 一条已排序记录",
+      "ja": "整列済みレコードを1件RETURN"
+    },
+    "Process until AT END": {
+      "zh-cn": "处理直到 AT END",
+      "ja": "AT ENDまで処理"
+    },
+    "Ordered stream · no output file": {
+      "zh-cn": "有序流 · 无输出文件",
+      "ja": "整列済みストリーム · 出力ファイルなし"
+    },
+    "CONTROL": {
+      "zh-cn": "控制",
+      "ja": "CONTROL"
+    },
+    "SORT-RETURN = ZERO · INPUT COUNT = OUTPUT COUNT": {
+      "zh-cn": "SORT-RETURN = ZERO · 输入数 = 输出数",
+      "ja": "SORT-RETURN = ZERO · INPUT COUNT = OUTPUT COUNT"
+    },
+    "Lesson fixture: 004 released = 004 returned;": {
+      "zh-cn": "本课夹具：RELEASE 4 条、RETURN 4 条。",
+      "ja": "レッスン用データ：004件をRELEASEし004件をRETURN。"
+    },
+    "SORT manages the work file, so application code does not OPEN or CLOSE it.": {
+      "zh-cn": "工作文件由 SORT 管理，应用代码不 OPEN/CLOSE 它。",
+      "ja": "作業ファイルはSORTが管理するため、OPEN/CLOSE しません。"
+    }
+  },
+  "23_copybooks/assets/copybook-compile-expansion.svg": {
+    "COPY is source expansion at compile time": {
+      "zh-cn": "COPY 在编译时展开源码",
+      "ja": "COPYはコンパイル時にソースを展開"
+    },
+    "PROGRAM SOURCE": {
+      "zh-cn": "程序源码",
+      "ja": "プログラムソース"
+    },
+    "WORKING-STORAGE SECTION.": {
+      "zh-cn": "WORKING-STORAGE SECTION.",
+      "ja": "WORKING-STORAGE SECTION."
+    },
+    "COPY \"ACCOUNT-REC.CPY\".": {
+      "zh-cn": "COPY \"ACCOUNT-REC.CPY\".",
+      "ja": "COPY \"ACCOUNT-REC.CPY\"."
+    },
+    "COPYBOOK": {
+      "zh-cn": "Copybook",
+      "ja": "Copybook"
+    },
+    "01 WS-ACCOUNT-RECORD.": {
+      "zh-cn": "01 WS-ACCOUNT-RECORD.",
+      "ja": "01 WS-ACCOUNT-RECORD."
+    },
+    "05 WS-ACCOUNT-NUMBER PIC X(10).": {
+      "zh-cn": "05 WS-ACCOUNT-NUMBER PIC X(10).",
+      "ja": "05 WS-ACCOUNT-NUMBER PIC X(10)."
+    },
+    "COMPILE": {
+      "zh-cn": "编译",
+      "ja": "コンパイル"
+    },
+    "text insertion": {
+      "zh-cn": "文本插入",
+      "ja": "テキストを挿入"
+    },
+    "EXPANDED PROGRAM": {
+      "zh-cn": "展开后的程序",
+      "ja": "展開後のプログラム"
+    },
+    "WORKING-STORAGE": {
+      "zh-cn": "WORKING-STORAGE",
+      "ja": "WORKING-STORAGE"
+    },
+    "SECTION.": {
+      "zh-cn": "SECTION.",
+      "ja": "SECTION."
+    },
+    "05 WS-ACCOUNT-NUMBER": {
+      "zh-cn": "05 WS-ACCOUNT-NUMBER",
+      "ja": "05 WS-ACCOUNT-NUMBER"
+    },
+    "PIC X(10).": {
+      "zh-cn": "PIC X(10).",
+      "ja": "PIC X(10)."
+    },
+    "compiled into this program": {
+      "zh-cn": "编译进此程序",
+      "ja": "このプログラムにコンパイル"
+    },
+    "Shared declaration ≠ shared runtime data": {
+      "zh-cn": "共享声明 ≠ 共享运行时数据",
+      "ja": "宣言を共有しても実行時データは共有されない"
+    },
+    "PROGRAM A STORAGE": {
+      "zh-cn": "程序 A 存储区",
+      "ja": "PROGRAM Aの記憶領域"
+    },
+    "PROGRAM B STORAGE": {
+      "zh-cn": "程序 B 存储区",
+      "ja": "PROGRAM Bの記憶領域"
+    }
+  },
+  "25_using-parameters/assets/using-data-directions.svg": {
+    "CALL ... USING: where can a data change go?": {
+      "zh-cn": "CALL ... USING：数据变更会传到哪里？",
+      "ja": "CALL ... USING：データの変更はどこに反映される？"
+    },
+    "CALLER": {
+      "zh-cn": "调用方",
+      "ja": "呼び出し元"
+    },
+    "SUBPROGRAM": {
+      "zh-cn": "子程序",
+      "ja": "サブプログラム"
+    },
+    "BY REFERENCE": {
+      "zh-cn": "按引用",
+      "ja": "BY REFERENCE"
+    },
+    "AMOUNT = 10": {
+      "zh-cn": "AMOUNT = 10",
+      "ja": "AMOUNT = 10"
+    },
+    "same storage": {
+      "zh-cn": "相同存储区",
+      "ja": "同じ記憶領域"
+    },
+    "address": {
+      "zh-cn": "地址",
+      "ja": "アドレス"
+    },
+    "write back: caller sees 11": {
+      "zh-cn": "写回：调用方看到 11",
+      "ja": "書き戻し：呼び出し元は11を参照"
+    },
+    "BY CONTENT": {
+      "zh-cn": "按内容",
+      "ja": "BY CONTENT"
+    },
+    "AMOUNT = 20": {
+      "zh-cn": "AMOUNT = 20",
+      "ja": "AMOUNT = 20"
+    },
+    "copy: 20 → 21": {
+      "zh-cn": "副本：20 → 21",
+      "ja": "コピー：20 → 21"
+    },
+    "contents": {
+      "zh-cn": "内容",
+      "ja": "内容"
+    },
+    "copy discarded: caller stays 20": {
+      "zh-cn": "丢弃副本：调用方仍为 20",
+      "ja": "コピーを破棄：呼び出し元は20のまま"
+    },
+    "BY VALUE": {
+      "zh-cn": "按值",
+      "ja": "BY VALUE"
+    },
+    "AMOUNT = 30": {
+      "zh-cn": "AMOUNT = 30",
+      "ja": "AMOUNT = 30"
+    },
+    "value: 30 (read only)": {
+      "zh-cn": "值：30（只读）",
+      "ja": "値：30（読み取り専用）"
+    },
+    "numeric value": {
+      "zh-cn": "数值",
+      "ja": "数値"
+    },
+    "no write-back: caller stays 30": {
+      "zh-cn": "不写回：调用方仍为 30",
+      "ja": "書き戻しなし：呼び出し元は30のまま"
+    }
+  },
+  "29_embedded-sql/assets/embedded-sql-pipeline.svg": {
+    "Embedded SQL: source to running program": {
+      "zh-cn": "Embedded SQL：从源码到运行程序",
+      "ja": "埋め込みSQL：ソースから実行プログラムまで"
+    },
+    "Precompile EXEC SQL first; cobc compiles and links the translated COBOL.": {
+      "zh-cn": "先预编译 EXEC SQL；再由 cobc 编译并链接转换后的 COBOL。",
+      "ja": "まずEXEC SQLをプリコンパイルし、cobcが変換後のCOBOLをコンパイル・リンクします。"
+    },
+    "COBOL source": {
+      "zh-cn": "COBOL 源码",
+      "ja": "COBOLソース"
+    },
+    "lesson.cob": {
+      "zh-cn": "lesson.cob",
+      "ja": "lesson.cob"
+    },
+    "EXEC SQL": {
+      "zh-cn": "EXEC SQL",
+      "ja": "EXEC SQL"
+    },
+    "embedded in source": {
+      "zh-cn": "嵌入源码",
+      "ja": "ソースに埋め込み"
+    },
+    "Precompile": {
+      "zh-cn": "预编译",
+      "ja": "プリコンパイル"
+    },
+    "gixpp -e": {
+      "zh-cn": "gixpp -e",
+      "ja": "gixpp -e"
+    },
+    "translates SQL": {
+      "zh-cn": "转换 SQL",
+      "ja": "SQLを変換"
+    },
+    "to COBOL": {
+      "zh-cn": "为 COBOL",
+      "ja": "COBOLへ"
+    },
+    "Precompile output": {
+      "zh-cn": "预编译输出",
+      "ja": "プリコンパイル出力"
+    },
+    "lesson_29.cbsql": {
+      "zh-cn": "lesson_29.cbsql",
+      "ja": "lesson_29.cbsql"
+    },
+    "plain COBOL": {
+      "zh-cn": "纯 COBOL",
+      "ja": "通常のCOBOL"
+    },
+    "Compile / link": {
+      "zh-cn": "编译 / 链接",
+      "ja": "コンパイル／リンク"
+    },
+    "cobc": {
+      "zh-cn": "cobc",
+      "ja": "cobc"
+    },
+    "C intermediate": {
+      "zh-cn": "C 中间代码",
+      "ja": "中間Cコード"
+    },
+    "internal stage": {
+      "zh-cn": "内部阶段",
+      "ja": "内部段階"
+    },
+    "Executable": {
+      "zh-cn": "可执行程序",
+      "ja": "実行ファイル"
+    },
+    "build/lesson_29": {
+      "zh-cn": "build/lesson_29",
+      "ja": "build/lesson_29"
+    },
+    "linked with -lgixsql": {
+      "zh-cn": "链接 -lgixsql",
+      "ja": "-lgixsqlとリンク"
+    },
+    "run → build/accounts.db": {
+      "zh-cn": "运行 → build/accounts.db",
+      "ja": "実行 → build/accounts.db"
+    },
+    "Runtime: LD_LIBRARY_PATH locates libgixsql and the SQLite driver.": {
+      "zh-cn": "运行时：LD_LIBRARY_PATH 用于定位 libgixsql 和 SQLite 驱动。",
+      "ja": "実行時：LD_LIBRARY_PATHでlibgixsqlとSQLiteドライバーを検索します。"
+    }
+  },
+  "30_sql-cursors/assets/cursor-lifecycle.svg": {
+    "ACCOUNT-CURSOR lifecycle": {
+      "zh-cn": "ACCOUNT-CURSOR 生命周期",
+      "ja": "ACCOUNT-CURSORのライフサイクル"
+    },
+    "DECLARE registers the query; OPEN starts it; FETCH branches on SQLCODE.": {
+      "zh-cn": "DECLARE 注册查询；OPEN 启动查询；FETCH 根据 SQLCODE 分支。",
+      "ja": "DECLAREでクエリを登録し、OPENで開始、FETCH後にSQLCODEで分岐します。"
+    },
+    "DECLARE": {
+      "zh-cn": "声明",
+      "ja": "DECLARE"
+    },
+    "register SELECT": {
+      "zh-cn": "注册 SELECT",
+      "ja": "SELECTを登録"
+    },
+    "OPEN": {
+      "zh-cn": "打开",
+      "ja": "OPEN"
+    },
+    "SQLCODE = 0?": {
+      "zh-cn": "SQLCODE = 0？",
+      "ja": "SQLCODE = 0?"
+    },
+    "FETCH": {
+      "zh-cn": "取一行",
+      "ja": "FETCH"
+    },
+    "one row": {
+      "zh-cn": "一行",
+      "ja": "1行"
+    },
+    "SQLCODE = 0": {
+      "zh-cn": "SQLCODE = 0",
+      "ja": "SQLCODE = 0"
+    },
+    "process row": {
+      "zh-cn": "处理行",
+      "ja": "行を処理"
+    },
+    "0": {
+      "zh-cn": "0",
+      "ja": "0"
+    },
+    "continue": {
+      "zh-cn": "继续",
+      "ja": "続行"
+    },
+    "SQLCODE = 100": {
+      "zh-cn": "SQLCODE = 100",
+      "ja": "SQLCODE = 100"
+    },
+    "EOF: normal end": {
+      "zh-cn": "EOF：正常结束",
+      "ja": "EOF：正常終了"
+    },
+    "100": {
+      "zh-cn": "100",
+      "ja": "100"
+    },
+    "SQL error": {
+      "zh-cn": "SQL 错误",
+      "ja": "SQLエラー"
+    },
+    "other SQLCODE": {
+      "zh-cn": "其他 SQLCODE",
+      "ja": "その他のSQLCODE"
+    },
+    "other": {
+      "zh-cn": "其他",
+      "ja": "その他"
+    },
+    "CLOSE": {
+      "zh-cn": "关闭",
+      "ja": "CLOSE"
+    },
+    "Close only after OPEN succeeds; then disconnect.": {
+      "zh-cn": "仅在 OPEN 成功后执行 CLOSE；然后断开连接。",
+      "ja": "OPEN成功後にのみCLOSEし、その後切断します。"
+    }
+  },
+  "32_bank-reconciliation-project/assets/bank-reconciliation-flow.svg": {
+    "Bank Reconciliation Batch": {
+      "zh-cn": "银行对账批处理",
+      "ja": "銀行照合バッチ"
+    },
+    "File posting feeds a guarded database sync; every transaction is posted or rejected.": {
+      "zh-cn": "文件入账后进入受保护的数据库同步；每笔交易都会入账或拒绝。",
+      "ja": "ファイル処理後に条件付きでデータベースを同期し、各トランザクションを計上または却下します。"
+    },
+    "Account Master": {
+      "zh-cn": "账户主档",
+      "ja": "口座マスター"
+    },
+    "accounts.txt": {
+      "zh-cn": "accounts.txt",
+      "ja": "accounts.txt"
+    },
+    "Daily Transactions": {
+      "zh-cn": "每日交易",
+      "ja": "日次トランザクション"
+    },
+    "transactions.txt": {
+      "zh-cn": "transactions.txt",
+      "ja": "transactions.txt"
+    },
+    "Database Snapshot": {
+      "zh-cn": "数据库快照",
+      "ja": "データベースのスナップショット"
+    },
+    "ACCOUNT_SNAPSHOT": {
+      "zh-cn": "ACCOUNT_SNAPSHOT",
+      "ja": "ACCOUNT_SNAPSHOT"
+    },
+    "Open Files &amp; Load Accounts": {
+      "zh-cn": "打开文件并加载账户",
+      "ja": "ファイルを開き口座を読み込む"
+    },
+    "1000-OPEN-FILES": {
+      "zh-cn": "1000-OPEN-FILES",
+      "ja": "1000-OPEN-FILES"
+    },
+    "1100-LOAD-ACCOUNTS": {
+      "zh-cn": "1100-LOAD-ACCOUNTS",
+      "ja": "1100-LOAD-ACCOUNTS"
+    },
+    "Validate numeric balances, capacity, unique keys": {
+      "zh-cn": "验证余额为数字、容量足够且键唯一",
+      "ja": "残高の数値形式・容量・キーの一意性を検証"
+    },
+    "Validate, Match &amp; Post": {
+      "zh-cn": "验证、匹配并入账",
+      "ja": "検証・照合・計上"
+    },
+    "2000-POST-TRANSACTIONS · 2100-POST-ONE": {
+      "zh-cn": "2000-POST-TRANSACTIONS · 2100-POST-ONE",
+      "ja": "2000-POST-TRANSACTIONS · 2100-POST-ONE"
+    },
+    "2200-APPLY-TRANSACTION": {
+      "zh-cn": "2200-APPLY-TRANSACTION",
+      "ja": "2200-APPLY-TRANSACTION"
+    },
+    "Match account; apply D / C rules or reject": {
+      "zh-cn": "匹配账户；按 D / C 规则处理或拒绝",
+      "ja": "口座を照合し、D / Cの規則を適用または却下"
+    },
+    "Synchronize Account Table": {
+      "zh-cn": "同步账户表",
+      "ja": "口座テーブルを同期"
+    },
+    "2000-SYNC-TABLE · 2100-SYNC-ACCOUNT": {
+      "zh-cn": "2000-SYNC-TABLE · 2100-SYNC-ACCOUNT",
+      "ja": "2000-SYNC-TABLE · 2100-SYNC-ACCOUNT"
+    },
+    "Runs only when file processing has no system error": {
+      "zh-cn": "仅当文件处理无系统错误时运行",
+      "ja": "ファイル処理でシステムエラーがない場合のみ実行"
+    },
+    "Posted": {
+      "zh-cn": "已入账",
+      "ja": "計上"
+    },
+    "2300-WRITE-POSTED → accepted.txt": {
+      "zh-cn": "2300-WRITE-POSTED → accepted.txt",
+      "ja": "2300-WRITE-POSTED → accepted.txt"
+    },
+    "Business Rejection": {
+      "zh-cn": "业务拒绝",
+      "ja": "業務上の却下"
+    },
+    "2400-WRITE-REJECTED → rejected.txt": {
+      "zh-cn": "2400-WRITE-REJECTED → rejected.txt",
+      "ja": "2400-WRITE-REJECTED → rejected.txt"
+    },
+    "Snapshot Comparison": {
+      "zh-cn": "快照比较",
+      "ja": "スナップショット比較"
+    },
+    "2200-UPDATE · UNCHANGED": {
+      "zh-cn": "2200-UPDATE · UNCHANGED",
+      "ja": "2200-UPDATE · UNCHANGED"
+    },
+    "2300-INSERT · 2400-REPORT-SYNC": {
+      "zh-cn": "2300-INSERT · 2400-REPORT-SYNC",
+      "ja": "2300-INSERT · 2400-REPORT-SYNC"
+    },
+    "Audit &amp; Reconciliation Outputs": {
+      "zh-cn": "审计与对账输出",
+      "ja": "監査・照合の出力"
+    },
+    "batch.log · account-report.txt": {
+      "zh-cn": "batch.log · account-report.txt",
+      "ja": "batch.log · account-report.txt"
+    },
+    "3000-CHECK-COUNTS": {
+      "zh-cn": "3000-CHECK-COUNTS",
+      "ja": "3000-CHECK-COUNTS"
+    },
+    "POSTED + REJECTED = TX": {
+      "zh-cn": "已过账 + 已拒绝 = 交易数",
+      "ja": "POSTED + REJECTED = TX"
+    },
+    "UPDATED + UNCHANGED + INSERTED = ACCOUNTS": {
+      "zh-cn": "已更新 + 未变 + 已插入 = 账户数",
+      "ja": "UPDATED + UNCHANGED + INSERTED = ACCOUNTS"
+    },
+    "2000-RETURN-STATUS · RETURN-CODE 0 / 1": {
+      "zh-cn": "2000-RETURN-STATUS · RETURN-CODE 0 / 1",
+      "ja": "2000-RETURN-STATUS · RETURN-CODE 0 / 1"
+    },
+    "System failures set a nonzero return code; business rejections remain counted outcomes.": {
+      "zh-cn": "系统故障会设置非零返回码；业务拒绝仍作为已计数结果处理。",
+      "ja": "システム障害では戻りコードが0以外になります。業務上の却下も件数に含まれます。"
+    }
+  }
+}

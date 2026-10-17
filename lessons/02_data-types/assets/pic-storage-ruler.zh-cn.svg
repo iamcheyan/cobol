@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 450" role="img" aria-labelledby="title desc" font-family="'DM Sans','Noto Sans SC','Noto Sans JP',system-ui,sans-serif">
+  <title id="title">PIC declarations mapped to DISPLAY storage bytes</title>
+  <desc id="desc">Six declarations from lesson 02 show field names, PIC clauses, and their byte widths as proportional rulers.</desc>
+  <style>
+    .title { font-size: 17px; font-weight: 600; fill: #3f3b3b; }
+    .head { font-size: 12px; font-weight: 600; fill: #5f5b52; }
+    .field { font-size: 12px; font-weight: 600; fill: #3f3b3b; font-family: 'DM Mono',ui-monospace,monospace; }
+    .pic { font-size: 11px; fill: #3f3b3b; font-family: 'DM Mono',ui-monospace,monospace; }
+    .byte { font-size: 12px; font-weight: 600; fill: #2563eb; }
+    .tick { font-size: 11px; fill: #77736c; font-family: 'DM Mono',ui-monospace,monospace; }
+    .small { font-size: 11px; fill: #5f5b52; }
+  </style>
+  <rect x="1" y="1" width="978" height="448" rx="10" fill="#fcfbf7" stroke="#d8d2c3" stroke-width="1.5"/>
+  <text class="title" x="32" y="38">PIC 声明 → DISPLAY 存储字节数</text>
+  <text class="head" x="32" y="76">字段</text><text class="head" x="298" y="76">PIC</text><text class="head" x="600" y="76">字节标尺</text><text class="head" x="930" y="76">字节</text>
+  <g stroke="#d8d2c3" stroke-width="1">
+    <path d="M600 91V392 M620 91V392 M640 91V392 M660 91V392 M680 91V392 M700 91V392 M720 91V392 M740 91V392 M760 91V392 M780 91V392 M800 91V392 M820 91V392 M840 91V392"/>
+  </g>
+  <g class="tick" text-anchor="middle"><text x="600" y="98">0</text><text x="620" y="98">1</text><text x="640" y="98">2</text><text x="660" y="98">3</text><text x="680" y="98">4</text><text x="700" y="98">5</text><text x="720" y="98">6</text><text x="740" y="98">7</text><text x="760" y="98">8</text><text x="780" y="98">9</text><text x="800" y="98">10</text><text x="820" y="98">11</text><text x="840" y="98">12</text></g>
+  <g>
+    <rect x="24" y="108" width="928" height="42" rx="4" fill="#64748b" fill-opacity="0.06"/><text class="field" x="32" y="134">WS-ACCOUNT-KEY</text><text class="pic" x="298" y="134">X(12)</text><rect x="600" y="116" width="240" height="26" rx="3" fill="#64748b" fill-opacity="0.16" stroke="#64748b" stroke-width="1.5"/><text class="byte" x="930" y="134">12 字节</text>
+    <text class="field" x="32" y="184">WS-CUSTOMER-NAME</text><text class="pic" x="298" y="184">A(12)</text><rect x="600" y="166" width="240" height="26" rx="3" fill="#0d9488" fill-opacity="0.16" stroke="#0d9488" stroke-width="1.5"/><text class="byte" x="930" y="184">12 字节</text>
+    <rect x="24" y="208" width="928" height="42" rx="4" fill="#64748b" fill-opacity="0.06"/><text class="field" x="32" y="234">WS-BRANCH-CODE</text><text class="pic" x="298" y="234">9(4)</text><rect x="600" y="216" width="80" height="26" rx="3" fill="#2563eb" fill-opacity="0.16" stroke="#2563eb" stroke-width="1.5"/><text class="byte" x="930" y="234">4 字节</text>
+    <text class="field" x="32" y="284">WS-LEDGER-BALANCE</text><text class="pic" x="298" y="284">9(7)V99</text><rect x="600" y="266" width="180" height="26" rx="3" fill="#2563eb" fill-opacity="0.16" stroke="#2563eb" stroke-width="1.5"/><text class="byte" x="930" y="284">9 字节</text>
+    <rect x="24" y="308" width="928" height="50" rx="4" fill="#64748b" fill-opacity="0.06"/><text class="field" x="32" y="339">WS-LAST-CREDIT</text><text class="pic" x="298" y="329">S9(7)V99 SIGN LEADING</text><text class="pic" x="298" y="345">独立符号字符</text><rect x="600" y="320" width="200" height="26" rx="3" fill="#d97706" fill-opacity="0.20" stroke="#d97706" stroke-width="1.5"/><text class="byte" x="930" y="339">10 字节</text>
+    <text class="field" x="32" y="389">WS-INTEREST-RATE</text><text class="pic" x="298" y="389">9(2)V9(4)</text><rect x="600" y="371" width="120" height="26" rx="3" fill="#0d9488" fill-opacity="0.16" stroke="#0d9488" stroke-width="1.5"/><text class="byte" x="930" y="389">6 字节</text>
+  </g>
+  <text class="small" x="32" y="425">标尺每格 = 1 字节 · V 不占字节 · 独立符号占 1 字节 · 默认 DISPLAY 用法</text>
+</svg>

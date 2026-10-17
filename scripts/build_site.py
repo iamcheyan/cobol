@@ -539,7 +539,20 @@ def lesson_assets(source: Path) -> list[Path]:
     ]
 
 
-def fix_links(content: str, source: Path) -> str:
+def localized_asset(resolved: Path, locale: str) -> Path:
+    """Pick the locale variant of a lesson figure when one exists.
+
+    Figures keep one canonical English SVG; ``scripts/diagram_i18n.py`` writes
+    ``<name>.zh-cn.svg`` / ``<name>.ja.svg`` beside it. Everything else (source
+    files, fixtures, screenshots) is shared as-is.
+    """
+    if resolved.suffix.lower() != ".svg":
+        return resolved
+    variant = resolved.with_name(f"{resolved.stem}.{locale}{resolved.suffix}")
+    return variant if variant.is_file() else resolved
+
+
+def fix_links(content: str, source: Path, locale: str = "zh-cn") -> str:
     """Rewrite repository-relative Markdown links into site-relative HTML links."""
     def replace(match: re.Match[str]) -> str:
         target = match.group(1)
@@ -567,6 +580,9 @@ def fix_links(content: str, source: Path) -> str:
             target = rel.parent / "README.html"
             relative = os.path.relpath(target.as_posix(), output_rel(source).parent.as_posix())
             return f"]({quote(relative, safe='/._-')}{tab})"
+        if resolved.suffix.lower() == ".svg":
+            chosen = localized_asset(resolved, locale)
+            rel = chosen.relative_to(ROOT)
         target_rel = rel.with_suffix(".html") if rel.suffix.lower() == ".md" else rel
         relative = os.path.relpath(target_rel.as_posix(), output_rel(source).parent.as_posix())
         return f"]({quote(relative, safe='/._-')}" + (f"#{fragment}" if sep else "") + ")"
@@ -585,7 +601,7 @@ def render_markdown(source: Path, locale: str) -> str:
     chosen = translated(source, locale) or source
     MD.reset()
     text = strip_frontmatter(chosen.read_text(encoding="utf-8"))
-    return MD.convert(fix_links(text, source))
+    return MD.convert(fix_links(text, source, locale))
 
 
 def inline_page_target(source: Path) -> tuple[Path, str]:

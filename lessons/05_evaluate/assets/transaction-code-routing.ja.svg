@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 390" role="img" aria-labelledby="title desc" font-family="'DM Sans','Noto Sans SC','Noto Sans JP',system-ui,sans-serif">
+  <title id="title">EVALUATE transaction code routing</title>
+  <desc id="desc">EVALUATE routes D to deposit, W to withdrawal, T to transfer, and every other exact character value to unknown and review rejection.</desc>
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#5f5b52"/></marker></defs>
+  <style>.title{font-size:17px;font-weight:600;fill:#3f3b3b}.label{font-size:12px;font-weight:600;fill:#3f3b3b}.mono{font-size:12px;font-weight:600;fill:#76319f;font-family:'DM Mono',ui-monospace,monospace}.note{font-size:11px;fill:#5f5b52}.line{fill:none;stroke:#5f5b52;stroke-width:1.5;marker-end:url(#arrow)}</style>
+  <rect x="1" y="1" width="898" height="388" rx="10" fill="#fcfbf7" stroke="#d8d2c3"/>
+  <text class="title" x="32" y="36">EVALUATE WS-TRANSACTION-CODE</text>
+  <rect x="336" y="55" width="228" height="46" rx="5" fill="#64748b" fill-opacity=".16" stroke="#64748b" stroke-width="1.5"/>
+  <text class="label" x="450" y="83" text-anchor="middle">1文字の完全一致</text>
+  <path class="line" d="M450 101 V132 H130 V163"/><path class="line" d="M450 132 H344 V163"/><path class="line" d="M450 132 H558 V163"/><path class="line" d="M450 132 H772 V163"/>
+  <rect x="55" y="165" width="150" height="44" rx="5" fill="#2563eb" fill-opacity=".16" stroke="#2563eb" stroke-width="1.5"/><text class="mono" x="130" y="193" text-anchor="middle">WHEN "D"</text>
+  <rect x="269" y="165" width="150" height="44" rx="5" fill="#2563eb" fill-opacity=".16" stroke="#2563eb" stroke-width="1.5"/><text class="mono" x="344" y="193" text-anchor="middle">WHEN "W"</text>
+  <rect x="483" y="165" width="150" height="44" rx="5" fill="#2563eb" fill-opacity=".16" stroke="#2563eb" stroke-width="1.5"/><text class="mono" x="558" y="193" text-anchor="middle">WHEN "T"</text>
+  <rect x="697" y="165" width="150" height="44" rx="5" fill="#d97706" fill-opacity=".16" stroke="#d97706" stroke-width="1.5"/><text class="mono" x="772" y="193" text-anchor="middle">WHEN OTHER</text>
+  <path class="line" d="M130 209 V240"/><path class="line" d="M344 209 V240"/><path class="line" d="M558 209 V240"/><path class="line" d="M772 209 V240"/>
+  <rect x="35" y="242" width="190" height="82" rx="5" fill="#0d9488" fill-opacity=".16" stroke="#0d9488" stroke-width="1.5"/><text class="label" x="130" y="267" text-anchor="middle">入金</text><text class="mono" x="130" y="291" text-anchor="middle">ADD_TO_ACCOUNT</text>
+  <rect x="249" y="242" width="190" height="82" rx="5" fill="#0d9488" fill-opacity=".16" stroke="#0d9488" stroke-width="1.5"/><text class="label" x="344" y="267" text-anchor="middle">出金</text><text class="mono" x="344" y="291" text-anchor="middle">SUBTRACT_FROM_ACCOUNT</text>
+  <rect x="463" y="242" width="190" height="82" rx="5" fill="#0d9488" fill-opacity=".16" stroke="#0d9488" stroke-width="1.5"/><text class="label" x="558" y="267" text-anchor="middle">振込</text><text class="mono" x="558" y="291" text-anchor="middle">PROCESS_BOTH_ACCOUNTS</text>
+  <rect x="677" y="242" width="190" height="82" rx="5" fill="#b91c1c" fill-opacity=".16" stroke="#b91c1c" stroke-width="1.5"/><text class="label" x="772" y="267" text-anchor="middle">不明</text><text class="mono" x="772" y="291" text-anchor="middle">REJECT_FOR_REVIEW</text>
+  <text class="note" x="32" y="360">小文字、空白、その他すべての値はWHEN OTHERに一致します。ラベルは振り分け先を示し、記帳は行いません。</text>
+</svg>

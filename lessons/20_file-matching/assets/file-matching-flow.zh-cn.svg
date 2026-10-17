@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 510" role="img" aria-labelledby="title desc" font-family="'DM Sans','Noto Sans SC','Noto Sans JP',system-ui,sans-serif">
+  <title id="title">Ordered account and transaction streams merge by key</title>
+  <desc id="desc">Compare FD-ACCOUNT-NUMBER and FD-TRANSACTION-ACCOUNT. Equal keys consume both records; a smaller master key consumes only the master; a smaller transaction key consumes only the transaction. At EOF, remaining records take the one-sided path.</desc>
+  <style>
+    .h { font-size: 17px; font-weight: 600; fill: #3f3b3b; }
+    .label { font-size: 13px; font-weight: 600; fill: #3f3b3b; }
+    .field { font-size: 12px; fill: #3f3b3b; font-family: 'DM Mono',ui-monospace,monospace; }
+    .small { font-size: 11.5px; fill: #5f5b52; }
+    .key { font-size: 12px; font-weight: 600; fill: #2563eb; font-family: 'DM Mono',ui-monospace,monospace; }
+  </style>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#64748b"/></marker>
+    <marker id="blueArrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#2563eb"/></marker>
+  </defs>
+  <rect x="1" y="1" width="898" height="508" rx="10" fill="#fcfbf7" stroke="#d8d2c3"/>
+  <text class="h" x="32" y="36">按账户键归并两个有序流</text>
+  <rect x="30" y="58" width="370" height="76" rx="4" fill="#64748b" fill-opacity="0.12" stroke="#64748b" stroke-width="1.5"/>
+  <text class="label" x="48" y="81">ACCOUNT-MASTER · FD-ACCOUNT-RECORD</text>
+  <text class="field" x="48" y="105">FD-ACCOUNT-NUMBER X(10)</text>
+  <text class="small" x="270" y="105">CUSTOMER-ID X(8) · BALANCE 9(7)V99</text>
+  <rect x="500" y="58" width="370" height="76" rx="4" fill="#64748b" fill-opacity="0.12" stroke="#64748b" stroke-width="1.5"/>
+  <text class="label" x="518" y="81">DAILY-TRANSACTIONS · FD-TRANSACTION-RECORD</text>
+  <text class="field" x="518" y="105">FD-TRANSACTION-ACCOUNT X(10)</text>
+  <text class="small" x="518" y="122">TRANSACTION-TYPE X · TRANSACTION-AMOUNT 9(7)V99</text>
+  <path d="M215 134V168H410" fill="none" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <path d="M685 134V168H490" fill="none" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="320" y="170" width="260" height="62" rx="4" fill="#2563eb" fill-opacity="0.14" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="label" x="450" y="193" text-anchor="middle">比较当前键</text>
+  <text class="key" x="450" y="215" text-anchor="middle">主档键  ?  交易键</text>
+  <path d="M450 232V252H155V276" fill="none" stroke="#0d9488" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <path d="M450 232V276" fill="none" stroke="#2563eb" stroke-width="1.5" marker-end="url(#blueArrow)"/>
+  <path d="M450 252H745V276" fill="none" stroke="#d97706" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text class="small" x="155" y="265" text-anchor="middle">主档键 &lt; 交易键</text>
+  <text class="small" x="450" y="265" text-anchor="middle">键相等</text>
+  <text class="small" x="745" y="265" text-anchor="middle">主档键 &gt; 交易键</text>
+  <rect x="35" y="280" width="240" height="96" rx="4" fill="#0d9488" fill-opacity="0.16" stroke="#0d9488" stroke-width="1.5"/>
+  <text class="label" x="155" y="307" text-anchor="middle">仅主档</text>
+  <text class="small" x="155" y="331" text-anchor="middle">报告当前主档记录</text>
+  <text class="small" x="155" y="353" text-anchor="middle">推进主档流</text>
+  <rect x="330" y="280" width="240" height="96" rx="4" fill="#2563eb" fill-opacity="0.16" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="label" x="450" y="307" text-anchor="middle">已匹配</text>
+  <text class="small" x="450" y="331" text-anchor="middle">报告配对记录</text>
+  <text class="small" x="450" y="353" text-anchor="middle">推进两个流</text>
+  <rect x="625" y="280" width="240" height="96" rx="4" fill="#d97706" fill-opacity="0.16" stroke="#d97706" stroke-width="1.5"/>
+  <text class="label" x="745" y="307" text-anchor="middle">仅交易</text>
+  <text class="small" x="745" y="331" text-anchor="middle">报告当前交易</text>
+  <text class="small" x="745" y="353" text-anchor="middle">推进交易流</text>
+  <path d="M155 376V398H450M450 376V398M745 376V398H450V415" fill="none" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="255" y="418" width="390" height="56" rx="4" fill="#64748b" fill-opacity="0.12" stroke="#64748b" stroke-width="1.5"/>
+  <text class="label" x="450" y="441" text-anchor="middle">比较键之前先检查 EOF</text>
+  <text class="small" x="450" y="461" text-anchor="middle">一侧结束：将另一侧剩余记录送入对应的“仅此侧”路径 · 两侧都结束：停止</text>
+  <text class="small" x="32" y="494">每次判断都会消耗一条或两条当前记录；不会缓存当前记录对以外的记录。</text>
+</svg>

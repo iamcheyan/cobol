@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" role="img" aria-labelledby="title desc" font-family="'DM Sans','Noto Sans SC','Noto Sans JP',system-ui,sans-serif">
+  <title id="title">Sequential file read loop with EOF and file status</title>
+  <desc id="desc">Open the transaction file and inspect FILE STATUS. On status 00, read one record in a loop. NOT AT END processes and counts the record, then loops. AT END marks EOF and exits. An open failure such as status 35 reports failure and stops before any read.</desc>
+  <style>
+    .title { font-size: 16px; font-weight: 600; fill: #3f3b3b; }
+    .label { font-size: 12px; font-weight: 600; fill: #3f3b3b; }
+    .text { font-size: 11.5px; fill: #3f3b3b; }
+    .mono { font-size: 11.5px; fill: #3f3b3b; font-family: 'DM Mono',ui-monospace,monospace; }
+    .note { font-size: 11px; fill: #5f5b52; }
+    .flow { fill: none; stroke: #2563eb; stroke-width: 1.8; marker-end: url(#arrow); }
+    .error-flow { fill: none; stroke: #b91c1c; stroke-width: 1.8; marker-end: url(#error-arrow); }
+    .loop { fill: none; stroke: #0d9488; stroke-width: 1.8; marker-end: url(#success-arrow); }
+  </style>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2563eb"/></marker>
+    <marker id="error-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#b91c1c"/></marker>
+    <marker id="success-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#0d9488"/></marker>
+  </defs>
+  <rect x="1" y="1" width="898" height="498" rx="10" fill="#fcfbf7" stroke="#d8d2c3" stroke-width="1.5"/>
+  <text class="title" x="32" y="36">打开 → 读取一条记录 → 检查 EOF → 退出</text>
+  <text class="note" x="32" y="57">READ 会重复执行，直到 AT END 设置文件结束标志。</text>
+
+  <rect x="350" y="78" width="200" height="48" rx="4" fill="#64748b" fill-opacity="0.16" stroke="#64748b" stroke-width="1.5"/>
+  <text class="label" x="450" y="98" text-anchor="middle">打开输入</text>
+  <text class="mono" x="450" y="116" text-anchor="middle">TRANSACTION-FILE</text>
+  <path class="flow" d="M450 126 V148"/>
+
+  <path d="M450 148 L545 190 L450 232 L355 190 Z" fill="#d97706" fill-opacity="0.16" stroke="#d97706" stroke-width="1.5"/>
+  <text class="label" x="450" y="186" text-anchor="middle">文件状态</text>
+  <text class="mono" x="450" y="204" text-anchor="middle">= "00"？</text>
+
+  <path class="error-flow" d="M355 190 H176 V241"/>
+  <text class="note" x="228" y="180" text-anchor="middle">否 · 例如 "35"</text>
+  <rect x="76" y="241" width="200" height="56" rx="4" fill="#b91c1c" fill-opacity="0.12" stroke="#b91c1c" stroke-width="1.5"/>
+  <text class="label" x="176" y="264" text-anchor="middle">报告打开失败</text>
+  <text class="mono" x="176" y="284" text-anchor="middle">STOP RUN · 不执行 READ</text>
+
+  <path class="flow" d="M450 232 V270"/>
+  <text class="note" x="466" y="254">是</text>
+  <rect x="350" y="270" width="200" height="50" rx="4" fill="#2563eb" fill-opacity="0.12" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="label" x="450" y="291" text-anchor="middle">READ 一条记录</text>
+  <text class="mono" x="450" y="309" text-anchor="middle">行顺序</text>
+  <path class="flow" d="M450 320 V342"/>
+
+  <path d="M450 342 L550 384 L450 426 L350 384 Z" fill="#d97706" fill-opacity="0.16" stroke="#d97706" stroke-width="1.5"/>
+  <text class="label" x="450" y="380" text-anchor="middle">AT END？</text>
+  <text class="note" x="450" y="398" text-anchor="middle">READ 结果</text>
+
+  <path class="loop" d="M550 384 H700 V358"/>
+  <text class="note" x="626" y="375" text-anchor="middle">非文件末尾</text>
+  <rect x="700" y="330" width="160" height="56" rx="4" fill="#0d9488" fill-opacity="0.16" stroke="#0d9488" stroke-width="1.5"/>
+  <text class="label" x="780" y="353" text-anchor="middle">处理记录</text>
+  <text class="text" x="780" y="373" text-anchor="middle">计数 + 1</text>
+  <path class="loop" d="M780 330 V294 H552"/>
+
+  <path class="flow" d="M450 426 V451 H560"/>
+  <text class="note" x="466" y="446">是 · EOF</text>
+  <rect x="560" y="431" width="160" height="48" rx="4" fill="#0d9488" fill-opacity="0.16" stroke="#0d9488" stroke-width="1.5"/>
+  <text class="label" x="640" y="451" text-anchor="middle">退出循环</text>
+  <text class="text" x="640" y="469" text-anchor="middle">报告计数 · CLOSE</text>
+
+  <text class="note" x="76" y="329">此处的 FILE STATUS 描述 OPEN 结果。</text>
+  <text class="note" x="76" y="346">EOF 对应 READ 的 AT END 分支，不是 FILE STATUS 检查。</text>
+</svg>

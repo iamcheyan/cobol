@@ -2,13 +2,13 @@
 
 ## Learning objectives
 
-需求拆解、input格式、Copybook、data验证、sequential file、业务计算、control break报表、退出码、Bash testing和文档。
+Requirements breakdown, input formats, Copybooks, data validation, sequential files, business calculations, control-break reports, exit codes, Bash testing, and documentation.
 
 After this lesson, explain these terms in your own words and locate their declarations or uses in a small program. Observe inputs, outputs, and state changes instead of memorizing syntax.
 
 ## Example code
 
-Open  [`L28.COB`](./L28.COB)。The source uses fixed format: divisions and paragraphs begin in Area A, while declaration and execution statements are in Area B. Read the source line by line, then run it.
+Open [`L28.COB`](./L28.COB). The source uses fixed format: divisions and paragraphs begin in Area A, while declaration and execution statements are in Area B. Read the source line by line, then run it.
 
 ## Compile and run
 
@@ -21,7 +21,7 @@ cobc -x -Wall -o build/l28 extensions/legacy-workshop/lessons/28-capstone-night-
 ./build/l28
 ```
 
-Expected result: 结业project规格在 README 中；可以从 BATCHRPT.COB 和 INPUTCSV.COB 组合起步。
+Expected result: the capstone project specification is in the README. You can start by combining `BATCHRPT.COB` and `INPUTCSV.COB`.
 
 If the compiler reports a format or column error, check columns 7, 8, 12, and 72, then verify periods, variable PIC clauses, and scope terminators. `-Wall` adds warnings; understand them before deciding what to do.
 
@@ -34,13 +34,13 @@ If the compiler reports a format or column error, check columns 7, 8, 12, and 72
 
 ## Modification exercise
 
-先写input/output样例与验收条件，再拆分paragraph，最后加入testing脚本；确保重复execution可预测。
+First write sample inputs and outputs and define acceptance criteria. Then divide the work into paragraphs and add a test script. Make sure repeated runs behave predictably.
 
 After each change, rerun syntax checking, compilation, and the program. Change one concept at a time and record the output before and after.
 
 ## Learn with cobol.nvim
 
-用 Aerial 复核架构；按record计算、诊断、Copybook 跳转、折叠分别做一次代码审查。
+Use Aerial to review the structure. Perform a code review for record calculations, diagnostics, Copybook navigation, and folding.
 
 If the plugin does not respond, check the filetype with `:set filetype?` and then run `cobc --version`. The plugin provides navigation, layout hints, and diagnostics; GnuCOBOL compilation determines whether the program compiles.
 

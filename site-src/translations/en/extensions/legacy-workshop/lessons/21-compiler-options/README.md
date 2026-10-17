@@ -2,13 +2,13 @@
 
 ## Learning objectives
 
--x、-c、-o、-I、-fsyntax-only、-Wall、-Wextra、-std 等选项；固定/自由格式与 GnuCOBOL 默认扩展。
+Compiler options such as `-x`, `-c`, `-o`, `-I`, `-fsyntax-only`, `-Wall`, `-Wextra`, and `-std`; fixed versus free format; and GnuCOBOL's default extensions.
 
 After this lesson, explain these terms in your own words and locate their declarations or uses in a small program. Observe inputs, outputs, and state changes instead of memorizing syntax.
 
 ## Example code
 
-Open  [`L21.COB`](./L21.COB)。The source uses fixed format: divisions and paragraphs begin in Area A, while declaration and execution statements are in Area B. Read the source line by line, then run it.
+Open [`L21.COB`](./L21.COB). The source uses fixed format: divisions and paragraphs begin in Area A, while declaration and execution statements are in Area B. Read the source line by line, then run it.
 
 ## Compile and run
 
@@ -21,7 +21,7 @@ cobc -x -Wall -o build/l21 extensions/legacy-workshop/lessons/21-compiler-option
 ./build/l21
 ```
 
-Expected result: programcolumn出编译和静态check的主要用途。
+Expected result: the program prints the main purposes of compilation and static checking.
 
 If the compiler reports a format or column error, check columns 7, 8, 12, and 72, then verify periods, variable PIC clauses, and scope terminators. `-Wall` adds warnings; understand them before deciding what to do.
 
@@ -34,13 +34,13 @@ If the compiler reports a format or column error, check columns 7, 8, 12, and 72
 
 ## Modification exercise
 
-分别execution -fsyntax-only、-Wall、-x；试用 -free；record平台上实际可用选项。
+Run the program separately with `-fsyntax-only`, `-Wall`, and `-x`. Try `-free`, then record which options are available on your platform.
 
 After each change, rerun syntax checking, compilation, and the program. Change one concept at a time and record the output before and after.
 
 ## Learn with cobol.nvim
 
-plugin实时诊断调用 cobc 做语法check；终端构建仍是最终验证。
+The plugin's live diagnostics call `cobc` for syntax checking; terminal builds remain the final verification.
 
 If the plugin does not respond, check the filetype with `:set filetype?` and then run `cobc --version`. The plugin provides navigation, layout hints, and diagnostics; GnuCOBOL compilation determines whether the program compiles.
 

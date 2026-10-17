@@ -1,14 +1,14 @@
-# Lesson
+# Names, Comments, Literals, and Periods
 
 ## Learning objectives
 
-COBOL 单词、连字符命名、保留字、字符串引号、数字字面量、行内/整行注释和句点的作用域。
+Understand COBOL words, hyphenated names, reserved words, quotation marks in strings, numeric literals, inline and full-line comments, and how periods delimit scope.
 
-After this lesson, explain these terms in your own words and locate their declarations or uses in a small program. Observe inputs, outputs, and state changes instead of memorizing syntax.
+After this lesson, you should be able to explain these terms in your own words and find where they are declared or used in a small program. Do not just memorize syntax: first observe the inputs, outputs, and changes in state.
 
 ## Example code
 
-Open  [`L03.COB`](./L03.COB)。The source uses fixed format: divisions and paragraphs begin in Area A, while declaration and execution statements are in Area B. Read the source line by line, then run it.
+Open [`L03.COB`](./L03.COB). This lesson's source uses fixed format: divisions and paragraphs begin in Area A, while declaration and execution statements are in Area B. Read the source line by line, then run it.
 
 ## Compile and run
 
@@ -21,32 +21,32 @@ cobc -x -Wall -o build/l03 extensions/legacy-workshop/lessons/03-names-comments-
 ./build/l03
 ```
 
-Expected result: 打印字符串和数值字面量。
+Expected result: the program prints string and numeric literals.
 
-If the compiler reports a format or column error, check columns 7, 8, 12, and 72, then verify periods, variable PIC clauses, and scope terminators. `-Wall` adds warnings; understand them before deciding what to do.
+If the compiler reports a format or column-position error, first check columns 7, 8, 12, and 72. Then verify the periods, variable PIC clauses, and scope-terminating statements. `-Wall` provides additional warnings; understand each warning before deciding whether to address it.
 
 ## Understand the program
 
-1. `IDENTIFICATION DIVISION` declares the program unit; `PROGRAM-ID` is its compiler-visible name.
-2. `DATA DIVISION` describes runtime data; where fields are declared, observe their level numbers and PIC clauses.
-3. `PROCEDURE DIVISION` is the entry point; `0000-MAIN` is a readable paragraph name and does not repeat automatically.
-4. Statements run in source order until control flow changes the path or `STOP RUN` ends the process.
+1. `IDENTIFICATION DIVISION` declares the program unit; `PROGRAM-ID` is the program name seen by the compiler.
+2. `DATA DIVISION` describes the data used at runtime. If this lesson declares fields, observe their level numbers and PIC clauses.
+3. `PROCEDURE DIVISION` is the program's entry point; `0000-MAIN` is a readable paragraph name and does not execute repeatedly on its own.
+4. Each statement runs in source order until a control-flow statement changes the path or `STOP RUN` ends the process.
 
 ## Modification exercise
 
-将文本改为包含双引号的内容，Try  doubled quote；Add 注释并移除最后一个句点observe 诊断。
+Change the text to include double quotation marks and try doubled quotes. Add a comment, then remove the final period and observe the diagnostic.
 
-After each change, rerun syntax checking, compilation, and the program. Change one concept at a time and record the output before and after.
+After each change, rerun syntax checking, compilation, and the program. Change one concept at a time, and record the output before and after.
 
 ## Learn with cobol.nvim
 
-试用 :CobolFormatCase；确认格式化只规范关键字，不应改变变量名、字符串和注释。
+Try `:CobolFormatCase`. Confirm that formatting standardizes only keywords and does not change variable names, strings, or comments.
 
-If the plugin does not respond, check the filetype with `:set filetype?` and then run `cobc --version`. The plugin provides navigation, layout hints, and diagnostics; GnuCOBOL compilation determines whether the program compiles.
+If the plugin does not respond, first check the current filetype with `:set filetype?`, then check `cobc --version`. The plugin provides navigation, layout hints, and diagnostics; the actual GnuCOBOL compilation result determines whether the program compiles.
 
 ## Self-check
 
-- Can you identify the lines where this lesson’s concepts are declared and used?
-- How does the output change when an input or field value changes?
+- Can you identify the lines where this lesson's concepts are declared and used?
+- How will the output change if an input or field value changes?
 - Can you introduce a small error related to this lesson and explain the compiler message?
-- What inputs and failure paths would you validate before using this example in a real batch project?
+- What inputs and failure paths would you need to validate before using the example in a real batch project?

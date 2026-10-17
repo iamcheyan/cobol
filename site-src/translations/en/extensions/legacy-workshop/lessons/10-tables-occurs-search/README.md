@@ -2,13 +2,13 @@
 
 ## Learning objectives
 
-固定长度表 OCCURS、INDEXED BY、下标/索引区别、SEARCH 顺序查找、SEARCH ALL 的sort前提。
+Fixed-length OCCURS tables, INDEXED BY, the difference between subscripts and indexes, sequential lookup with SEARCH, and the sorting requirement for SEARCH ALL.
 
 After this lesson, explain these terms in your own words and locate their declarations or uses in a small program. Observe inputs, outputs, and state changes instead of memorizing syntax.
 
 ## Example code
 
-Open  [`L10.COB`](./L10.COB)。The source uses fixed format: divisions and paragraphs begin in Area A, while declaration and execution statements are in Area B. Read the source line by line, then run it.
+Open [`L10.COB`](./L10.COB). The source uses fixed format: divisions and paragraphs begin in Area A, while declaration and execution statements are in Area B. Read the source line by line, then run it.
 
 ## Compile and run
 
@@ -21,7 +21,7 @@ cobc -x -Wall -o build/l10 extensions/legacy-workshop/lessons/10-tables-occurs-s
 ./build/l10
 ```
 
-Expected result: 写入三项成绩并逐项遍历。
+Expected result: three scores are stored and traversed one by one.
 
 If the compiler reports a format or column error, check columns 7, 8, 12, and 72, then verify periods, variable PIC clauses, and scope terminators. `-Wall` adds warnings; understand them before deciding what to do.
 
@@ -34,13 +34,13 @@ If the compiler reports a format or column error, check columns 7, 8, 12, and 72
 
 ## Modification exercise
 
-Add 第四项；Try  SEARCH ALL 前先sort，并理解其二分查找条件。
+Add a fourth entry. Try sorting the table before SEARCH ALL and learn the conditions required for its binary search.
 
 After each change, rerun syntax checking, compilation, and the program. Change one concept at a time and record the output before and after.
 
 ## Learn with cobol.nvim
 
-pluginrecord计算器可展示 OCCURS 的总长度；在索引变量处用 gd。
+The plugin's record calculator can show the total size of an OCCURS table. Use gd on the index variable to jump to its definition.
 
 If the plugin does not respond, check the filetype with `:set filetype?` and then run `cobc --version`. The plugin provides navigation, layout hints, and diagnostics; GnuCOBOL compilation determines whether the program compiles.
 

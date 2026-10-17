@@ -2,13 +2,13 @@
 
 ## Learning objectives
 
-SORT/MERGE 的工作file、INPUT PROCEDURE/OUTPUT PROCEDURE、SORT table、sort键和sort稳定性。
+SORT/MERGE work files, `INPUT PROCEDURE`/`OUTPUT PROCEDURE`, sort tables, sort keys, and sort stability.
 
 After this lesson, explain these terms in your own words and locate their declarations or uses in a small program. Observe inputs, outputs, and state changes instead of memorizing syntax.
 
 ## Example code
 
-Open  [`L18.COB`](./L18.COB)。The source uses fixed format: divisions and paragraphs begin in Area A, while declaration and execution statements are in Area B. Read the source line by line, then run it.
+Open [`L18.COB`](./L18.COB). The source uses fixed format: divisions and paragraphs begin in Area A, while declaration and execution statements are in Area B. Read the source line by line, then run it.
 
 ## Compile and run
 
@@ -21,7 +21,7 @@ cobc -x -Wall -o build/l18 extensions/legacy-workshop/lessons/18-sort-merge/L18.
 ./build/l18
 ```
 
-Expected result: This lesson先说明 SORT 的data流与filedeclaration，再由Practice 仓库完整批processprogram演示真实读写。
+Expected result: this lesson first explains SORT data flow and file declarations; the Practice repository then demonstrates a complete batch program with real file input and output.
 
 If the compiler reports a format or column error, check columns 7, 8, 12, and 72, then verify periods, variable PIC clauses, and scope terminators. `-Wall` adds warnings; understand them before deciding what to do.
 
@@ -34,13 +34,13 @@ If the compiler reports a format or column error, check columns 7, 8, 12, and 72
 
 ## Modification exercise
 
-为 sales_data.txt 按客户号sort；确保相同键的record满足业务要求。
+Sort `sales_data.txt` by customer number. Make sure records with duplicate keys meet the requirements of the application.
 
 After each change, rerun syntax checking, compilation, and the program. Change one concept at a time and record the output before and after.
 
 ## Learn with cobol.nvim
 
-plugin大纲for 跟踪 SORT input/output过程；用 :CobolLint checkfile定义。
+Use the plugin outline to trace the SORT input and output procedures; use `:CobolLint` to check file declarations.
 
 If the plugin does not respond, check the filetype with `:set filetype?` and then run `cobc --version`. The plugin provides navigation, layout hints, and diagnostics; GnuCOBOL compilation determines whether the program compiles.
 

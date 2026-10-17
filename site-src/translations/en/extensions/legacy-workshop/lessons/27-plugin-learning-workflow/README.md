@@ -2,13 +2,13 @@
 
 ## Learning objectives
 
-plugin不是 COBOL 语言本身；把标尺、大纲、跳转、Copybook 预览、PIC 计算、诊断、折叠和格式化融入lesson。
+The plugin is not the COBOL language itself. Integrate its ruler, outline, navigation, Copybook preview, PIC calculations, diagnostics, folding, and formatting into your lessons.
 
 After this lesson, explain these terms in your own words and locate their declarations or uses in a small program. Observe inputs, outputs, and state changes instead of memorizing syntax.
 
 ## Example code
 
-Open  [`L27.COB`](./L27.COB)。The source uses fixed format: divisions and paragraphs begin in Area A, while declaration and execution statements are in Area B. Read the source line by line, then run it.
+Open [`L27.COB`](./L27.COB). The source uses fixed format: divisions and paragraphs begin in Area A, while declaration and execution statements are in Area B. Read the source line by line, then run it.
 
 ## Compile and run
 
@@ -21,7 +21,7 @@ cobc -x -Wall -o build/l27 extensions/legacy-workshop/lessons/27-plugin-learning
 ./build/l27
 ```
 
-Expected result: 提示学员plugin辅助learn但不能代替 GnuCOBOL compiler和权威语义验证。
+Expected result: the lesson shows how the plugin can support learning without replacing the GnuCOBOL compiler or authoritative semantic verification.
 
 If the compiler reports a format or column error, check columns 7, 8, 12, and 72, then verify periods, variable PIC clauses, and scope terminators. `-Wall` adds warnings; understand them before deciding what to do.
 
@@ -34,13 +34,13 @@ If the compiler reports a format or column error, check columns 7, 8, 12, and 72
 
 ## Modification exercise
 
-选择前 10 课中的一个知识点：写代码、编译、run、故意出错、Use the plugin to 定位、修复并record。
+Choose a concept from the first 10 lessons. Write code, compile and run it, introduce an intentional error, use the plugin to locate it, fix it, and record the result.
 
 After each change, rerun syntax checking, compilation, and the program. Change one concept at a time and record the output before and after.
 
 ## Learn with cobol.nvim
 
-完成 README 的plugin任务卡，use  :CobolGuideToggle、:CobolCalcRecord、:CobolLint 和 :CobolQuickfix。
+Complete the plugin task card in the README. Use `:CobolGuideToggle`, `:CobolCalcRecord`, `:CobolLint`, and `:CobolQuickfix`.
 
 If the plugin does not respond, check the filetype with `:set filetype?` and then run `cobc --version`. The plugin provides navigation, layout hints, and diagnostics; GnuCOBOL compilation determines whether the program compiles.
 

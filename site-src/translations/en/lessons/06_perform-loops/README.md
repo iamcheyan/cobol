@@ -93,9 +93,9 @@ One thing needs to be said up front here: **this lesson has not yet taught table
 
 | Sequence | Symbol | Amount |
 |---:|---|---:|
-| 1 | `D`（存款） | 125.50 |
-| 2 | `W`（取款） | 040.10 |
-| 3 | `T`（转账） | 075.00 |
+| 1 | `D` (deposit) | 125.50 |
+| 2 | `W` (withdrawal) | 040.10 |
+| 3 | `T` (transfer) | 075.00 |
 
 This is only scaffolding — once lesson 11 gives us the `OCCURS` table, the same loop will be rewritten to look up by sequence number in the table, and that is the real batch writing style.
 

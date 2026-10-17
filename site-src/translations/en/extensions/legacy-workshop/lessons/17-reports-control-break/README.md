@@ -2,13 +2,13 @@
 
 ## Learning objectives
 
-页眉/明细/总计、accumulator、分组sort、control break（control break）、编辑型 PIC 与amount格式。
+Report headers, detail lines, and totals; accumulators; sorting by group; control breaks; edited PIC clauses and amount formatting.
 
 After this lesson, explain these terms in your own words and locate their declarations or uses in a small program. Observe inputs, outputs, and state changes instead of memorizing syntax.
 
 ## Example code
 
-Open  [`L17.COB`](./L17.COB)。The source uses fixed format: divisions and paragraphs begin in Area A, while declaration and execution statements are in Area B. Read the source line by line, then run it.
+Open [`L17.COB`](./L17.COB). The source uses fixed format: divisions and paragraphs begin in Area A, while declaration and execution statements are in Area B. Read the source line by line, then run it.
 
 ## Compile and run
 
@@ -21,7 +21,7 @@ cobc -x -Wall -o build/l17 extensions/legacy-workshop/lessons/17-reports-control
 ./build/l17
 ```
 
-Expected result: output一个department的累计amount和格式化总计。
+Expected result: the program displays the accumulated amount for one department and a formatted total.
 
 If the compiler reports a format or column error, check columns 7, 8, 12, and 72, then verify periods, variable PIC clauses, and scope terminators. `-Wall` adds warnings; understand them before deciding what to do.
 
@@ -34,13 +34,13 @@ If the compiler reports a format or column error, check columns 7, 8, 12, and 72
 
 ## Modification exercise
 
-Add 第二个department并在department变化时先打印小计，再重置accumulator。
+Add a second department. When the department changes, print its subtotal before resetting the accumulator.
 
 After each change, rerun syntax checking, compilation, and the program. Change one concept at a time and record the output before and after.
 
 ## Learn with cobol.nvim
 
-用 Aerial 大纲view  1000/2000/9000 paragraph，observe control break的process顺序。
+Use the Aerial outline to inspect the `1000`/`2000`/`9000` paragraphs and observe the control-break processing order.
 
 If the plugin does not respond, check the filetype with `:set filetype?` and then run `cobc --version`. The plugin provides navigation, layout hints, and diagnostics; GnuCOBOL compilation determines whether the program compiles.
 

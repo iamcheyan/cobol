@@ -2,13 +2,13 @@
 
 ## Learning objectives
 
-ASSIGN、ORGANIZATION SEQUENTIAL、FD record、OPEN INPUT/OUTPUT/EXTEND、READ、WRITE、AT END、CLOSE。
+ASSIGN, ORGANIZATION SEQUENTIAL, FD records, OPEN INPUT/OUTPUT/EXTEND, READ, WRITE, AT END, and CLOSE.
 
 After this lesson, explain these terms in your own words and locate their declarations or uses in a small program. Observe inputs, outputs, and state changes instead of memorizing syntax.
 
 ## Example code
 
-Open  [`L12.COB`](./L12.COB)。The source uses fixed format: divisions and paragraphs begin in Area A, while declaration and execution statements are in Area B. Read the source line by line, then run it.
+Open [`L12.COB`](./L12.COB). The source uses fixed format: divisions and paragraphs begin in Area A, while declaration and execution statements are in Area B. Read the source line by line, then run it.
 
 ## Compile and run
 
@@ -21,7 +21,7 @@ cobc -x -Wall -o build/l12 extensions/legacy-workshop/lessons/12-sequential-file
 ./build/l12
 ```
 
-Expected result: 此课use 附带的file I/O 完整例子，避免把关键file控制declaration藏在截图片段中。
+Expected result: this lesson uses a complete file I/O example included with the lesson, so the essential file-control declarations are visible rather than hidden in a cropped excerpt.
 
 If the compiler reports a format or column error, check columns 7, 8, 12, and 72, then verify periods, variable PIC clauses, and scope terminators. `-Wall` adds warnings; understand them before deciding what to do.
 
@@ -34,13 +34,13 @@ If the compiler reports a format or column error, check columns 7, 8, 12, and 72
 
 ## Modification exercise
 
-在下方创建 input.txt，然后将 README 的 SELECT/FD example逐步加入This lessonprogram。
+Create input.txt below, then gradually add the SELECT/FD example from this README to the lesson program.
 
 After each change, rerun syntax checking, compilation, and the program. Change one concept at a time and record the output before and after.
 
 ## Learn with cobol.nvim
 
-Use the plugin to check FD/01 record层级并在 READ processparagraph间跳转。
+Use the plugin to inspect the FD/01 record hierarchy and jump between paragraphs in the READ procedure.
 
 If the plugin does not respond, check the filetype with `:set filetype?` and then run `cobc --version`. The plugin provides navigation, layout hints, and diagnostics; GnuCOBOL compilation determines whether the program compiles.
 
@@ -53,7 +53,7 @@ If the plugin does not respond, check the filetype with `:set filetype?` and the
 
 ## Runnable sequential-file exercise
 
-本directory另附完整的 [`FILE-DEMO.COB`](./FILE-DEMO.COB) 和 [`input.txt`](./input.txt)。program按当前工作directory查找inputfile，因此从This lessondirectory编译并run：
+This directory also includes a complete [`FILE-DEMO.COB`](./FILE-DEMO.COB) and [`input.txt`](./input.txt). The program looks for the input file in the current working directory, so compile and run it from this lesson's directory:
 
 ```sh
 mkdir -p build
@@ -61,4 +61,4 @@ cobc -x -Wall -o build/file-demo FILE-DEMO.COB
 ./build/file-demo
 ```
 
-READ 每次读取一条逻辑record；`AT END` processfile尾，`FILE STATUS` 提供success或failure状态。试着删除 `input.txt`，observe  OPEN error path；再修改record length、行结束符和空行，验证input假设。
+Each READ retrieves one logical record; `AT END` handles the end of the file, and `FILE STATUS` reports success or failure. Try deleting `input.txt` to observe the OPEN error path. Then change the record length, line endings, and blank lines to verify the input assumptions.

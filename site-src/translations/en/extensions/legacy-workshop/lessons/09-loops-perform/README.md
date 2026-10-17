@@ -2,13 +2,13 @@
 
 ## Learning objectives
 
-PERFORM paragraph、TIMES、UNTIL、WITH TEST BEFORE/AFTER；避免落入后续paragraph；EXIT PERFORM 的边界。
+PERFORM paragraphs, TIMES, UNTIL, and WITH TEST BEFORE/AFTER; preventing fall-through into subsequent paragraphs; the limits of EXIT PERFORM.
 
 After this lesson, explain these terms in your own words and locate their declarations or uses in a small program. Observe inputs, outputs, and state changes instead of memorizing syntax.
 
 ## Example code
 
-Open  [`L09.COB`](./L09.COB)。The source uses fixed format: divisions and paragraphs begin in Area A, while declaration and execution statements are in Area B. Read the source line by line, then run it.
+Open [`L09.COB`](./L09.COB). The source uses fixed format: divisions and paragraphs begin in Area A, while declaration and execution statements are in Area B. Read the source line by line, then run it.
 
 ## Compile and run
 
@@ -21,7 +21,7 @@ cobc -x -Wall -o build/l09 extensions/legacy-workshop/lessons/09-loops-perform/L
 ./build/l09
 ```
 
-Expected result: 循环打印 1 到 5。
+Expected result: the loop prints the numbers 1 through 5.
 
 If the compiler reports a format or column error, check columns 7, 8, 12, and 72, then verify periods, variable PIC clauses, and scope terminators. `-Wall` adds warnings; understand them before deciding what to do.
 
@@ -34,13 +34,13 @@ If the compiler reports a format or column error, check columns 7, 8, 12, and 72
 
 ## Modification exercise
 
-把条件改为 TEST AFTER；Add 计数上限，验证不会出现无限循环。
+Change the condition to TEST AFTER. Add an upper bound for the counter and verify that the loop cannot run forever.
 
 After each change, rerun syntax checking, compilation, and the program. Change one concept at a time and record the output before and after.
 
 ## Learn with cobol.nvim
 
-在 PERFORM paragraph调用处用 gd，use  za 折叠循环paragraph。
+Use gd at the PERFORM paragraph call to jump to its definition, and use za to fold the loop paragraph.
 
 If the plugin does not respond, check the filetype with `:set filetype?` and then run `cobc --version`. The plugin provides navigation, layout hints, and diagnostics; GnuCOBOL compilation determines whether the program compiles.
 

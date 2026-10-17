@@ -2,13 +2,13 @@
 
 ## Learning objectives
 
-独立program unit、CALL USING、BY REFERENCE/CONTENT/VALUE、PROCEDURE DIVISION USING、LINKAGE SECTION、RETURNING。
+Independent program units, `CALL USING`, `BY REFERENCE`/`CONTENT`/`VALUE`, `PROCEDURE DIVISION USING`, the `LINKAGE SECTION`, and `RETURNING`.
 
 After this lesson, explain these terms in your own words and locate their declarations or uses in a small program. Observe inputs, outputs, and state changes instead of memorizing syntax.
 
 ## Example code
 
-Open  [`L15.COB`](./L15.COB)。This lesson源fileuse fixed format：Division 和paragraph从 Area A 开始，declaration/execution语句在 Area B。主program `L15.COB` 将 7 传给 `DOUBLE-NUM.COB`，子program用 LINKAGE 接收参数并通过共享resultfield返回 14。
+Open [`L15.COB`](./L15.COB). This lesson's source uses fixed format: divisions and paragraphs begin in Area A, while declaration and execution statements are in Area B. The main program, `L15.COB`, passes 7 to `DOUBLE-NUM.COB`. The subprogram receives the argument through `LINKAGE` and returns 14 through the shared result field.
 
 ## Compile and run
 
@@ -21,7 +21,7 @@ cobc -x -Wall -o build/l15 extensions/legacy-workshop/lessons/15-subprograms-lin
 ./build/l15
 ```
 
-Expected result: 先output `INPUT=0007`，再output `RESULT=00014`。
+Expected result: the program first displays `INPUT=0007`, then displays `RESULT=00014`.
 
 If the compiler reports a format or column error, check columns 7, 8, 12, and 72, then verify periods, variable PIC clauses, and scope terminators. `-Wall` adds warnings; understand them before deciding what to do.
 
@@ -34,13 +34,13 @@ If the compiler reports a format or column error, check columns 7, 8, 12, and 72
 
 ## Modification exercise
 
-把子program改成计算三倍；Add 无效inputcheck。
+Change the subprogram to triple the value, then add a check for invalid input.
 
 After each change, rerun syntax checking, compilation, and the program. Change one concept at a time and record the output before and after.
 
 ## Learn with cobol.nvim
 
-Use the plugin to  gd 跳转 CALL 目标（如果作为同一projectOpen ），并用大纲view 入口和参数区。
+Use `gd` to jump to the `CALL` target (when it is open in the same project), and use the outline to explore the entry point and parameter area.
 
 If the plugin does not respond, check the filetype with `:set filetype?` and then run `cobc --version`. The plugin provides navigation, layout hints, and diagnostics; GnuCOBOL compilation determines whether the program compiles.
 

@@ -2,13 +2,13 @@
 
 ## Learning objectives
 
-重定向、管道、tee、日志、管道failure传播、锁file、cron/systemd timer 的职责边界及可重复run。
+Redirection, pipelines, `tee`, logs, failure propagation through pipelines, lock files, the roles of cron and systemd timers, and repeatable runs.
 
 After this lesson, explain these terms in your own words and locate their declarations or uses in a small program. Observe inputs, outputs, and state changes instead of memorizing syntax.
 
 ## Example code
 
-Open  [`L24.COB`](./L24.COB)。The source uses fixed format: divisions and paragraphs begin in Area A, while declaration and execution statements are in Area B. Read the source line by line, then run it.
+Open [`L24.COB`](./L24.COB). The source uses fixed format: divisions and paragraphs begin in Area A, while declaration and execution statements are in Area B. Read the source line by line, then run it.
 
 ## Compile and run
 
@@ -21,7 +21,7 @@ cobc -x -Wall -o build/l24 extensions/legacy-workshop/lessons/24-bash-pipelines-
 ./build/l24
 ```
 
-Expected result: 用program返回状态码驱动 Shell 日志与批processresult。
+Expected result: the program's exit status drives shell logging and the batch process result.
 
 If the compiler reports a format or column error, check columns 7, 8, 12, and 72, then verify periods, variable PIC clauses, and scope terminators. `-Wall` adds warnings; understand them before deciding what to do.
 
@@ -34,13 +34,13 @@ If the compiler reports a format or column error, check columns 7, 8, 12, and 72
 
 ## Modification exercise
 
-将output重定向到日志；在管道中use  pipefail；试着连续run两次并保证不会破坏input。
+Redirect the output to a log. Use `pipefail` in a pipeline. Try running the job twice in succession and make sure it does not damage the input.
 
 After each change, rerun syntax checking, compilation, and the program. Change one concept at a time and record the output before and after.
 
 ## Learn with cobol.nvim
 
-在plugin中view program退出path；用 CobolLint process语法，ShellCheck（若安装）process脚本。
+View the program's exit paths in the plugin. Use CobolLint for syntax issues and ShellCheck, if installed, for script issues.
 
 If the plugin does not respond, check the filetype with `:set filetype?` and then run `cobc --version`. The plugin provides navigation, layout hints, and diagnostics; GnuCOBOL compilation determines whether the program compiles.
 
@@ -54,11 +54,11 @@ If the plugin does not respond, check the filetype with `:set filetype?` and the
 
 ## Runnable pipeline example
 
-run [`run-pipeline.sh`](./run-pipeline.sh)：
+Run [`run-pipeline.sh`](./run-pipeline.sh):
 
 ```sh
 extensions/legacy-workshop/lessons/24-bash-pipelines-scheduling/run-pipeline.sh
 LOG_FILE=/tmp/course-batch.log extensions/legacy-workshop/lessons/24-bash-pipelines-scheduling/run-pipeline.sh
 ```
 
-脚本展示 `tee` 同时output到终端和日志，并通过 `set -o pipefail` 保留 COBOL program在管道中的failure状态。把 `L24.COB` 改成返回非零码后重跑，验证failure分支。
+The script uses `tee` to send output to both the terminal and a log, and `set -o pipefail` to preserve the COBOL program's failure status through the pipeline. Change `L24.COB` to return a nonzero code, run the script again, and verify the failure path.

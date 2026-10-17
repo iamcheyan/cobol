@@ -2,13 +2,13 @@
 
 ## Learning objectives
 
-源file与目标file、模块依赖、COPY path、动态库搜索、环境变量、可移植性和构建directory。
+Source and target files, module dependencies, COPY paths, dynamic library search, environment variables, portability, and build directories.
 
 After this lesson, explain these terms in your own words and locate their declarations or uses in a small program. Observe inputs, outputs, and state changes instead of memorizing syntax.
 
 ## Example code
 
-Open  [`L19.COB`](./L19.COB)。The source uses fixed format: divisions and paragraphs begin in Area A, while declaration and execution statements are in Area B. Read the source line by line, then run it.
+Open [`L19.COB`](./L19.COB). The source uses fixed format: divisions and paragraphs begin in Area A, while declaration and execution statements are in Area B. Read the source line by line, then run it.
 
 ## Compile and run
 
@@ -21,7 +21,7 @@ cobc -x -Wall -o build/l19 extensions/legacy-workshop/lessons/19-modules-environ
 ./build/l19
 ```
 
-Expected result: program提醒工程由源码、Copybook、data和构建脚本共同组成。
+Expected result: the program reminds you that a project consists of source code, Copybooks, data, and build scripts.
 
 If the compiler reports a format or column error, check columns 7, 8, 12, and 72, then verify periods, variable PIC clauses, and scope terminators. `-Wall` adds warnings; understand them before deciding what to do.
 
@@ -34,13 +34,13 @@ If the compiler reports a format or column error, check columns 7, 8, 12, and 72
 
 ## Modification exercise
 
-将example拆成主program、子program和 Copybook；record每个file如何进入编译命令。
+Split the example into a main program, a subprogram, and a Copybook. Record how each file is included in the compile command.
 
 After each change, rerun syntax checking, compilation, and the program. Change one concept at a time and record the output before and after.
 
 ## Learn with cobol.nvim
 
-在 Neovim 中以仓库directory启动，让plugin能use project根directory和 Copybook 搜索path。
+Start Neovim from the repository directory so the plugin can use the project root and find Copybooks through its search path.
 
 If the plugin does not respond, check the filetype with `:set filetype?` and then run `cobc --version`. The plugin provides navigation, layout hints, and diagnostics; GnuCOBOL compilation determines whether the program compiles.
 

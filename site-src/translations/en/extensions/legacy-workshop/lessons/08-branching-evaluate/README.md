@@ -2,13 +2,13 @@
 
 ## Learning objectives
 
-嵌套 IF 与作用域终止符 END-IF；EVALUATE/WHEN/WHEN OTHER；范围与多条件选择。
+Nested IF statements and the END-IF scope terminator; EVALUATE/WHEN/WHEN OTHER; range tests and multi-condition selection.
 
 After this lesson, explain these terms in your own words and locate their declarations or uses in a small program. Observe inputs, outputs, and state changes instead of memorizing syntax.
 
 ## Example code
 
-Open  [`L08.COB`](./L08.COB)。The source uses fixed format: divisions and paragraphs begin in Area A, while declaration and execution statements are in Area B. Read the source line by line, then run it.
+Open [`L08.COB`](./L08.COB). The source uses fixed format: divisions and paragraphs begin in Area A, while declaration and execution statements are in Area B. Read the source line by line, then run it.
 
 ## Compile and run
 
@@ -21,7 +21,7 @@ cobc -x -Wall -o build/l08 extensions/legacy-workshop/lessons/08-branching-evalu
 ./build/l08
 ```
 
-Expected result: 用 EVALUATE TRUE 完成分数分级。
+Expected result: grades are assigned using EVALUATE TRUE.
 
 If the compiler reports a format or column error, check columns 7, 8, 12, and 72, then verify periods, variable PIC clauses, and scope terminators. `-Wall` adds warnings; understand them before deciding what to do.
 
@@ -34,13 +34,13 @@ If the compiler reports a format or column error, check columns 7, 8, 12, and 72
 
 ## Modification exercise
 
-Add  A+ 档；将 EVALUATE 改写为 IF/ELSE 并比较可读性。
+Add an A+ grade; rewrite EVALUATE as IF/ELSE and compare readability.
 
 After each change, rerun syntax checking, compilation, and the program. Change one concept at a time and record the output before and after.
 
 ## Learn with cobol.nvim
 
-用折叠收起 EVALUATE 分支；Try 制造漏掉 END-IF 的error并看 quickfix。
+Fold the EVALUATE branches. Try omitting an END-IF and inspect the error in quickfix.
 
 If the plugin does not respond, check the filetype with `:set filetype?` and then run `cobc --version`. The plugin provides navigation, layout hints, and diagnostics; GnuCOBOL compilation determines whether the program compiles.
 

@@ -2,13 +2,13 @@
 
 ## Learning objectives
 
-shebang、set -euo pipefail、脚本directory定位、命令check、临时 build directory、参数转发与error码。
+Shebangs, `set -euo pipefail`, locating the script directory, checking commands, temporary build directories, argument forwarding, and exit codes.
 
 After this lesson, explain these terms in your own words and locate their declarations or uses in a small program. Observe inputs, outputs, and state changes instead of memorizing syntax.
 
 ## Example code
 
-Open  [`L22.COB`](./L22.COB)。The source uses fixed format: divisions and paragraphs begin in Area A, while declaration and execution statements are in Area B. Read the source line by line, then run it.
+Open [`L22.COB`](./L22.COB). The source uses fixed format: divisions and paragraphs begin in Area A, while declaration and execution statements are in Area B. Read the source line by line, then run it.
 
 ## Compile and run
 
@@ -21,7 +21,7 @@ cobc -x -Wall -o build/l22 extensions/legacy-workshop/lessons/22-bash-build-run/
 ./build/l22
 ```
 
-Expected result: example源代码由 run.sh 编译并run，脚本保持构建产物在 build/。
+Expected result: `run.sh` compiles and runs the example source, keeping build artifacts in `build/`.
 
 If the compiler reports a format or column error, check columns 7, 8, 12, and 72, then verify periods, variable PIC clauses, and scope terminators. `-Wall` adds warnings; understand them before deciding what to do.
 
@@ -34,13 +34,13 @@ If the compiler reports a format or column error, check columns 7, 8, 12, and 72
 
 ## Modification exercise
 
-run ./run.sh；设置 COBC=/path/to/cobc 覆盖compiler；observe 脚本缺少compiler时的error。
+Run `./run.sh`. Set `COBC=/path/to/cobc` to override the compiler, then observe the error when the compiler is missing.
 
 After each change, rerun syntax checking, compilation, and the program. Change one concept at a time and record the output before and after.
 
 ## Learn with cobol.nvim
 
-在编辑器终端中Open  run.sh 和This lesson COBOL file，交替run :CobolLint 与 ./run.sh。
+Open `run.sh` and this lesson's COBOL file in the editor terminal, then alternate between running `:CobolLint` and `./run.sh`.
 
 If the plugin does not respond, check the filetype with `:set filetype?` and then run `cobc --version`. The plugin provides navigation, layout hints, and diagnostics; GnuCOBOL compilation determines whether the program compiles.
 

@@ -2,13 +2,13 @@
 
 ## Learning objectives
 
-compiler告警/error、行column号、最小复现、DISPLAY 跟踪、返回码、GnuCOBOL 调试选项和plugin quickfix。
+Compiler warnings and errors, line and column numbers, minimal reproductions, `DISPLAY` tracing, return codes, GnuCOBOL debugging options, and plugin quick fixes.
 
 After this lesson, explain these terms in your own words and locate their declarations or uses in a small program. Observe inputs, outputs, and state changes instead of memorizing syntax.
 
 ## Example code
 
-Open  [`L20.COB`](./L20.COB)。The source uses fixed format: divisions and paragraphs begin in Area A, while declaration and execution statements are in Area B. Read the source line by line, then run it.
+Open [`L20.COB`](./L20.COB). The source uses fixed format: divisions and paragraphs begin in Area A, while declaration and execution statements are in Area B. Read the source line by line, then run it.
 
 ## Compile and run
 
@@ -21,7 +21,7 @@ cobc -x -Wall -o build/l20 extensions/legacy-workshop/lessons/20-debugging-diagn
 ./build/l20
 ```
 
-Expected result: 用明确的追踪信息呈现program经过的path。
+Expected result: the program uses explicit trace messages to show the path it takes.
 
 If the compiler reports a format or column error, check columns 7, 8, 12, and 72, then verify periods, variable PIC clauses, and scope terminators. `-Wall` adds warnings; understand them before deciding what to do.
 
@@ -34,13 +34,13 @@ If the compiler reports a format or column error, check columns 7, 8, 12, and 72
 
 ## Modification exercise
 
-制造未declarationfield和缺少 END-IF 两种error；先读第一条根因，再修复并重新run。
+Introduce two errors: an undeclared field and a missing `END-IF`. Read the first root cause, fix it, and run the program again.
 
 After each change, rerun syntax checking, compilation, and the program. Change one concept at a time and record the output before and after.
 
 ## Learn with cobol.nvim
 
-用 <leader>cl/:CobolLint、<leader>cq/:CobolQuickfix 对照终端 cobc output。
+Compare `cobc`'s terminal output with `<leader>cl`/`:CobolLint` and `<leader>cq`/`:CobolQuickfix`.
 
 If the plugin does not respond, check the filetype with `:set filetype?` and then run `cobc --version`. The plugin provides navigation, layout hints, and diagnostics; GnuCOBOL compilation determines whether the program compiles.
 

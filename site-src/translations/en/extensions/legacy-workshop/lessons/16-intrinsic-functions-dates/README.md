@@ -2,13 +2,13 @@
 
 ## Learning objectives
 
-FUNCTION TRIM、LENGTH、NUMVAL、CURRENT-DATE、INTEGER、MAX/MIN；区分显示格式、内部数值与无效input。
+`FUNCTION TRIM`, `LENGTH`, `NUMVAL`, `CURRENT-DATE`, `INTEGER`, `MAX`/`MIN`; distinguishing display formats, internal numeric values, and invalid input.
 
 After this lesson, explain these terms in your own words and locate their declarations or uses in a small program. Observe inputs, outputs, and state changes instead of memorizing syntax.
 
 ## Example code
 
-Open  [`L16.COB`](./L16.COB)。The source uses fixed format: divisions and paragraphs begin in Area A, while declaration and execution statements are in Area B. Read the source line by line, then run it.
+Open [`L16.COB`](./L16.COB). The source uses fixed format: divisions and paragraphs begin in Area A, while declaration and execution statements are in Area B. Read the source line by line, then run it.
 
 ## Compile and run
 
@@ -21,7 +21,7 @@ cobc -x -Wall -o build/l16 extensions/legacy-workshop/lessons/16-intrinsic-funct
 ./build/l16
 ```
 
-Expected result: 清理文本并转换为数值，再读取run环境日期。
+Expected result: the program cleans up text, converts it to a numeric value, and then reads the runtime date.
 
 If the compiler reports a format or column error, check columns 7, 8, 12, and 72, then verify periods, variable PIC clauses, and scope terminators. `-Wall` adds warnings; understand them before deciding what to do.
 
@@ -34,13 +34,13 @@ If the compiler reports a format or column error, check columns 7, 8, 12, and 72
 
 ## Modification exercise
 
-Try 空字符串和非数字文本；为转换过程加校验，不要假设 NUMVAL 会替代业务验证。
+Try an empty string and nonnumeric text. Add validation to the conversion process; do not assume `NUMVAL` replaces business-level validation.
 
 After each change, rerun syntax checking, compilation, and the program. Change one concept at a time and record the output before and after.
 
 ## Learn with cobol.nvim
 
-在 FUNCTION 表达式处让 cobc 提供最终语法反馈；plugin计算器关注 PIC，不负责求值函数。
+Let `cobc` provide the final syntax feedback for `FUNCTION` expressions. The plugin's calculator focuses on PIC clauses; it does not evaluate functions.
 
 If the plugin does not respond, check the filetype with `:set filetype?` and then run `cobc --version`. The plugin provides navigation, layout hints, and diagnostics; GnuCOBOL compilation determines whether the program compiles.
 

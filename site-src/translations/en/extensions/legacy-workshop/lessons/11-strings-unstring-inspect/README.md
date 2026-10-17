@@ -2,13 +2,13 @@
 
 ## Learning objectives
 
-定界符拆分、拼接、DELIMITED BY SIZE、TALLYING、COUNTING、REPLACING、引用修改和指针field。
+Splitting on delimiters, concatenation, DELIMITED BY SIZE, TALLYING, COUNTING, REPLACING, reference modification, and pointer fields.
 
 After this lesson, explain these terms in your own words and locate their declarations or uses in a small program. Observe inputs, outputs, and state changes instead of memorizing syntax.
 
 ## Example code
 
-Open  [`L11.COB`](./L11.COB)。The source uses fixed format: divisions and paragraphs begin in Area A, while declaration and execution statements are in Area B. Read the source line by line, then run it.
+Open [`L11.COB`](./L11.COB). The source uses fixed format: divisions and paragraphs begin in Area A, while declaration and execution statements are in Area B. Read the source line by line, then run it.
 
 ## Compile and run
 
@@ -21,7 +21,7 @@ cobc -x -Wall -o build/l11 extensions/legacy-workshop/lessons/11-strings-unstrin
 ./build/l11
 ```
 
-Expected result: 拆分一行管道分隔文本并拼接result。
+Expected result: a pipe-delimited line is split and the results are concatenated.
 
 If the compiler reports a format or column error, check columns 7, 8, 12, and 72, then verify periods, variable PIC clauses, and scope terminators. `-Wall` adds warnings; understand them before deciding what to do.
 
@@ -34,13 +34,13 @@ If the compiler reports a format or column error, check columns 7, 8, 12, and 72
 
 ## Modification exercise
 
-Switch to  DELIMITED BY ALL；对 WS-LINE use  INSPECT TALLYING count 分隔符。
+Switch to DELIMITED BY ALL. Use INSPECT TALLYING on WS-LINE to count the delimiters.
 
 After each change, rerun syntax checking, compilation, and the program. Change one concept at a time and record the output before and after.
 
 ## Learn with cobol.nvim
 
-在 UNSTRING 上Practice 格式诊断；通过plugin大纲快速view field和processparagraph。
+Practice format diagnostics on UNSTRING. Use the plugin's outline to quickly view fields and procedure paragraphs.
 
 If the plugin does not respond, check the filetype with `:set filetype?` and then run `cobc --version`. The plugin provides navigation, layout hints, and diagnostics; GnuCOBOL compilation determines whether the program compiles.
 

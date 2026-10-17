@@ -2,13 +2,13 @@
 
 ## Learning objectives
 
-把file I/O、UNSTRING、data校验、error计数、STRING、Copybook 和 Bash 自动化组合成端到端小program。
+Combine file I/O, UNSTRING, data validation, error counts, STRING, Copybooks, and Bash automation in a small end-to-end program.
 
 After this lesson, explain these terms in your own words and locate their declarations or uses in a small program. Observe inputs, outputs, and state changes instead of memorizing syntax.
 
 ## Example code
 
-Open  [`L25.COB`](./L25.COB)。The source uses fixed format: divisions and paragraphs begin in Area A, while declaration and execution statements are in Area B. Read the source line by line, then run it.
+Open [`L25.COB`](./L25.COB). The source uses fixed format: divisions and paragraphs begin in Area A, while declaration and execution statements are in Area B. Read the source line by line, then run it.
 
 ## Compile and run
 
@@ -21,7 +21,7 @@ cobc -x -Wall -o build/l25 extensions/legacy-workshop/lessons/25-project-csv-pip
 ./build/l25
 ```
 
-Expected result: 配套完整program是仓库根directory INPUTCSV.COB；This lesson先拆解data流，不重复隐藏关键errorprocess。
+Expected result: the complete companion program is `INPUTCSV.COB` in the repository root. This lesson breaks down the data flow without repeating the hidden key error handling.
 
 If the compiler reports a format or column error, check columns 7, 8, 12, and 72, then verify periods, variable PIC clauses, and scope terminators. `-Wall` adds warnings; understand them before deciding what to do.
 
@@ -34,13 +34,13 @@ If the compiler reports a format or column error, check columns 7, 8, 12, and 72
 
 ## Modification exercise
 
-run make run-csv；改 input.txt 中field数、空field和非法amount，recordprogram应如何process。
+Run `make run-csv`. Change the number of fields, an empty field, and an invalid amount in `input.txt`. Observe how the record program should handle each case.
 
 After each change, rerun syntax checking, compilation, and the program. Change one concept at a time and record the output before and after.
 
 ## Learn with cobol.nvim
 
-Practice  gf/K view  EMP-REC.CPY，<leader>cr view fieldrecord，诊断和 Quickfix 修复故意inclusion的error。
+Practice using `gf` and `K` to view `EMP-REC.CPY`, `<leader>cr` to inspect the field record, and diagnostics and Quickfix to fix an intentionally introduced error.
 
 If the plugin does not respond, check the filetype with `:set filetype?` and then run `cobc --version`. The plugin provides navigation, layout hints, and diagnostics; GnuCOBOL compilation determines whether the program compiles.
 

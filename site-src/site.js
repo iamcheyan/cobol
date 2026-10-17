@@ -159,6 +159,15 @@ if (cobolViews.length) {
     ruler.className = 'cobol-ruler';
     ruler.setAttribute('aria-hidden', 'true');
     ruler.innerHTML = '<span class="ruler-segment ruler-sequence">1───6</span><span class="ruler-segment ruler-indicator">7</span><span class="ruler-segment ruler-area-a">8-11</span><span class="ruler-segment ruler-area-b"><span>12</span><span>72</span></span><span class="ruler-segment ruler-identification">73──80</span>';
+    const mobileLegend = document.createElement('div');
+    mobileLegend.className = 'cobol-mobile-legend';
+    mobileLegend.setAttribute('aria-label', 'Fixed-format column regions');
+    const legendLabels = document.documentElement.lang === 'ja'
+      ? ['1–6 連番', '7 指示', '8–11 Area A', '12–72 Area B', '73–80 識別']
+      : document.documentElement.lang === 'en'
+        ? ['1–6 Sequence', '7 Indicator', '8–11 Area A', '12–72 Area B', '73–80 Identification']
+        : ['1–6 序列', '7 指示', '8–11 Area A', '12–72 Area B', '73–80 识别'];
+    mobileLegend.innerHTML = legendLabels.map((label, i) => `<span class="legend-region legend-${['sequence','indicator','a','b','id'][i]}">${label}</span>`).join('');
     const rows = document.createElement('div');
     rows.className = 'cobol-lines';
     for (let i = 0; i < lines.length; i++) {
@@ -178,7 +187,7 @@ if (cobolViews.length) {
       rows.append(row);
     }
     pre.classList.add('cobol-editor');
-    pre.replaceChildren(ruler, rows);
+    pre.replaceChildren(ruler, mobileLegend, rows);
     pre.setAttribute('aria-label', 'COBOL source with fixed-format column ruler');
   }
 }

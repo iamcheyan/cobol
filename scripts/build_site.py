@@ -60,6 +60,7 @@ LOCALES = {
         "download": "下载文件 ↓", "pending_page": "此内容的翻译正在准备中。以下先显示中文原文。",
         "pending_resource": "此文件暂无该语言版本，下面显示中文原文。",
         "source_format": "固定格式 COBOL · 80 列刻度",
+        "source_scroll_hint": "左右滑动查看完整列 · 第 72 列为程序正文边界",
         "view_source": "查看中文原文 →", "unsupported": "此资源不适合直接预览，可下载后在本地打开。",
         "footer": "课程源码与练习材料",
         "footer_compiler": "配套编译器",
@@ -171,6 +172,7 @@ LOCALES = {
         "download": "Download ↓", "pending_page": "This translation is being prepared. The Chinese original is shown below.",
         "pending_resource": "This file has no English version yet; the Chinese original is shown below.",
         "source_format": "FIXED FORMAT · 80-COLUMN RULER",
+        "source_scroll_hint": "Scroll sideways to inspect all columns · source text ends at column 72",
         "view_source": "Read the Chinese original →", "unsupported": "Preview is unavailable for this file; download it to open locally.",
         "footer": "Course source and practice material",
         "footer_compiler": "compiler",
@@ -282,6 +284,7 @@ LOCALES = {
         "download": "ダウンロード ↓", "pending_page": "このページは翻訳準備中です。以下は中国語の原文です。",
         "pending_resource": "このファイルの日本語版は未作成です。以下は中国語の原文です。",
         "source_format": "固定形式 COBOL · 80 桁ルーラー",
+        "source_scroll_hint": "左右にスクロールして全桁を表示 · ソース本文は 72 桁まで",
         "view_source": "中国語の原文を見る →", "unsupported": "このファイルはプレビューできません。ダウンロードして開いてください。",
         "footer": "コースのソースと演習資料",
         "footer_compiler": "対応コンパイラ",
@@ -677,6 +680,8 @@ def resource_browser(locale: str, source: Path, page: Path) -> str:
                 cobol_source = suffix in {".cob", ".cbl", ".cobol", ".cpy"}
                 source_badge = (f'<span class="source-format">{html.escape(labels["source_format"])}</span>'
                                 if cobol_source else "")
+                scroll_hint = (f'<p class="source-scroll-hint">{html.escape(labels["source_scroll_hint"])}</p>'
+                               if cobol_source else "")
                 editor_class = " cobol-source-view" if cobol_source else ""
                 editor_attr = ' data-cobol-source="true"' if cobol_source else ""
                 views.append(
@@ -684,7 +689,7 @@ def resource_browser(locale: str, source: Path, page: Path) -> str:
                     f'<div class="resource-heading"><span>{html.escape(label)}</span>'
                     f'<span class="resource-heading-tools">{source_badge}'
                     f'<a href="{rel_from_page}" download>{labels["download"]}</a></span></div>'
-                    f'{note}<pre class="source-pre"><code class="language-{language}">{body}</code></pre></div>'
+                    f'{note}{scroll_hint}<pre class="source-pre"><code class="language-{language}">{body}</code></pre></div>'
                 )
                 continue
         views.append(

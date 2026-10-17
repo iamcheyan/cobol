@@ -277,9 +277,9 @@ LOCALES = {
         "view_source": "中国語の原文を見る →", "unsupported": "このファイルはプレビューできません。ダウンロードして開いてください。",
         "footer": "コースのソースと演習資料",
         "footer_compiler": "対応コンパイラ",
-        "hero_eyebrow": "GNU COBOL · PRACTICAL COURSE",
+        "hero_eyebrow": "GNU COBOL · 日本の基幹系のための実践コース",
         "hero_h1": "最初の COBOL ステートメントから、", "hero_h1_em": "銀行の夜間照合システムまで。",
-        "hero_intro": "段階的に学ぶ GnuCOBOL 実践コース。解説を読み、プログラムを動かし、演習をこなし、実際のバッチ処理を組み上げます。",
+        "hero_intro": "国内の金融・保険・公共システムでは、いまも COBOL が現役です。このコースは、実際に動く固定形式のバッチプログラムを 32 本読み・直しながら、勘定系の処理を安全に変更できる力を身につけます。",
         "hero_cta": "レッスン01から始める", "hero_cta2": "全レッスンを見る",
         "path_eyebrow": "THE LEARNING PATH", "path_title": "6つのステージで完結するコース", "path_link": "カリキュラムを見る →",
         "stages": [
@@ -290,8 +290,8 @@ LOCALES = {
             ("29 — 31", "データベース", "埋め込みSQLと同期"),
             ("32", "卒業プロジェクト", "銀行照合バッチシステム"),
         ],
-        "start_eyebrow": "START HERE", "start_title": "どのレッスンも手元で動かせます",
-        "start_text": "GnuCOBOL と Make を用意し、第1課からコンパイル・修正・演習を進めます。ソースコード、入力データ、解答例も各レッスンと一緒に閲覧できます。",
+        "start_eyebrow": "START HERE", "start_title": "Linux と GnuCOBOL があれば、今日から動かせます",
+        "start_text": "メインフレームがなくても大丈夫です。GnuCOBOL は COBOL を C に変換して動かす自由なコンパイラで、日本の開発者・西田圭介氏が原作者です。apt 一発で入り、自宅の Linux で本番と同じ固定形式のコードを扱えます。",
         "start_term": "ターミナル · Debian / Ubuntu", "start_open": "レッスン01を開く",
         "more_eyebrow": "BEYOND THE MAIN COURSE", "more_title": "さらに学ぶ",
         "more_kn": "ナレッジベース", "more_kn_desc": "言語の概要・史話・リファレンス・用語集",
@@ -1210,12 +1210,15 @@ def main() -> None:
     for locale in LOCALES:
         total += build_locale(locale)
     (OUT / "CNAME").write_text("cobol.iamcheyan.com\n", encoding="ascii")
+    # The audience is Japanese business readers, so the bare domain lands on
+    # the Japanese tree; the language switcher covers zh-cn and en.
     (OUT / "index.html").write_text(
-        '<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">'
-        '<meta http-equiv="refresh" content="0;url=zh-cn/index.html">'
+        '<!doctype html><html lang="ja"><head><meta charset="utf-8">'
+        '<meta http-equiv="refresh" content="0;url=ja/index.html">'
         '<meta name="viewport" content="width=device-width,initial-scale=1">'
-        '<title>GnuCOBOL 实战课程</title></head><body>'
-        '<a href="zh-cn/index.html">进入 GnuCOBOL 实战课程</a></body></html>', encoding="utf-8")
+        '<title>GnuCOBOL 実践コース</title></head><body>'
+        '<p><a href="ja/index.html">日本語</a> · <a href="zh-cn/index.html">简体中文</a>'
+        ' · <a href="en/index.html">English</a></p></body></html>', encoding="utf-8")
     write_manifest()
     print(f"Rendered {len(LOCALES)} locales, {total} pages ({total // len(LOCALES)} per locale) to {OUT}")
 

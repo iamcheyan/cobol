@@ -96,7 +96,23 @@ ABOUT = {
                              'COBOL 85、2002、2014 标准的很大一部分，还支持 JD Edwards、Micro Focus、IBM 等厂商的扩展方言。',
                              '这门课用的就是它。你在[第 01 课](lessons/01_hello-cobol/README.html)里敲的第一个 `cobc` 命令，编译的就是 '
                              'GnuCOBOL。']},
-                  {'id': 'industries',
+                              {'id': 'japan',
+             'title': '它在日本仍然是现役语言',
+             'kind': 'prose',
+             'body': ['这也是用中文读这门课的实际理由：COBOL 不是“国外的老故事”，而是**日本基干系（基幹系）系统里的现役语言**。',
+                      '大型银行、地方银行、信用金库、保险、信用卡、证券，以及地方政府的住民记录与年金——这些“不能停”的系统，很多今天仍在跑 COBOL '
+                      '批处理。原因很朴素：**让正在运行的系统停下来重写，比维护它更危险**。'],
+             'bullets': ['**国内厂商的 COBOL**：像富士通的 NetCOBOL 这样，把大型机上的 COBOL 资产迁到开放环境继续使用，是现实中常见的路线。2025 年 1 '
+                         '月，高知信用金库宣布把勘定系系统从大型机迁到 NetCOBOL，目标 2030 年 1 月完成。',
+                         '**“2025 年的悬崖”与人才短缺**：以经济产业省警告的“2025 年の崖”为背景，能维护和迁移遗留系统的人才不足已成社会议题。2024 年 10 月，SCSK 与 FPT Japan '
+                         '宣布就设立合资公司“COBOL PARK”开始协商，为金融机构等提供维持既有系统与迁移的多种出路；公司名里用 COBOL，是因为它六十多年来一直是主流语言、也是遗留系统的象征。',
+                         '**GnuCOBOL 的原始作者是日本人**：2002 年发布 OpenCOBOL（GnuCOBOL 的前身）的，是日本开发者**西田圭介（Keisuke Nishida）**。目前开发在 '
+                         'GNU 项目下由 Simon Sobisch 等人推进。也就是说，对日语读者来说，COBOL 不是“进口技术”——连学习入口的作者都是日本人。',
+                         '**现场用语**：日本现场常说“勘定系”“基幹系”“日中バッチ”“夜間バッチ”“突合（とつごう）”“項目”“桁”等词。本课程的程序输出也按实际业务场景使用日文标签，README '
+                         '里给出中文对照。'],
+             'after': ['所以这门课的重点不是背语法，而是**能在现场读懂**：固定格式的列位置、`FILE STATUS` 的判定、对账的计数不变量、异常时的退出码。这些知识在日本现场同样通用。',
+                       '从[第 01 课](lessons/01_hello-cobol/README.html)开始，动手验证一遍。']},
+{'id': 'industries',
                    'title': '它今天还在哪些地方跑',
                    'kind': 'table',
                    'intro': 'COBOL 的存量集中在一类场景：**交易量大、规则稳定、错一笔都是钱**。这些系统换掉的成本极高，所以它们一直在跑。',
@@ -277,7 +293,38 @@ ABOUT = {
                              'Edwards, Micro Focus and IBM dialects.',
                              'It is what this course uses. The first `cobc` command you type in [Lesson '
                              '01](lessons/01_hello-cobol/README.html) is GnuCOBOL.']},
-                  {'id': 'industries',
+                              {'id': 'japan',
+             'title': 'Still in production in Japan',
+             'kind': 'prose',
+             'body': ['This is the practical reason the course is also worth reading outside Japan: COBOL is not a '
+                      "foreign relic — it is **the working language of Japan's core banking and administrative "
+                      'systems**.',
+                      'Megabanks, regional banks, shinkin credit unions, insurers, card processors, securities firms, '
+                      'and municipal resident and pension systems: many of the systems that must never stop still run '
+                      'COBOL batch jobs. The reason is simple — **stopping a running system to rewrite it is riskier '
+                      'than maintaining it**.'],
+             'bullets': ['**Domestic vendors keep the assets**：moving mainframe COBOL onto open systems rather than '
+                         "rewriting is a real, common route — for example Fujitsu's NetCOBOL. In January 2025 Kochi "
+                         'Shinkin Bank announced migrating its core accounting system from the mainframe to NetCOBOL, '
+                         'targeting full migration by January 2030.',
+                         '**The 2025 cliff and the skills shortage**：against the "2025 cliff" warned about by Japan\'s '
+                         'Ministry of Economy, Trade and Industry, a shortage of engineers who can maintain and migrate '
+                         'legacy systems has become a social issue. In October 2024 SCSK and FPT Japan announced talks '
+                         'to form a joint venture, **COBOL PARK**, offering financial institutions several exits from '
+                         'ageing mainframes; the name uses COBOL because the language has been mainstream for over sixty '
+                         'years and symbolises legacy systems.',
+                         "**GnuCOBOL's original author is Japanese**：**Keisuke Nishida** released OpenCOBOL, the project "
+                         'GnuCOBOL grew out of, in 2002. Development now runs under the GNU Project, led by Simon '
+                         'Sobisch and others. For Japanese readers, COBOL is therefore not imported technology — even '
+                         'the entry point was written by a Japanese developer.',
+                         '**Field vocabulary**：Japanese teams speak of 勘定系 (core accounting), 基幹系 (core systems), 夜間バッチ '
+                         '(nightly batch), 突合 (reconciliation), 項目 (field) and 桁 (digit positions). The programs here '
+                         'print Japanese business labels, with Chinese/English explanations in the lessons.'],
+             'after': ['So the course is about **being able to read code in production**, not memorising syntax: '
+                       'fixed-format column positions, `FILE STATUS` checks, the count invariants of reconciliation, and '
+                       'exit codes on failure. That knowledge transfers directly to Japanese sites.',
+                       'Start with [Lesson 01](lessons/01_hello-cobol/README.html) and verify it by hand.']},
+{'id': 'industries',
                    'title': 'Where it still runs',
                    'kind': 'table',
                    'intro': "COBOL's installed base sits where **volume is high, rules are stable, and one wrong "
@@ -439,7 +486,26 @@ ABOUT = {
                              'で学べるもの」に変えました。COBOL 85・2002・2014 の大部分を実装し、JD Edwards、Micro Focus、IBM などの拡張方言も扱えます。',
                              '本コースが使っているのもこれです。[第 01 課](lessons/01_hello-cobol/README.html)で最初に打つ `cobc` は '
                              'GnuCOBOL です。']},
-                  {'id': 'industries',
+                              {'id': 'japan',
+             'title': '日本では今も現役です',
+             'kind': 'prose',
+             'body': ['ここが、このコースを日本語で読む意味です。COBOL は「海外の古い話」ではなく、**日本の基幹系システムの現役の言語**です。',
+                      'メガバンク、地方銀行、信用金庫、保険、クレジットカード、証券、そして自治体の住民記録や年金。こうした「止まってはいけない」システムの多くが、いまも COBOL '
+                      'のバッチで動いています。理由は単純で、**動いているものを止めずに作り直すほうが難しい**からです。'],
+             'bullets': ['**NTT データや富士通など国内ベンダーの COBOL**：富士通の NetCOBOL のように、メインフレームからオープン環境へ移しても COBOL '
+                         '資産をそのまま活かす選択肢が実際に使われています。2025 年 1 月には高知信用金庫が勘定系をメインフレームから NetCOBOL へ移行すると発表し、2030 年 1 '
+                         '月の完全移行を目指しています。',
+                         '**2025 年の崖と COBOL 人材**：経済産業省が警告した「2025 年の崖」を背景に、レガシーシステムを維持・移行できる人材の不足が社会課題になっています。2024 年 10 '
+                         '月には SCSK と FPT ジャパンが、レガシーシステムの維持と移行を支援する合弁会社「COBOL PARK」の設立に向けた協議開始を発表しました。社名に COBOL を採ったのは、60 '
+                         '年以上にわたり主流であり続けた言語を「日本企業が今後も活用していく資産」と位置づけたためです。',
+                         '**GnuCOBOL の原作者は日本人**：GnuCOBOL の元になった OpenCOBOL を 2002 年に公開したのは、日本の開発者 **西田圭介（Keisuke '
+                         'Nishida）** 氏です。現在の開発は GNU プロジェクトの下で、Simon Sobisch 氏らが中心に進めています。つまり、日本語話者にとって COBOL '
+                         'は「輸入された技術」ではなく、**学ぶ入口にも作者がいる**言語です。',
+                         '**日本語の現場用語**：現場では「勘定系」「基幹系」「日中バッチ」「夜間バッチ」「突合（とつごう）」「項目（フィールド）」「桁（けた）」といった言葉で会話されます。本コースの実行結果も、実際の出力に合わせて日本語のラベルで表示されます。'],
+             'after': ['だから本コースは、文法の暗記ではなく**現場で読めること**を重視しています。固定形式の桁位置、`FILE STATUS` '
+                       'の判定、突合の数え上げ、異常時の終了コード。これらは日本語の現場でもそのまま通用する知識です。',
+                       '[第 01 課](lessons/01_hello-cobol/README.html)から、実際に手を動かして確かめてください。']},
+{'id': 'industries',
                    'title': '今どこで動いているか',
                    'kind': 'table',
                    'intro': 'COBOL の既存資産は**取引量が多く、規則が安定し、1 件の誤りが金額になる**領域に集中しています。置き換えの費用が高いため、動き続けています。',

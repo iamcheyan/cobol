@@ -1232,6 +1232,7 @@
     "extensions/standalone-examples/sales_data.txt",
     "extensions/standalone-examples/tx_input.dat",
     "lessons/01_hello-cobol/README.md",
+    "lessons/01_hello-cobol/assets/fixed-format-columns.svg",
     "lessons/01_hello-cobol/lesson.cob",
     "lessons/02_data-types/README.md",
     "lessons/02_data-types/lesson.cob",

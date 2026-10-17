@@ -12,310 +12,478 @@ on Wikipedia and the published ISO standard names; nothing here is invented.
 # ---------------------------------------------------------------------------
 
 ABOUT = {
-    "zh-cn": {
-        "eyebrow": "BACKGROUND",
-        "title": "COBOL 是什么",
-        "lead": "COBOL 是面向商业数据处理的编程语言：它用接近英语的语句描述记录、文件和批处理流程。1959 年由美国国防部推动、多家厂商与政府机构共同设计，如今仍是银行、保险、政务等系统里大量核心账务与批处理程序的实现语言。",
-        "source_note": "本页史实依据 COBOL 的公开历史资料与 ISO 标准编号整理；标准编号与年份以已发布版本为准。",
-        "sections": [
-            {
-                "id": "what",
-                "title": "它是什么",
-                "kind": "prose",
-                "body": [
-                    "COBOL 是 Common Business-Oriented Language 的缩写，定位是**商业数据处理**，而不是科学计算或系统编程。它的设计目标直接决定了它的样子：读起来像英语、数据描述与执行指令分离、强调定长记录与文件处理、便于跨机器移植。",
-                    "对今天的读者，最实际的三点认识是：",
-                ],
-                "bullets": [
-                    "**它面向文件与记录**：定长记录、顺序文件、排序与对账是它的主场，这门课的全部示例都建立在这套模型上。",
-                    "**它强调可读性而非简洁**：语句很长、保留字很多，这是刻意的取舍——程序要能被业务人员读懂、被下一代人维护。",
-                    "**它是编译型语言**：源码经 `cobc` 编译为原生可执行程序，不是脚本。",
-                ],
-                "after": [
-                    "一句话：COBOL 把「业务规则」写成接近英语的固定格式文本，交给编译器变成能在大型机或 Linux 上长期运行的批处理程序。",
-                ],
-            },
-            {
-                "id": "origin",
-                "title": "它从何而来",
-                "kind": "timeline",
-                "intro": "COBOL 不是某个人一夜之间发明的，而是由一次跨厂商协作推动出来的标准语言。",
-                "items": [
-                    ("1959-04-08", "会议发起", "Burroughs 的计算机科学家 Mary K. Hawes 在宾夕法尼亚大学召集学界、用户与厂商代表，商议是否需要一个通用的商业语言。与会者包括 Grace Hopper、Jean Sammet 与 Saul Gorn。"),
-                    ("1959-05-28", "五角大楼会议", "美国国防部出资在五角大楼召开会议，41 人参加，由 Charles A. Phillips 主持。背景很现实：国防部当时有 225 台计算机、另有 175 台在订购中，程序移植成本极高。"),
-                    ("1959-06-04", "CODASYL 成立", "指导委员会把这项活动命名为 CODASYL（Committee on Data Systems Languages），并成立执行委员会；短期委员会被要求三个月内给出临时语言规范。"),
-                    ("1960-04", "COBOL 60", "第一版规范提交给 CODASYL。它主要吸收了三门语言的经验：Grace Hopper 的 FLOW-MATIC（长变量名、英语命令、数据与指令分离）、IBM 的 COMTRAN，以及 AIMACO。"),
-                    ("1963", "语法澄清", "COBOL 60 被发现存在歧义，委员会做了系统性清理；到 1963 年，其语法的可定义程度已与 ALGOL 相当。早期编译器很慢：1962 年一次美国海军评测记录的速度是每分钟 3–11 条语句。"),
-                    ("1968-08", "首个国家标准", "ANSI 发布 USA Standard COBOL X3.23（即 ANS COBOL），成为后续各版的基石；ISO 于 1972 年采纳。"),
-                    ("1974", "COBOL-74", "ANSI 发布修订版。此前 CODASYL 委员会在 1968–1973 年间持续改进语言，加入程序间通信、调试、文件合并、字符串处理与库引入等能力。"),
-                    ("1985", "COBOL-85", "又一次大修。修订过程争议很大：草案与 COBOL-74 不向上兼容，保险公司的 4000 万行代码库迁移被形容为「非生产性」；第一轮公开评审收到 2200 份意见，其中 1700 份是反对。"),
-                    ("2002", "面向对象", "ISO 发布 COBOL 2002，加入面向对象、自由格式源码、用户自定义函数、递归、区域设置与扩展字符集等。这些特性多数在 CODASYL 1978 年的开发期刊里就已出现，只是错过了 COBOL-85。"),
-                    ("2014", "COBOL 2014", "把部分设施改为可选（如 VALIDATE、报表写出器、屏幕处理），引入 IEEE 754 数据类型与方法重载。"),
-                    ("2023", "COBOL 2023", "最新标准：异步消息（`SEND`/`RECEIVE`）、事务处理（`COMMIT`/`ROLLBACK`）、`XOR`、`PERFORM UNTIL EXIT`、`SUBSTITUTE`、`CONVERT` 等。GCC 15.1 起的 `gcobol` 即基于此标准。"),
-                ],
-                "after": [
-                    "当前标准编号是 **ISO/IEC 1989:2023**。标准演进的一条主线始终是：在不破坏既有代码的前提下增加能力——这也是 COBOL 程序寿命动辄数十年的原因之一。",
-                ],
-            },
-            {
-                "id": "industries",
-                "title": "它用在哪里",
-                "kind": "table",
-                "intro": "COBOL 的存量集中在「交易量大、规则稳定、不能出错」的场景。",
-                "head": ["行业", "典型用途"],
-                "rows": [
-                    ("银行与金融", "账户与账务、日终批处理、对账、清算、利息与费用计算"),
-                    ("保险", "保单、理赔、保费计算与批量结算"),
-                    ("零售与流通", "库存、结算、供应链批处理"),
-                    ("航空与旅行", "订座与运价等长期运行的交易系统"),
-                    ("医疗与公共事业", "理赔与缴费等批量处理"),
-                    ("政府机构", "税务、福利、社保等大型事务处理系统"),
-                ],
-                "after": [
-                    "运行平台同样很广：z/OS、z/VSE、VME、Unix、NonStop OS、OpenVMS、Windows 等。",
-                ],
-            },
-            {
-                "id": "legacy",
-                "title": "为什么今天还要学它",
-                "kind": "prose",
-                "body": [
-                    "这组数字能说明存量规模：",
-                ],
-                "bullets": [
-                    "1997 年 Gartner Group 的估算：全世界约有 **2000 亿行** COBOL 代码，承载 **80%** 的商业程序。",
-                    "2020 年前后：**95%** 的信用卡/借记卡刷卡交易，其后台处理经过 COBOL 程序。",
-                    "2006 与 2012 年 Computerworld 的调查：超过 **60%** 的组织仍在使用 COBOL，其中约一半把它用于大部分内部软件。",
-                    "2016 年美国众议院监督与政府改革委员会听证会记录：美国农业部、国土安全部、卫生与公众服务部、司法部、财政部、退伍军人事务部、国税局等机构仍在使用 COBOL。",
-                ],
-                "after": [
-                    "**千年虫（Y2K）**是 COBOL 最近一次被大众关注：因为商业系统大量使用日期、且数据是定长字段，修复工作量集中落在 COBOL 上，有研究把高达 **24%** 的 Y2K 修复成本归因于 COBOL。清理之后，2003 年的一次调查发现这些程序大多仍在服役。",
-                    "**人才缺口**是当下更实际的问题：到 2019 年，COBOL 程序员因退休而快速减少，而重写既有系统的成本高、风险大——一些银行的多年度迁移项目曾造成服务中断并招致罚款。COVID-19 期间，美国多个州的失业救济系统出现 COBOL 程序员短缺，成为公开报道的事件。",
-                    "所以这门课的价值不在「追新」，而在于：**能读懂并安全修改已经在生产环境里运行了几十年的批处理程序**，同时用现代工具（编译器诊断、结构导航、测试）把它维护好。",
-                ],
-            },
-            {
-                "id": "shape",
-                "title": "它长什么样",
-                "kind": "code",
-                "intro": "一个最小可运行的固定格式程序。前七列留空，第 8 列起写程序正文：",
-                "code": """       IDENTIFICATION DIVISION.
-       PROGRAM-ID. HELLO.
-       DATA DIVISION.
-       WORKING-STORAGE SECTION.
-       01 WS-NAME PIC X(10) VALUE "COBOL".
-       PROCEDURE DIVISION.
-           DISPLAY "HELLO, " WS-NAME.
-           STOP RUN.""",
-                "after": [
-                    "四个 Division 各司其职：`IDENTIFICATION` 说明程序身份，`DATA` 描述数据，`PROCEDURE` 写执行步骤。`01` 定义记录或字段，`PIC X(10)` 表示 10 个字符位置。",
-                    "想动手跑起来，从[第 01 课](lessons/01_hello-cobol/README.html)开始；想查语句与字段定义规则，用[速查手册](reference.html)。",
-                ],
-            },
-        ],
-    },
-    "en": {
-        "eyebrow": "BACKGROUND",
-        "title": "What is COBOL",
-        "lead": "COBOL is a programming language for business data processing: it describes records, files and batch flows in statements that read like English. Sponsored by the US Department of Defense and designed with manufacturers and government agencies from 1959, it still implements a large share of the core accounting and batch programs in banking, insurance and government.",
-        "source_note": "The history on this page follows COBOL's public historical record and the published ISO standard numbers.",
-        "sections": [
-            {
-                "id": "what",
-                "title": "What it is",
-                "kind": "prose",
-                "body": [
-                    "COBOL stands for Common Business-Oriented Language. Its target was **business data processing**, not scientific computing or systems programming, and that choice explains its shape: English-like statements, data descriptions kept separate from executable statements, a strong emphasis on fixed-length records and file handling, and portability across machines.",
-                    "Three things matter most for a reader today:",
-                ],
-                "bullets": [
-                    "**It is built around files and records**: fixed-length records, sequential files, sorting and reconciliation are its home ground, and every example in this course uses that model.",
-                    "**It favours readability over brevity**: long statements and many reserved words are a deliberate trade-off, so business staff can read a program and the next generation can maintain it.",
-                    "**It is a compiled language**: source is compiled by `cobc` into a native executable, not interpreted.",
-                ],
-                "after": [
-                    "In one sentence: COBOL writes business rules as English-like fixed-format text and hands them to a compiler that produces batch programs able to run for decades on a mainframe or on Linux.",
-                ],
-            },
-            {
-                "id": "origin",
-                "title": "Where it came from",
-                "kind": "timeline",
-                "intro": "COBOL was not invented overnight by one person; it came out of a cross-vendor standardisation effort.",
-                "items": [
-                    ("1959-04-08", "The first meeting", "Mary K. Hawes, a computer scientist at Burroughs, convened representatives from academia, users and manufacturers at the University of Pennsylvania to discuss a common business language. Attendees included Grace Hopper, Jean Sammet and Saul Gorn."),
-                    ("1959-05-28", "The Pentagon meeting", "The US Department of Defense sponsored a meeting at the Pentagon: 41 people, chaired by Charles A. Phillips. The motivation was concrete — the DoD operated 225 computers with 175 more on order, and porting programs was expensive."),
-                    ("1959-06-04", "CODASYL is formed", "The steering committee named the activity CODASYL (Committee on Data Systems Languages) and formed an executive committee; the short-range committee had three months to produce an interim language specification."),
-                    ("1960-04", "COBOL 60", "The first specification was delivered to CODASYL. It drew mainly on three languages: Grace Hopper's FLOW-MATIC (long variable names, English command words, data descriptions separated from instructions), IBM's COMTRAN, and AIMACO."),
-                    ("1963", "Syntax cleaned up", "COBOL 60 was found to contain ambiguities, and the committee performed a systematic cleanup; by 1963 its syntax was as definable as ALGOL's. Early compilers were slow: a 1962 US Navy evaluation measured 3-11 statements per minute."),
-                    ("1968-08", "First national standard", "ANSI published USA Standard COBOL X3.23 (ANS COBOL), the cornerstone for later versions; ISO adopted it in 1972."),
-                    ("1974", "COBOL-74", "ANSI published a revision. CODASYL had been improving the language through 1968-1973, adding inter-program communication, debugging, file merging, better string handling and library inclusion."),
-                    ("1985", "COBOL-85", "Another major revision, and a contentious one: the draft was not upward compatible with COBOL-74, one insurer called migrating its 40-million-line code base 'non-productive', and the first public review drew 2200 responses of which 1700 were negative."),
-                    ("2002", "Object orientation", "ISO published COBOL 2002 with object-oriented features, free-form source, user-defined functions, recursion, locale-based processing and extended character sets. Most had appeared in CODASYL's 1978 Journal of Development but missed COBOL-85."),
-                    ("2014", "COBOL 2014", "Made several facilities optional (VALIDATE, the report writer, screen handling) and added IEEE 754 data types and method overloading."),
-                    ("2023", "COBOL 2023", "The current standard: asynchronous messaging (`SEND`/`RECEIVE`), transaction processing (`COMMIT`/`ROLLBACK`), `XOR`, `PERFORM UNTIL EXIT`, `SUBSTITUTE`, `CONVERT` and more. `gcobol`, from GCC 15.1, is based on it."),
-                ],
-                "after": [
-                    "The current standard is **ISO/IEC 1989:2023**. One theme runs through every revision: add capability without breaking existing code — part of why COBOL programs live for decades.",
-                ],
-            },
-            {
-                "id": "industries",
-                "title": "Where it is used",
-                "kind": "table",
-                "intro": "COBOL's installed base sits where volume is high, rules are stable and failure is expensive.",
-                "head": ["Industry", "Typical use"],
-                "rows": [
-                    ("Banking and finance", "Accounts and ledgers, end-of-day batch, reconciliation, clearing, interest and fee calculation"),
-                    ("Insurance", "Policies, claims, premium calculation and batch settlement"),
-                    ("Retail and distribution", "Inventory, settlement and supply-chain batch jobs"),
-                    ("Airlines and travel", "Long-lived reservation and fare systems"),
-                    ("Healthcare and utilities", "Claims and billing batch processing"),
-                    ("Government", "Tax, benefits and social-security transaction systems"),
-                ],
-                "after": [
-                    "It also runs on a wide range of platforms: z/OS, z/VSE, VME, Unix, NonStop OS, OpenVMS and Windows, among others.",
-                ],
-            },
-            {
-                "id": "legacy",
-                "title": "Why it is still worth learning",
-                "kind": "prose",
-                "body": [
-                    "A few numbers convey the scale of the installed base:",
-                ],
-                "bullets": [
-                    "A 1997 Gartner Group estimate: roughly **200 billion lines** of COBOL in existence, running **80%** of the world's business programs.",
-                    "Around 2020: **95%** of the time a credit or debit card was swiped, COBOL ran the background processing.",
-                    "Computerworld surveys in 2006 and 2012: over **60%** of organisations still used COBOL, and for about half of them it covered most of their internal software.",
-                    "Testimony before the US House Committee on Oversight and Government Reform in 2016: COBOL remained in use at the USDA, DHS, HHS, Department of Justice, Treasury, Veterans Affairs and the IRS, among others.",
-                ],
-                "after": [
-                    "**Y2K** was the last time the public noticed COBOL. Because business systems lean on dates and use fixed-length fields, the repair effort concentrated there; some studies attribute as much as **24%** of Y2K software repair costs to COBOL. After the cleanup, a 2003 survey found most of those programs still in service.",
-                    "**The skills gap** is the practical issue now: by 2019 the number of COBOL programmers was shrinking fast through retirement, while rewriting legacy systems has proved expensive and risky — some banks' multi-year migrations caused service disruptions and fines. During COVID-19, several US states publicly reported a shortage of COBOL programmers for unemployment systems.",
-                    "So the value of this course is not novelty: it is being able to **read and safely change batch programs that have run in production for decades**, while maintaining them with modern tools such as compiler diagnostics, structure navigation and tests.",
-                ],
-            },
-            {
-                "id": "shape",
-                "title": "What it looks like",
-                "kind": "code",
-                "intro": "A minimal runnable fixed-format program. The first seven columns are blank and the program text starts in column 8:",
-                "code": """       IDENTIFICATION DIVISION.
-       PROGRAM-ID. HELLO.
-       DATA DIVISION.
-       WORKING-STORAGE SECTION.
-       01 WS-NAME PIC X(10) VALUE "COBOL".
-       PROCEDURE DIVISION.
-           DISPLAY "HELLO, " WS-NAME.
-           STOP RUN.""",
-                "after": [
-                    "Each division has a job: `IDENTIFICATION` states the program's identity, `DATA` describes the data, and `PROCEDURE` holds the executable steps. `01` defines a record or field, and `PIC X(10)` means ten character positions.",
-                    "To run something, start with [lesson 01](lessons/01_hello-cobol/README.html); to look up statements and data-definition rules, use the [reference sheet](reference.html).",
-                ],
-            },
-        ],
-    },
-    "ja": {
-        "eyebrow": "BACKGROUND",
-        "title": "COBOL とは",
-        "lead": "COBOL は業務データ処理のためのプログラミング言語です。英語に近い文でレコード・ファイル・バッチ処理を記述します。1959 年に米国防総省の後押しで複数のメーカーと政府機関が共同設計し、現在も銀行・保険・行政などの基幹帳票処理やバッチ処理の多くを担っています。",
-        "source_note": "本ページの史実は COBOL の公開された歴史資料と ISO 標準番号に基づいています。",
-        "sections": [
-            {
-                "id": "what",
-                "title": "どんな言語か",
-                "kind": "prose",
-                "body": [
-                    "COBOL は Common Business-Oriented Language の略で、対象は**業務データ処理**です。科学技術計算でもシステムプログラミングでもありません。この目的が言語の形を決めました。英語に近い文、データ記述と実行命令の分離、固定長レコードとファイル処理の重視、そしてマシン間の移植性です。",
-                    "現在の読者にとって重要な点は三つです。",
-                ],
-                "bullets": [
-                    "**ファイルとレコードが中心**：固定長レコード、順編成ファイル、ソートと突合が主戦場で、本コースの全サンプルもこのモデルに乗っています。",
-                    "**簡潔さより可読性**：文が長く予約語が多いのは意図的な選択で、業務担当者が読め、次世代が保守できることを狙っています。",
-                    "**コンパイル言語**：ソースは `cobc` でネイティブ実行ファイルに変換されます。スクリプトではありません。",
-                ],
-                "after": [
-                    "一言でいえば、業務ルールを英語に近い固定形式のテキストで書き、コンパイラがそれをメインフレームや Linux で長期運用できるバッチ処理プログラムに変換する言語です。",
-                ],
-            },
-            {
-                "id": "origin",
-                "title": "成り立ち",
-                "kind": "timeline",
-                "intro": "COBOL は一人が一夜で作ったものではなく、ベンダー横断の標準化の取り組みから生まれました。",
-                "items": [
-                    ("1959-04-08", "最初の会合", "Burroughs の計算機科学者 Mary K. Hawes がペンシルバニア大学で学界・利用者・メーカーの代表を招集し、共通の業務用言語を検討しました。参加者には Grace Hopper、Jean Sammet、Saul Gorn が含まれます。"),
-                    ("1959-05-28", "ペンタゴン会議", "米国防総省の後援でペンタゴンに 41 名が集まり、Charles A. Phillips が議長を務めました。背景は現実的で、当時 225 台の計算機を運用し 175 台を追加発注、プログラムの移植費用が大きな負担でした。"),
-                    ("1959-06-04", "CODASYL 発足", "指導委員会はこの活動を CODASYL（Committee on Data Systems Languages）と命名し執行委員会を設置。短期委員会は 3 か月で暫定言語仕様を出すよう求められました。"),
-                    ("1960-04", "COBOL 60", "最初の仕様が CODASYL に提出されました。主に三つの言語を取り込んでいます。Grace Hopper の FLOW-MATIC（長い変数名、英語の命令語、データ記述と命令の分離）、IBM の COMTRAN、そして AIMACO です。"),
-                    ("1963", "文法の整理", "COBOL 60 には曖昧さが見つかり、委員会が体系的に整理しました。1963 年にはその文法は ALGOL と同程度に定義可能とされました。初期のコンパイラは低速で、1962 年の米海軍の評価では毎分 3〜11 文でした。"),
-                    ("1968-08", "最初の国家規格", "ANSI が USA Standard COBOL X3.23（ANS COBOL）を発行。後の各版の基盤となり、1972 年に ISO が採用しました。"),
-                    ("1974", "COBOL-74", "ANSI が改訂版を発行。CODASYL は 1968〜1973 年にプログラム間通信、デバッグ、ファイル併合、文字列処理、ライブラリ導入などを追加していました。"),
-                    ("1985", "COBOL-85", "もう一つの大改訂。草案が COBOL-74 と上位互換でなく、保険会社の 4000 万行の移行が「非生産的」と評され、最初の公開審査では 2200 件の意見のうち 1700 件が反対でした。"),
-                    ("2002", "オブジェクト指向", "ISO が COBOL 2002 を発行。オブジェクト指向、自由形式ソース、ユーザー定義関数、再帰、ロケール処理、拡張文字集合などを追加。多くは CODASYL の 1978 年開発誌に既出で、COBOL-85 に間に合わなかったものです。"),
-                    ("2014", "COBOL 2014", "VALIDATE、帳票作成機能、画面処理などを任意機能とし、IEEE 754 データ型とメソッド多重定義を追加しました。"),
-                    ("2023", "COBOL 2023", "最新規格。非同期メッセージ（`SEND`/`RECEIVE`）、トランザクション処理（`COMMIT`/`ROLLBACK`）、`XOR`、`PERFORM UNTIL EXIT`、`SUBSTITUTE`、`CONVERT` など。GCC 15.1 以降の `gcobol` はこの規格に基づきます。"),
-                ],
-                "after": [
-                    "現在の規格番号は **ISO/IEC 1989:2023** です。改訂を貫くテーマは「既存コードを壊さずに能力を足す」こと。これが COBOL プログラムが数十年動き続ける理由の一つです。",
-                ],
-            },
-            {
-                "id": "industries",
-                "title": "どこで使われているか",
-                "kind": "table",
-                "intro": "COBOL の既存資産は、取引量が多く、規則が安定し、失敗が高くつく領域に集中しています。",
-                "head": ["業界", "代表的な用途"],
-                "rows": [
-                    ("銀行・金融", "口座と帳簿、日次バッチ、突合、決済、利息と手数料の計算"),
-                    ("保険", "契約、請求、保険料計算、バッチ精算"),
-                    ("小売・流通", "在庫、決済、サプライチェーンのバッチ処理"),
-                    ("航空・旅行", "長期間運用される予約・運賃システム"),
-                    ("医療・公益", "請求や料金のバッチ処理"),
-                    ("政府機関", "税務、給付、社会保障などの基幹処理"),
-                ],
-                "after": [
-                    "動作する環境も幅広く、z/OS、z/VSE、VME、Unix、NonStop OS、OpenVMS、Windows などがあります。",
-                ],
-            },
-            {
-                "id": "legacy",
-                "title": "いま学ぶ意味",
-                "kind": "prose",
-                "body": [
-                    "資産規模は次の数字がよく表しています。",
-                ],
-                "bullets": [
-                    "1997 年の Gartner Group の推計：世界に約 **2000 億行**の COBOL コードがあり、業務プログラムの **80%** を動かしていました。",
-                    "2020 年前後：クレジット／デビットカードの読み取り時、**95%** のケースで COBOL がバックグラウンド処理を担っていました。",
-                    "2006 年と 2012 年の Computerworld 調査：**60%** を超える組織が COBOL を使い続け、その約半数では社内ソフトの大半を占めていました。",
-                    "2016 年の米下院監督・政府改革委員会の証言：米農務省、国土安全保障省、保健福祉省、司法省、財務省、退役軍人省、国税庁などが COBOL を使用していました。",
-                ],
-                "after": [
-                    "**Y2K（2000 年問題）**は COBOL が最後に一般の注目を集めた出来事です。業務システムは日付を多用し固定長項目を使うため修正作業が集中し、Y2K 修正費用の最大 **24%** を COBOL に帰する研究もあります。対応後、2003 年の調査でも多くのプログラムが現役でした。",
-                    "**人材不足**が現在の実際的な課題です。2019 年までに COBOL プログラマーは退職により急速に減少し、一方で既存システムの書き換えは高コストでリスクも大きく、一部の銀行の複数年にわたる移行はサービス障害と制裁金を招きました。COVID-19 期には、米国の複数州が失業給付システムで COBOL プログラマー不足を公表しています。",
-                    "したがって本コースの価値は「新しさ」ではなく、**数十年本番稼働してきたバッチ処理プログラムを読み、安全に変更できるようになること**にあります。コンパイラ診断、構造ナビゲーション、テストといった現代の道具で保守できる状態を目指します。",
-                ],
-            },
-            {
-                "id": "shape",
-                "title": "実際のコード",
-                "kind": "code",
-                "intro": "最小の実行可能な固定形式プログラムです。先頭 7 列は空け、8 列目から本文を書きます。",
-                "code": """       IDENTIFICATION DIVISION.
-       PROGRAM-ID. HELLO.
-       DATA DIVISION.
-       WORKING-STORAGE SECTION.
-       01 WS-NAME PIC X(10) VALUE "COBOL".
-       PROCEDURE DIVISION.
-           DISPLAY "HELLO, " WS-NAME.
-           STOP RUN.""",
-                "after": [
-                    "4 つの DIVISION が役割を分担します。`IDENTIFICATION` はプログラムの身元、`DATA` はデータ、`PROCEDURE` は実行手順です。`01` はレコードや項目の定義、`PIC X(10)` は 10 文字分を意味します。",
-                    "実際に動かすには[第 01 課](lessons/01_hello-cobol/README.html)から始め、文やデータ定義の規則を調べるには[クイックリファレンス](reference.html)を使ってください。",
-                ],
-            },
-        ],
-    },
+    "zh-cn": {'eyebrow': 'BACKGROUND',
+     'title': 'COBOL 是什么',
+     'lead': 'COBOL 是一门为**商业数据处理**而生的语言：它用接近英语的句子描述记录、文件和整批作业，写给要长期维护的账务系统看。1959 '
+             '年由美国国防部牵头、多家厂商与政府机构共同设计；六十多年后，银行、保险、政务系统的日终批处理里仍有大量程序是它写的。下面按时间讲清楚它为什么长成这样，以及今天的 GnuCOBOL 又是从哪儿来的。',
+     'source_note': '本页史实依据 COBOL 的公开历史资料、ISO 标准编号，以及 GnuCOBOL 源码仓库中的 AUTHORS / THANKS / ChangeLog 整理。',
+     'sections': [{'id': 'what',
+                   'title': '它是什么',
+                   'kind': 'prose',
+                   'body': ['COBOL 是 **Common Business-Oriented Language** '
+                            '的缩写。它的定位从名字就写死了：处理商业数据，不是科学计算，也不是写操作系统。',
+                            '要理解它为什么长得跟现代语言不一样，得先知道它面向的活儿是什么样：**每天夜里，把成千上万条交易记录逐条过一遍账**。这种活儿的特点不是算得复杂，而是量极大、规则几十年不变、出错就是真金白银的账目错误。所以它的设计处处优先「稳」和「读得懂」：'],
+                   'bullets': ['**数据描述与执行步骤分开写**：先在一处声明「一条记录有多宽、每个字段多少位」，再在另一处写「怎么处理」。这个分离是为了让程序能跨机器移植——当年每台机器的数据表示都不一样。',
+                               '**代码写得像英语**：`ADD 1 TO WS-COUNT`、`IF WS-STATUS = '
+                               "'A'`。刻意的啰嗦，为了业务人员能看懂、为了让二十年后接手的人不必猜。",
+                               '**定长记录、顺序文件、排序对账是主场**：这门课的全部示例都建立在这套模型上。',
+                               '**它是编译型语言**：源码经 `cobc` 编译成原生可执行程序，不是脚本。'],
+                   'after': ['一句话概括：COBOL 把业务规则写成接近英语的固定格式文本，交给编译器变成能在大型机或 Linux 上连续跑几十年的批处理程序。']},
+                  {'id': 'origin',
+                   'title': '它从何而来：一场被逼出来的联合行动',
+                   'kind': 'timeline',
+                   'intro': 'COBOL 不是谁一拍脑袋发明的。它诞生于一个很具体的问题：**美国政府买了太多不同牌子的计算机，程序却没法互相搬。**',
+                   'items': [('1959-04-08',
+                              '先有人提议',
+                              'Burroughs 的计算机科学家 **Mary K. Hawes** '
+                              '在宾夕法尼亚大学召集学界、用户与厂商代表开会，议题只有一个：要不要搞一门通用的商业语言。与会者里有 Grace Hopper、Jean Sammet 和 Saul '
+                              'Gorn。'),
+                             ('1959-05-28',
+                              '五角大楼拍板',
+                              '一个月后，美国国防部出资在五角大楼开会，41 人参加，由 Charles A. Phillips 主持。**为什么军方这么急**：当时国防部自己有 225 '
+                              '台计算机，还有 175 台正在订购，型号各不相同。每换一次机器就要重写一遍程序，采购和迁移成本高得离谱。统一语言直接等于省钱。'),
+                             ('1959-06-04',
+                              '成立组织',
+                              '指导委员会把这项活动命名为 **CODASYL**（Committee on Data Systems '
+                              'Languages），并成立执行委员会。短期委员会被要求三个月内交出临时语言规范——这个死线逼出了后来 COBOL 60 的雏形。'),
+                             ('1960-04',
+                              'COBOL 60 问世',
+                              '第一版规范提交给 CODASYL。它主要吸收了三门语言的经验：Grace Hopper 的 '
+                              '**FLOW-MATIC**（长变量名、英语命令、数据与指令分离——COBOL 最核心的两个特征都来自这里）、IBM 的 **COMTRAN**，以及 '
+                              'AIMACO。'),
+                             ('1963',
+                              '把语法理清楚',
+                              'COBOL 60 被发现存在歧义，委员会做了系统性清理。到 1963 年，其语法的可定义程度已与 ALGOL 相当。早期编译器非常慢：1962 '
+                              '年一次美国海军评测记录的速度是**每分钟 3–11 条语句**——一条几百行的程序要编译十几分钟。'),
+                             ('1968-08',
+                              '成为国家标准',
+                              'ANSI 发布 USA Standard COBOL X3.23（即 ANS COBOL），成为后续各版的基石；ISO 于 1972 '
+                              '年采纳。从这一刻起，COBOL 不再是某家厂商的方言，而是有正式标准约束的语言。'),
+                             ('1974',
+                              'COBOL-74',
+                              'ANSI 发布修订版。此前 CODASYL 在 1968–1973 年间持续改进语言，加入程序间通信、调试、文件合并、字符串处理与库引入等能力。'),
+                             ('1985',
+                              'COBOL-85：最大的一次争议',
+                              '这次修订动静很大：草案与 COBOL-74 **不向上兼容**，保险公司一个 4000 万行的代码库面临迁移，被公开形容为「非生产性工作」。第一轮公开评审收到 '
+                              '2200 份意见，其中 **1700 份是反对**。但标准最终还是推行了——而「改语言要小心别把存量代码搞死」也从此成了 COBOL 演进的第一原则。'),
+                             ('2002',
+                              '面向对象',
+                              'ISO 发布 COBOL 2002，加入面向对象、自由格式源码、用户自定义函数、递归、区域设置与扩展字符集。有意思的是，这些特性多数在 CODASYL 1978 '
+                              '年的开发期刊里就已经提过，只是错过了 COBOL-85 那一班车。'),
+                             ('2014', 'COBOL 2014', '把部分设施改为可选（如 VALIDATE、报表写出器、屏幕处理），引入 IEEE 754 数据类型与方法重载。'),
+                             ('2023',
+                              'COBOL 2023',
+                              '最新标准：异步消息（`SEND`/`RECEIVE`）、事务处理（`COMMIT`/`ROLLBACK`）、`XOR`、`PERFORM UNTIL '
+                              'EXIT`、`SUBSTITUTE`、`CONVERT` 等。GCC 15.1 起自带的 `gcobol` 即基于此标准。')],
+                   'after': ['当前标准编号是 **ISO/IEC 1989:2023**。六十四年、十来个版本，主线始终是同一句话：**在不破坏既有代码的前提下增加能力**。这也解释了为什么一段 '
+                             '1980 年代的 COBOL 程序，今天还能原样编译、原样运行。']},
+                  {'id': 'gnucobol',
+                   'title': 'GnuCOBOL 又是从哪儿来的',
+                   'kind': 'prose',
+                   'body': ['上面讲的是**语言标准**。标准只是纸面规范，真正把 `.cob` '
+                            '文件变成能跑的程序，需要一个**编译器**。过去这类编译器都是商业软件，装在昂贵的大型机上，个人和小团队根本碰不到。GnuCOBOL 就是把这个门槛拆掉的那个项目。',
+                            '它的路走得挺绕：'],
+                   'bullets': ['**2002 年 1 月**，日本开发者 **西田圭介（Keisuke Nishida）** 发布了 **OpenCOBOL** 0.9：一个用 C '
+                               '语言写的自由 COBOL 编译器。它的做法很聪明——不直接生成机器码，而是**把 COBOL 翻译成 C**，再交给系统上的 C 编译器编译。于是只要有 '
+                               'gcc，任何平台都能跑 COBOL。',
+                               '**2009 年** OpenCOBOL 1.1 发布。之后项目一度缺少维护者。',
+                               '**2013 年**，OpenCOBOL 被接纳为 GNU 项目并改名为 **GnuCOBOL**，2014 年 1 月发布 GnuCOBOL '
+                               '1.1。改名的同时，社区开始接手长期维护——其中出力最多的是 **Roger While**（1950–2015）和德国的 **Simon Sobisch**。',
+                               '**今天**，GnuCOBOL 的 THANKS 文件里列出的维护者是 **Keisuke Nishida**（原始作者）、**Roger '
+                               'While**（2015 年去世）和 **Simon Sobisch**；活跃开发在 GNU 与 SourceForge 上进行，当前稳定版是 3.2（2023 '
+                               '年 7 月），4.0 正在开发。'],
+                   'after': ['**为什么这件事重要**：GnuCOBOL 让 COBOL 从「只有大机构才玩得起」变成了「`apt install gnucobol` 就能学」。它实现了 '
+                             'COBOL 85、2002、2014 标准的很大一部分，还支持 JD Edwards、Micro Focus、IBM 等厂商的扩展方言。',
+                             '这门课用的就是它。你在[第 01 课](lessons/01_hello-cobol/README.html)里敲的第一个 `cobc` 命令，编译的就是 '
+                             'GnuCOBOL。']},
+                  {'id': 'industries',
+                   'title': '它今天还在哪些地方跑',
+                   'kind': 'table',
+                   'intro': 'COBOL 的存量集中在一类场景：**交易量大、规则稳定、错一笔都是钱**。这些系统换掉的成本极高，所以它们一直在跑。',
+                   'head': ['行业', '典型用途'],
+                   'rows': [('银行与金融', '账户与账务、日终批处理、对账、清算、利息与费用计算'),
+                            ('保险', '保单、理赔、保费计算与批量结算'),
+                            ('零售与流通', '库存、结算、供应链批处理'),
+                            ('航空与旅行', '订座与运价等长期运行的交易系统'),
+                            ('医疗与公共事业', '理赔与缴费等批量处理'),
+                            ('政府机构', '税务、福利、社保等大型事务处理系统')],
+                   'after': ['运行平台同样很广：z/OS、z/VSE、VME、Unix、NonStop OS、OpenVMS、Windows 等。']},
+                  {'id': 'legacy',
+                   'title': '为什么它还没被替换掉',
+                   'kind': 'prose',
+                   'body': ['常有人问：这么老的语言，为什么不重写？答案不是「懒」，而是**重写的风险比维护更大**。下面这组数字说明存量有多大：'],
+                   'bullets': ['1997 年 Gartner Group 的估算：全世界约有 **2000 亿行** COBOL 代码，承载了商业程序中的 '
+                               '**80%**。这个数字流传很广，也要打折看——它的统计口径一直有争议，但量级是公认的。',
+                               '2020 年前后：**95%** 的信用卡/借记卡刷卡交易，后台处理都经过 COBOL 程序。也就是说你每天刷卡，几乎必然碰到它。',
+                               '2006 与 2012 年 Computerworld 的调查：超过 **60%** 的组织仍在使用 COBOL，其中约一半把它用于大部分内部软件。',
+                               '2016 年美国众议院监督与政府改革委员会听证会记录：美国农业部、国土安全部、卫生与公众服务部、司法部、财政部、退伍军人事务部、国税局等机构仍在使用 '
+                               'COBOL。'],
+                   'after': ['**千年虫（Y2K）**是 COBOL 最近一次被大众注意到。为什么偏偏是它？因为商业系统大量用日期做键、数据又是定长字段，存两位年份的地方全要改。有研究把高达 '
+                             '**24%** 的 Y2K 修复成本归因于 COBOL。而清理完之后，2003 年的一次调查发现这些程序大多仍在服役——修完继续用，而不是趁机重写。',
+                             '**人才缺口**是当下更实在的问题：到 2019 年，COBOL '
+                             '程序员因退休而快速减少，而重写既有系统的成本高、风险大——一些银行的多年度迁移项目曾造成服务中断并招致罚款。COVID-19 期间，美国多个州的失业救济系统出现 '
+                             'COBOL 程序员短缺，还上了新闻。',
+                             '所以这门课的价值不在「追新」，而在于：**能读懂并安全修改已经在生产环境里跑了几十年的批处理程序**，同时用现代工具（编译器诊断、结构导航、测试）把它维护好。']},
+                  {'id': 'shape',
+                   'title': '它长什么样',
+                   'kind': 'code',
+                   'intro': '一个最小可运行的固定格式程序。前七列留空，第 8 列起写程序正文——第 01 课有一张列布局图专门解释这件事：',
+                   'code': '       IDENTIFICATION DIVISION.\n'
+                           '       PROGRAM-ID. HELLO.\n'
+                           '       DATA DIVISION.\n'
+                           '       WORKING-STORAGE SECTION.\n'
+                           '       01 WS-NAME PIC X(10) VALUE "COBOL".\n'
+                           '       PROCEDURE DIVISION.\n'
+                           '           DISPLAY "HELLO, " WS-NAME.\n'
+                           '           STOP RUN.',
+                   'after': ['四个 Division 各司其职：`IDENTIFICATION` 说明程序身份，`DATA` 描述数据，`PROCEDURE` 写执行步骤。`01` '
+                             '定义记录或字段，`PIC X(10)` 表示 10 个字符位置。',
+                             '想动手跑起来，从[第 01 '
+                             '课](lessons/01_hello-cobol/README.html)开始；想查语句与字段定义规则，用[速查手册](reference.html)。想了解标准演进的细节，看[COBOL '
+                             '简史](history.html)。']}]},
+    "en": {'eyebrow': 'BACKGROUND',
+     'title': 'What is COBOL',
+     'lead': 'COBOL is a language built for **business data processing**: it describes records, files and whole '
+             'batch runs in sentences that read like English, written to be maintained for decades. The US '
+             'Department of Defense pressed for it in 1959, with manufacturers and government agencies designing '
+             'it together; sixty-odd years later, a large share of nightly batch work in banking, insurance and '
+             'government is still written in it. What follows is the story of why it looks the way it does — and '
+             "where today's GnuCOBOL came from.",
+     'source_note': "Facts here follow COBOL's public history, the ISO standard numbers, and the AUTHORS / "
+                    'THANKS / ChangeLog files in the GnuCOBOL source tree.',
+     'sections': [{'id': 'what',
+                   'title': 'What it is',
+                   'kind': 'prose',
+                   'body': ['COBOL stands for **Common Business-Oriented Language**. The name pins down its '
+                            'purpose: business data, not scientific computing, not operating systems.',
+                            'To see why it looks unlike modern languages, first look at the work it was built '
+                            'for: **every night, walk tens of thousands of transaction records through an '
+                            'accounting pass.** The difficulty is not cleverness — it is volume, rules that hold '
+                            'for decades, and errors that become real money. So everything in the design favours '
+                            '*stability* and *legibility*:'],
+                   'bullets': ['**Data description is separate from the procedure**: declare once how wide a '
+                               'record is and how many positions each field has, then write elsewhere what to do '
+                               'with it. That split is what made programs portable — every machine represented '
+                               'data differently at the time.',
+                               "**Code reads like English**: `ADD 1 TO WS-COUNT`, `IF WS-STATUS = 'A'`. The "
+                               'verbosity is deliberate, so business staff can read it and whoever inherits it '
+                               'in twenty years does not have to guess.',
+                               '**Fixed-length records, sequential files, sorting and reconciliation are its '
+                               'home ground**: every example in this course uses that model.',
+                               '**It is compiled**: source goes through `cobc` into a native executable, not a '
+                               'script.'],
+                   'after': ['In one line: COBOL writes business rules as near-English fixed-format text, and a '
+                             'compiler turns them into batch programs that run for decades on a mainframe or on '
+                             'Linux.']},
+                  {'id': 'origin',
+                   'title': 'Where it came from: a forced collaboration',
+                   'kind': 'timeline',
+                   'intro': 'COBOL was not invented in a flash. It came out of one concrete problem: **the US '
+                            'government had bought too many incompatible computers, and programs could not move '
+                            'between them.**',
+                   'items': [('1959-04-08',
+                              'Someone proposes it',
+                              '**Mary K. Hawes**, a computer scientist at Burroughs, gathered academics, users '
+                              'and manufacturers at the University of Pennsylvania with one question: do we need '
+                              'a common business language? Attendees included Grace Hopper, Jean Sammet and Saul '
+                              'Gorn.'),
+                             ('1959-05-28',
+                              'The Pentagon commits',
+                              'A month later the US Department of Defense funded a meeting at the Pentagon: 41 '
+                              'people, chaired by Charles A. Phillips. **Why the urgency**: the department '
+                              'already ran 225 computers and had another 175 on order, all different models. '
+                              'Every machine change meant rewriting the software, so procurement and migration '
+                              'costs were spiralling. One common language was, quite literally, a cost saving.'),
+                             ('1959-06-04',
+                              'An organisation forms',
+                              'The steering committee named the effort **CODASYL** (Committee on Data Systems '
+                              'Languages) and set up an executive committee. A short-range committee was given '
+                              'three months to produce an interim language specification — that deadline '
+                              'produced the draft that became COBOL 60.'),
+                             ('1960-04',
+                              'COBOL 60 arrives',
+                              'The first specification went to CODASYL. It drew mainly on three languages: Grace '
+                              "Hopper's **FLOW-MATIC** (long names, English verbs, data separated from "
+                              "instructions — COBOL's two defining traits come from here), IBM's **COMTRAN**, "
+                              'and AIMACO.'),
+                             ('1963',
+                              'Clearing up the grammar',
+                              'COBOL 60 turned out to be ambiguous, and the committee cleaned it up '
+                              "systematically. By 1963 its grammar was about as definable as ALGOL's. Early "
+                              'compilers were painfully slow: a 1962 US Navy evaluation recorded **3–11 '
+                              'statements per minute** — a few hundred lines took a quarter of an hour to '
+                              'compile.'),
+                             ('1968-08',
+                              'A national standard',
+                              'ANSI published USA Standard COBOL X3.23 (ANS COBOL), the basis for every later '
+                              'edition; ISO adopted it in 1972. From then on COBOL was no longer a vendor '
+                              'dialect but a language governed by a formal standard.'),
+                             ('1974',
+                              'COBOL-74',
+                              'ANSI published a revision. CODASYL had spent 1968–1973 adding inter-program '
+                              'communication, debugging, file merge, string handling and library facilities.'),
+                             ('1985',
+                              'COBOL-85: the loudest fight',
+                              'This revision was disruptive: the draft was **not upward compatible** with '
+                              'COBOL-74, and one insurer faced migrating a 40-million-line codebase, publicly '
+                              'called unproductive work. The first public review drew 2,200 comments, **1,700 of '
+                              'them objections**. The standard went ahead anyway — and "do not break existing '
+                              'code" became COBOL\'s first rule of evolution.'),
+                             ('2002',
+                              'Object orientation',
+                              'ISO published COBOL 2002: object orientation, free-format source, user-defined '
+                              'functions, recursion, locale handling and extended character sets. Most of these '
+                              "had already appeared in CODASYL's 1978 development journal, and simply missed the "
+                              'COBOL-85 train.'),
+                             ('2014',
+                              'COBOL 2014',
+                              'Made some facilities optional (VALIDATE, the report writer, screen handling) and '
+                              'added IEEE 754 data types and method overloading.'),
+                             ('2023',
+                              'COBOL 2023',
+                              'The current standard: asynchronous messaging (`SEND`/`RECEIVE`), transaction '
+                              'processing (`COMMIT`/`ROLLBACK`), `XOR`, `PERFORM UNTIL EXIT`, `SUBSTITUTE`, '
+                              '`CONVERT` and more. The `gcobol` front end shipped with GCC 15.1 follows this '
+                              'standard.')],
+                   'after': ['The current standard is **ISO/IEC 1989:2023**. Sixty-four years and a dozen '
+                             'editions, with one constant theme: **add capability without breaking existing '
+                             'code**. Which is why a 1980s COBOL program can still compile and run unchanged '
+                             'today.']},
+                  {'id': 'gnucobol',
+                   'title': 'Where GnuCOBOL came from',
+                   'kind': 'prose',
+                   'body': ['All of that is the **language standard**. A standard is only paper; turning a '
+                            '`.cob` file into a running program needs a **compiler**. Those used to be '
+                            'commercial products installed on expensive mainframes, out of reach for individuals '
+                            'and small teams. GnuCOBOL is the project that removed that barrier.',
+                            'Its path was indirect:'],
+                   'bullets': ['**January 2002**: Japanese developer **Keisuke Nishida** released **OpenCOBOL** '
+                               '0.9, a free COBOL compiler written in C. The trick was clever — it does not emit '
+                               'machine code directly but **translates COBOL into C** and hands that to the '
+                               'system C compiler. Anywhere a C compiler exists, COBOL runs.',
+                               '**2009**: OpenCOBOL 1.1 shipped. Afterwards the project went through a period '
+                               'without a maintainer.',
+                               '**2013**: OpenCOBOL was accepted as a GNU project and renamed **GnuCOBOL**; '
+                               'version 1.1 followed in January 2014. With the rename, the community took over '
+                               "long-term maintenance — **Roger While** (1950–2015) and Germany's **Simon "
+                               'Sobisch** contributing most.',
+                               '**Today** the GnuCOBOL THANKS file lists **Keisuke Nishida** (original author), '
+                               '**Roger While** (died 2015) and **Simon Sobisch** as past and present '
+                               'maintainers. Development runs on GNU and SourceForge infrastructure; the current '
+                               'stable release is 3.2 (July 2023), with 4.0 in development.'],
+                   'after': ['**Why this matters**: GnuCOBOL turned COBOL from something only large institutions '
+                             'could afford into something you install with `apt install gnucobol`. It implements '
+                             'a large part of COBOL 85, 2002 and 2014, and supports vendor extensions such as JD '
+                             'Edwards, Micro Focus and IBM dialects.',
+                             'It is what this course uses. The first `cobc` command you type in [Lesson '
+                             '01](lessons/01_hello-cobol/README.html) is GnuCOBOL.']},
+                  {'id': 'industries',
+                   'title': 'Where it still runs',
+                   'kind': 'table',
+                   'intro': "COBOL's installed base sits where **volume is high, rules are stable, and one wrong "
+                            'entry costs money**. Replacing those systems is expensive, so they keep running.',
+                   'head': ['Industry', 'Typical use'],
+                   'rows': [('Banking and finance',
+                             'Accounts and ledgers, end-of-day batch, reconciliation, clearing, interest and '
+                             'fees'),
+                            ('Insurance', 'Policies, claims, premium calculation and batch settlement'),
+                            ('Retail and distribution', 'Inventory, settlement, supply-chain batch'),
+                            ('Airline and travel', 'Reservation and fare systems that run for decades'),
+                            ('Healthcare and utilities', 'Claims and billing batch processing'),
+                            ('Government', 'Tax, benefits and social-security transaction systems')],
+                   'after': ['The platforms are just as broad: z/OS, z/VSE, VME, Unix, NonStop OS, OpenVMS, '
+                             'Windows and more.']},
+                  {'id': 'legacy',
+                   'title': 'Why it has not been replaced',
+                   'kind': 'prose',
+                   'body': ['People ask why such an old language is not simply rewritten. The answer is not '
+                            'laziness: **rewriting carries more risk than maintaining**. These numbers show the '
+                            'size of the estate:'],
+                   'bullets': ["Gartner Group's 1997 estimate: about **200 billion lines** of COBOL worldwide, "
+                               'carrying **80%** of business programs. The figure is widely quoted and should be '
+                               'read with care — its methodology has always been disputed — but the order of '
+                               'magnitude is not.',
+                               'Around 2020: **95%** of credit and debit card swipes are processed by COBOL on '
+                               'the back end. Every card you tap almost certainly touches it.',
+                               'Computerworld surveys in 2006 and 2012: over **60%** of organisations still used '
+                               'COBOL, about half of them for most of their internal software.',
+                               'A 2016 US House Committee on Oversight and Government Reform hearing recorded '
+                               'COBOL still in use at the Departments of Agriculture, Homeland Security, Health '
+                               'and Human Services, Justice, Treasury, Veterans Affairs and the IRS.'],
+                   'after': ['**Y2K** was the last time the public noticed. Why COBOL specifically? Business '
+                             'systems keyed on dates and stored fixed-length fields, so every two-digit year had '
+                             'to be changed. One study attributed up to **24%** of Y2K remediation cost to '
+                             'COBOL. And after the cleanup, a 2003 survey found most of those programs still in '
+                             'service — repaired and kept, not replaced.',
+                             '**The skills gap** is the more practical problem now: by 2019 COBOL programmers '
+                             'were retiring faster than they could be replaced, while rewriting carried high '
+                             "cost and risk — several banks' multi-year migrations caused outages and fines. "
+                             'During COVID-19, unemployment-benefit systems in several US states ran short of '
+                             'COBOL programmers, and it made the news.',
+                             'So the value of this course is not novelty. It is being able to **read and safely '
+                             'change batch programs that have run in production for decades**, and to maintain '
+                             'them with modern tools: compiler diagnostics, structural navigation, tests.']},
+                  {'id': 'shape',
+                   'title': 'What it looks like',
+                   'kind': 'code',
+                   'intro': 'A minimal runnable fixed-format program. The first seven columns stay blank; the '
+                            'body starts in column 8 — Lesson 01 has a column map that explains exactly why:',
+                   'code': '       IDENTIFICATION DIVISION.\n'
+                           '       PROGRAM-ID. HELLO.\n'
+                           '       DATA DIVISION.\n'
+                           '       WORKING-STORAGE SECTION.\n'
+                           '       01 WS-NAME PIC X(10) VALUE "COBOL".\n'
+                           '       PROCEDURE DIVISION.\n'
+                           '           DISPLAY "HELLO, " WS-NAME.\n'
+                           '           STOP RUN.',
+                   'after': ['Each Division has one job: `IDENTIFICATION` identifies the program, `DATA` '
+                             'describes the data, `PROCEDURE` holds the steps. `01` defines a record or field, '
+                             'and `PIC X(10)` means ten character positions.',
+                             'To run something, start with [Lesson 01](lessons/01_hello-cobol/README.html); for '
+                             'statement and field rules use the [reference sheet](reference.html). For the '
+                             "standard's evolution in detail, see the [COBOL history](history.html)."]}]},
+    "ja": {'eyebrow': 'BACKGROUND',
+     'title': 'COBOL とは',
+     'lead': 'COBOL は**業務データ処理**のために作られた言語です。レコード、ファイル、バッチ全体を英語に近い文で記述し、何十年も保守されることを前提に書きます。1959 '
+             '年に米国防総省が主導し、メーカーと政府機関が共同で設計しました。60 余年たった今も、銀行・保険・行政の夜間バッチの多くは COBOL '
+             'で書かれています。ここでは、なぜ今の形になったのか、そして現在の GnuCOBOL がどこから来たのかを順に説明します。',
+     'source_note': '本ページの史実は COBOL の公開された歴史資料、ISO 標準番号、および GnuCOBOL ソースツリーの AUTHORS / THANKS / ChangeLog '
+                    'に基づきます。',
+     'sections': [{'id': 'what',
+                   'title': 'どんな言語か',
+                   'kind': 'prose',
+                   'body': ['COBOL は **Common Business-Oriented Language** の略です。名前がそのまま目的を示しています。科学技術計算でも OS '
+                            'でもなく、業務データを扱う言語です。',
+                            '現代の言語と見た目が違う理由を知るには、まず想定された仕事を見る必要があります。**毎晩、何万件もの取引レコードを 1 '
+                            '件ずつ会計処理に通す**。難しいのは計算ではなく、量が膨大で、規則が何十年も変わらず、1 '
+                            '件の誤りがそのまま金額の誤りになることです。だから設計は「安定」と「読めること」を優先します：'],
+                   'bullets': ['**データ定義と手続きを分ける**：レコードの幅と各項目の桁数を一箇所で宣言し、別の場所に処理を書く。この分離が移植性を生みました。当時は機械ごとにデータ表現が違ったからです。',
+                               "**英語のように読める**：`ADD 1 TO WS-COUNT`、`IF WS-STATUS = 'A'`。冗長なのは意図的で、業務担当者が読め、20 "
+                               '年後に引き継ぐ人が推測しなくて済むようにするためです。',
+                               '**固定長レコード、順次ファイル、ソートと突合が主戦場**：本コースの例はすべてこのモデルに乗っています。',
+                               '**コンパイル型**：ソースは `cobc` でネイティブな実行ファイルになります。スクリプトではありません。'],
+                   'after': ['一行でいえば、COBOL は業務規則を英語に近い固定形式テキストで書き、コンパイラがそれをメインフレームや Linux '
+                             'で何十年も動くバッチプログラムに変えます。']},
+                  {'id': 'origin',
+                   'title': '成り立ち：押し付けられた協同作業',
+                   'kind': 'timeline',
+                   'intro': 'COBOL は誰かが一夜で作ったものではありません。**米政府が互換性のない計算機を買いすぎて、プログラムが持ち運べなくなった**という具体的な問題から生まれました。',
+                   'items': [('1959-04-08',
+                              '発案',
+                              'Burroughs の計算機科学者 **Mary K. Hawes** '
+                              'がペンシルベニア大学で学界・利用者・メーカーの代表を集め、「共通の業務言語は必要か」を議題にしました。参加者には Grace Hopper、Jean '
+                              'Sammet、Saul Gorn がいました。'),
+                             ('1959-05-28',
+                              '国防総省が動く',
+                              '1 か月後、米国防総省の資金でペンタゴンに 41 人が集まり、Charles A. Phillips が議長を務めました。**なぜ急いだのか**：当時すでに '
+                              '225 台の計算機を運用し、さらに 175 '
+                              '台を発注中で、機種はばらばらでした。機種を変えるたびにソフトを書き直すため、調達と移行の費用が膨らんでいたのです。共通言語はそのままコスト削減でした。'),
+                             ('1959-06-04',
+                              '組織づくり',
+                              ' steering committee はこの活動を **CODASYL**（Committee on Data Systems '
+                              'Languages）と名づけ、実行委員会を設置。短期委員会には 3 か月で暫定仕様を出す期限が課され、それが COBOL 60 の原型になりました。'),
+                             ('1960-04',
+                              'COBOL 60 の登場',
+                              '最初の仕様が CODASYL に提出されました。主に 3 つの言語の経験を取り入れています。Grace Hopper の '
+                              '**FLOW-MATIC**（長い名前、英語の動詞、データと命令の分離 — COBOL の中心的な特徴はここから来ています）、IBM の '
+                              '**COMTRAN**、そして AIMACO です。'),
+                             ('1963',
+                              '文法の整理',
+                              'COBOL 60 には曖昧さが見つかり、委員会が体系的に整理しました。1963 年までに文法の定義可能度は ALGOL '
+                              'と同程度になっています。初期のコンパイラは非常に遅く、1962 年の米海軍による評価では**毎分 3〜11 '
+                              '文**でした。数百行のプログラムのコンパイルに十数分かかった計算です。'),
+                             ('1968-08',
+                              '国家標準に',
+                              'ANSI が USA Standard COBOL X3.23（ANS COBOL）を発行し、以降の版の基礎になりました。ISO は 1972 '
+                              '年に採用しています。これ以降 COBOL は特定ベンダーの方言ではなく、正式な標準に従う言語になりました。'),
+                             ('1974',
+                              'COBOL-74',
+                              'ANSI が改訂版を発行。CODASYL は 1968〜1973 '
+                              '年にプログラム間通信、デバッグ、ファイル併合、文字列処理、ライブラリ導入などを追加していました。'),
+                             ('1985',
+                              'COBOL-85：最大の論争',
+                              'この改訂は大きな波紋を呼びました。草案は COBOL-74 と**上方互換がなく**、保険会社の 4,000 '
+                              '万行のコードベースが移行を迫られ、「非生産的」と評されました。最初の公開レビューには 2,200 件の意見が寄せられ、うち **1,700 '
+                              '件が反対**でした。それでも標準は進み、「既存コードを壊さない」が COBOL 進化の第一原則になりました。'),
+                             ('2002',
+                              'オブジェクト指向',
+                              'ISO が COBOL 2002 を発行。オブジェクト指向、自由形式ソース、ユーザー定義関数、再帰、ロケール、拡張文字集合が入りました。多くは CODASYL の '
+                              '1978 年の開発誌ですでに提案されていたもので、COBOL-85 に間に合わなかっただけでした。'),
+                             ('2014',
+                              'COBOL 2014',
+                              '一部の機能を任意化し（VALIDATE、帳票作成、画面処理）、IEEE 754 データ型とメソッドの多重定義を追加しました。'),
+                             ('2023',
+                              'COBOL 2023',
+                              '最新標準。非同期メッセージ（`SEND`/`RECEIVE`）、トランザクション処理（`COMMIT`/`ROLLBACK`）、`XOR`、`PERFORM '
+                              'UNTIL EXIT`、`SUBSTITUTE`、`CONVERT` など。GCC 15.1 付属の `gcobol` はこの標準に基づきます。')],
+                   'after': ['現在の標準番号は **ISO/IEC 1989:2023**。64 年で十数版、一貫しているのは**既存コードを壊さずに能力を増やす**こと。1980 年代の '
+                             'COBOL プログラムが今もそのままコンパイルして動く理由がここにあります。']},
+                  {'id': 'gnucobol',
+                   'title': 'GnuCOBOL はどこから来たか',
+                   'kind': 'prose',
+                   'body': ['ここまでは**言語標準**の話です。標準は紙の上の仕様で、`.cob` '
+                            'を動くプログラムにするには**コンパイラ**が要ります。以前は商用製品で高価なメインフレームに載るものばかりで、個人や小さなチームには手が届きませんでした。その壁を壊したのが '
+                            'GnuCOBOL です。',
+                            '道のりはやや込み入っています：'],
+                   'bullets': ['**2002 年 1 月**、日本の開発者 **西田圭介（Keisuke Nishida）** が **OpenCOBOL** 0.9 を公開しました。C '
+                               'で書かれた自由な COBOL コンパイラです。賢いのは、機械語を直接出さず **COBOL を C に変換**し、システムの C コンパイラに渡す方式。C '
+                               'コンパイラがある環境ならどこでも COBOL が動きます。',
+                               '**2009 年**に OpenCOBOL 1.1 が公開。その後、しばらく保守者が不在の時期がありました。',
+                               '**2013 年**に OpenCOBOL は GNU プロジェクトとして受け入れられ、**GnuCOBOL** に改名。2014 年 1 月に '
+                               'GnuCOBOL 1.1 が出ました。改名と同時にコミュニティが長期保守を引き受け、特に **Roger While**（1950–2015）とドイツの '
+                               '**Simon Sobisch** が大きく貢献しています。',
+                               '**現在**、GnuCOBOL の THANKS ファイルには **Keisuke Nishida**（原作者）、**Roger While**（2015 '
+                               '年没）、**Simon Sobisch** が過去および現行の保守者として挙げられています。開発は GNU と SourceForge 上で続き、安定版は '
+                               '3.2（2023 年 7 月）、4.0 が開発中です。'],
+                   'after': ['**なぜ重要か**：GnuCOBOL は COBOL を「大組織だけのもの」から「`apt install gnucobol` '
+                             'で学べるもの」に変えました。COBOL 85・2002・2014 の大部分を実装し、JD Edwards、Micro Focus、IBM などの拡張方言も扱えます。',
+                             '本コースが使っているのもこれです。[第 01 課](lessons/01_hello-cobol/README.html)で最初に打つ `cobc` は '
+                             'GnuCOBOL です。']},
+                  {'id': 'industries',
+                   'title': '今どこで動いているか',
+                   'kind': 'table',
+                   'intro': 'COBOL の既存資産は**取引量が多く、規則が安定し、1 件の誤りが金額になる**領域に集中しています。置き換えの費用が高いため、動き続けています。',
+                   'head': ['業界', '代表的な用途'],
+                   'rows': [('銀行・金融', '口座と元帳、日次バッチ、照合、決済、利息と手数料'),
+                            ('保険', '契約、請求、保険料計算、バッチ決済'),
+                            ('小売・流通', '在庫、決済、サプライチェーンのバッチ'),
+                            ('航空・旅行', '予約・運賃など長期運用の基幹システム'),
+                            ('医療・公益', '請求や料金のバッチ処理'),
+                            ('政府機関', '税務、給付、社会保障などの大規模処理')],
+                   'after': ['実行環境も広範です：z/OS、z/VSE、VME、Unix、NonStop OS、OpenVMS、Windows など。']},
+                  {'id': 'legacy',
+                   'title': 'なぜ置き換えられないのか',
+                   'kind': 'prose',
+                   'body': ['これほど古い言語をなぜ書き直さないのか。答えは怠慢ではなく、**書き直しのほうが保守より危険**だからです。規模を示す数字を挙げます：'],
+                   'bullets': ['1997 年の Gartner Group の推計：世界に約 **2,000 億行**の COBOL があり、業務プログラムの **80%** '
+                               'を担う。広く引用される数字ですが、算出方法には議論があり、桁感として読むべきです。',
+                               '2020 年前後：クレジット／デビットカード決済の **95%** がバックエンドで COBOL を通ります。毎日の支払いがほぼ確実に触れている計算です。',
+                               '2006 年と 2012 年の Computerworld 調査：**60%** 超の組織が COBOL '
+                               'を継続利用し、約半数が社内ソフトの大半に使っていました。',
+                               '2016 年の米下院監督政府改革委員会の公聴会記録：農務省、国土安全保障省、保健福祉省、司法省、財務省、退役軍人省、国税庁などが COBOL を現役で使用。'],
+                   'after': ['**2000 年問題（Y2K）**は COBOL が最後に世間の注目を浴びた出来事です。なぜ COBOL だったのか。業務システムが日付をキーにし、固定長項目に 2 '
+                             '桁の年を保存していたからです。Y2K 対応費用の最大 **24%** が COBOL 由来とする研究もあります。対応後、2003 '
+                             '年の調査ではそれらのプログラムの多くが現役のままでした。直して使い続けたのであり、書き直したのではありません。',
+                             '**人材不足**が今はより現実的な問題です。2019 年までに COBOL '
+                             '技術者は引退で急速に減り、書き直しは費用もリスクも大きいままでした。複数年の移行計画がサービス障害と制裁金につながった銀行もあります。COVID-19 '
+                             'の際には米国複数州の失業給付システムで COBOL 技術者不足が報じられました。',
+                             'したがって本コースの価値は新しさではなく、**何十年も本番で動いてきたバッチプログラムを読み、安全に変更できる**ようになること、そしてコンパイラ診断・構造ナビゲーション・テストといった現代の道具で保守できるようになることです。']},
+                  {'id': 'shape',
+                   'title': '実際のコード',
+                   'kind': 'code',
+                   'intro': '最小の実行可能な固定形式プログラムです。先頭 7 列は空け、8 列目から本文を書きます。理由は第 01 課の列レイアウト図で説明しています：',
+                   'code': '       IDENTIFICATION DIVISION.\n'
+                           '       PROGRAM-ID. HELLO.\n'
+                           '       DATA DIVISION.\n'
+                           '       WORKING-STORAGE SECTION.\n'
+                           '       01 WS-NAME PIC X(10) VALUE "COBOL".\n'
+                           '       PROCEDURE DIVISION.\n'
+                           '           DISPLAY "HELLO, " WS-NAME.\n'
+                           '           STOP RUN.',
+                   'after': ['各 Division の役割は 1 つずつです。`IDENTIFICATION` はプログラムの身元、`DATA` はデータの記述、`PROCEDURE` '
+                             'は実行手順。`01` はレコードや項目の定義、`PIC X(10)` は 10 文字分を意味します。',
+                             '実際に動かすなら[第 01 '
+                             '課](lessons/01_hello-cobol/README.html)から。文と項目の規則は[リファレンス](reference.html)、標準の変遷の詳細は[COBOL '
+                             '小史](history.html)を見てください。']}]},
+
 }

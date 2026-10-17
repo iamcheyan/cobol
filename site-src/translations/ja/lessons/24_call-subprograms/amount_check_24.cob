@@ -1,0 +1,21 @@
+      * 金額 PIC 9(7)V99 を BY REFERENCE で渡す（読取専用）
+      * 結果 PIC X(15) に書く。USING と順序を合わせる。
+      * 状態：ZERO-AMOUNT（ゼロ）、LIMIT-EXCEEDED（1000.00超
+      * VALID（1000.00を含む）。GOBACK で戻り、終了コード
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. CHECK-AMOUNT.
+       DATA DIVISION.
+       LINKAGE SECTION.
+       01 LK-AMOUNT PIC 9(7)V99.
+       01 LK-CHECK-RESULT PIC X(15).
+       PROCEDURE DIVISION USING LK-AMOUNT LK-CHECK-RESULT.
+       0000-VALIDATE-AMOUNT.
+           EVALUATE TRUE
+               WHEN LK-AMOUNT = ZERO
+                   MOVE "ZERO-AMOUNT" TO LK-CHECK-RESULT
+               WHEN LK-AMOUNT > 1000.00
+                   MOVE "LIMIT-EXCEEDED" TO LK-CHECK-RESULT
+               WHEN OTHER
+                   MOVE "VALID" TO LK-CHECK-RESULT
+           END-EVALUATE
+           GOBACK.

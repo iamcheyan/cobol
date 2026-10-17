@@ -1,0 +1,4 @@
+       01 WS-RAW-RECORD PIC X(10).
+       01 WS-PARTS REDEFINES WS-RAW-RECORD.
+           05 WS-CODE PIC X(2).
+           05 WS-NUMBER PIC 9(8).

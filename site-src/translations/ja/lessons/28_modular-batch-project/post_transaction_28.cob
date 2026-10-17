@@ -1,0 +1,38 @@
+      * LINKAGE順は口座・取引・状態。
+      * BY REFERENCE。残高と状態のみ更新。
+      * 状態値：POSTED/INSUFFICIENT/BAD_TYPE/NO_ACCOUNT。
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. POST-TRANSACTION28.
+       DATA DIVISION.
+       LINKAGE SECTION.
+       COPY "ACCOUNT-REC.CPY".
+       COPY "TRANSACTION-REC.CPY".
+       COPY "POST-STATUS.CPY".
+       PROCEDURE DIVISION USING BY REFERENCE
+           WS-ACCOUNT-RECORD
+           WS-TRANSACTION-RECORD
+           WS-POST-STATUS.
+       0000-POST-TRANSACTION.
+           IF WS-TRANSACTION-ACCOUNT NOT = WS-ACCOUNT-NUMBER
+               MOVE "NO_ACCOUNT" TO WS-POST-STATUS
+           ELSE
+               EVALUATE WS-TRANSACTION-TYPE
+                   WHEN "D"
+                       ADD WS-TRANSACTION-AMOUNT
+                           TO WS-ACCOUNT-BALANCE
+                       MOVE "POSTED" TO WS-POST-STATUS
+                   WHEN "C"
+                       PERFORM 1000-CHECK-WITHDRAWAL
+                   WHEN OTHER
+                       MOVE "BAD_TYPE" TO WS-POST-STATUS
+               END-EVALUATE
+           END-IF
+           GOBACK.
+       1000-CHECK-WITHDRAWAL.
+           IF WS-TRANSACTION-AMOUNT <= WS-ACCOUNT-BALANCE
+               SUBTRACT WS-TRANSACTION-AMOUNT
+                   FROM WS-ACCOUNT-BALANCE
+               MOVE "POSTED" TO WS-POST-STATUS
+           ELSE
+               MOVE "INSUFFICIENT" TO WS-POST-STATUS
+           END-IF.

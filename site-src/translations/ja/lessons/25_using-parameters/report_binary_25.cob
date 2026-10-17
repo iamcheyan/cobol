@@ -1,0 +1,15 @@
+      * BY VALUE はアドレスでなく、4バイトの値を受け取
+      * 引数を表示するだけで、呼出側には書き戻さな
+      * 呼出側も BY VALUE を指定。不一致では誤値となる
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. REPORT-BINARY.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 WS-EDITED-AMOUNT PIC 9(9) VALUE ZERO.
+       LINKAGE SECTION.
+       COPY "AMOUNT-INTERFACE.CPY".
+       PROCEDURE DIVISION USING BY VALUE AMOUNT-ARGUMENT.
+       0000-REPORT-VALUE.
+           MOVE AMOUNT-ARGUMENT TO WS-EDITED-AMOUNT
+           DISPLAY "被呼出側=受取値=" WS-EDITED-AMOUNT
+           GOBACK.

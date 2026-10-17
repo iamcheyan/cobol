@@ -1,0 +1,3 @@
+# Expected SORT outputs
+
+These files are byte-for-byte expected output streams for the corresponding fixtures. The normal case is ordered by the composite key `(account_id, sequence_no, transaction_id)`. Boundary cases cover an empty stream, one record, a leap date, and zero amount. Expected bytes are independent of the implementation; `check.py` validates the produced candidate before publication.

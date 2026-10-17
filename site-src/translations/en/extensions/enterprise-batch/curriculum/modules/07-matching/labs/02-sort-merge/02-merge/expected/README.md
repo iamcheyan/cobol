@@ -1,0 +1,3 @@
+# Expected MERGE outputs
+
+The files here are byte-for-byte expectations for merging the two already-sorted input streams. The normal case selects the smaller composite key at each step; empty, single, and zero-amount cases exercise boundary behavior. The zero-amount record remains structurally valid through MERGE and is classified by downstream L2. `check.py` validates output bytes and ordering independently.

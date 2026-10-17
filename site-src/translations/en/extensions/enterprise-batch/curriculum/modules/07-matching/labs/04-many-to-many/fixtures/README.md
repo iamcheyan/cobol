@@ -1,0 +1,5 @@
+# L3 fixtures
+
+The fixtures are synthetic inputs for the four-stream customer aggregation: ACCOUNT, L2 accepted TRANSACTION, CUSTOMER SNAPSHOT, and PREVIOUS-DAY. Binary/text layouts and their versions are defined in the adjacent Copybooks and DESIGN.md. Inputs are ASCII fixed-width records with LF endings; dates and keys are chosen to exercise customer ordering, account ordering, and reconciliation.
+
+`normal/` provides the hand-trace case. `cases/` contains boundary and business-isolation scenarios, including a missing customer snapshot, disabled customer, stale snapshot, and customer/count limits. `expected/` contains independent expected outputs. Structural errors return RC8 without publication; business isolation returns RC4 with eligible records published and isolated records preserved with reasons.

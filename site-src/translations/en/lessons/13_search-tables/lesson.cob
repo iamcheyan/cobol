@@ -1,0 +1,56 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. SEARCH13.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+      *SEARCH ALL requires unique actual keys in ASCENDING KEY order.
+       01 WS-ACCOUNT-TABLE.
+          05 WS-ACCOUNT-ENTRY OCCURS 4 TIMES
+             ASCENDING KEY IS WS-ACCOUNT-NUMBER
+             INDEXED BY WS-ACCOUNT-IDX.
+             10 WS-ACCOUNT-NUMBER PIC X(10).
+             10 WS-ACCOUNT-BALANCE PIC 9(7)V99.
+       01 WS-SEARCH-KEY PIC X(10) VALUE SPACES.
+       PROCEDURE DIVISION.
+       0000-MAIN.
+           PERFORM 1000-LOAD-ACCOUNTS
+           MOVE "0002468101" TO WS-SEARCH-KEY
+           PERFORM 2000-SEQUENTIAL-SEARCH
+           PERFORM 3000-BINARY-SEARCH
+           MOVE "0005550000" TO WS-SEARCH-KEY
+           PERFORM 2000-SEQUENTIAL-SEARCH
+           PERFORM 3000-BINARY-SEARCH
+           STOP RUN.
+       1000-LOAD-ACCOUNTS.
+           MOVE "0000000042" TO WS-ACCOUNT-NUMBER(1)
+           MOVE 0.00 TO WS-ACCOUNT-BALANCE(1)
+           MOVE "0001234567" TO WS-ACCOUNT-NUMBER(2)
+           MOVE 1000.00 TO WS-ACCOUNT-BALANCE(2)
+           MOVE "0002468101" TO WS-ACCOUNT-NUMBER(3)
+           MOVE 520.00 TO WS-ACCOUNT-BALANCE(3)
+           MOVE "0007654321" TO WS-ACCOUNT-NUMBER(4)
+           MOVE 250.75 TO WS-ACCOUNT-BALANCE(4).
+       2000-SEQUENTIAL-SEARCH.
+           DISPLAY "検索=SEQUENTIAL キー=" WS-SEARCH-KEY
+           SET WS-ACCOUNT-IDX TO 1
+           SEARCH WS-ACCOUNT-ENTRY
+               AT END
+                   DISPLAY "逐次検索=NOT_FOUND"
+               WHEN WS-ACCOUNT-NUMBER(WS-ACCOUNT-IDX)
+                   = WS-SEARCH-KEY
+                   DISPLAY "逐次検索=検出 口座="
+                       WS-ACCOUNT-NUMBER(WS-ACCOUNT-IDX)
+                       "  残高="
+                       WS-ACCOUNT-BALANCE(WS-ACCOUNT-IDX)
+           END-SEARCH.
+       3000-BINARY-SEARCH.
+           DISPLAY "検索=BINARY キー=" WS-SEARCH-KEY
+           SEARCH ALL WS-ACCOUNT-ENTRY
+               AT END
+                   DISPLAY "二分検索=NOT_FOUND"
+               WHEN WS-ACCOUNT-NUMBER(WS-ACCOUNT-IDX)
+                   = WS-SEARCH-KEY
+                   DISPLAY "二分検索=検出 口座="
+                       WS-ACCOUNT-NUMBER(WS-ACCOUNT-IDX)
+                       "  残高="
+                       WS-ACCOUNT-BALANCE(WS-ACCOUNT-IDX)
+           END-SEARCH.

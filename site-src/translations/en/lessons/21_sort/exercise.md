@@ -2,13 +2,13 @@
 _translated_from: lessons/21_sort/exercise.md
 _translated_by: site-src/translation agent
 ---
-# 第21課の練習：SORTと入力手続き
+# Lesson 21 Exercise: SORT and Input Procedures
 
-この練習では第15～21課の内容だけを使います。順次ファイルの `SELECT` / `OPEN` / `READ` / `CLOSE`、`FILE STATUS`、`AT END`、`SORT`、`RELEASE` / `RETURN`、`PERFORM`、`DISPLAY` が対象です。
+This exercise uses only material covered in Lessons 15–21: sequential-file `SELECT` / `OPEN` / `READ` / `CLOSE`, `FILE STATUS`, `AT END`, `SORT` with `RELEASE` / `RETURN`, `PERFORM`, and `DISPLAY`.
 
-## 変更練習（解答例は `answer.md`）
+## Modification Exercises (sample answers are in `answer.md`)
 
-2つとも**一時ディレクトリにあるフィクスチャ複製**だけを変更します。リポジトリー内の `accounts-unsorted.txt` は変更しないでください。
+For both exercises, modify only **fixture copies in a temporary directory**. Do not modify the repository's `accounts-unsorted.txt`. First prepare a temporary directory:
 
 ```sh
 scratch=$(mktemp -d)
@@ -18,15 +18,15 @@ cobc -fsyntax-only lesson.cob
 cobc -x -Wall -o lesson_21 lesson.cob
 ```
 
-1. 複製の先頭2行を入れ替えます。`./lesson_21` を実行し、出力が口座番号の昇順のままか、入力件数と出力件数が一致するか確認します。
-2. 元のフィクスチャから作った複製の末尾に、口座番号 `A000000006`、顧客番号 `C0001006`、残高数字 `000000001` の27文字レコードを追加します。実行後、新しいレコードが最後に並び、入出力件数がともに `005` であることを確認します。
+1. Swap the first two lines in the copy. Run `./lesson_21`, confirm that the output is still sorted in ascending account-number order, and compare the input and output record counts.
+2. Starting from a copy of the original fixture, append a 27-character record with account number `A000000006`, customer number `C0001006`, and balance digits `000000001`. After running the program, confirm that the new record is on the last line and that both the input and output counts are `005`.
 
-制約：`lesson.cob` は変更しません。追加する行は27文字にします。
+Constraints: Do not modify `lesson.cob`; the appended line must be 27 characters long.
 
-各実行の標準出力全文を保存し、`RELEASE` と `RETURN` がどの手続きにあるか、それぞれの `AT END` がどこにあるか説明します。解答例は `answer.md` にあります。
+Save the complete standard output from each run, and identify which procedure executes `RELEASE` and which executes `RETURN`, as well as where each `AT END` appears. See `answer.md` for sample answers.
 
-## 発展課題（解答なし）
+## Further Exploration (no answer provided)
 
-ソートキーに第2項目を追加し、口座番号の昇順、同一口座内では残高の降順に並べます。口座番号が同じで残高が異なるレコードを2件以上用意してください。変更後の `SORT ... ON ASCENDING KEY ...` 宣言と出力全文を記録し、キーを1つしか宣言しない場合に同一キーの順序へ依存してよいか、数例の観察だけでは結論できない理由も説明します。
+Add a second field to the sort key: sort by account number in ascending order, then by balance in descending order for the same account. Prepare at least two records with the same account number and different balances. Record the modified `SORT ... ON ASCENDING KEY ...` declaration and the complete output, and explain whether the relative order of records with equal keys can be relied on when only one sort key is declared, and why observing a few sets of data is not enough to draw a conclusion.
 
-ソース、コンパイル・実行コマンド、実際の出力、終了コードを提出してください。全件を `OCCURS` に読み込まず、`USING` / `GIVING` で2つの手続きを避けないでください。
+Submit the source code, compile and run commands, actual output, and exit code. Do not first load all records using `OCCURS`, and do not use `USING` / `GIVING` to bypass the two procedures in this lesson.

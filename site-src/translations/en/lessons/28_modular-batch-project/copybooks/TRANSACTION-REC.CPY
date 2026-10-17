@@ -1,0 +1,5 @@
+      * Transaction: X(10)+X(1)+9(7)V99 = 20 bytes.
+       01 WS-TRANSACTION-RECORD.
+          05 WS-TRANSACTION-ACCOUNT PIC X(10).
+          05 WS-TRANSACTION-TYPE PIC X.
+          05 WS-TRANSACTION-AMOUNT PIC 9(7)V99.

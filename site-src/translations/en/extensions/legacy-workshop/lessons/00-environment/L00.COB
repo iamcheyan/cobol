@@ -1,0 +1,9 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. L00.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       PROCEDURE DIVISION.
+       0000-MAIN.
+           DISPLAY "Hello, COBOL!"
+           DISPLAY "GNUCOBOL is ready."
+           STOP RUN.

@@ -1,0 +1,20 @@
+      * LINKAGE: account then counts; BY REFERENCE, read-only.
+      * Displays data; balance and counts are unchanged.
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. REPORT-ACCOUNT28.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 WS-EDITED-BALANCE PIC 9(7).99 VALUE ZERO.
+       LINKAGE SECTION.
+       COPY "ACCOUNT-REC.CPY".
+       COPY "BATCH-COUNTS.CPY".
+       PROCEDURE DIVISION USING BY REFERENCE
+           WS-ACCOUNT-RECORD WS-BATCH-COUNTS.
+       0000-REPORT-ACCOUNT.
+           MOVE WS-ACCOUNT-BALANCE TO WS-EDITED-BALANCE
+           DISPLAY "口座=" WS-ACCOUNT-NUMBER
+               " CUSTOMER=" WS-CUSTOMER-ID
+               " BALANCE=" WS-EDITED-BALANCE
+           DISPLAY "集計 記帳=" WS-POSTED-COUNT
+               " 拒否=" WS-REJECTED-COUNT
+           GOBACK.

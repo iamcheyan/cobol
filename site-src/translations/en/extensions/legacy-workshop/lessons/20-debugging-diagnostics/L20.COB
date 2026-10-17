@@ -1,0 +1,10 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. L20.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 WS-FILE-STATUS PIC XX VALUE "00".
+       PROCEDURE DIVISION.
+       0000-MAIN.
+           DISPLAY "Trace: entered PROCESS-RECORD"
+           DISPLAY "Trace: status=" WS-FILE-STATUS
+           STOP RUN.

@@ -1,0 +1,15 @@
+      * Contract: BY VALUE receives the 4-byte value, not an address;
+      * Program reads/displays only; does not write caller storage.
+      * Caller must use BY VALUE too, or received value is incorrect.
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. REPORT-BINARY.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 WS-EDITED-AMOUNT PIC 9(9) VALUE ZERO.
+       LINKAGE SECTION.
+       COPY "AMOUNT-INTERFACE.CPY".
+       PROCEDURE DIVISION USING BY VALUE AMOUNT-ARGUMENT.
+       0000-REPORT-VALUE.
+           MOVE AMOUNT-ARGUMENT TO WS-EDITED-AMOUNT
+           DISPLAY "被呼出側=受取値=" WS-EDITED-AMOUNT
+           GOBACK.

@@ -1,0 +1,87 @@
+      * Contract: all three programs share AMOUNT-ARGUMENT declaration.
+      * It is 4-byte signed binary; width and signedness must match.
+      * BY REFERENCE changes caller storage,
+      * BY CONTENT changes a copy; BY VALUE passes the value;
+      * caller field stays unchanged.
+      * Arguments match by USING position, regardless of name;
+      * convention mismatch is not reported by the compiler.
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. LESSON25.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       COPY "AMOUNT-INTERFACE.CPY".
+       01 WS-EXPECTED USAGE BINARY-LONG VALUE ZERO.
+       01 WS-ACTUAL USAGE BINARY-LONG VALUE ZERO.
+       01 WS-EDITED-ACTUAL PIC 9(9) VALUE ZERO.
+       01 WS-MODE PIC X(15) VALUE SPACES.
+       01 WS-PASS-COUNT PIC 9(3) VALUE ZERO.
+       01 WS-FAIL-COUNT PIC 9(3) VALUE ZERO.
+       01 WS-REFERENCE-COUNT PIC 9(3) VALUE ZERO.
+       01 WS-CONTENT-COUNT PIC 9(3) VALUE ZERO.
+       01 WS-VALUE-COUNT PIC 9(3) VALUE ZERO.
+       PROCEDURE DIVISION.
+       0000-MAIN.
+           PERFORM 1000-RUN-MODE-CASES
+           PERFORM 9000-DISPLAY-SUMMARY
+           IF WS-FAIL-COUNT NOT = ZERO
+               MOVE 1 TO RETURN-CODE
+           END-IF
+           STOP RUN.
+       1000-RUN-MODE-CASES.
+           PERFORM 1100-TEST-REFERENCE
+           PERFORM 1200-TEST-CONTENT
+           PERFORM 1300-TEST-VALUE.
+       1100-TEST-REFERENCE.
+           MOVE 10 TO AMOUNT-ARGUMENT
+           MOVE 11 TO WS-EXPECTED
+           MOVE "BY REFERENCE" TO WS-MODE
+           PERFORM 8000-DISPLAY-BEFORE
+           CALL "ADD-ONE" USING BY REFERENCE AMOUNT-ARGUMENT
+           PERFORM 8100-CHECK-ACTUAL.
+       1200-TEST-CONTENT.
+           MOVE 20 TO AMOUNT-ARGUMENT
+           MOVE 20 TO WS-EXPECTED
+           MOVE "BY CONTENT" TO WS-MODE
+           PERFORM 8000-DISPLAY-BEFORE
+           CALL "ADD-ONE" USING BY CONTENT AMOUNT-ARGUMENT
+           PERFORM 8100-CHECK-ACTUAL.
+       1300-TEST-VALUE.
+           MOVE 30 TO AMOUNT-ARGUMENT
+           MOVE 30 TO WS-EXPECTED
+           MOVE "BY VALUE" TO WS-MODE
+           PERFORM 8000-DISPLAY-BEFORE
+           CALL "REPORT-BINARY" USING BY VALUE AMOUNT-ARGUMENT
+           PERFORM 8100-CHECK-ACTUAL.
+       8000-DISPLAY-BEFORE.
+           MOVE AMOUNT-ARGUMENT TO WS-EDITED-ACTUAL
+           DISPLAY "呼出側=呼出前 方式="
+               FUNCTION TRIM(WS-MODE TRAILING)
+               " 値=" WS-EDITED-ACTUAL.
+      * Self-check sees caller storage only; cannot verify receipt.
+       8100-CHECK-ACTUAL.
+           MOVE AMOUNT-ARGUMENT TO WS-ACTUAL
+           MOVE WS-ACTUAL TO WS-EDITED-ACTUAL
+           IF WS-ACTUAL = WS-EXPECTED
+               ADD 1 TO WS-PASS-COUNT
+               EVALUATE WS-MODE
+                   WHEN "BY REFERENCE"
+                       ADD 1 TO WS-REFERENCE-COUNT
+                   WHEN "BY CONTENT"
+                       ADD 1 TO WS-CONTENT-COUNT
+                   WHEN "BY VALUE"
+                       ADD 1 TO WS-VALUE-COUNT
+               END-EVALUATE
+               DISPLAY "呼出側=呼出後 方式="
+                   FUNCTION TRIM(WS-MODE TRAILING)
+                   " 値=" WS-EDITED-ACTUAL " 確認=合格"
+           ELSE
+               ADD 1 TO WS-FAIL-COUNT
+               DISPLAY "呼出側=呼出後 方式="
+                   FUNCTION TRIM(WS-MODE TRAILING)
+                   " 値=" WS-EDITED-ACTUAL " 確認=失敗"
+           END-IF.
+       9000-DISPLAY-SUMMARY.
+           DISPLAY "集計 合格=" WS-PASS-COUNT
+               " 不合格=" WS-FAIL-COUNT
+           DISPLAY "方式 BY REFERENCE=" WS-REFERENCE-COUNT
+               " BY CONTENT=" WS-CONTENT-COUNT " 値=" WS-VALUE-COUNT.

@@ -1,0 +1,16 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. L10.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 WS-SCORES.
+           05 WS-SCORE PIC 9(3) OCCURS 3 TIMES.
+       01 WS-I PIC 9 VALUE 1.
+       PROCEDURE DIVISION.
+       0000-MAIN.
+           MOVE 75 TO WS-SCORE(1)
+           MOVE 88 TO WS-SCORE(2)
+           MOVE 92 TO WS-SCORE(3)
+           PERFORM VARYING WS-I FROM 1 BY 1 UNTIL WS-I > 3
+               DISPLAY "SCORE=" WS-SCORE(WS-I)
+           END-PERFORM
+           STOP RUN.

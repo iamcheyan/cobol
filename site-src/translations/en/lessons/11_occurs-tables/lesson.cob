@@ -1,0 +1,58 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. OCCURS11.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 WS-TRANSACTION-TABLE.
+          05 WS-TRANSACTION-ENTRY OCCURS 4 TIMES.
+             10 WS-TXN-CODE PIC X.
+             10 WS-TXN-AMOUNT PIC 9(5)V99.
+       01 WS-SAMPLE-INDEX PIC 9(2) VALUE ZERO.
+      *Table capacity is 4; the traversal limit must not exceed it.
+      *An out-of-range subscript reads adjacent bytes without an error.
+       01 WS-LAST-SAMPLE PIC 9 VALUE 4.
+       01 WS-PROCESSED-COUNT PIC 9(3) VALUE ZERO.
+       01 WS-ACCOUNT-BALANCE PIC 9(7)V99 VALUE 1000.00.
+       PROCEDURE DIVISION.
+       0000-MAIN.
+           PERFORM 1000-LOAD-TABLE
+           PERFORM 2000-PROCESS-TABLE
+           PERFORM 9000-REPORT
+           STOP RUN.
+       1000-LOAD-TABLE.
+           MOVE "C" TO WS-TXN-CODE(1)
+           MOVE 125.50 TO WS-TXN-AMOUNT(1)
+           MOVE "D" TO WS-TXN-CODE(2)
+           MOVE 40.10 TO WS-TXN-AMOUNT(2)
+           MOVE "X" TO WS-TXN-CODE(3)
+           MOVE 25.00 TO WS-TXN-AMOUNT(3)
+           MOVE "C" TO WS-TXN-CODE(4)
+           MOVE 20.00 TO WS-TXN-AMOUNT(4).
+       2000-PROCESS-TABLE.
+           PERFORM VARYING WS-SAMPLE-INDEX FROM 1 BY 1
+               UNTIL WS-SAMPLE-INDEX > WS-LAST-SAMPLE
+               PERFORM 2100-PROCESS-ENTRY
+           END-PERFORM.
+       2100-PROCESS-ENTRY.
+           DISPLAY "明細=" WS-SAMPLE-INDEX
+               " コード=" WS-TXN-CODE(WS-SAMPLE-INDEX)
+               " 金額=" WS-TXN-AMOUNT(WS-SAMPLE-INDEX)
+      *Unknown codes do not affect balances; validation is skipped.
+           EVALUATE WS-TXN-CODE(WS-SAMPLE-INDEX)
+               WHEN "C"
+                   COMPUTE WS-ACCOUNT-BALANCE =
+                       WS-ACCOUNT-BALANCE
+                           + WS-TXN-AMOUNT(WS-SAMPLE-INDEX)
+                   DISPLAY "処理=入金"
+               WHEN "D"
+                   COMPUTE WS-ACCOUNT-BALANCE =
+                       WS-ACCOUNT-BALANCE
+                           - WS-TXN-AMOUNT(WS-SAMPLE-INDEX)
+                   DISPLAY "処理=出金"
+               WHEN OTHER
+                   DISPLAY "処理=未知コードを無視"
+           END-EVALUATE
+           COMPUTE WS-PROCESSED-COUNT =
+               WS-PROCESSED-COUNT + 1.
+       9000-REPORT.
+           DISPLAY "処理件数=" WS-PROCESSED-COUNT
+           DISPLAY "最終残高=" WS-ACCOUNT-BALANCE.

@@ -1670,5 +1670,589 @@
       "zh-cn": "RC 0 = 成功 · RC 1 = 作业失败 · RC 2 = 前置条件未验证（例如缺少 DB 路线）",
       "ja": "RC 0 = 成功 · RC 1 = ジョブ失敗 · RC 2 = 前提が未検証（DB 経路が無い場合など）"
     }
+  },
+  "22_file-processing-practice/assets/pipeline-dispatch.svg": {
+    "One record, one destination": {
+      "zh-cn": "一条记录，一个去向",
+      "ja": "1件に出口は1つ"
+    },
+    "Sort by account key, walk both streams once, and account for every record.": {
+      "zh-cn": "按账号键排序，两流各走一遍，每条都要交代。",
+      "ja": "口座キーで整列し、両流を一度だけ走査し、全件を照合する。"
+    },
+    "transactions": {
+      "zh-cn": "交易",
+      "ja": "取引"
+    },
+    "20 chars each": {
+      "zh-cn": "每条 20 字",
+      "ja": "各 20 文字"
+    },
+    "1000-LOAD": {
+      "zh-cn": "1000-LOAD",
+      "ja": "1000-LOAD"
+    },
+    "width = 20 ? RELEASE": {
+      "zh-cn": "width = 20 ? RELEASE",
+      "ja": "幅 = 20 ? RELEASE"
+    },
+    "SORT ascending": {
+      "zh-cn": "SORT 升序",
+      "ja": "SORT 昇順"
+    },
+    "SD-TRANSACTION-ACCOUNT": {
+      "zh-cn": "SD-TRANSACTION-ACCOUNT",
+      "ja": "SD-TRANSACTION-ACCOUNT"
+    },
+    "2000-RECONCILE": {
+      "zh-cn": "2000-RECONCILE",
+      "ja": "2000-RECONCILE"
+    },
+    "master + sorted stream": {
+      "zh-cn": "主档 + 已排序流",
+      "ja": "マスタ + 整列済み"
+    },
+    "compare keys": {
+      "zh-cn": "比较键",
+      "ja": "キーを比較"
+    },
+    "master key vs txn key": {
+      "zh-cn": "主档键 vs 交易键",
+      "ja": "マスタキー 対 取引キー"
+    },
+    "MATCHED + valid": {
+      "zh-cn": "MATCHED + 合法",
+      "ja": "一致 + 有効"
+    },
+    "type D/C, digits only": {
+      "zh-cn": "类型 D/C，仅数字",
+      "ja": "種別 D/C、数字のみ"
+    },
+    "→ accepted.txt": {
+      "zh-cn": "→ accepted.txt",
+      "ja": "→ accepted.txt"
+    },
+    "MATCHED + invalid": {
+      "zh-cn": "MATCHED + 非法",
+      "ja": "一致 + 無効"
+    },
+    "wrong type / not numeric": {
+      "zh-cn": "类型错 / 非数字",
+      "ja": "種別不正 / 非数字"
+    },
+    "→ rejected.txt + reason": {
+      "zh-cn": "→ rejected.txt + 原因",
+      "ja": "→ rejected.txt + 理由"
+    },
+    "MASTER ONLY": {
+      "zh-cn": "MASTER ONLY",
+      "ja": "マスタのみ"
+    },
+    "master key smaller, or transactions exhausted": {
+      "zh-cn": "主档键更小，或交易已读完",
+      "ja": "マスタキーが小、または取引が尽きた"
+    },
+    "counted, not written to a file": {
+      "zh-cn": "只计数，不写入文件",
+      "ja": "件数のみ、ファイルには書かない"
+    },
+    "count invariant": {
+      "zh-cn": "计数不变量",
+      "ja": "件数の不変条件"
+    },
+    "accepted + rejected = transactions read": {
+      "zh-cn": "accepted + rejected = 读入交易数",
+      "ja": "受理 + 拒否 = 読んだ取引件数"
+    },
+    "If the two sides differ, a record was dropped — treat the night as failed rather than publishing a short file.": {
+      "zh-cn": "两边不等就是丢了记录——当晚算失败，不要发布一份短文件。",
+      "ja": "両辺が違えば件が落ちている。短いファイルを出さず、その夜は失敗とする。"
+    }
+  },
+  "24_call-subprograms/assets/call-contract.svg": {
+    "Position decides the parameter, not the name": {
+      "zh-cn": "位置决定参数，名字不算",
+      "ja": "引数を決めるのは名前ではなく位置"
+    },
+    "Two fields, in this order. Renaming a field changes nothing; swapping the order breaks the contract.": {
+      "zh-cn": "两个字段，按此顺序。改名无效；对调顺序就破坏契约。",
+      "ja": "項目はこの順で 2 つ。改名しても変わらず、順序を入れ替えると契約が壊れる。"
+    },
+    "CALLER · lesson.cob": {
+      "zh-cn": "调用方 · lesson.cob",
+      "ja": "呼び出し側 · lesson.cob"
+    },
+    "CALLEE · amount_check_24.cob": {
+      "zh-cn": "子程序 · amount_check_24.cob",
+      "ja": "サブルーチン · amount_check_24.cob"
+    },
+    "PROGRAM-ID. LESSON24": {
+      "zh-cn": "PROGRAM-ID. LESSON24",
+      "ja": "PROGRAM-ID. LESSON24"
+    },
+    "PROGRAM-ID. CHECK-AMOUNT": {
+      "zh-cn": "PROGRAM-ID. CHECK-AMOUNT",
+      "ja": "PROGRAM-ID. CHECK-AMOUNT"
+    },
+    "WS-AMOUNT": {
+      "zh-cn": "WS-AMOUNT",
+      "ja": "WS-AMOUNT"
+    },
+    "PIC 9(7)V99 · 9 B": {
+      "zh-cn": "PIC 9(7)V99 · 9 B",
+      "ja": "PIC 9(7)V99 · 9 B"
+    },
+    "position 1": {
+      "zh-cn": "位置 1",
+      "ja": "位置 1"
+    },
+    "LK-AMOUNT": {
+      "zh-cn": "LK-AMOUNT",
+      "ja": "LK-AMOUNT"
+    },
+    "LINKAGE · read only": {
+      "zh-cn": "LINKAGE · 只读",
+      "ja": "LINKAGE · 読み取り専用"
+    },
+    "amount in → validated, never modified": {
+      "zh-cn": "金额传入 → 校验，不修改",
+      "ja": "金額を渡す → 検証のみ、更新しない"
+    },
+    "WS-CHECK-RESULT": {
+      "zh-cn": "WS-CHECK-RESULT",
+      "ja": "WS-CHECK-RESULT"
+    },
+    "PIC X(15) · 15 B": {
+      "zh-cn": "PIC X(15) · 15 B",
+      "ja": "PIC X(15) · 15 B"
+    },
+    "position 2": {
+      "zh-cn": "位置 2",
+      "ja": "位置 2"
+    },
+    "LK-CHECK-RESULT": {
+      "zh-cn": "LK-CHECK-RESULT",
+      "ja": "LK-CHECK-RESULT"
+    },
+    "LINKAGE · written back": {
+      "zh-cn": "LINKAGE · 写回",
+      "ja": "LINKAGE · 書き戻し"
+    },
+    "status written back → caller counts it": {
+      "zh-cn": "状态写回 → 调用方计数",
+      "ja": "状態を書き戻す → 呼び出し側が集計"
+    },
+    "Order matters: two X(15) fields swapped would compile and run, then write a status into the amount. Keep the Copybook contract in sync.": {
+      "zh-cn": "顺序很重要：两个 X(15) 对调仍能编译运行，却把状态写进金额。Copybook 契约须保持同步。",
+      "ja": "順序が命。X(15) を入れ替えるとコンパイルは通り実行し、金額へ状態を書く。Copybook の契約を揃える。"
+    }
+  },
+  "26_error-handling/assets/failure-classes.svg": {
+    "Same non-zero, different origin": {
+      "zh-cn": "同是非零，来源不同",
+      "ja": "同じ非ゼロでも出所は違う"
+    },
+    "Decide first what kind of failure this is; only one of them fails the batch.": {
+      "zh-cn": "先判断是哪类故障；只有一类会让整批失败。",
+      "ja": "まず失敗の種類を決める。バッチを失敗させるのはそのうち一つだけ。"
+    },
+    "what happened on this record?": {
+      "zh-cn": "这条记录出了什么？",
+      "ja": "このレコードで何が起きた？"
+    },
+    "business rejection": {
+      "zh-cn": "业务拒绝",
+      "ja": "業務拒否"
+    },
+    "bad type, bad amount, failed rule": {
+      "zh-cn": "类型错、金额错、规则失败",
+      "ja": "種別不正、金額不正、規則違反"
+    },
+    "→ rejected.txt + reason": {
+      "zh-cn": "→ rejected.txt + 原因",
+      "ja": "→ rejected.txt + 理由"
+    },
+    "batch continues, later records process": {
+      "zh-cn": "批次继续，后续记录照常处理",
+      "ja": "バッチは続き、後続も処理"
+    },
+    "exit code still 0": {
+      "zh-cn": "退出码仍为 0",
+      "ja": "終了コードは依然 0"
+    },
+    "system failure": {
+      "zh-cn": "系统故障",
+      "ja": "システム障害"
+    },
+    "open / read / write / close failed": {
+      "zh-cn": "打开 / 读 / 写 / 关闭失败",
+      "ja": "open / read / write / close 失敗"
+    },
+    "result of this run is untrustworthy": {
+      "zh-cn": "本次运行结果不可信",
+      "ja": "この実行結果は信頼できない"
+    },
+    "stop processing, close what opened": {
+      "zh-cn": "停止处理，关闭已打开的",
+      "ja": "処理を止め、開いたものを閉じる"
+    },
+    "return 1": {
+      "zh-cn": "返回 1",
+      "ja": "1 を返す"
+    },
+    "normal end": {
+      "zh-cn": "正常结束",
+      "ja": "正常終了"
+    },
+    "status \"10\" (EOF) and an empty input are neither a rejection nor a failure → 0 records, exit code 0": {
+      "zh-cn": "状态 \"10\"（EOF）与空输入既非拒绝也非故障 → 0 条记录，退出码 0",
+      "ja": "状態 \"10\"（EOF）と空入力は拒否でも障害でもない → 0 件、終了コード 0"
+    },
+    "Why separate them: if every problem printed a line and continued, the exit code would always be 0 —": {
+      "zh-cn": "为何分开：若每个问题都打印一行再继续，退出码会永远是 0——",
+      "ja": "分ける理由：問題ごとに行を出して続けると、終了コードは常に 0 になる。"
+    },
+    "and the scheduler could not tell \"some records were rejected\" from \"the input file never arrived\".": {
+      "zh-cn": "调度器就分不清「有记录被拒绝」和「输入文件根本没到」。",
+      "ja": "スケジューラは「一部を拒否」と「入力ファイルが来なかった」を区別できない。"
+    }
+  },
+  "27_logging/assets/log-lifecycle.svg": {
+    "Log lifecycle: open first, close last": {
+      "zh-cn": "日志生命周期：先开，后关",
+      "ja": "ログのライフサイクル：先に開き、最後に閉じる"
+    },
+    "If the log cannot be opened the batch never starts, so business data is never touched without a trace.": {
+      "zh-cn": "日志打不开则批次不启动，业务数据不会在无痕迹时被改动。",
+      "ja": "ログが開けなければバッチは始まらず、痕跡なく業務データを触らない。"
+    },
+    "1 open log": {
+      "zh-cn": "1 开日志",
+      "ja": "1 ログを開く"
+    },
+    "2 open data": {
+      "zh-cn": "2 开数据",
+      "ja": "2 データを開く"
+    },
+    "3 process": {
+      "zh-cn": "3 处理",
+      "ja": "3 処理"
+    },
+    "4 close data": {
+      "zh-cn": "4 关数据",
+      "ja": "4 データを閉じる"
+    },
+    "5 close log": {
+      "zh-cn": "5 关日志",
+      "ja": "5 ログを閉じる"
+    },
+    "EVENT=BATCH_START": {
+      "zh-cn": "EVENT=BATCH_START",
+      "ja": "EVENT=BATCH_START"
+    },
+    "ID=TRAINING-001": {
+      "zh-cn": "ID=TRAINING-001",
+      "ja": "ID=TRAINING-001"
+    },
+    "before any business file": {
+      "zh-cn": "先于任何业务文件",
+      "ja": "業務ファイルより前"
+    },
+    "EVENT=RECORD_READ      NO= ACCOUNT=": {
+      "zh-cn": "EVENT=RECORD_READ      NO= ACCOUNT=",
+      "ja": "EVENT=RECORD_READ      NO= ACCOUNT="
+    },
+    "EVENT=RECORD_ACCEPTED  NO= ACCOUNT=": {
+      "zh-cn": "EVENT=RECORD_ACCEPTED  NO= ACCOUNT=",
+      "ja": "EVENT=RECORD_ACCEPTED  NO= ACCOUNT="
+    },
+    "EVENT=BUSINESS_REJECT  NO= ACCOUNT= REASON=": {
+      "zh-cn": "EVENT=BUSINESS_REJECT  NO= ACCOUNT= REASON=",
+      "ja": "EVENT=BUSINESS_REJECT  NO= ACCOUNT= REASON="
+    },
+    "EVENT=SYSTEM_ERROR     OP= STATUS=": {
+      "zh-cn": "EVENT=SYSTEM_ERROR     OP= STATUS=",
+      "ja": "EVENT=SYSTEM_ERROR     OP= STATUS="
+    },
+    "one line per event, written after the operation succeeded": {
+      "zh-cn": "一事一行，操作成功后再写",
+      "ja": "操作成功後に、イベントごとに1行書く"
+    },
+    "EVENT=BATCH_END": {
+      "zh-cn": "EVENT=BATCH_END",
+      "ja": "EVENT=BATCH_END"
+    },
+    "INPUT= ACCEPTED= REJECTED= SYSTEM_ERROR=": {
+      "zh-cn": "INPUT= ACCEPTED= REJECTED= SYSTEM_ERROR=",
+      "ja": "INPUT= ACCEPTED= REJECTED= SYSTEM_ERROR="
+    },
+    "after data files close, before log closes": {
+      "zh-cn": "数据文件关闭后、日志关闭前",
+      "ja": "データ閉鎖後、ログ閉鎖前"
+    },
+    "the log cannot record its own failure": {
+      "zh-cn": "日志记不下自己的失败",
+      "ja": "ログは自身の失敗を記録できない"
+    },
+    "log open fails → batch never starts · log write fails mid-run → cannot report it · log close fails → the last line may be missing": {
+      "zh-cn": "打开失败 → 批次不启动 · 中途写失败 → 无法上报 · 关闭失败 → 末行可能缺失",
+      "ja": "オープン失敗→バッチ不開始 · 途中の書込失敗→報告不能 · クローズ失敗→最終行が欠けることがある"
+    },
+    "Each line is assembled with STRING ... DELIMITED BY SIZE into WS-LOG-MESSAGE, which is cleared first; otherwise a longer previous event leaves a tail behind.": {
+      "zh-cn": "每行用 STRING ... DELIMITED BY SIZE 拼进 WS-LOG-MESSAGE，先清空；否则上一条更长的事件会留下尾巴。",
+      "ja": "各行は STRING ... DELIMITED BY SIZE で WS-LOG-MESSAGE に組む。先にクリアしないと、前の長いイベントの末尾が残る。"
+    },
+    "WS-LOG-MESSAGE is PIC X(100); the longest event in this lesson is 66 characters, so no truncation occurs.": {
+      "zh-cn": "WS-LOG-MESSAGE 为 PIC X(100)；本课最长事件 66 字符，不会截断。",
+      "ja": "WS-LOG-MESSAGE は PIC X(100)。本課最長のイベントは66文字なので、切り捨ては起きない。"
+    }
+  },
+  "28_modular-batch-project/assets/project-modules.svg": {
+    "Three programs, four copybooks": {
+      "zh-cn": "三个程序，四份 Copybook",
+      "ja": "3つのプログラム、4つのCopybook"
+    },
+    "Each copybook describes one interface. A program copies only what it needs, so the blast radius of a change is visible.": {
+      "zh-cn": "每份 Copybook 只描述一个接口。程序只 COPY 所需，改动影响面可见。",
+      "ja": "Copybookは1つにつき1つのインターフェース。必要なものだけCOPYするので、変更の影響範囲が見える。"
+    },
+    "lesson.cob": {
+      "zh-cn": "lesson.cob",
+      "ja": "lesson.cob"
+    },
+    "main: log, samples, CALL": {
+      "zh-cn": "主程序：日志、样例、CALL",
+      "ja": "メイン：ログ、サンプル、CALL"
+    },
+    "sum up statuses, write log": {
+      "zh-cn": "汇总状态，写日志",
+      "ja": "状態を集計し、ログを書く"
+    },
+    "PROGRAM-ID. LESSON28": {
+      "zh-cn": "PROGRAM-ID. LESSON28",
+      "ja": "PROGRAM-ID. LESSON28"
+    },
+    "post_transaction_28.cob": {
+      "zh-cn": "post_transaction_28.cob",
+      "ja": "post_transaction_28.cob"
+    },
+    "validate account + type": {
+      "zh-cn": "校验账户与类型",
+      "ja": "口座と種別を検証"
+    },
+    "update caller balance": {
+      "zh-cn": "更新调用方余额",
+      "ja": "呼出元の残高を更新"
+    },
+    "POST-TRANSACTION28": {
+      "zh-cn": "POST-TRANSACTION28",
+      "ja": "POST-TRANSACTION28"
+    },
+    "report_account_28.cob": {
+      "zh-cn": "report_account_28.cob",
+      "ja": "report_account_28.cob"
+    },
+    "read final account + counts": {
+      "zh-cn": "读最终账户与计数",
+      "ja": "最終口座と件数を読む"
+    },
+    "display the batch summary": {
+      "zh-cn": "显示批次汇总",
+      "ja": "バッチ要約を表示"
+    },
+    "REPORT-ACCOUNT28": {
+      "zh-cn": "REPORT-ACCOUNT28",
+      "ja": "REPORT-ACCOUNT28"
+    },
+    "CALL": {
+      "zh-cn": "CALL",
+      "ja": "CALL"
+    },
+    "Interfaces live in copybooks/ — one shape per file:": {
+      "zh-cn": "接口在 copybooks/：一文件一种结构",
+      "ja": "インターフェースは copybooks/ に、1ファイル1形："
+    },
+    "ACCOUNT-REC.CPY": {
+      "zh-cn": "ACCOUNT-REC.CPY",
+      "ja": "ACCOUNT-REC.CPY"
+    },
+    "X(10)+X(8)+9(7)V99": {
+      "zh-cn": "X(10)+X(8)+9(7)V99",
+      "ja": "X(10)+X(8)+9(7)V99"
+    },
+    "27 bytes": {
+      "zh-cn": "27 字节",
+      "ja": "27 バイト"
+    },
+    "TRANSACTION-REC.CPY": {
+      "zh-cn": "TRANSACTION-REC.CPY",
+      "ja": "TRANSACTION-REC.CPY"
+    },
+    "X(10)+X(1)+9(7)V99": {
+      "zh-cn": "X(10)+X(1)+9(7)V99",
+      "ja": "X(10)+X(1)+9(7)V99"
+    },
+    "20 bytes": {
+      "zh-cn": "20 字节",
+      "ja": "20 バイト"
+    },
+    "POST-STATUS.CPY": {
+      "zh-cn": "POST-STATUS.CPY",
+      "ja": "POST-STATUS.CPY"
+    },
+    "X(12): POSTED, INSUFFICIENT,": {
+      "zh-cn": "X(12): POSTED, INSUFFICIENT,",
+      "ja": "X(12): POSTED, INSUFFICIENT,"
+    },
+    "BAD_TYPE, NO_ACCOUNT": {
+      "zh-cn": "BAD_TYPE, NO_ACCOUNT",
+      "ja": "BAD_TYPE, NO_ACCOUNT"
+    },
+    "BATCH-COUNTS.CPY": {
+      "zh-cn": "BATCH-COUNTS.CPY",
+      "ja": "BATCH-COUNTS.CPY"
+    },
+    "POSTED-COUNT 9(3)": {
+      "zh-cn": "POSTED-COUNT 9(3)",
+      "ja": "POSTED-COUNT 9(3)"
+    },
+    "REJECTED-COUNT 9(3)": {
+      "zh-cn": "REJECTED-COUNT 9(3)",
+      "ja": "REJECTED-COUNT 9(3)"
+    },
+    "who copies which: account → main, post, report · transaction → main, post · status → main, post · counts → main, report": {
+      "zh-cn": "谁 COPY 哪份：账户 → 主程序、入账、报表 · 交易 → 主程序、入账 · 状态 → 主程序、入账 · 计数 → 主程序、报表",
+      "ja": "誰が何をCOPY：口座→メイン,入帳,報告 · 取引→メイン,入帳 · 状態→メイン,入帳 · 件数→メイン,報告"
+    },
+    "Five sample transactions against a starting balance of 1000.00": {
+      "zh-cn": "五笔样例，期初余额 1000.00",
+      "ja": "初期残高 1000.00 に対するサンプル取引5件"
+    },
+    "1  D  125.50   POSTED        → 1125.50": {
+      "zh-cn": "1  D  125.50   POSTED        → 1125.50",
+      "ja": "1  D  125.50   POSTED        → 1125.50"
+    },
+    "2  C   25.25   POSTED        → 1100.25": {
+      "zh-cn": "2  C   25.25   POSTED        → 1100.25",
+      "ja": "2  C   25.25   POSTED        → 1100.25"
+    },
+    "3  C 2000.00   INSUFFICIENT  → balance unchanged": {
+      "zh-cn": "3  C 2000.00   INSUFFICIENT  → 余额不变",
+      "ja": "3  C 2000.00   INSUFFICIENT  → 残高は不変"
+    },
+    "4  X    1.00   BAD_TYPE      → balance unchanged": {
+      "zh-cn": "4  X    1.00   BAD_TYPE      → 余额不变",
+      "ja": "4  X    1.00   BAD_TYPE      → 残高は不変"
+    },
+    "5  D    1.00   NO_ACCOUNT    → account does not match": {
+      "zh-cn": "5  D    1.00   NO_ACCOUNT    → 账户不匹配",
+      "ja": "5  D    1.00   NO_ACCOUNT    → 口座が不一致"
+    },
+    "count invariant: POSTED + REJECTED = 5, here 2 + 3 = 5": {
+      "zh-cn": "计数不变量：POSTED + REJECTED = 5，此处 2 + 3 = 5",
+      "ja": "件数の不変条件：POSTED + REJECTED = 5、ここでは 2 + 3 = 5"
+    },
+    "recompute by hand: 1000.00 + 125.50 − 25.25 = 1100.25": {
+      "zh-cn": "手算复核：1000.00 + 125.50 − 25.25 = 1100.25",
+      "ja": "手計算：1000.00 + 125.50 − 25.25 = 1100.25"
+    }
+  },
+  "31_data-synchronization/assets/reconcile-classes.svg": {
+    "Every file row gets exactly one class": {
+      "zh-cn": "每条文件记录只归一类",
+      "ja": "ファイルの各行は必ず1つの分類に入る"
+    },
+    "Compare by lookup result, then by value; never by formatting.": {
+      "zh-cn": "先比查找结果，再比值；不比格式。",
+      "ja": "検索結果で比べ、次に値で比べる。書式では比べない。"
+    },
+    "look up account in ACCOUNT_SNAPSHOT": {
+      "zh-cn": "在 ACCOUNT_SNAPSHOT 查账户",
+      "ja": "ACCOUNT_SNAPSHOT で口座を検索"
+    },
+    "SQLCODE = 0": {
+      "zh-cn": "SQLCODE = 0",
+      "ja": "SQLCODE = 0"
+    },
+    "SQLCODE = 100": {
+      "zh-cn": "SQLCODE = 100",
+      "ja": "SQLCODE = 100"
+    },
+    "MATCH": {
+      "zh-cn": "MATCH",
+      "ja": "MATCH"
+    },
+    "customer id and amount both equal": {
+      "zh-cn": "客户号与金额都相等",
+      "ja": "顧客IDと金額がともに一致"
+    },
+    "amount compared as a number, not text": {
+      "zh-cn": "金额按数值比，不按文本",
+      "ja": "金額は文字ではなく数値で比較"
+    },
+    "count 1 · not written to differences.txt": {
+      "zh-cn": "计数 1 · 不写入 differences.txt",
+      "ja": "1件 · differences.txt に書かない"
+    },
+    "CHANGED": {
+      "zh-cn": "CHANGED",
+      "ja": "CHANGED"
+    },
+    "at least one field differs": {
+      "zh-cn": "至少一个字段不同",
+      "ja": "少なくとも1項目が異なる"
+    },
+    "customer id or amount": {
+      "zh-cn": "客户号或金额",
+      "ja": "顧客IDまたは金額"
+    },
+    "count 1 · written to differences.txt": {
+      "zh-cn": "计数 1 · 写入 differences.txt",
+      "ja": "1件 · differences.txt に書く"
+    },
+    "FILE_ONLY": {
+      "zh-cn": "FILE_ONLY",
+      "ja": "FILE_ONLY"
+    },
+    "SQLCODE = 100, no such account": {
+      "zh-cn": "SQLCODE = 100，无此账户",
+      "ja": "SQLCODE = 100、該当口座なし"
+    },
+    "the file knows an account the DB does not": {
+      "zh-cn": "文件有、数据库没有的账户",
+      "ja": "DBにない口座をファイルが持つ"
+    },
+    "count invariant": {
+      "zh-cn": "计数不变量",
+      "ja": "件数の不変条件"
+    },
+    "MATCH + CHANGED + FILE_ONLY = file rows": {
+      "zh-cn": "MATCH + CHANGED + FILE_ONLY = 文件行数",
+      "ja": "MATCH + CHANGED + FILE_ONLY = ファイル行数"
+    },
+    "1 + 1 + 1 = 3, and differences.txt has 1 + 1 = 2 rows": {
+      "zh-cn": "1 + 1 + 1 = 3，differences.txt 有 1 + 1 = 2 行",
+      "ja": "1 + 1 + 1 = 3、differences.txt は 1 + 1 = 2 行"
+    },
+    "deliberate gap: DB_ONLY": {
+      "zh-cn": "刻意留的缺口：DB_ONLY",
+      "ja": "意図的な未対応範囲：DB_ONLY"
+    },
+    "an account in ACCOUNT_SNAPSHOT but not in the file": {
+      "zh-cn": "ACCOUNT_SNAPSHOT 有、文件没有的账户",
+      "ja": "ACCOUNT_SNAPSHOT にあってファイルにない口座"
+    },
+    "is not compared and produces no output in this lesson": {
+      "zh-cn": "本课不比较，也不产生输出",
+      "ja": "本課では比較せず、出力もしない"
+    },
+    "This is a boundary, not an omission: covering DB_ONLY needs a reverse cursor scan over the snapshot, which lesson 30 introduces as a follow-up exercise.": {
+      "zh-cn": "这是边界，不是遗漏：覆盖 DB_ONLY 需对快照做反向游标扫描，第 30 课作为后续练习引入。",
+      "ja": "これは境界であり欠落ではない。DB_ONLY を覆うにはスナップショットの逆方向カーソル走査が必要で、第30課が演習として導入する。"
+    },
+    "Any other SQLCODE is a system failure: set the failure flag instead of classifying the row.": {
+      "zh-cn": "其他 SQLCODE 是系统失败：置失败标志，不要给该行分类。",
+      "ja": "それ以外の SQLCODE はシステム障害：行を分類せず、障害フラグを立てる。"
+    }
   }
 }

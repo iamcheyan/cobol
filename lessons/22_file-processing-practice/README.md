@@ -86,6 +86,9 @@
 
 ## 一次跑完，每条记录都去了哪儿
 
+![每条记录只有三个去向：合法入账写 accepted、非法写 rejected 并附原因、只剩主档的计为仅主档；accepted + rejected 必须等于读入笔数](assets/pipeline-dispatch.svg)
+
+
 1. 主程序直接调用 `SORT ... ON ASCENDING KEY SD-TRANSACTION-ACCOUNT`，把排序和分类写在一句里。
 2. `1000-LOAD-TRANSACTIONS` 打开交易输入；每行先量实际宽度，只有 20 字符的记录才 `RELEASE` 进排序工作文件——短一行、长一位，整批就当场停。
 3. `2000-RECONCILE-TRANSACTIONS` 打开主档和两个结果文件，先把第一条主档读进来。

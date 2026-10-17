@@ -86,6 +86,9 @@ Rejection reasons are ten characters: `NO_ACCOUNT`, `BAD_TYPE__` (underscores pa
 
 ## One Run: Where Every Record Goes
 
+![Every record leaves through exactly one door: valid pairs go to accepted, invalid ones to rejected with a reason, leftover master rows count as master-only; accepted + rejected must equal the input count](assets/pipeline-dispatch.svg)
+
+
 1. The main program invokes `SORT ... ON ASCENDING KEY SD-TRANSACTION-ACCOUNT`, combining sorting and classification in one flow.
 2. `1000-LOAD-TRANSACTIONS` opens the transaction input and measures each row. Only a 20-character row is `RELEASE`d to sort. A short or long row stops the batch.
 3. `2000-RECONCILE-TRANSACTIONS` opens the master and two output files, then reads the first master row.

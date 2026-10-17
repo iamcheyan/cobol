@@ -64,6 +64,9 @@ Scope: this lesson uses the default `BY REFERENCE`. Data direction, `BY CONTENT`
 
 ## Two Files, One Interface Contract
 
+![CALL matches parameters by position: the amount is read-only input, the status is written back. Names never participate, so swapping the order still compiles and corrupts data](assets/call-contract.svg)
+
+
 This lesson has two source files with distinct responsibilities:
 
 | File | Role |

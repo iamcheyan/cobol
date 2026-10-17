@@ -62,6 +62,9 @@
 
 ## 这个工程长什么样
 
+![三个程序 + 四份 Copybook：每份 Copybook 只描述一个接口，谁需要哪份就 COPY 哪份；五笔样例的入账/拒绝计数与余额都能手算复核](assets/project-modules.svg)
+
+
 | 文件 | 职责 |
 |---|---|
 | [`lesson.cob`](./lesson.cob) | 主程序：开日志、初始化账户、准备五笔样例交易、`CALL` 过账模块、汇总状态并写日志 |

@@ -67,6 +67,9 @@ Limits: the sample transactions are hard-coded in the main program, and no exter
 
 ## Project Contents
 
+![Three programs, four copybooks: each describes exactly one interface and a program copies only what it needs. The five samples can be checked by hand for counts and balance](assets/project-modules.svg)
+
+
 | File | Responsibility |
 |---|---|
 | [`lesson.cob`](./lesson.cob) | Main program: opens the log, initializes the account, prepares five sample transactions, `CALL`s the posting module, summarizes statuses, and writes the log |

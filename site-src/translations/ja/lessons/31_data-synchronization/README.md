@@ -101,6 +101,9 @@ CREATE TABLE RECON_RESULT (          -- 核对结果，按文件键写回
 
 ### 比較ルール
 
+![各ファイル行は MATCH・CHANGED・FILE_ONLY のいずれか 1 つに必ず入る（相互排他かつ網羅）。DB にしか無い口座はこの課では検出しない、意図的な境界](assets/reconcile-classes.svg)
+
+
 | 条件 | 判定 | カウント | `differences.txt` に書くか |
 |---|---|---|---|
 | `SQLCODE = 0`、顧客番号と金額が両方一致 | `MATCH` | 一致 | いいえ |

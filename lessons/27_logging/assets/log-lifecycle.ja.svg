@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 460" role="img" aria-labelledby="t d" font-family="'DM Sans','Noto Sans SC','Noto Sans JP',system-ui,sans-serif">
+  <title id="t">Log opens before the business input, closes after the data files</title>
+  <desc id="d">Order of operations: open the log first, then the business files; write BATCH_START, record events, BATCH_END, then close data files and close the log. Three positions cannot be logged.</desc>
+  <style>
+    .h1{font-size:16px;font-weight:600;fill:#3f3b3b}.sub{font-size:12px;fill:#5f5b52}
+    .step{font-size:11px;font-weight:600;fill:#3f3b3b}.mono{font-size:10px;fill:#3f3b3b;font-family:'DM Mono',ui-monospace,monospace}
+    .note{font-size:11px;fill:#5f5b52}.axis{font-size:10px;fill:#77736c}
+  </style>
+  <rect x="1" y="1" width="918" height="458" rx="10" fill="#fcfbf7" stroke="#d8d2c3"/>
+  <text class="h1" x="28" y="34">ログのライフサイクル：先に開き、最後に閉じる</text>
+  <text class="sub" x="28" y="54">ログが開けなければバッチは始まらず、痕跡なく業務データを触らない。</text>
+
+  <!-- timeline -->
+  <line x1="60" y1="120" x2="860" y2="120" stroke="#d8d2c3" stroke-width="2"/>
+  <g class="axis" text-anchor="middle">
+    <text x="120" y="144">1 ログを開く</text>
+    <text x="290" y="144">2 データを開く</text>
+    <text x="470" y="144">3 処理</text>
+    <text x="650" y="144">4 データを閉じる</text>
+    <text x="810" y="144">5 ログを閉じる</text>
+  </g>
+  <g fill="#2563eb">
+    <circle cx="120" cy="120" r="5"/><circle cx="290" cy="120" r="5"/><circle cx="470" cy="120" r="5"/>
+  </g>
+  <g fill="#0d9488"><circle cx="650" cy="120" r="5"/></g>
+  <g fill="#b91c1c"><circle cx="810" cy="120" r="5"/></g>
+
+  <!-- events -->
+  <rect x="60" y="170" width="160" height="64" rx="3" fill="#2563eb" fill-opacity="0.14" stroke="#2563eb" stroke-width="1.4"/>
+  <text class="mono" x="72" y="191">EVENT=BATCH_START</text>
+  <text class="mono" x="72" y="207">ID=TRAINING-001</text>
+  <text class="note" x="72" y="224">業務ファイルより前</text>
+
+  <rect x="250" y="168" width="360" height="122" rx="3" fill="#0d9488" fill-opacity="0.14" stroke="#0d9488" stroke-width="1.4"/>
+  <text class="mono" x="262" y="191">EVENT=RECORD_READ      NO= ACCOUNT=</text>
+  <text class="mono" x="262" y="211">EVENT=RECORD_ACCEPTED  NO= ACCOUNT=</text>
+  <text class="mono" x="262" y="231">EVENT=BUSINESS_REJECT  NO= ACCOUNT= REASON=</text>
+  <text class="mono" x="262" y="251">EVENT=SYSTEM_ERROR     OP= STATUS=</text>
+  <text class="note" x="262" y="276">操作成功後に、イベントごとに1行書く</text>
+
+  <rect x="610" y="170" width="250" height="64" rx="3" fill="#0d9488" fill-opacity="0.14" stroke="#0d9488" stroke-width="1.4"/>
+  <text class="mono" x="622" y="191">EVENT=BATCH_END</text>
+  <text class="mono" x="622" y="207">INPUT= ACCEPTED= REJECTED= SYSTEM_ERROR=</text>
+  <text class="note" x="622" y="224">データ閉鎖後、ログ閉鎖前</text>
+
+  <!-- cannot be logged -->
+  <rect x="60" y="316" width="800" height="56" rx="3" fill="#b91c1c" fill-opacity="0.10" stroke="#b91c1c" stroke-width="1.4"/>
+  <text class="step" x="74" y="337">ログは自身の失敗を記録できない</text>
+  <text class="mono" x="74" y="356">オープン失敗→バッチ不開始 · 途中の書込失敗→報告不能 · クローズ失敗→最終行が欠けることがある</text>
+
+  <text class="note" x="28" y="400">各行は STRING ... DELIMITED BY SIZE で WS-LOG-MESSAGE に組む。先にクリアしないと、前の長いイベントの末尾が残る。</text>
+  <text class="note" x="28" y="422">WS-LOG-MESSAGE は PIC X(100)。本課最長のイベントは66文字なので、切り捨ては起きない。</text>
+</svg>

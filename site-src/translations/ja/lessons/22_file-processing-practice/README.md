@@ -84,6 +84,9 @@ _translated_by: site-src/translation agent
 
 ## 1回の実行で各レコードが進む先
 
+![各レコードの行き先は 3 つだけ：正当なものは accepted、不正なものは理由付きで rejected、残ったマスタ行は master-only。accepted + rejected は読込件数と一致すること](assets/pipeline-dispatch.svg)
+
+
 1. メインプログラムは `SORT ... ON ASCENDING KEY SD-TRANSACTION-ACCOUNT` を呼び、整列と分類を一つの流れにします。
 2. `1000-LOAD-TRANSACTIONS` が取引入力を開き、各行の実幅を測定します。20文字の行だけ `RELEASE` します。短い行や長い行があればバッチを停止します。
 3. `2000-RECONCILE-TRANSACTIONS` がマスターと2つの結果ファイルを開き、最初のマスター行を読みます。

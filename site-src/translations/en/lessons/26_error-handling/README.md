@@ -55,6 +55,9 @@ Limits: this lesson does **not** provide atomic delivery or idempotent reruns, a
 
 ## Two Kinds of Failure, Two Different Outcomes
 
+![A business rejection only touches the reject file and its count, exit code stays 0; a system failure makes the run untrustworthy and must stop with 1; EOF and an empty file are normal ends](assets/failure-classes.svg)
+
+
 The input is a text file of daily transactions, one per line. The program validates each record at fixed widths, routes it to `accepted.txt` or `rejected.txt`, and prints a count summary. All the new capabilities in this lesson concern **the same nonzero outcome having different causes**:
 
 - A business rejection (bad record) affects only the reject file and rejection count; it is **not a batch failure**. Later records are processed as usual and the exit code is 0.

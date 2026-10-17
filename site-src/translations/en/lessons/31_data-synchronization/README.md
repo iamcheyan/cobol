@@ -101,6 +101,9 @@ The demonstration database is recreated by each `run`: `ACCOUNT_SNAPSHOT` always
 
 ### Comparison Rules
 
+![Each file row falls into exactly one of MATCH, CHANGED or FILE_ONLY; the three are mutually exclusive and exhaustive. Accounts that exist only in the database are deliberately not detected here](assets/reconcile-classes.svg)
+
+
 | Case | Classification | Count | Write to `differences.txt`? |
 |---|---|---|---|
 | `SQLCODE = 0`; customer ID and amount are both equal | `MATCH` | Consistent | No |

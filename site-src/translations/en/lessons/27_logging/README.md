@@ -64,6 +64,9 @@ Limits: the log uses a fixed educational `KEY=VALUE` format, and the batch ID is
 
 ## Log Format and Lifecycle
 
+![The log opens before any business file and closes last: if it cannot open, the batch never starts, so data is never touched without a trail. Three failure points cannot be logged at all](assets/log-lifecycle.svg)
+
+
 The log is line-oriented `KEY=VALUE` text, with one event per line. A successful run writes these events in order:
 
 | Event | When it is written | Key fields |

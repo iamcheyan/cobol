@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 460" role="img" aria-labelledby="t d" font-family="'DM Sans','Noto Sans SC','Noto Sans JP',system-ui,sans-serif">
+  <title id="t">Log opens before the business input, closes after the data files</title>
+  <desc id="d">Order of operations: open the log first, then the business files; write BATCH_START, record events, BATCH_END, then close data files and close the log. Three positions cannot be logged.</desc>
+  <style>
+    .h1{font-size:16px;font-weight:600;fill:#3f3b3b}.sub{font-size:12px;fill:#5f5b52}
+    .step{font-size:11px;font-weight:600;fill:#3f3b3b}.mono{font-size:10px;fill:#3f3b3b;font-family:'DM Mono',ui-monospace,monospace}
+    .note{font-size:11px;fill:#5f5b52}.axis{font-size:10px;fill:#77736c}
+  </style>
+  <rect x="1" y="1" width="918" height="458" rx="10" fill="#fcfbf7" stroke="#d8d2c3"/>
+  <text class="h1" x="28" y="34">日志生命周期：先开，后关</text>
+  <text class="sub" x="28" y="54">日志打不开则批次不启动，业务数据不会在无痕迹时被改动。</text>
+
+  <!-- timeline -->
+  <line x1="60" y1="120" x2="860" y2="120" stroke="#d8d2c3" stroke-width="2"/>
+  <g class="axis" text-anchor="middle">
+    <text x="120" y="144">1 开日志</text>
+    <text x="290" y="144">2 开数据</text>
+    <text x="470" y="144">3 处理</text>
+    <text x="650" y="144">4 关数据</text>
+    <text x="810" y="144">5 关日志</text>
+  </g>
+  <g fill="#2563eb">
+    <circle cx="120" cy="120" r="5"/><circle cx="290" cy="120" r="5"/><circle cx="470" cy="120" r="5"/>
+  </g>
+  <g fill="#0d9488"><circle cx="650" cy="120" r="5"/></g>
+  <g fill="#b91c1c"><circle cx="810" cy="120" r="5"/></g>
+
+  <!-- events -->
+  <rect x="60" y="170" width="160" height="64" rx="3" fill="#2563eb" fill-opacity="0.14" stroke="#2563eb" stroke-width="1.4"/>
+  <text class="mono" x="72" y="191">EVENT=BATCH_START</text>
+  <text class="mono" x="72" y="207">ID=TRAINING-001</text>
+  <text class="note" x="72" y="224">先于任何业务文件</text>
+
+  <rect x="250" y="168" width="360" height="122" rx="3" fill="#0d9488" fill-opacity="0.14" stroke="#0d9488" stroke-width="1.4"/>
+  <text class="mono" x="262" y="191">EVENT=RECORD_READ      NO= ACCOUNT=</text>
+  <text class="mono" x="262" y="211">EVENT=RECORD_ACCEPTED  NO= ACCOUNT=</text>
+  <text class="mono" x="262" y="231">EVENT=BUSINESS_REJECT  NO= ACCOUNT= REASON=</text>
+  <text class="mono" x="262" y="251">EVENT=SYSTEM_ERROR     OP= STATUS=</text>
+  <text class="note" x="262" y="276">一事一行，操作成功后再写</text>
+
+  <rect x="610" y="170" width="250" height="64" rx="3" fill="#0d9488" fill-opacity="0.14" stroke="#0d9488" stroke-width="1.4"/>
+  <text class="mono" x="622" y="191">EVENT=BATCH_END</text>
+  <text class="mono" x="622" y="207">INPUT= ACCEPTED= REJECTED= SYSTEM_ERROR=</text>
+  <text class="note" x="622" y="224">数据文件关闭后、日志关闭前</text>
+
+  <!-- cannot be logged -->
+  <rect x="60" y="316" width="800" height="56" rx="3" fill="#b91c1c" fill-opacity="0.10" stroke="#b91c1c" stroke-width="1.4"/>
+  <text class="step" x="74" y="337">日志记不下自己的失败</text>
+  <text class="mono" x="74" y="356">打开失败 → 批次不启动 · 中途写失败 → 无法上报 · 关闭失败 → 末行可能缺失</text>
+
+  <text class="note" x="28" y="400">每行用 STRING ... DELIMITED BY SIZE 拼进 WS-LOG-MESSAGE，先清空；否则上一条更长的事件会留下尾巴。</text>
+  <text class="note" x="28" y="422">WS-LOG-MESSAGE 为 PIC X(100)；本课最长事件 66 字符，不会截断。</text>
+</svg>

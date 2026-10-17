@@ -96,6 +96,9 @@ CREATE TABLE RECON_RESULT (          -- 核对结果，按文件键写回
 
 ### 比对规则
 
+![每条文件记录只归入一致 / 変更 / ファイルのみ三类之一，三类互斥且穷尽；只在数据库存在的账户本课不检测，这是明确划出的边界](assets/reconcile-classes.svg)
+
+
 | 情况 | 判定 | 计数 | 是否写 `differences.txt` |
 |---|---|---|---|
 | `SQLCODE = 0`，客户号与金额都相等 | `MATCH` | 一致 | 否 |

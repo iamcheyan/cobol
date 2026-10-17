@@ -67,6 +67,9 @@ _translated_by: site-src/translation agent
 
 ## プロジェクトの構成
 
+![3 つのプログラムと 4 つの Copybook。各 Copybook は 1 つのインターフェースだけを表し、必要なものだけを COPY する。5 件のサンプルは件数も残高も手計算で検証できる](assets/project-modules.svg)
+
+
 | ファイル | 役割 |
 |---|---|
 | [`lesson.cob`](./lesson.cob) | メインプログラム：ログを開き、口座を初期化し、5 件のサンプル取引を用意し、計上モジュールを `CALL` し、状態を集計してログを書く |

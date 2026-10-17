@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 470" role="img" aria-labelledby="t d" font-family="'DM Sans','Noto Sans SC','Noto Sans JP',system-ui,sans-serif">
+  <title id="t">Every input record leaves through exactly one door</title>
+  <desc id="d">The batch sorts by account key, then walks the sorted stream against the master file. Each record ends in accepted, rejected or master-only, and the counts must add up.</desc>
+  <style>
+    .h1{font-size:16px;font-weight:600;fill:#3f3b3b}.sub{font-size:12px;fill:#5f5b52}
+    .step{font-size:11.5px;font-weight:600;fill:#3f3b3b}.mono{font-size:10.5px;fill:#3f3b3b;font-family:'DM Mono',ui-monospace,monospace}
+    .note{font-size:11px;fill:#5f5b52}.out{font-size:11px;font-weight:600;fill:#3f3b3b}
+  </style>
+  <rect x="1" y="1" width="938" height="468" rx="10" fill="#fcfbf7" stroke="#d8d2c3"/>
+  <text class="h1" x="28" y="34">One record, one destination</text>
+  <text class="sub" x="28" y="54">Sort by account key, walk both streams once, and account for every record.</text>
+  <defs><marker id="a" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#64748b"/></marker></defs>
+
+  <rect x="28" y="78" width="160" height="50" rx="3" fill="#64748b" fill-opacity="0.16" stroke="#64748b" stroke-width="1.5"/>
+  <text class="step" x="42" y="99">transactions</text>
+  <text class="mono" x="42" y="116">20 chars each</text>
+
+  <rect x="222" y="78" width="180" height="50" rx="3" fill="#2563eb" fill-opacity="0.16" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="step" x="236" y="99">1000-LOAD</text>
+  <text class="mono" x="236" y="116">width = 20 ? RELEASE</text>
+
+  <rect x="436" y="78" width="200" height="50" rx="3" fill="#2563eb" fill-opacity="0.16" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="step" x="450" y="99">SORT ascending</text>
+  <text class="mono" x="450" y="116">SD-TRANSACTION-ACCOUNT</text>
+
+  <rect x="670" y="78" width="240" height="50" rx="3" fill="#0d9488" fill-opacity="0.16" stroke="#0d9488" stroke-width="1.5"/>
+  <text class="step" x="684" y="99">2000-RECONCILE</text>
+  <text class="mono" x="684" y="116">master + sorted stream</text>
+
+  <g stroke="#64748b" stroke-width="1.4" fill="none" marker-end="url(#a)">
+    <line x1="190" y1="103" x2="218" y2="103"/>
+    <line x1="404" y1="103" x2="432" y2="103"/>
+    <line x1="638" y1="103" x2="666" y2="103"/>
+    <path d="M790 131 V168"/>
+  </g>
+
+  <!-- decision -->
+  <rect x="330" y="172" width="250" height="54" rx="3" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="1.5"/>
+  <text class="step" x="344" y="194">compare keys</text>
+  <text class="mono" x="344" y="211">master key vs txn key</text>
+
+  <g stroke="#64748b" stroke-width="1.4" fill="none" marker-end="url(#a)">
+    <path d="M380 226 V262 H210 V286"/>
+    <path d="M455 226 V286"/>
+    <path d="M530 226 V262 H700 V286"/>
+  </g>
+
+  <!-- three outputs -->
+  <rect x="90" y="290" width="240" height="74" rx="3" fill="#0d9488" fill-opacity="0.16" stroke="#0d9488" stroke-width="1.5"/>
+  <text class="out" x="104" y="311">MATCHED + valid</text>
+  <text class="mono" x="104" y="328">type D/C, digits only</text>
+  <text class="mono" x="104" y="345">→ accepted.txt</text>
+
+  <rect x="360" y="290" width="200" height="74" rx="3" fill="#b91c1c" fill-opacity="0.10" stroke="#b91c1c" stroke-width="1.5"/>
+  <text class="out" x="374" y="311">MATCHED + invalid</text>
+  <text class="mono" x="374" y="328">wrong type / not numeric</text>
+  <text class="mono" x="374" y="345">→ rejected.txt + reason</text>
+
+  <rect x="590" y="290" width="320" height="74" rx="3" fill="#64748b" fill-opacity="0.16" stroke="#64748b" stroke-width="1.5"/>
+  <text class="out" x="604" y="311">MASTER ONLY</text>
+  <text class="mono" x="604" y="328">master key smaller, or transactions exhausted</text>
+  <text class="mono" x="604" y="345">counted, not written to a file</text>
+
+  <!-- invariant -->
+  <rect x="28" y="386" width="882" height="62" rx="3" fill="#2563eb" fill-opacity="0.10" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="step" x="42" y="408">count invariant</text>
+  <text class="mono" x="42" y="426">accepted + rejected = transactions read</text>
+  <text class="note" x="42" y="442">If the two sides differ, a record was dropped — treat the night as failed rather than publishing a short file.</text>
+</svg>

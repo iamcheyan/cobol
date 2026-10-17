@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 450" role="img" aria-labelledby="t d" font-family="'DM Sans','Noto Sans SC','Noto Sans JP',system-ui,sans-serif">
+  <title id="t">Three mutually exclusive classes, and one gap left open</title>
+  <desc id="d">Each file row becomes MATCH, CHANGED or FILE_ONLY based on SQLCODE and field equality. Accounts that exist only in the database are not detected in this lesson.</desc>
+  <style>
+    .h1{font-size:16px;font-weight:600;fill:#3f3b3b}.sub{font-size:12px;fill:#5f5b52}
+    .box{font-size:11.5px;font-weight:600;fill:#3f3b3b}.mono{font-size:10.5px;fill:#3f3b3b;font-family:'DM Mono',ui-monospace,monospace}
+    .note{font-size:11px;fill:#5f5b52}.cnt{font-size:11px;font-weight:600;fill:#76319f}
+  </style>
+  <rect x="1" y="1" width="918" height="448" rx="10" fill="#fcfbf7" stroke="#d8d2c3"/>
+  <text class="h1" x="28" y="34">Every file row gets exactly one class</text>
+  <text class="sub" x="28" y="54">Compare by lookup result, then by value; never by formatting.</text>
+  <defs><marker id="a" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#64748b"/></marker></defs>
+
+  <rect x="330" y="74" width="250" height="46" rx="3" fill="#64748b" fill-opacity="0.16" stroke="#64748b" stroke-width="1.5"/>
+  <text class="box" x="344" y="102">look up account in ACCOUNT_SNAPSHOT</text>
+
+  <g stroke="#64748b" stroke-width="1.4" fill="none" marker-end="url(#a)">
+    <path d="M400 124 V150 H200 V172"/>
+    <path d="M470 124 V150 H470 V172"/>
+    <path d="M560 124 V150 H740 V172"/>
+  </g>
+  <text class="mono" x="200" y="146" text-anchor="middle">SQLCODE = 0</text>
+  <text class="mono" x="740" y="146" text-anchor="middle">SQLCODE = 100</text>
+
+  <rect x="60" y="176" width="280" height="96" rx="3" fill="#0d9488" fill-opacity="0.16" stroke="#0d9488" stroke-width="1.5"/>
+  <text class="box" x="74" y="198">MATCH</text>
+  <text class="mono" x="74" y="216">customer id and amount both equal</text>
+  <text class="mono" x="74" y="233">amount compared as a number, not text</text>
+  <text class="cnt" x="74" y="256">count 1 · not written to differences.txt</text>
+
+  <rect x="370" y="176" width="230" height="96" rx="3" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="1.5"/>
+  <text class="box" x="384" y="198">CHANGED</text>
+  <text class="mono" x="384" y="216">at least one field differs</text>
+  <text class="mono" x="384" y="233">customer id or amount</text>
+  <text class="cnt" x="384" y="256">count 1 · written to differences.txt</text>
+
+  <rect x="630" y="176" width="260" height="96" rx="3" fill="#b91c1c" fill-opacity="0.10" stroke="#b91c1c" stroke-width="1.5"/>
+  <text class="box" x="644" y="198">FILE_ONLY</text>
+  <text class="mono" x="644" y="216">SQLCODE = 100, no such account</text>
+  <text class="mono" x="644" y="233">the file knows an account the DB does not</text>
+  <text class="cnt" x="644" y="256">count 1 · written to differences.txt</text>
+
+  <!-- invariant -->
+  <rect x="60" y="300" width="440" height="66" rx="3" fill="#2563eb" fill-opacity="0.10" stroke="#2563eb" stroke-width="1.4"/>
+  <text class="box" x="74" y="321">count invariant</text>
+  <text class="mono" x="74" y="339">MATCH + CHANGED + FILE_ONLY = file rows</text>
+  <text class="mono" x="74" y="356">1 + 1 + 1 = 3, and differences.txt has 1 + 1 = 2 rows</text>
+
+  <!-- the gap -->
+  <rect x="520" y="300" width="370" height="66" rx="3" fill="#64748b" fill-opacity="0.12" stroke="#64748b" stroke-width="1.4" stroke-dasharray="4 3"/>
+  <text class="box" x="534" y="321">deliberate gap: DB_ONLY</text>
+  <text class="mono" x="534" y="339">an account in ACCOUNT_SNAPSHOT but not in the file</text>
+  <text class="mono" x="534" y="356">is not compared and produces no output in this lesson</text>
+
+  <text class="note" x="28" y="398">This is a boundary, not an omission: covering DB_ONLY needs a reverse cursor scan over the snapshot, which lesson 30 introduces as a follow-up exercise.</text>
+  <text class="note" x="28" y="420">Any other SQLCODE is a system failure: set the failure flag instead of classifying the row.</text>
+</svg>

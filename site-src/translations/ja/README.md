@@ -158,8 +158,12 @@ Makefile            コース検査と拡張教材の実行入口
 
 ## クレジット
 
-[GnuCOBOL](https://gnucobol.sourceforge.io/) を使用しています。GnuCOBOL は **Keisuke Nishida** が2002年に公開した OpenCOBOL として始まり、
-現在は Simon Sobisch らが率いる GNU Project のもとで開発されています。シャイヤー種の馬のマスコットは GnuCOBOL プロジェクトに由来します。
+[GnuCOBOL](https://gnucobol.sourceforge.io/) を使っています。GnuCOBOL は 2002 年に日本の開発者 **西田圭介**氏が公開した
+OpenCOBOL から始まりました。COBOL ソースを C に変換し、システムの C コンパイラーで実行プログラムを作る方式です。
+現在は GNU プロジェクトの下で Simon Sobisch 氏らが開発を続けています。Debian/Ubuntu なら
+`sudo apt install gnucobol` で導入でき、自宅の Linux でコースの固定形式コードをコンパイル・実行できます。
+メインフレームは必要ありません。ただし、学習用に実行できることは、メインフレームの方言・データ表現・本番環境での動作が
+すべて同じという意味ではありません。シャイヤー種の馬のマスコットは GnuCOBOL プロジェクトに由来します。
 
 連携する Neovim プラグイン [`cobol.nvim`](https://github.com/iamcheyan/cobol.nvim) は、各課に取り組む際に使える固定形式の桁ガイド、
 構造ナビゲーション、Copybook プレビュー、レコードサイズ計算、コンパイラー診断を提供します。

@@ -170,9 +170,12 @@ a new feature.
 
 ## Credits
 
-Built with [GnuCOBOL](https://gnucobol.sourceforge.io/). GnuCOBOL began as OpenCOBOL, released in 2002 by
-**Keisuke Nishida**; development now runs under the GNU Project, led by Simon Sobisch and others. The Shire horse
-mascot comes from the GnuCOBOL project.
+Built with [GnuCOBOL](https://gnucobol.sourceforge.io/). GnuCOBOL began as OpenCOBOL, released in 2002 by Japanese developer
+**Keisuke Nishida**. It translates COBOL source into C, then uses the system's C compiler to build the program; development
+now continues under the GNU Project, with Simon Sobisch and others. On Debian or Ubuntu, install it with
+`sudo apt install gnucobol`. That makes it practical to compile and run this course's fixed-format examples on Linux at home,
+without access to a mainframe. It is a useful learning and validation environment, though compiler dialects, data representations,
+and production behavior on a mainframe may differ. The Shire horse mascot comes from the GnuCOBOL project.
 
 The companion Neovim plugin, [`cobol.nvim`](https://github.com/iamcheyan/cobol.nvim), provides fixed-format column
 guides, structure navigation, copybook preview, record-size calculation and compiler diagnostics while you work

@@ -157,8 +157,9 @@ Makefile            课程检查与扩展入口
 
 ## 致谢
 
-使用 [GnuCOBOL](https://gnucobol.sourceforge.io/) 构建。GnuCOBOL 最初是 OpenCOBOL，由**西田圭介**于 2002 年发布；
-现在开发在 GNU 项目下推进，由 Simon Sobisch 等人主导。夏尔马标志来自 GnuCOBOL 项目。
+使用 [GnuCOBOL](https://gnucobol.sourceforge.io/) 构建。GnuCOBOL 最初是 OpenCOBOL，由日本开发者**西田圭介**于 2002 年发布；
+它把 COBOL 源码翻译成 C，再交给系统的 C 编译器生成程序。现在项目在 GNU 名下由 Simon Sobisch 等人持续维护。
+在 Debian/Ubuntu 上可以用 `sudo apt install gnucobol` 安装；这让学习者能在家用 Linux 上编译和运行课程中的固定格式代码，无需拥有大型机。它适合学习和验证 COBOL 代码，但不意味着大型机上的编译器方言、数据表示和生产环境行为都与 GnuCOBOL 完全相同。夏尔马标志来自 GnuCOBOL 项目。
 
 配套的 Neovim 插件 [`cobol.nvim`](https://github.com/iamcheyan/cobol.nvim) 提供固定格式标尺、结构导航、
 Copybook 预览、记录长度计算与编译器诊断，配合这套课程使用。

@@ -78,7 +78,8 @@ LOCALES = {
             ("32", "毕业项目", "银行对账批处理系统"),
         ],
         "start_eyebrow": "START HERE", "start_title": "每一课，都能动手运行",
-        "start_text": "准备 GnuCOBOL 与 Make，从第一课开始编译、修改、练习。源码、输入数据和参考答案都与讲义一起浏览。",
+        "start_text": "准备 GnuCOBOL 与 Make，从第一课开始编译、修改、练习。GnuCOBOL 源自日本开发者西田圭介发布的 OpenCOBOL，会先把 COBOL 翻译成 C，再调用系统的 C 编译器。Debian/Ubuntu 可用 apt 安装，在家用 Linux 就能练习本课程采用的固定格式；这不要求大型机，也不代表与主机生产环境完全相同。源码、输入数据和参考答案都与讲义一起浏览。",
+
         "start_term": "终端 · Debian / Ubuntu", "start_open": "打开第 01 课",
         "more_eyebrow": "BEYOND THE MAIN COURSE", "more_title": "继续探索",
         "more_kn": "知识库", "more_kn_desc": "语言背景、史话、速查手册与术语表",
@@ -190,7 +191,8 @@ LOCALES = {
             ("32", "Capstone", "Bank reconciliation batch system"),
         ],
         "start_eyebrow": "START HERE", "start_title": "Every lesson runs on your machine",
-        "start_text": "Install GnuCOBOL and Make, then compile, modify and practise from lesson one. Source code, fixtures and answer keys sit next to each lesson.",
+        "start_text": "Install GnuCOBOL and Make, then compile, modify and practise from lesson one. GnuCOBOL grew from OpenCOBOL, released by Japanese developer Keisuke Nishida, and translates COBOL to C for the system C compiler. On Debian/Ubuntu, apt makes it easy to practise this course’s fixed-format source on home Linux—no mainframe needed. This is a learning setup, not a guarantee of identical mainframe production behavior. Source code, fixtures and answer keys sit next to each lesson.",
+
         "start_term": "Terminal · Debian / Ubuntu", "start_open": "Open lesson 01",
         "more_eyebrow": "BEYOND THE MAIN COURSE", "more_title": "Keep exploring",
         "more_kn": "Knowledge base", "more_kn_desc": "Language background, history, reference and glossary",
@@ -302,7 +304,8 @@ LOCALES = {
             ("32", "卒業プロジェクト", "銀行照合バッチシステム"),
         ],
         "start_eyebrow": "START HERE", "start_title": "Linux と GnuCOBOL があれば、今日から動かせます",
-        "start_text": "メインフレームがなくても大丈夫です。GnuCOBOL は COBOL を C に変換して動かす自由なコンパイラで、日本の開発者・西田圭介氏が原作者です。apt 一発で入り、自宅の Linux で本番と同じ固定形式のコードを扱えます。",
+        "start_text": "メインフレームがなくても大丈夫です。GnuCOBOL は日本の開発者・西田圭介氏が公開した OpenCOBOL から始まり、COBOL を C に変換してシステムの C コンパイラーでビルドする自由なコンパイラーです。Debian/Ubuntu なら apt で導入でき、自宅の Linux で本番の現場でも使われる固定形式の書き方を練習できます。ただし、メインフレームの方言や本番動作まで同じになるわけではありません。",
+
         "start_term": "ターミナル · Debian / Ubuntu", "start_open": "レッスン01を開く",
         "more_eyebrow": "BEYOND THE MAIN COURSE", "more_title": "さらに学ぶ",
         "more_kn": "ナレッジベース", "more_kn_desc": "言語の概要・史話・リファレンス・用語集",

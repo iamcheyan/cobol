@@ -55,6 +55,16 @@ Limits: this lesson does not define data items, does not read files / command li
 - A Linux terminal; this lesson needs no database, additional tools, or third-party libraries.
 - The run will not create business data files; the only thing produced in `build/` is a single executable.
 
+## From Punch Cards to Screens: Where COBOL First Ran
+
+When COBOL was created, a mainframe was typically a large computer bought and managed centrally by an organization, and shared by many people in different ways. A bank might hand a batch of business records to a program for processing; the program itself was often first written on paper, then an operator transcribed each line onto a punched card. The cards were stacked in order and fed into a card reader. These are **punch cards and card readers**, not time clocks used to record attendance. After the run, results were often printed on paper. The holes encoded characters; the computer read the encoding, not the shapes printed on the card.
+
+Cards were not the only way to interact with computers. Interactive terminals also became common during the mainframe era: their keyboards and screens let people enter commands and view results, while the mainframe elsewhere did most of the computing and was shared. A terminal screen did not mean that a personal computer had arrived.
+
+As personal computers spread, programmers could edit and save source code on a local screen, then compile and run it on that computer or on a connected server. The physical stack of cards gave way to tape, disks and files, but old programs and newer editors could still keep card-era line-format conventions. COBOL's fixed-format column rules are one trace of that history.
+
+COBOL is closely associated with mainframes because it was designed for business data processing and became widely used on them early on. But **COBOL is not a mainframe**. It is a programming language that compilers can implement on different platforms. A portable language makes it easier to move the same source to another machine, though real migrations still encounter differences in compiler dialects, operating systems, file formats and data representation. This course compiles and runs COBOL on Linux with GnuCOBOL, showing that you do not need access to a mainframe to learn it.
+
 ## Breaking This Code Open
 
 ### What Is Actually In a Program

@@ -125,7 +125,7 @@ In a real batch, this can trigger actual incidents: if upstream switches to lowe
 
 ### Language of the Output Text
 
-Repository convention: source comments and README explanations use Chinese, while business text printed by running programs follows Japanese conventions. In this lesson, `取引参照番号` means "transaction reference number", `取引コード` means "transaction code", `分類` means "classification", and `処理` means "action label" (e.g., `処理=ADD_TO_ACCOUNT` means "action suggestion=credit account"). When assessing program behavior, rely on actual output and the explanations in this section.
+This course's explanations are translated into Chinese, English and Japanese, while the **business text printed at runtime remains in Japanese**. In this lesson, `取引参照番号` means "transaction reference number", `取引コード` means "transaction code", `分類` means "classification", and `処理` means "action label" (for example, `処理=ADD_TO_ACCOUNT` means "recommended action=credit the account"). When judging program behavior, rely on the actual output together with the explanations in this section.
 
 ## Complete Example Source
 

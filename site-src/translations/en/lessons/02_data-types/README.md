@@ -223,9 +223,9 @@ rm -rf build                                     # clean: delete the executable 
 言語コード=EN
 ```
 
-Repository convention: source comments and explanations are written in Chinese, but the business text the program outputs remains in Japanese. Line-by-line Chinese meaning and observations:
+Repository convention: this course's explanations are translated into Chinese, English and Japanese, while the business text the program outputs remains in Japanese. Line-by-line English meaning and observations:
 
-| Output line | Chinese meaning | Why it displays this way |
+| Output line | English meaning | Why it displays this way |
 |---|---|---|
 | `口座データ型` | Account data types (heading) | fixed literal |
 | `テキストキーは定義文字を保持：` | Text keys preserve defined characters (subsection heading) | fixed literal |

@@ -114,7 +114,7 @@ COBOL also supports combining multiple conditions into a compound condition usin
 
 ### Language of the Output Text
 
-The repository follows a convention: source comments and README explanations use Chinese, but **business text printed during program execution follows Japanese conventions**. Fortunately, there is no need to guess — all information required for the decision is in the standard output `key=value` lines, where the two critical keys are `判定=` and `理由=`, with Chinese mappings provided in the next section.
+This course's explanations are translated into Chinese, English and Japanese, while the **business text printed at runtime remains in Japanese**. When checking program behavior, use the English explanations in this README together with the actual output.
 
 ## Complete Example Source
 

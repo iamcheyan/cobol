@@ -544,7 +544,7 @@ def lesson_items(locale: str) -> tuple[tuple[Path, str, str], ...]:
     items = []
     for source in sorted(LESSONS.glob("[0-9][0-9]*/README.md")):
         folder = source.parent.name
-        short = names.get(folder[:2]) if locale == "zh-cn" else None
+        short = names.get(folder[:2]) if locale in {"zh-cn", "ja"} else None
         items.append((output_rel(source), short or LESSON_LABELS.get(folder, folder), title_of(source, locale)))
     return tuple(items)
 

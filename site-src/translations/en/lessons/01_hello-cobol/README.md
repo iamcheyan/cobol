@@ -110,7 +110,7 @@ All source files in this course follow these rules. Your habit of "align everyth
 
 ### About the Japanese in the Output
 
-This course has a convention: explanations and comments are written in Chinese, but the **business text printed by the program at runtime is in Japanese** (the teaching material follows the real practice of Japanese financial systems; the field names and status words in the output remain Japanese). So this lesson outputs `こんにちは、COBOL！`, which means "Hello, COBOL!" When judging program behavior, treat the actual output as the source of truth; if the meaning does not line up, come back to the Chinese mapping given in this README.
+The course explanations are translated into Chinese, English and Japanese, while the **business text printed at runtime remains in Japanese** to reflect terminology used in Japanese financial systems. This lesson prints `こんにちは、COBOL！` (“Hello, COBOL!”). Use the English explanations in this README together with the actual output when checking the program's behavior.
 
 ## Complete Example Source
 

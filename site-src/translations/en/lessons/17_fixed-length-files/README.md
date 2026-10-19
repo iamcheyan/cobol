@@ -183,7 +183,7 @@ Each command has a separate job: `-fsyntax-only` only proves the syntax can be p
 クローズ完了 件数=03
 ```
 
-**Chinese translation of the Japanese output:** `ファイルを開きました` = both the input and output files have been opened; `出力 口座番号=… 顧客番号=… 残高=…` = the account number, customer ID, and balance for each written record; `クローズ完了 件数=03` = close completed; 3 records were written. The balance appears as `0001000.00` because that is the display format for `PIC 9(7)V99`: 7 integer digits padded with leading zeroes, a decimal point, and 2 fractional digits.
+**Output line key (Japanese output → English meaning):** `ファイルを開きました` = both the input and output files have been opened; `出力 口座番号=… 顧客番号=… 残高=…` = the account number, customer ID, and balance for each written record; `クローズ完了 件数=03` = close completed; 3 records were written. The balance appears as `0001000.00` because that is the display format for `PIC 9(7)V99`: 7 integer digits padded with leading zeroes, a decimal point, and 2 fractional digits.
 
 **Expected output file:** `balances.dat` is 81 bytes total, or `3 × 27`. Grouped into 27-byte records, it looks like the following three lines (the file contains no newline bytes; line breaks here are only for viewing):
 

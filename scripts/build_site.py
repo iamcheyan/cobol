@@ -55,6 +55,8 @@ LOCALES = {
         "nav_home": "课程首页", "nav_directory": "32 课目录", "nav_extensions": "拓展课程",
         "nav_source": "GitHub 源码", "nav_lang": "语言", "course_nav": "课程导航",
         "lesson_context_label": "现场工作",
+        "course_expand": "展开课程目录",
+        "course_collapse": "收起课程目录",
         "search": "筛选课程", "directory_link": "查看完整课程目录 →",
         "tab_guide": "课程讲义", "tab_exercise": "动手练习", "tab_answer": "参考答案", "tab_resources": "源码与资料",
         "download": "下载文件 ↓", "pending_page": "此内容的翻译正在准备中。以下先显示中文原文。",
@@ -168,6 +170,8 @@ LOCALES = {
         "nav_home": "Home", "nav_directory": "32 lessons", "nav_extensions": "Extensions",
         "nav_source": "GitHub source", "nav_lang": "Language", "course_nav": "Course contents",
         "lesson_context_label": "IN PRACTICE",
+        "course_expand": "Expand course sidebar",
+        "course_collapse": "Collapse course sidebar",
         "search": "Filter lessons", "directory_link": "View the full curriculum →",
         "tab_guide": "Lesson", "tab_exercise": "Exercise", "tab_answer": "Answer key", "tab_resources": "Code & files",
         "download": "Download ↓", "pending_page": "This translation is being prepared. The Chinese original is shown below.",
@@ -281,6 +285,8 @@ LOCALES = {
         "nav_home": "ホーム", "nav_directory": "全32レッスン", "nav_extensions": "発展教材",
         "nav_source": "GitHub ソース", "nav_lang": "言語", "course_nav": "コース目次",
         "lesson_context_label": "現場との接点",
+        "course_expand": "コース一覧を展開",
+        "course_collapse": "コース一覧を折りたたむ",
         "search": "レッスンを絞り込む", "directory_link": "全カリキュラムを見る →",
         "tab_guide": "レッスン", "tab_exercise": "演習", "tab_answer": "解答例", "tab_resources": "コード・資料",
         "download": "ダウンロード ↓", "pending_page": "このページは翻訳準備中です。以下は中国語の原文です。",
@@ -784,8 +790,13 @@ def shell(locale: str, title: str, body: str, page: Path, home: bool = False) ->
     else:
         main = (
             f'<div class="reading-layout"><aside class="course-nav">'
-            f'<button class="course-toggle" type="button" aria-expanded="false" aria-controls="course-body">'
-            f'<span>{labels["course_toggle"]}</span><b>32 {labels["lessons_label"]}</b></button>'
+            f'<button class="course-toggle" type="button" aria-expanded="true" aria-label="{labels["course_collapse"]}" '
+            f'title="{labels["course_collapse"]}" aria-controls="course-body" '
+            f'data-expand-label="{labels["course_expand"]}" data-collapse-label="{labels["course_collapse"]}" '
+            f'data-open-label="{labels["course_toggle"]}" data-closed-label="{labels["course_expand"]}">'
+            f'<span class="course-toggle-label">{labels["course_toggle"]}</span>'
+            f'<b class="course-count">32 {labels["lessons_label"]}</b>'
+            f'<span class="course-toggle-icon" aria-hidden="true">‹</span></button>'
             f'<div class="course-body" id="course-body">'
             f'<div class="nav-heading">{labels["course_nav"]} <span>32</span></div>'
             f'<label class="search"><span>⌕</span><input id="course-search" type="search" '

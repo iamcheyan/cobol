@@ -110,10 +110,35 @@ if (navToggle && siteNav) {
 
 const courseToggle = document.querySelector('.course-toggle');
 const courseBody = document.querySelector('#course-body');
-if (courseToggle && courseBody) {
-  courseToggle.addEventListener('click', () => {
-    const open = courseBody.classList.toggle('open');
+const courseNav = document.querySelector('.course-nav');
+const readingLayout = document.querySelector('.reading-layout');
+if (courseToggle && courseBody && courseNav && readingLayout) {
+  const labels = {
+    expand: courseToggle.dataset.expandLabel,
+    collapse: courseToggle.dataset.collapseLabel,
+  };
+  const setOpen = open => {
+    courseBody.classList.toggle('open', open);
+    courseNav.classList.toggle('collapsed', !open);
+    readingLayout.classList.toggle('sidebar-collapsed', !open);
     courseToggle.setAttribute('aria-expanded', String(open));
+    courseToggle.setAttribute('aria-label', open ? labels.collapse : labels.expand);
+    courseToggle.setAttribute('title', open ? labels.collapse : labels.expand);
+    courseToggle.querySelector('.course-toggle-label').textContent = open
+      ? courseToggle.dataset.openLabel : courseToggle.dataset.closedLabel;
+    const count = courseToggle.querySelector('.course-count');
+    if (count) count.hidden = !open;
+  };
+  const mobile = window.matchMedia('(max-width: 760px)');
+  let open = !mobile.matches;
+  setOpen(open);
+  courseToggle.addEventListener('click', () => {
+    open = courseNav.classList.contains('collapsed');
+    setOpen(open);
+  });
+  mobile.addEventListener('change', event => {
+    open = !event.matches;
+    setOpen(open);
   });
 }
 

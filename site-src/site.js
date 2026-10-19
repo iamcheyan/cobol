@@ -131,14 +131,23 @@ if (courseToggle && courseBody && courseNav && readingLayout) {
     if (count) count.hidden = !open;
   };
   const mobile = window.matchMedia('(max-width: 760px)');
-  let open = !mobile.matches;
+  const stateKey = 'cobol-course-sidebar-open';
+  const savedState = () => {
+    try {
+      const value = localStorage.getItem(stateKey);
+      return value === 'true' ? true : value === 'false' ? false : null;
+    } catch { return null; }
+  };
+  let open = savedState() ?? !mobile.matches;
   setOpen(open);
   courseToggle.addEventListener('click', () => {
     open = courseNav.classList.contains('collapsed');
     setOpen(open);
+    try { localStorage.setItem(stateKey, String(open)); } catch { /* Storage may be unavailable. */ }
   });
   mobile.addEventListener('change', event => {
-    open = !event.matches;
+    const saved = savedState();
+    open = saved ?? !event.matches;
     setOpen(open);
   });
 }

@@ -1,8 +1,8 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. BATCH09.
-      *    Module 09 nightly driver. Composes three shared modules:
-      *    CUSTVAL (customer validation), AMTCALC (amount posting) and
-      *    LOGGER (append-only log) via CALL ... USING ... RETURNING.
+      *    module 09 夜間処理ドライバー。3 つ共通M連携:
+      *    CUSTVAL（顧客検証）・AMTCALC（金額計上）LOGGER
+      *    CALL ... USING ... RETURNING で呼び出す。
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.

@@ -1,9 +1,9 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. IFACEPROBE.
-      *    Unit experiment for module 09. Prints deterministic evidence
-      *    for BY REFERENCE / BY CONTENT / BY VALUE, static vs INITIAL
-      *    WORKING-STORAGE, and AMTCALC interface/RC handling.
-      *    Run: build.sh ifaceprobe.COB, then ./ifaceprobe
+      * module 09の単体実験。次の動作を一定の結果で出
+      * 力。
+      * BY REFERENCE / BY CONTENT / BY VALUE、staticとINITIALの
+      * WORKING-STORAGE、AMTCALCのIFとRC処理
        DATA DIVISION.
        WORKING-STORAGE SECTION.
            COPY "AMTCALC-INTERFACE-V1.CPY".

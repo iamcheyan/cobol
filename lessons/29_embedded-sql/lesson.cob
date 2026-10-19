@@ -1,6 +1,6 @@
-      * 连接串与认证信息不写进源码，由运行环境传入。
-      * SELECT 前先清空接收项，避免“该行不匹配”时沿用上一笔的值。
-      * SQLCODE 100 是正常的“无匹配行”，不是数据库故障。
+      * 接続情報は実行環境から渡す。
+      * SELECT前に受取項目を初期化する。
+      * SQLCODE 100は該当行なし。正常。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON29.
        DATA DIVISION.
@@ -57,7 +57,7 @@
                  FROM ACCOUNT_SNAPSHOT
                 WHERE ACCOUNT_NO = :WS-LOOKUP-ACCOUNT
            END-EXEC
-      * 只有 0 与 100 之外的 SQLCODE 才算 SQL 失败（置失败标志并返回非零码）。
+      * SQLCODE 0/100以外は失敗扱い。
            EVALUATE SQLCODE
              WHEN 0
                MOVE WS-BALANCE TO WS-EDITED-BALANCE

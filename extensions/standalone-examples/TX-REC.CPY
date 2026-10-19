@@ -1,5 +1,5 @@
       *================================================================*
-      * TX-REC.CPY: 80-BYTE FIXED-LENGTH BANK TRANSACTION RECORD       *
+      *TX-REC.CPY：銀行取引の固定長80バイトレコード
       *================================================================*
        01  TX-RECORD.
            05  TX-HEADER.
@@ -12,13 +12,13 @@
                    88  TX-TRANSFER     VALUE "XFR".
            05  TX-AMOUNT               PIC 9(09)V99.
            05  TX-BODY                 PIC X(42).
-      *    -- REDEFINES: DEPOSIT/WITHDRAW FORMAT (42 BYTES) --
+      *入金・出金レコードの項目配置（42バイト）
            05  TX-DEP-INFO REDEFINES TX-BODY.
                10  TX-DEP-ACCOUNT      PIC X(16).
                10  TX-DEP-BRANCH       PIC X(08).
                10  TX-DEP-TELLER       PIC X(06).
                10  FILLER              PIC X(12).
-      *    -- REDEFINES: TRANSFER FORMAT (42 BYTES) --
+      *振替レコードの項目配置（42バイト）
            05  TX-XFR-INFO REDEFINES TX-BODY.
                10  TX-XFR-FROM-ACCT    PIC X(16).
                10  TX-XFR-TO-ACCT      PIC X(16).

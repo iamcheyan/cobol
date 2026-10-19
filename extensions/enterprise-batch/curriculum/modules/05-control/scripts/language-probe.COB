@@ -1,9 +1,9 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. M05-LANGUAGE-PROBE.
-      *> Lesson 05.2 micro-lab: UNSTRING loads an unordered
-      *> raw=canonical status map, INSPECT normalises names,
-      *> SEARCH resolves status, INITIALIZE clears output and
-      *> STRING composes the report line.
+      *> 05.2 実験：UNSTRING で順不同の対応表を読む。
+      *> raw=canonical、INSPECT で名前を正規化。
+      *> SEARCH で状態検索、INITIALIZE で出力初期化、
+      *> STRING でレポート行を組み立てる。
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.

@@ -1,5 +1,5 @@
-      *> M04ENTERPRISE: module 04 lesson 04.3 field locator over the
-      *> module 07 canonical 175-field enterprise record (read-only).
+      *> M04ENTERPRISE: module 04 lesson 04.3 フィールド検索。
+      *> module 07 正規 enterprise record（175 fields）対象（読
        IDENTIFICATION DIVISION.
        PROGRAM-ID. M04ENTERPRISE.
        ENVIRONMENT DIVISION.

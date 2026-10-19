@@ -1,6 +1,6 @@
-      * 契约：ADD-ONE 以默认 BY REFERENCE 接收参数地址，
-      * 并就地 +1；故 BY REFERENCE 调用方会看到新值，
-      * BY CONTENT 只改临时副本，调用方不变。
+      * ADD-ONE は既定の BY REFERENCE で引数アドレスを受け
+      * 1を加えるため、BY REFERENCE の呼出側にも新値が
+      * BY CONTENT は一時コピーだけ変更し、呼出側は不
        IDENTIFICATION DIVISION.
        PROGRAM-ID. ADD-ONE.
        DATA DIVISION.

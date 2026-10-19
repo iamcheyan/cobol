@@ -1,9 +1,9 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. BROKEN-AREA.
-      *> Deliberately broken fixed-format source for lesson 01.2. The
-      *> MOVE statement starts at column 5, which is still Area A, so
-      *> the compiler does not see a valid statement there. Area B
-      *> statements must start at column 12 or later.
+      *01.2の固定形式エラー例。
+      *MOVE文が列5（Area A）から始まる。
+      *コンパイラは有効な文と認識しない。Area B文は
+      *列12以降に置く必要がある。
        DATA DIVISION.
        WORKING-STORAGE SECTION.
        01 WS-N PIC 9 VALUE 0.

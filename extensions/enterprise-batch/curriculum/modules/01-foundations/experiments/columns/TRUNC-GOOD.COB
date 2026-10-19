@@ -1,8 +1,8 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. TRUNC-GOOD.
-      *> Corrected version of TRUNC-BAD: the literal 111110 is
-      *> written entirely inside columns 12-72, so the compiler
-      *> sees every digit and the result is 1 + 111110 = 111111.
+      *TRUNC-BADの修正版。リテラル111110を
+      *列12〜72の範囲内にすべて記述ため、
+      *全桁が認識され、結果は1 + 111110 = 111111。
        DATA DIVISION.
        WORKING-STORAGE SECTION.
        01 WS-BASE PIC 9(9) VALUE 1.

@@ -1,8 +1,8 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. M06-INDEXED-PROBE.
-      *> Lesson 06.4: GnuCOBOL BDB indexed WRITE / READ / REWRITE /
-      *> DELETE and the status codes for duplicate key, missing key,
-      *> in-process re-open lock and open failure. Reading lab only.
+      *> 06.4 GnuCOBOL BDB 索引の WRITE / READ / REWRITE /
+      *> DELETE、重複キー・キーなし・再OPEN時の
+      *> ロック・OPEN失敗の状態を確認する実験。
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.

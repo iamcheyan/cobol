@@ -1,11 +1,11 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. M06-INDEXED-HOLD-PROBE.
-      *> Lesson 06.4 companion: hold an indexed file OPEN I-O until
-      *> stdin closes, so a second process can be launched against the
-      *> same file.  check.sh runs two copies at once and reads the
-      *> OPEN status of each; both reporting 00 proves the default
-      *> GnuCOBOL/BDB handler does NOT provide cross-process mutual
-      *> exclusion, which is why the JOB layer (run.sh .lock) must.
+      *> 06.4 補助実験：入力終了まで索引を保持。
+      *> OPEN I-O で保持し、別プロセスからも開く。
+      *> check.sh は2つを同時起動し、
+      *> 各 OPEN の状態を確認。両方が00なら、標準の
+      *> GnuCOBOL/BDB はプロセス間排他を行わず、
+      *> JOB 層で run.sh の .lock が必要。
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.

@@ -20,7 +20,7 @@
                WHEN "T"
                    DISPLAY "分類=TRANSFER"
                    DISPLAY "処理=PROCESS_BOTH_ACCOUNTS"
-      * 規約外のコードは手作業確認。本課はラベルのみ。
+      * 規約外は手作業で確認。本課はラベルのみ。
                WHEN OTHER
                    DISPLAY "分類=UNKNOWN"
                    DISPLAY "処理=REJECT_FOR_REVIEW"

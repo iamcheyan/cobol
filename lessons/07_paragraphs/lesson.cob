@@ -7,8 +7,8 @@
        01 WS-WITHDRAWAL PIC 9(7)V99 VALUE 40.10.
        01 WS-CLOSING-BALANCE PIC 9(7)V99 VALUE ZERO.
        PROCEDURE DIVISION.
-      * 四个数据项都是本程序的共享存储；各段落读写同一份数据。
-      * 主流程必须先初始化再处理，否则初始化会清掉处理结果。
+      * 4項目は共有領域。各段落が同じデータを扱う。
+      * 初期化後に処理する。逆順では結果が消える。
        0000-MAIN.
            PERFORM 1000-INITIALIZE
            PERFORM 2000-PROCESS

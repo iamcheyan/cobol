@@ -1,5 +1,5 @@
-      *> M03BYTES: module 03 reference. Lesson via M03_LESSON=1|2|3.
-      *> Lesson 1 declaration logic vs ABI; 2 raw bytes; 3 packed parse.
+      *> M03BYTES: module 03 参照。M03_LESSON=1|2|3 で
+      *> レッスン選択。Lesson 1: 宣言 ABI・2: 生B3: packed
        IDENTIFICATION DIVISION.
        PROGRAM-ID. M03BYTES.
        ENVIRONMENT DIVISION.

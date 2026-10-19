@@ -2,13 +2,13 @@
        PROGRAM-ID. INDEX12.
        DATA DIVISION.
        WORKING-STORAGE SECTION.
-      *INDEXED BY creates an index without PIC; move it only with SET.
+      *INDEXED BYの索引名にPICはなく、SETで移動。
        01 WS-ACCOUNT-TABLE.
           05 WS-ACCOUNT-ENTRY OCCURS 4 TIMES
              INDEXED BY WS-ACCOUNT-IDX.
              10 WS-ACCOUNT-NUMBER PIC X(10).
              10 WS-ACCOUNT-BALANCE PIC 9(7)V99.
-      *Loaded count, not index; must not exceed OCCURS capacity.
+      *ロード件数であり索引ではない。容量以下。
        01 WS-LAST-ACCOUNT PIC 9 VALUE 4.
        01 WS-PROCESSED-COUNT PIC 9(3) VALUE ZERO.
        PROCEDURE DIVISION.
@@ -18,7 +18,7 @@
            PERFORM 9000-REPORT
            STOP RUN.
        1000-LOAD-ACCOUNTS.
-      *Load by number; invalid literal subscripts fail at compile time.
+      *範囲外の数値添字はコンパイル時エラー。
            MOVE "0001234567" TO WS-ACCOUNT-NUMBER(1)
            MOVE 1000.00 TO WS-ACCOUNT-BALANCE(1)
            MOVE "0007654321" TO WS-ACCOUNT-NUMBER(2)
@@ -28,7 +28,7 @@
            MOVE "0002468101" TO WS-ACCOUNT-NUMBER(4)
            MOVE 520.00 TO WS-ACCOUNT-BALANCE(4).
        2000-DISPLAY-ACCOUNTS.
-      *Traverse by index: SET locates and advances; no arithmetic.
+      *走査には索引を使う。SETで移動し、算術不可。
            SET WS-ACCOUNT-IDX TO 1
            PERFORM UNTIL WS-ACCOUNT-IDX > WS-LAST-ACCOUNT
                PERFORM 2100-DISPLAY-ONE-ACCOUNT

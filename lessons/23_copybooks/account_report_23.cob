@@ -1,11 +1,11 @@
-      * 第二个消费者：只导入账户 Copybook，与 LESSON23 共用同一份物理声明。
-      * 报表行是程序内常量样例，不读外部文件。
+      * 第2利用側。口座 Copybook を使う。
+      * 報告行は内部定数。外部ファイルは読まない。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. ACCOUNT-REPORT23.
        DATA DIVISION.
        WORKING-STORAGE SECTION.
        COPY "ACCOUNT-REC.CPY".
-      * 编辑字段只负责显示；存储宽度仍取自 Copybook 的 PIC 9(7)V99。
+      * 編集項目は表示用。幅は Copybook に従う。
        01 WS-REPORT-BALANCE PIC 9(7).99 VALUE ZERO.
        PROCEDURE DIVISION.
        0000-MAIN.

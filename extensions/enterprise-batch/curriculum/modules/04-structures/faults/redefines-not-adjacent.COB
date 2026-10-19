@@ -1,4 +1,4 @@
-      *> Fault: REDEFINES must immediately follow the item it redefines.
+      *故障例:REDEFINESは再定義対象項目の直後に置く。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. FAULTREDEFINESADJ.
        DATA DIVISION.

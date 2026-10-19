@@ -1,20 +1,20 @@
-      * 契约：账户记录 27 字节（10+8+9）、交易记录 20 字节（10+1+9），
-      * 与第 17、20、22 课的定长文件接口同宽；改宽度须重编译全部消费者。
-      * 业务规则：余额不足、类型不明、账户号不匹配一律拒绝，且余额不变。
+      * 契約：口座27（10+8+9）、取引20（10+1+9）バイト。
+      * 第17/20/22課と同幅。変更時は全側を再ビルド。
+      * 残高不足・種別不明・口座違いは拒否。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON23.
        DATA DIVISION.
        WORKING-STORAGE SECTION.
-      * COPY 在编译期把 Copybook 声明原文插入此处，不是运行时 CALL；
-      * 声明文件的查找目录由编译命令的 -I copybooks 提供。
+      * COPY はコンパイル時に宣言を挿入。実行時CALLで
+      * 宣言の検索先は -I copybooks で指定。
        COPY "ACCOUNT-REC.CPY".
        COPY "TRANSACTION-REC.CPY".
-      * 状态值定长、不足处补空格：比较依赖 COBOL 的空格补齐，仅显示时 TRIM。
+      * 状態値は固定長。比較は空白補完。表示はTRIM。
        01 WS-POST-STATUS PIC X(12) VALUE SPACES.
        01 WS-POSTED-COUNT PIC 9(3) VALUE ZERO.
        01 WS-REJECTED-COUNT PIC 9(3) VALUE ZERO.
-      * 编辑字段只负责显示（显式小数点占一个字节）；存储宽度仍由 Copybook
-      * 声明，改 Copybook 不会自动改变这两个字段。
+      * 編集項目は表示用（小数点は1バイト）。幅は Co
+      * 宣言で決まる。この2項目の幅は連動しない。
        01 WS-EDITED-AMOUNT PIC 9(7).99 VALUE ZERO.
        01 WS-EDITED-BALANCE PIC 9(7).99 VALUE ZERO.
        PROCEDURE DIVISION.
@@ -53,7 +53,7 @@
            MOVE "D" TO WS-TRANSACTION-TYPE
            MOVE 1.00 TO WS-TRANSACTION-AMOUNT
            PERFORM 2000-POST-TRANSACTION.
-      * 先核对账户号，再验类型与金额：账户号不符一律记 NO_ACCOUNT。
+      * 先に口座番号を照合。不一致は NO_ACCOUNT。
        2000-POST-TRANSACTION.
            MOVE SPACES TO WS-POST-STATUS
            IF WS-TRANSACTION-ACCOUNT NOT = WS-ACCOUNT-NUMBER

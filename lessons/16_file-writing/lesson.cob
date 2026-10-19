@@ -1,5 +1,5 @@
-      * 输出用相对文件名：写在运行时的当前目录。
-      * OPEN OUTPUT 覆盖同名旧文件，本课不追加。
+      * 出力は相対パス。実行時の作業場所に書く。
+      * OPEN OUTPUTは同名を上書き。追記しない。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. WRITE16.
        ENVIRONMENT DIVISION.
@@ -20,7 +20,7 @@
        FD 拒否-FILE.
        01 FD-拒否-RECORD PIC X(35).
        WORKING-STORAGE SECTION.
-      * 样例是程序内演示数据，不是读入的真实交易。
+      * サンプルはプログラム内のデモデータ。
        01 WS-RESULT-TABLE.
           05 WS-RESULT-ENTRY OCCURS 4 TIMES.
              10 WS-RESULT-DESTINATION PIC X.
@@ -30,7 +30,7 @@
        01 WS-拒否-STATUS PIC XX VALUE SPACES.
        01 WS-受理-COUNT PIC 9(2) VALUE ZERO.
        01 WS-拒否-COUNT PIC 9(2) VALUE ZERO.
-      * 写/关闭失败即停止并返回 1；已写行不回滚。
+      * 書込または閉鎖失敗で停止。終了コード1。
        01 WS-WRITE-ERROR PIC X VALUE "N".
        PROCEDURE DIVISION.
        0000-MAIN.
@@ -103,7 +103,7 @@
                            WS-拒否-STATUS
                        MOVE "Y" TO WS-WRITE-ERROR
                    END-IF
-      * 目的地标记只有 A/R；非 A/R 按系统失败处理。
+      * 宛先はA/Rのみ。それ以外は失敗扱い。
                WHEN OTHER
                    DISPLAY "書込=FAILED REASON=UNKNOWN_DESTINATION"
                    MOVE "Y" TO WS-WRITE-ERROR

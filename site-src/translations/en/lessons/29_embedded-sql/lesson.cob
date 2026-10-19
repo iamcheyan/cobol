@@ -1,6 +1,6 @@
-      * Runtime supplies connection string and credentials.
-      * Clear result fields before SELECT to avoid stale values.
-      * SQLCODE 100 means no match, not a database error.
+      * 接続情報は実行環境から渡す。
+      * SELECT前に受取項目を初期化する。
+      * SQLCODE 100は該当行なし。正常。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON29.
        DATA DIVISION.
@@ -57,7 +57,7 @@
                  FROM ACCOUNT_SNAPSHOT
                 WHERE ACCOUNT_NO = :WS-LOOKUP-ACCOUNT
            END-EXEC
-      * Only SQLCODE other than 0/100 fails; return nonzero.
+      * SQLCODE 0/100以外は失敗扱い。
            EVALUATE SQLCODE
              WHEN 0
                MOVE WS-BALANCE TO WS-EDITED-BALANCE

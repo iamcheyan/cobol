@@ -1,9 +1,9 @@
-      * Runtime supplies connection string and password.
-      * DECLARE registers query; OPEN starts retrieval.
-      * SQLCODE 0 = row; 100 = end, not an error.
-      * Close only a successfully opened cursor.
-      * Driver quirk: empty table first returns blank row (0);
-      * next FETCH returns 100; blank row is counted.
+      * 接続情報は環境から渡す。
+      * DECLAREは登録、OPENで取得。
+      * SQLCODE 0は行、100は終端。
+      * OPEN成功時だけカーソルを閉じる。
+      * 空表でも空白行を返すドライバー特例。
+      * 次のFETCHで100。空白行も数える。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON30.
        DATA DIVISION.
@@ -14,9 +14,9 @@
        01 WS-ACCOUNT PIC X(10).
        01 WS-CUSTOMER PIC X(8).
        01 WS-BALANCE PIC S9(7)V99 COMP-3.
-      * Display has 5 integer digits; above 99999.99 loses digits.
+      * 表示整数部は5桁。超過分は欠落。
        01 WS-EDITED-BALANCE PIC 9(5).99.
-      * Three-digit row count wraps above 999 rows.
+      * 行数は3桁。999行超で桁あふれ。
        01 WS-ROW-COUNT PIC 9(3) VALUE ZERO.
        01 WS-DB-OPEN PIC X VALUE "N".
        01 WS-CURSOR-OPEN PIC X VALUE "N".

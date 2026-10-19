@@ -2,16 +2,16 @@
        PROGRAM-ID. REDEF10.
        DATA DIVISION.
        WORKING-STORAGE SECTION.
-      * 样例值固定在程序内，无外部输入。
-      * 交易码由接口契约保证与负载布局相符；
-      * REDEFINES 不校验交易码，也不选择视图。
+      *値は内部固定。入力なし。
+      *コードと配置は契約で保証。
+      *REDEFINESは検証も選択もしない。
        01 WS-TRANSACTION-RECORD.
           05 WS-TRANSACTION-CODE PIC X.
           05 WS-DEPOSIT-PAYLOAD.
              10 WS-ACCOUNT-NUMBER PIC X(10).
              10 WS-DEPOSIT-AMOUNT PIC 9(5)V99.
              10 WS-REFERENCE PIC X(10).
-      * 重定义项必须紧邻被重定义项，且不得比它长。
+      *再定義項目は直後に置き、対象以下の長さ。
           05 WS-TRANSFER-PAYLOAD REDEFINES WS-DEPOSIT-PAYLOAD.
              10 WS-SOURCE-ACCOUNT PIC X(10).
              10 WS-TARGET-ACCOUNT PIC X(10).
@@ -39,8 +39,8 @@
            DISPLAY "振込元口座=" WS-SOURCE-ACCOUNT
            DISPLAY "振込先口座=" WS-TARGET-ACCOUNT
            DISPLAY "振込金額=" WS-TRANSFER-AMOUNT
-      * 故意用存款视图读取转账负载：
-      * 同一字节的另一种解释，不是有效存款记录。
+      *転送データを入金ビューで読む。
+      *別解釈であり、入金記録ではない。
            DISPLAY "同じバイト列の入金ビュー:"
            DISPLAY "口座=" WS-ACCOUNT-NUMBER
            DISPLAY "金額=" WS-DEPOSIT-AMOUNT

@@ -1,5 +1,5 @@
-      *> STARTER for module 04 lesson 04.3. Builds as-is but INCOMPLETE.
-      *> Complete the TODO paragraphs, set WS-EXERCISES-DONE to 'Y'.
+      *M04レッスン04.3雛形。ビルド可・未完了。
+      *TODO段落を完成しWS-EXERCISES-DONEを'Y'に。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. M04ENTERPRISE.
        ENVIRONMENT DIVISION.
@@ -23,11 +23,11 @@
                MOVE 12 TO RETURN-CODE
                GOBACK
            END-IF
-      *> TODO 04.3a: read 1,778-byte records; validate LAYOUT-VERSION,
-      *> BINARY-ABI-CODE and a numeric CUSTOMER-ID; a bad structure ends
-      *> RC8 and publishes nothing.
-      *> TODO 04.3b: print located values (CUSTOMER-ID,
-      *> RECORD-STATUS, LEGAL-SURNAME, CUSTOMER-CLASSIFICATION,
-      *> RISK-SCORE, SYNC-STATE).
+      *TODO 04.3a:1,778Bレコードを読込・LAYOUT-VERSION・
+      *BINARY-ABI-CODEと数値CUSTOMER-IDを検証。不正構造なら
+      *RC8で終了し、何も公開しない。
+      *TODO 04.3b：位置を特定した値を出力（CUSTOMER-ID、
+      *RECORD-STATUS、LEGAL-SURNAME、CUSTOMER-CLASSIFICATION、
+      *RISK-SCORE、SYNC-STATE）。
            DISPLAY 'LESSON,04.3'
            GOBACK.

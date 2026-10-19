@@ -1,4 +1,4 @@
-      * ENTERPRISE-CUSTOMER-V1: 175 leaf fields, fixed 1778 bytes
+      * ENTERPRISE-CUSTOMER-V1: 葉項目 175 個、固定 1778 bytes
        02 HEADER-GROUP.
        04 LAYOUT-VERSION PIC X(3).
        04 BINARY-ABI-CODE PIC X(8).

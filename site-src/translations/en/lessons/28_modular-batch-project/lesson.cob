@@ -1,6 +1,6 @@
-      * Copybooks define shared records and status.
-      * Business rejections are normal; exit code is 0.
-      * Overdrafts are rejected; balance stays unchanged.
+      * 共有契約はCopybookで定義。
+      * 業務拒否は正常終了。
+      * 残高不足は拒否し、残高不変。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON28.
        ENVIRONMENT DIVISION.

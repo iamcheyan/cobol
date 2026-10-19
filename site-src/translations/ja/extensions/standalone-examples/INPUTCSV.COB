@@ -2,7 +2,7 @@
        PROGRAM-ID. INPUTCSV.
        AUTHOR. TEST-DEVELOPER.
       *
-      *  input.txt を読み込み output.csv を作成するサンプ
+      * input.txtを読み込み、output.csvを作成する。
       *  入力形式: 社員番号|氏名|年齢|給与
       *  例      : 00001|Taro Yamada|28|350000
       *

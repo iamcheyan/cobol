@@ -1,9 +1,9 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. CUSTLOAD-STARTER.
-      *> Module 02 starter: the CUSTOMER v1 loader skeleton.
-      *> It compiles but is NOT implemented. It must return RC 12 and
-      *> must not publish accepted/rejected outputs until the TODOs are
-      *> done. The CUSTOMER v1 copybook is provided for the layout.
+      *M02雛形：CUSTOMER v1ローダーの骨格。
+      *コンパイル可能だが未実装。RC 12を返し、
+      *TODO完了までは受理・拒否出力を公開しない。
+      *レイアウトにはCUSTOMER v1 copybookを使う。
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
@@ -21,15 +21,15 @@
        PROCEDURE DIVISION.
        1000-MAIN.
            ACCEPT IN-PATH FROM ENVIRONMENT 'INPUT_FILE'
-      *> TODO 1: OPEN INPUT and read raw bytes until X'0A'; reject any
-      *>         record whose byte length is not exactly 27.
-      *> TODO 2: validate customer id digits and strictly ascending ids.
-      *> TODO 3: reject blank name (NAME-MISSING), non-digit balance
-      *>         (BAD-AMOUNT) and bad status (UNKNOWN-STATUS), using
-      *>         that priority order.
-      *> TODO 4: accumulate accepted BALANCE-DEMO into an 18-digit sum.
-      *> TODO 5: DISPLAY 'JOB|CUSTLOAD|V1' and the CONTROL line, then
-      *>         set RETURN-CODE 0 (no rejects) or 4 (some rejects).
+      *TODO 1：OPEN INPUTし、X'0A'まで生Bを読込、
+      *B長が正確に27でないレコードを拒否。
+      *TODO 2：顧客IDが数字で、厳密な昇順ことを検証。
+      *TODO 3：空白名（NAME-MISSING）、数字以外の残高
+      *（BAD-AMOUNT）、不正状態（UNKNOWN-STATUS）を
+      *この優先順位で拒否。
+      *TODO 4：受理したBALANCE-DEMOを18桁の合計に加算。
+      *TODO 5：'JOB|CUSTLOAD|V1'とCONTROL行をDISPLAYし、
+      *RETURN-CODEを拒否なしなら0・一部拒否なら4に。
            DISPLAY 'TODO: implement validated CUSTOMER v1 loading'
            MOVE 12 TO RETURN-CODE
            GOBACK.

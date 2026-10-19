@@ -1,5 +1,5 @@
-      * Logical table 3 transaction_ledger -> db/ledger.dat.
-      * Row: date|txid|account|direction|amount|commit_id
+      *論理テーブル3 transaction_ledger：db/ledger.dat。
+      *形式：date|txid|account|direction|amount|commit_id。
        01 DB-LEDGER-ROW.
           05 DBL-DATE             PIC X(8).
           05 DBL-TXID             PIC X(16).

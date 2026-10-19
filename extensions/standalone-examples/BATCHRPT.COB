@@ -1,7 +1,7 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. BATCHRPT.
       *================================================================*
-      * BATCHRPT.COB: TWO-LEVEL CONTROL BREAK AUDIT REPORT             *
+      *BATCHRPT.COB：支店・部門別の監査集計レポート
       *================================================================*
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
@@ -130,7 +130,7 @@
                    SET NOT-FIRST-REC TO TRUE
                END-IF
 
-      *        -- CHECK CONTROL BREAKS --
+      *支店・部門のキー変更時に小計を確定する
                IF IN-BRANCH NOT = PREV-BRANCH
                    PERFORM 2200-DEPT-BREAK
                    PERFORM 2300-BRANCH-BREAK
@@ -176,7 +176,7 @@
            MOVE ZERO TO BRANCH-TOTAL.
 
        3000-CLOSE-OUT.
-      *    FLUSH FINAL CONTROL BREAKS AT END OF FILE
+      *EOF時に最終部門・支店の小計を出力する
            PERFORM 2200-DEPT-BREAK
            PERFORM 2300-BRANCH-BREAK
 

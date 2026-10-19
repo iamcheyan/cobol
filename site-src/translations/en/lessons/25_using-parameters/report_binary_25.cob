@@ -1,6 +1,6 @@
-      * Contract: BY VALUE receives the 4-byte value, not an address;
-      * Program reads/displays only; does not write caller storage.
-      * Caller must use BY VALUE too, or received value is incorrect.
+      * BY VALUE はアドレスでなく、4バイトの値を受け取
+      * 引数を表示するだけで、呼出側には書き戻さな
+      * 呼出側も BY VALUE を指定。不一致では誤値となる
        IDENTIFICATION DIVISION.
        PROGRAM-ID. REPORT-BINARY.
        DATA DIVISION.

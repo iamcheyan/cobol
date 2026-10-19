@@ -1,5 +1,5 @@
-      * Logical table 10 publish_registry -> db/publish_registry.dat.
-      * Row: date|run_id|manifest_sha256|file_count|published_at
+      * 論理テーブル10 publish_registry。
+      * 格納先:db/publish_registry.dat
        01 DB-PUBLISH-REGISTRY-ROW.
           05 DBPR-DATE            PIC X(8).
           05 DBPR-RUN-ID          PIC X(40).

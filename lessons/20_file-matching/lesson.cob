@@ -1,5 +1,5 @@
-      * 前提：两个输入都按同一 10 位账户键升序排列且键唯一，本课不校验。
-      * 一侧到 EOF 后，另一侧剩余记录全部归为单边记录；比较键前先检查 EOF。
+      * 両入力は同一10桁キー昇順・一意。検証なし。
+      * 片側EOF後、他方残りは片側扱い。先にEOF確認。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. MATCH20.
        ENVIRONMENT DIVISION.

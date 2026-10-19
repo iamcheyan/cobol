@@ -1,4 +1,4 @@
-      *> M04SHAPE: module 04 lesson 04.1 structures reference.
+      *> M04SHAPE: module 04 lesson 04.1 構造体の参照実装。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. M04SHAPE.
        DATA DIVISION.

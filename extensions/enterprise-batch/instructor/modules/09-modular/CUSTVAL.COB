@@ -1,7 +1,7 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. CUSTVAL.
-      *    Shared customer validation, interface CUSTVAL v1.
-      *    Returns 0 valid, 4 business reject, 8 interface error.
+      *    共通顧客検証M、IF CUSTVAL v1。
+      *    RC: 0 有効、4 業務却下、8 IFエラー。
        DATA DIVISION.
        WORKING-STORAGE SECTION.
        01 WS-EXPECTED-LENGTH PIC 9(4) COMP-5.

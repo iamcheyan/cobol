@@ -54,8 +54,8 @@
        01 WS-ACCEPTED-COUNT PIC 9(3) VALUE ZERO.
        01 WS-REJECTED-COUNT PIC 9(3) VALUE ZERO.
        PROCEDURE DIVISION.
-      * Open log before data; if unavailable, do not start batch.
-      * Log cannot report its failures; use stdout and return code.
+      * ログを先に開く。失敗時はバッチ未開始。
+      * ログ障害は記録不可。失敗は標準出力で報告。
        0000-MAIN.
            PERFORM 9000-OPEN-LOG
            IF WS-SYSTEM-ERROR = "N"
@@ -160,8 +160,8 @@
            END-STRING
            PERFORM 9100-WRITE-LOG.
        3000-VALIDATE-RECORD.
-      * Business rejects go to rejected.txt and log BUSINESS_REJECT;
-      * batch ends with code 0; only I/O failures are system errors.
+      * 幅不正・非数字・ゼロは拒否ファイルへ記録。
+      * 正常終了し0返却。I/O障害のみシステムエラー。
            MOVE SPACES TO WS-REJECT-REASON
            COMPUTE WS-RECORD-LENGTH = FUNCTION LENGTH(
                FUNCTION TRIM(FD-TRANSACTION-RECORD TRAILING))
@@ -238,7 +238,7 @@
            END-STRING
            PERFORM 9100-WRITE-LOG.
        9100-WRITE-LOG.
-      * On log write failure, stop; do not try more log writes.
+      * ログ書込失敗後は記録停止、追記しない。
            IF WS-LOG-FAILED = "N"
                MOVE WS-LOG-MESSAGE TO FD-BATCH-LOG-RECORD
                WRITE FD-BATCH-LOG-RECORD
@@ -291,7 +291,7 @@
                END-IF
            END-IF.
        9200-LOG-BATCH-END.
-      * BATCH_END precedes log CLOSE; presence does not prove close.
+      * BATCH_ENDはCLOSE前。正常閉鎖は未確認。
            MOVE SPACES TO WS-LOG-MESSAGE
            STRING "EVENT=BATCH_END INPUT=" DELIMITED BY SIZE
                WS-INPUT-COUNT DELIMITED BY SIZE

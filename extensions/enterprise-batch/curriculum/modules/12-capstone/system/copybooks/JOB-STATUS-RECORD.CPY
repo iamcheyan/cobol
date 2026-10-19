@@ -1,4 +1,4 @@
-      * state/<NODE>.done marker: one node step's completion record.
+      * state/<NODE>.doneマーカー
        01 JOB-STATUS-RECORD.
           05 JSR-NODE             PIC X(8).
           05 JSR-RC               PIC 9(2).

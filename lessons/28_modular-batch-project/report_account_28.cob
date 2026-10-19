@@ -1,5 +1,5 @@
-      * 调用契约：LINKAGE 顺序为账户记录、批次计数，两者均 BY REFERENCE 只读使用。
-      * 本程序只读取并显示，不修改余额也不改计数。
+      * LINKAGEは口座・件数。参照専用。
+      * 読み取り表示のみ。値は変更しない。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. REPORT-ACCOUNT28.
        DATA DIVISION.

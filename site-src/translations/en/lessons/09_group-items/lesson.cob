@@ -2,8 +2,8 @@
        PROGRAM-ID. GROUP09.
        DATA DIVISION.
        WORKING-STORAGE SECTION.
-      * Levels define parent-child structure; indentation aids reading.
-      * Group items occupy consecutive bytes in order, no separators.
+      * レベル番号で親子を決める。字下げは表示用。
+      * 項目は宣言順に連続配置。区切りなし。
        01 WS-TRANSACTION-RECORD.
           05 WS-CUSTOMER-INFO.
              10 WS-CUSTOMER-ID PIC X(8) VALUE "C0001042".
@@ -18,10 +18,10 @@
              10 WS-TXN-CODE PIC X VALUE "D".
              10 WS-TXN-AMOUNT PIC 9(5)V99 VALUE 125.50.
              10 WS-STATUS PIC X(7) VALUE "PENDING".
-      * External record buffer; fixed at 58 bytes like this record.
+      * 外部固定長の受取領域。本レコードと同じ58B。
        01 WS-EXPORT-LINE PIC X(58).
        PROCEDURE DIVISION.
-      * WS-STATUS is duplicated; use OF to specify the parent group.
+      * WS-STATUSは同名。参照時はOFで親を指定。
            DISPLAY "顧客ID="
                WS-CUSTOMER-ID OF WS-CUSTOMER-INFO
            DISPLAY "顧客名="
@@ -34,11 +34,11 @@
            DISPLAY "取引金額="
                WS-TXN-AMOUNT OF WS-TXN-INFO
            DISPLAY "取引状態=" WS-STATUS OF WS-TXN-INFO
-      * Decimal point appears only when amount is displayed alone.
-      * Group display outputs stored bytes without a decimal point.
+      * 金額項目の単独表示時のみ小数点が現れる。
+      * グループ表示は格納バイト出力。小数点なし。
            DISPLAY "グループデータ=[" WS-TRANSACTION-RECORD "]"
-      * Group moves copy bytes without numeric conversion.
-      * The receiving PIC sets width; both items are 58 bytes.
+      * 全体転送はバイト複写。数値変換なし。
+      * 幅は受取項目のPICで決まる。両方58B。
            MOVE WS-TRANSACTION-RECORD TO WS-EXPORT-LINE
            DISPLAY "外部記録=[" WS-EXPORT-LINE "]"
            STOP RUN.

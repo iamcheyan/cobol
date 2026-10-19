@@ -1,7 +1,7 @@
-      *> CUSTOMER v1 contract: 27 bytes, ASCII, LF-terminated.
-      *> 1-based: 1-8 customer_id, 9-18 customer_name(10),
-      *> 19-26 balance_demo(8, minor units, unsigned), 27 status.
-      *> Layout frozen; business_date/schema version live in DESIGN.md.
+      *> CUSTOMER v1 契約：27 bytes、ASCII、LF終端。
+      *> 1始まり：1-8 customer_id、9-18 customer_name(10)、
+      *19-26 balance_demo 8桁・最小通貨単位、27 status。
+      *> 配置固定。business_date/schema は DESIGN.md 参照。
        01 CUSTOMER-RECORD.
           05 CUST-ID          PIC X(8).
           05 CUST-NAME        PIC X(10).

@@ -54,8 +54,8 @@
        01 WS-ACCEPTED-COUNT PIC 9(3) VALUE ZERO.
        01 WS-REJECTED-COUNT PIC 9(3) VALUE ZERO.
        PROCEDURE DIVISION.
-      * 日志契约：先开日志，再开业务文件；日志打不开则不启动批次。
-      * 日志记不下自身故障，其 OPEN/WRITE/CLOSE 失败只能由 stdout 与退出码报告。
+      * ログを先に開く。失敗時はバッチ未開始。
+      * ログ障害は記録不可。失敗は標準出力で報告。
        0000-MAIN.
            PERFORM 9000-OPEN-LOG
            IF WS-SYSTEM-ERROR = "N"
@@ -160,8 +160,8 @@
            END-STRING
            PERFORM 9100-WRITE-LOG.
        3000-VALIDATE-RECORD.
-      * 业务拒绝（坏宽度/非数字/零金额）写 rejected.txt 并记 BUSINESS_REJECT，
-      * 批次仍正常收尾返回 0；只有 I/O 故障才算系统错误。
+      * 幅不正・非数字・ゼロは拒否ファイルへ記録。
+      * 正常終了し0返却。I/O障害のみシステムエラー。
            MOVE SPACES TO WS-REJECT-REASON
            COMPUTE WS-RECORD-LENGTH = FUNCTION LENGTH(
                FUNCTION TRIM(FD-TRANSACTION-RECORD TRAILING))
@@ -238,7 +238,7 @@
            END-STRING
            PERFORM 9100-WRITE-LOG.
        9100-WRITE-LOG.
-      * 日志写失败后停止后续记录，不再尝试追加日志。
+      * ログ書込失敗後は記録停止、追記しない。
            IF WS-LOG-FAILED = "N"
                MOVE WS-LOG-MESSAGE TO FD-BATCH-LOG-RECORD
                WRITE FD-BATCH-LOG-RECORD
@@ -291,7 +291,7 @@
                END-IF
            END-IF.
        9200-LOG-BATCH-END.
-      * BATCH_END 在日志 CLOSE 之前写出，所以它存在不代表日志文件已成功关闭。
+      * BATCH_ENDはCLOSE前。正常閉鎖は未確認。
            MOVE SPACES TO WS-LOG-MESSAGE
            STRING "EVENT=BATCH_END INPUT=" DELIMITED BY SIZE
                WS-INPUT-COUNT DELIMITED BY SIZE

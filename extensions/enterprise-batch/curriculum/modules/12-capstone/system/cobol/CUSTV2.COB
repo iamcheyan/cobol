@@ -1,25 +1,25 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. CUSTV2.
-      *> Module 12 capstone JOB002d: validate the ENTERPRISE customer
-      *> feed and normalize it to the enterprise v2 layout (32 bytes)
-      *> while remaining able to read the enterprise v1 feed (31 B).
-      *>
-      *> The feed is an INDEPENDENT, versioned enterprise customer
-      *> layout, NOT the 27 byte canonical CUSTOMER v1.  Its bytes 1-27
-      *> embed the canonical CUSTOMER v1 unchanged, so byte 27 is the
-      *> record STATUS (A/D); the customer CLASSIFICATION is a separate
-      *> field at byte 28 (v1, A/B/C/D) or bytes 28-29 (v2, A1..D1).
-      *> The classification is never the status byte.
-      *>
-      *> v1 (31 B): id(8) name(10) balance_demo(8) status(1)
-      *>            classification(1) layout_version(3)="001"
-      *> v2 (32 B): id(8) name(10) balance_demo(8) status(1)
-      *>            classification(2) layout_version(3)="002"
-      *> A v1 classification A/B/C/D upgrades to v2 "A1/B1/C1/D1".
-      *>
-      *> Structural errors (record width not matching the declared
-      *> layout, non-numeric id) are RC8.  Business rejects keep the
-      *> run going with RC4.  The normalized stream is always v2.
+      *> Module 12 capstone JOB002d:企業顧客フィードを検証・
+      *> 企業向けv2レイアウト（32B）に正規化。
+      *> 企業向けv1フィード（31B）もも読込可。
+      *
+      *> こフィードは独立版管理企業顧客形式であり・
+      *> 27B正準CUSTOMER v1ではない。1-27Bには正準
+      *> CUSTOMER v1をそのまま内包ため、27B目は
+      *> レコードSTATUS(A/D)
+      *> v1では28B目（A/B/C/D）、v2では28-29B目
+      *> (A1～D1)に置く。区分をstatusBとして扱わない。
+      *
+      *> v1（31 B）：id(8) name(10) balance_demo(8) status(1)
+      *>             classification(1) layout_version(3)="001"
+      *> v2（32 B）：id(8) name(10) balance_demo(8) status(1)
+      *>             classification(2) layout_version(3)="002"
+      *> v1の区分A/B/C/Dはv2の"A1/B1/C1/D1"へ変換。
+      *
+      *> 宣言幅と幅が不一致なら、または
+      *> idが数字以外の場合は構造異常RC8。業務却下は
+      *> 継続してRC4と。正規化ストリームは常にv2形式
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.

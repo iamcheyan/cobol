@@ -2,16 +2,16 @@
        PROGRAM-ID. REDEF10.
        DATA DIVISION.
        WORKING-STORAGE SECTION.
-      *Sample values are fixed in the program; no external input.
-      *The interface ensures code matches the payload layout;
-      *REDEFINES does not validate the code or select a view.
+      *値は内部固定。入力なし。
+      *コードと配置は契約で保証。
+      *REDEFINESは検証も選択もしない。
        01 WS-TRANSACTION-RECORD.
           05 WS-TRANSACTION-CODE PIC X.
           05 WS-DEPOSIT-PAYLOAD.
              10 WS-ACCOUNT-NUMBER PIC X(10).
              10 WS-DEPOSIT-AMOUNT PIC 9(5)V99.
              10 WS-REFERENCE PIC X(10).
-      *A redefined item must follow its target and be no longer.
+      *再定義項目は直後に置き、対象以下の長さ。
           05 WS-TRANSFER-PAYLOAD REDEFINES WS-DEPOSIT-PAYLOAD.
              10 WS-SOURCE-ACCOUNT PIC X(10).
              10 WS-TARGET-ACCOUNT PIC X(10).
@@ -39,8 +39,8 @@
            DISPLAY "振込元口座=" WS-SOURCE-ACCOUNT
            DISPLAY "振込先口座=" WS-TARGET-ACCOUNT
            DISPLAY "振込金額=" WS-TRANSFER-AMOUNT
-      *Deliberately read the transfer payload through the deposit view:
-      *Same bytes, another view; not a valid deposit record.
+      *転送データを入金ビューで読む。
+      *別解釈であり、入金記録ではない。
            DISPLAY "同じバイト列の入金ビュー:"
            DISPLAY "口座=" WS-ACCOUNT-NUMBER
            DISPLAY "金額=" WS-DEPOSIT-AMOUNT

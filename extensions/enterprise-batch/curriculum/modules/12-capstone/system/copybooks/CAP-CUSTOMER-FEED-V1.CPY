@@ -1,27 +1,27 @@
-      * CAP-CUSTOMER-FEED v1 -- capstone-specific, independent,
-      * versioned customer feed layout (layout version 001), 31 bytes,
-      * ASCII, LF.
+      * CAP-CUSTOMER-FEED
+      * 顧客フィード（レイアウト版001）、31B、
+      * ASCII、LF終端。
       *
-      * NAMING: this 31 byte feed is NOT the canonical 1778 byte
-      * ENTERPRISE-CUSTOMER v1 of modules 04/07 (the 175 field large
-      * record) and NOT the module 11 incident lab layout.  Reusing one
-      * name for three incompatible widths would let a version label
-      * hide a physical layout change, so the capstone uses the distinct
-      * name CAP-CUSTOMER-FEED and states the relationship explicitly:
-      *   - it EMBEDS the canonical 27 byte CUSTOMER v1 (bytes 1-27,
-      *     byte 27 = record status A/D) unchanged;
-      *   - it appends its own classification + layout_version.
-      * The classification is NOT the status byte.
+      * 命名:こ31B形式はmodule 04/07正準形式である
+      * 1778B・175項目ENTERPRISE-CUSTOMER v1とは異なり・
+      * M11インシデント演習形式とも異なる。非互換
+      * 3
+      * 見えないため・capstone
+      * - 正準CUSTOMER v1の27B（1-27）を内包。
+      * 27B目はレコード状態A/D。
+      * - 独自の区分とlayout_versionを追加。
+      * 区分はstatusBではない。
       *
-      *   1-8   customer_id      8 digits, leading zeros kept
-      *   9-18  customer_name    10 chars, space padded
-      *   19-26 balance_demo     8 digits, minor unit
-      *   27    record_status    1 char: A active, D dormant
-      *   28    classification   1 char: A/B/C/D retail/business/
-      *                          private/public-sector
-      *   29-31 layout_version   "001"
-      * v2 widens only the classification (A -> A1 .. D -> D1) at
-      * bytes 28-29 and bumps layout_version to 002 (32 bytes).
+      * 1-8 customer_id：8桁、先頭のゼロを保持。
+      * 9-18 customer_name：10文字、空白埋め。
+      * 19-26 balance_demo：8桁、最小通貨単位。
+      * 27 record_status：1文字、Aは有効、Dは休眠。
+      * 28 classification：1文字、A/B/C/D（個人/法人/
+      * 富裕層/公共部門）。
+      * 29-31 layout_version："001"。
+      * v2では区分を28-29B2字(A→A1～D→D1)に拡張し・
+      * layout_versionを002に更新する（全体で32B）。
+      *
        01 CAP-CUSTOMER-FEED-V1-RECORD.
           05 EC1-CUSTOMER-ID            PIC X(8).
           05 EC1-CUSTOMER-NAME          PIC X(10).

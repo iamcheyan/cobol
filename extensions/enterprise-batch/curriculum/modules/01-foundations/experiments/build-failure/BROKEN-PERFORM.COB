@@ -1,9 +1,9 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. BROKEN-PERFORM.
-      *> Deliberately broken build for lesson 01.2. The PERFORM target
-      *> 5000-SETTLE-PARAGRAPH is never defined, so cobc reports an
-      *> undefined paragraph. The learner must locate the failing line
-      *> from the compiler diagnostic and fix/rename it.
+      *01.2の意図的なビルドエラー例。PERFORM先の
+      *5000-SETTLE-PARAGRAPHは未定義で、cobcは
+      *未定義段落を報告。診断から該当行を特定し・
+      *誤った名前を修正または変更。
        DATA DIVISION.
        WORKING-STORAGE SECTION.
        01 WS-COUNT PIC 9(4) VALUE 0.

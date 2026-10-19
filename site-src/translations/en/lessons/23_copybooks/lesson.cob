@@ -1,20 +1,20 @@
-      * Contract: account 27 bytes (10+8+9), transaction 20 (10+1+9),
-      * matching Lessons 17, 20, 22; recompile all if widths change.
-      * Reject low balance, bad type, or mismatch; balance stays same.
+      * 契約：口座27（10+8+9）、取引20（10+1+9）バイト。
+      * 第17/20/22課と同幅。変更時は全側を再ビルド。
+      * 残高不足・種別不明・口座違いは拒否。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON23.
        DATA DIVISION.
        WORKING-STORAGE SECTION.
-      * COPY inserts declarations at compile time, not via runtime CALL;
-      * -I copybooks supplies the declaration search directory.
+      * COPY はコンパイル時に宣言を挿入。実行時CALLで
+      * 宣言の検索先は -I copybooks で指定。
        COPY "ACCOUNT-REC.CPY".
        COPY "TRANSACTION-REC.CPY".
-      * Padded statuses compare with spaces; TRIM is display-only.
+      * 状態欄は固定長。比較は空白補完、表示はTRIM。
        01 WS-POST-STATUS PIC X(12) VALUE SPACES.
        01 WS-POSTED-COUNT PIC 9(3) VALUE ZERO.
        01 WS-REJECTED-COUNT PIC 9(3) VALUE ZERO.
-      * Edited fields are display-only (decimal point takes one byte);
-      * Copybook changes do not automatically update these fields.
+      * 編集項目は表示用（小数点は1バイト）。幅は
+      * CopybookのPICで決まり、2項目の幅は連動しない。
        01 WS-EDITED-AMOUNT PIC 9(7).99 VALUE ZERO.
        01 WS-EDITED-BALANCE PIC 9(7).99 VALUE ZERO.
        PROCEDURE DIVISION.
@@ -53,7 +53,7 @@
            MOVE "D" TO WS-TRANSACTION-TYPE
            MOVE 1.00 TO WS-TRANSACTION-AMOUNT
            PERFORM 2000-POST-TRANSACTION.
-      * Check account first; mismatch always means NO_ACCOUNT.
+      * 先に口座番号を照合。不一致は NO_ACCOUNT。
        2000-POST-TRANSACTION.
            MOVE SPACES TO WS-POST-STATUS
            IF WS-TRANSACTION-ACCOUNT NOT = WS-ACCOUNT-NUMBER

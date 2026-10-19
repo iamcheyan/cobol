@@ -1,4 +1,4 @@
-      * Codes D/W/T come from upstream contract; not validated here.
+      * D/W/T は上流規約。本課は値を検証しない。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. EVAL05.
        DATA DIVISION.
@@ -20,7 +20,7 @@
                WHEN "T"
                    DISPLAY "分類=TRANSFER"
                    DISPLAY "処理=PROCESS_BOTH_ACCOUNTS"
-      * Off-contract values route to manual review; label only.
+      * 規約外は手作業で確認。本課はラベルのみ。
                WHEN OTHER
                    DISPLAY "分類=UNKNOWN"
                    DISPLAY "処理=REJECT_FOR_REVIEW"

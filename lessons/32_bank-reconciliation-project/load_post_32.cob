@@ -1,4 +1,4 @@
-      * 账户号重复在记帐开始前按失败处理（见 1110-STORE-ACCOUNT）。
+      * 口座重複は記帳前に失敗扱い。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LOADPOST32.
        ENVIRONMENT DIVISION.

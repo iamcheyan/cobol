@@ -1,5 +1,5 @@
-      * LINKAGE: account then counts; BY REFERENCE, read-only.
-      * Displays data; balance and counts are unchanged.
+      * LINKAGEは口座・件数。参照専用。
+      * 読み取り表示のみ。値は変更しない。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. REPORT-ACCOUNT28.
        DATA DIVISION.

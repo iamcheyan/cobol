@@ -1,10 +1,10 @@
-      * NON-CONTRACT / intentionally wrong layout demo. This copybook is
-      * NOT the CUSTOMER v1 interface: it wrongly declares CUSTOMER-NAME
-      * as X(11), which makes the record 28 bytes. It exists only so
-      * LENGTH-PROBE can show a single wrong PIC shifting every later
-      * offset. The frozen contract is copybooks/CUSTOMER-V1.CPY (27 B,
-      * last byte CUSTOMER-STATUS only). Never use this file as a layout
-      * version or copy it into a job.
+      *非契約／意図的な誤レイアウトのデモ用copybook。
+      *CUSTOMER v1のIFではない。CUSTOMER-NAMEを
+      *X(11)と誤宣言し、レコード長は28Bになる。
+      *LENGTH-PROBEで、誤ったPICひとつが後続の
+      *オフセットをずらす様子を示すためだけに存在
+      *copybooks/CUSTOMER-V1.CPY（27 B、最終Bのみ
+      *CUSTOMER-STATUS）。版管理・ジョブ利用しない。
        01 CUSTOMER-RECORD.
           05 CUSTOMER-ID PIC X(8).
           05 CUSTOMER-NAME PIC X(11).

@@ -1,8 +1,8 @@
-      * File errors prevent DB sync after partial loads.
-      * Each transaction is posted or rejected; rejection is normal.
-      * Duplicate accounts fail early; bad withdrawals reject one.
-      * Reruns use opening balances; deposits are not doubled.
-      * File and DB updates are non-atomic; recovery is needed.
+      * ファイル障害時はDB同期しない。
+      * 取引を記帳か業務拒否に分類する。
+      * 口座重複は失敗。残高不足等は取引拒否。
+      * 期首残高から再適用し、二重入金を防ぐ。
+      * ファイルとDBは別更新。本番では復旧が必要。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON32.
        DATA DIVISION.

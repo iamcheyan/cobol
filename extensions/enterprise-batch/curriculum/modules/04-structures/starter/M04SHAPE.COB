@@ -1,5 +1,5 @@
-      *> STARTER for module 04 lesson 04.1. Builds as-is but INCOMPLETE.
-      *> Complete the TODO paragraphs, set WS-EXERCISES-DONE to 'Y'.
+      *M04レッスン04.1雛形。ビルド可・未完了。
+      *TODO段落を完成しWS-EXERCISES-DONEを'Y'に。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. M04SHAPE.
        DATA DIVISION.
@@ -13,13 +13,13 @@
                MOVE 12 TO RETURN-CODE
                GOBACK
            END-IF
-      *> TODO 04.1a: declare a group with a REDEFINES view; prove that
-      *> LENGTH OF the parent is not doubled.
-      *> TODO 04.1b: declare a 66-level RENAMES over two fields.
-      *> TODO 04.1c: declare OCCURS ... INDEXED BY and use SET to read
-      *> an item by index.
-      *> TODO 04.1d: declare OCCURS n TO m TIMES DEPENDING ON a counter
-      *> and show LENGTH OF changes when the counter changes.
+      *TODO 04.1a:REDEFINESビューを持つグループを宣言し・
+      *親のLENGTH OFが二重にならないことを確認。
+      *TODO 04.1b：2項目にまたがる66レベルRENAMESを宣言。
+      *TODO 04.1c：OCCURS ... INDEXED BYを宣言し、SETで
+      *索引指定した項目を読み取る。
+      *TODO 04.1d:カウンター依存OCCURS n TO m TIMESを宣言。
+      *カウンター変更でLENGTH OFが変わることを示す。
            DISPLAY 'LESSON,04.1'
            MOVE 0 TO WS-N
            DISPLAY 'REDEFINES,WRAP-LEN,' WS-N

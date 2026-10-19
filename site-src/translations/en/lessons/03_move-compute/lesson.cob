@@ -1,6 +1,6 @@
-      * Lesson 03: MOVE/COMPUTE monetary example.
-      * Data are in-program demo constants, not real accounts.
-      * No ROUNDED means truncate; ROUNDED rounds to dest.
+      * 第03課：MOVE と COMPUTE の金額計算サンプル。
+      * データはサンプル定数。実口座ではない。
+      * ROUNDEDなしは切捨て、ありは受信桁で丸める。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. MOVE03.
        DATA DIVISION.
@@ -9,16 +9,16 @@
        01 WS-DEPOSIT PIC 9(7)V99 VALUE 250.55.
        01 WS-WITHDRAWAL PIC 9(7)V99 VALUE 40.10.
        01 WS-SERVICE-FEE PIC 9(5)V99 VALUE 5.25.
-      * Demo rate: no day-count rule; multiply once.
+      * 利率サンプル：日数規定なし、1 回だけ乗算。
        01 WS-PERIOD-RATE PIC 9(1)V9(4) VALUE 0.0125.
        01 WS-PRE-INTEREST-BALANCE PIC 9(7)V99 VALUE ZERO.
-      * Intermediate keeps 4 decimals for compare.
+      * 中間値は 4 桁保持し、切捨てと丸めを比較。
        01 WS-INTEREST-RAW PIC 9(5)V9999 VALUE ZERO.
        01 WS-INTEREST-MOVE PIC 9(5)V99 VALUE ZERO.
        01 WS-INTEREST-TRUNC PIC 9(5)V99 VALUE ZERO.
-      * ROUNDED rounds to dest; default away from zero.
+      * ROUNDEDは受信桁で丸める。中間値は保持。
        01 WS-INTEREST-ROUNDED PIC 9(5)V99 VALUE ZERO.
-      * Posting rule: this lesson credits rounded interest.
+      * 計上：本課では丸め後利息を計上する。
        01 WS-CLOSING-BALANCE PIC 9(7)V99 VALUE ZERO.
        PROCEDURE DIVISION.
            COMPUTE WS-PRE-INTEREST-BALANCE =
@@ -45,6 +45,6 @@
            DISPLAY "COMPUTE四捨五入利息="
                WS-INTEREST-ROUNDED
            DISPLAY "期末残高=" WS-CLOSING-BALANCE
-      * Overflow silently drops high digits; no runtime error.
-      * Overflow must be checked explicitly (lesson 26).
+      * あふれ時は桁落ち、実行時エラーなし。
+      * 検出は明示的に行う必要あり（第26課）。
            STOP RUN.

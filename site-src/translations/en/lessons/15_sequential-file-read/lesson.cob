@@ -3,8 +3,8 @@
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
-      *Line input: upstream sends one record per line.
-      *Long lines split into records; upstream sets max length.
+      * 1行を1レコードとして上流から受け取る。
+      * 長い行は分割。最大長は上流で制限。
            SELECT TRANSACTION-FILE
                ASSIGN TO "transactions.txt"
                ORGANIZATION IS LINE SEQUENTIAL
@@ -12,17 +12,17 @@
        DATA DIVISION.
        FILE SECTION.
        FD TRANSACTION-FILE.
-      *FD record area is 100 chars; short lines pad right.
+      * FDは100文字固定。短い行は右を空白で埋める。
        01 FD-TRANSACTION-RECORD PIC X(100).
        WORKING-STORAGE SECTION.
        01 WS-FILE-STATUS PIC XX VALUE SPACES.
        01 WS-END-OF-FILE PIC X VALUE "N".
-      *The two-digit count wraps after 99 records.
+      * 件数は2桁。99件超で桁あふれ。
        01 WS-RECORD-COUNT PIC 9(2) VALUE ZERO.
        PROCEDURE DIVISION.
        0000-MAIN.
            OPEN INPUT TRANSACTION-FILE
-      *Missing file gives status 35; no READ; exit code 1.
+      * ファイルなしは状態35。READせず終了コード1。
            IF WS-FILE-STATUS NOT = "00"
                DISPLAY "オープン=FAILED STATUS=" WS-FILE-STATUS
                MOVE 1 TO RETURN-CODE
@@ -44,11 +44,11 @@
        1000-READ-ONE-RECORD.
            READ TRANSACTION-FILE
                AT END
-      *EOF is normal, not an error; set flag only, do not count.
+      * EOFは正常終了。フラグのみ設定し、件数外。
                    MOVE "Y" TO WS-END-OF-FILE
                NOT AT END
                    ADD 1 TO WS-RECORD-COUNT
-      *TRIM affects display only; record area stays 100 chars.
+      * TRIMは表示のみ。レコード領域は100文字。
                    DISPLAY "レコード="
                        FUNCTION TRIM(FD-TRANSACTION-RECORD TRAILING)
            END-READ.

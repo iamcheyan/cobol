@@ -1,12 +1,12 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. BANKVAL-STARTER.
-      *> STARTER for JOB002 (length and business validation).
-      *> TODO: read the frozen snapshot at BANKVAL_IN, verify the raw
-      *> byte length is exactly 55, validate the numeric key fields and
-      *> the business rules (direction C/D, status N, business date,
-      *> zero amount), then write BANKVAL_ACCEPTED / BANKVAL_REJECTED /
-      *> BANKVAL_CONTROL and set RETURN-CODE (0/4/8/12).
-      *> Until implemented this fails with RC12 and publishes nothing.
+      *JOB002の雛形（長さと業務規則の検証）。
+      *TODO: BANKVAL_INの固定スナップショットを読み、
+      * 生データの
+      *B長が55であること、数値キー項目と
+      *業務規則（direction C/D、status N、営業日、
+      *金額0）を検証。BANKVAL_ACCEPTED /
+      * BANKVAL_REJECTED
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.

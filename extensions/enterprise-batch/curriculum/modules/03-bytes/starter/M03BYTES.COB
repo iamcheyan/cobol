@@ -1,7 +1,7 @@
-      *> STARTER for module 03. Builds as-is, but is INCOMPLETE.
-      *> While WS-EXERCISES-DONE is 'N' the runner ends RC12 and
-      *> publishes nothing. Fill the TODO paragraphs, set it to 'Y',
-      *> and re-run.
+      *M03雛形。ビルド可、未完了。
+      *WS-EXERCISES-DONEが'N'の間はRC12で終了し、
+      *何も公開しない。TODO段落を完成し値を'Y'にして
+      *再実行。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. M03BYTES.
        ENVIRONMENT DIVISION.
@@ -46,20 +46,20 @@
            END-EVALUATE
            GOBACK.
        1100-LESSON-1.
-      *> TODO 03.1: declare DISPLAY / SIGN SEPARATE / COMP-3 / COMP
-      *> fields, print LENGTH OF each and prove COMP big-endian by
-      *> writing a known 0x01020304 value to abi.bin.
+      *TODO 03.1：DISPLAY／SIGN SEPARATE／COMP-3／COMPの
+      *項目を宣言し、LENGTH OFを表示。COMPの
+      *ビッグエンディアン確認既知値0x01020304abi.binへ書
            DISPLAY 'LESSON,03.1'
            DISPLAY 'TODO,03.1 declarations'.
        1200-LESSON-2.
-      *> TODO 03.2: store +12345.67 and -12345.67 in DISPLAY, SIGN
-      *> LEADING SEPARATE, COMP-3 and an integer minor-unit COMP field,
-      *> then emit their raw bytes as lowercase hex.
+      *TODO 03.2：DISPLAY、SIGN LEADING SEPARATE、COMP-3と
+      *整数の最小通貨単位COMP項目に+12345.67と-12345.67を
+      *格納し、生Bを小文字の16進数で出力。
            DISPLAY 'LESSON,03.2'
            DISPLAY 'TODO,03.2 hexdump'.
        1300-LESSON-3.
-      *> TODO 03.3: read 7-byte COMP-3 records from input.dat, validate
-      *> every digit nibble 0-9 and the sign nibble C/D BEFORE any
-      *> arithmetic, and report OK / REJECT with a reason.
+      *TODO 03.3：input.datから7BのCOMP-3レコードを読み、
+      *演算前各数字ニブル0-9と符号ニブルC/D検証し、
+      *理由付きでOK／REJECTを報告。
            DISPLAY 'LESSON,03.3'
            DISPLAY 'TODO,03.3 packed parser'.

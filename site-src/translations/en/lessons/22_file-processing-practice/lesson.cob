@@ -1,6 +1,6 @@
-      * Transactions: 20 chars; master: 27, unique/sorted; unchecked.
-      * Require matching accounts, D/C type, and numeric amount.
-      * OPEN OUTPUT truncates results; errors can leave partial output.
+      * 取引20字、マスター27字。キー昇順・一意。
+      * 一致・種別D/C・金額数字なら受理。他は拒否。
+      * 出力2件は上書き。失敗時不完全でも戻さない。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. BATCH22.
        ENVIRONMENT DIVISION.

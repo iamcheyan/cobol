@@ -1,6 +1,6 @@
-      * 模块接口由 Copybook 定义：账户/交易记录与 POST-STATUS 由双方共享同一份声明。
-      * 业务拒绝（BAD_TYPE/INSUFFICIENT/NO_ACCOUNT）是正常结果，退出码仍为 0。
-      * 余额不足的取款被拒绝，且不修改余额；计数与日志事件都由本程序维护。
+      * 共有契約はCopybookで定義。
+      * 業務拒否は正常終了。
+      * 残高不足は拒否し、残高不変。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON28.
        ENVIRONMENT DIVISION.

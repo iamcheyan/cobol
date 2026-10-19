@@ -1,14 +1,14 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. APPLY.
-      *> module08 ref: 08.4 update, unique constraint, COMMIT/ROLLBACK.
-      *>   read TRANSACTION v1 55B; idempotent apply by business day:
-      *>     new -> INSERT transaction_ledger + UPDATE balance;
-      *>     dup transaction_id in run -> 23505 -> RC8 rollback;
-      *>     applied by prior run -> 23505 -> SKIP (no re-post).
-      *>   batch_commit marks day; dup insert -> 23505 -> DAY-DUP.
-      *> mode: M08_MODE=apply (COMMIT) or rollback (demo).
-      *> env: M08_BIZ_DATE/M08_TX_FILE/M08_RUN_ID/M08_CONTROL/M08_MODE.
-      *> RC: 0 ok; 8 dup-in-run/structural; 12 system/connection.
+      *> module08 参照: 08.4 更新・一意制約・COMMIT/ROLLBACK
+      *> TRANSACTION v1 55B 読み、営業日単位で冪等適用。
+      *> 新規 -> INSERT transaction_ledger + UPDATE balance。
+      *> 実行内 transaction_id 重複 -> 23505 -> RC8 rollback。
+      *> 前回実行で適用済み -> 23505 -> SKIP（再計上なし
+      *> batch_commit 営業日記録。重 INSERT -> 23505 -> DAY-DUP
+      *> モード: M08_MODE=apply（COMMIT）また rollback（demo）
+      *> 環: M08_BIZ_DATE/M08_TX_FILE/M08_RUN_ID/M08_CONTROL/M08_MODE
+      *> RC: 0 正常・8 実行内重複/構造エラー・12 シス/
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
@@ -98,7 +98,7 @@
            EXEC SQL DISCONNECT ALL END-EXEC
            MOVE WS-RC TO RETURN-CODE
            GOBACK.
-      *> read 55B transactions; idempotent apply per business key.
+      *> 55B 取引読み、営業日キー単位で冪等に適用。
        1100-LOAD.
            PERFORM UNTIL WS-EOF = 'Y'
                READ TX-FILE AT END MOVE 'Y' TO WS-EOF
@@ -139,7 +139,7 @@
                    DISPLAY SQLERRMC
                    PERFORM 9100-FAIL
            END-EVALUATE.
-      *> applied: update closing and account balance by direction.
+      *> 適用時方向に応じて締め情報と口座残高更新。
        1160-UPDATE-BALANCE.
            IF HV-DIR = 'C'
                EXEC SQL
@@ -168,7 +168,7 @@
                END-EXEC
                PERFORM 9000-CHECK
            END-IF.
-      *> 23505: read applied_run_id to tell in-run dup vs retry.
+      *> 23505: applied_run_id 読み・実行内重複再試行判別
        1170-DUPLICATE.
            EXEC SQL
                SELECT applied_run_id INTO :HV-PREV-RUN
@@ -184,7 +184,7 @@
                ADD 1 TO SKIPPED-CNT
                DISPLAY 'ALREADY-APPLIED=' HV-TX
            END-IF.
-      *> day commit marker; dup insert 23505 = already committed.
+      *> 営業日 commit marker。重複 INSERT  23505 適用済み。
        1200-DAY-COMMIT.
            EXEC SQL SAVEPOINT SP2 END-EXEC
            PERFORM 9000-CHECK

@@ -1,9 +1,9 @@
-      * Rows: 27 bytes (account 10, customer 8, cents 9); sorted unique.
-      * Amounts are cents; nonnumeric data aborts as system failure.
-      * DB-only accounts are ignored; this check is one-way.
-      * Duplicate keys or reruns cause result-key errors and abort.
-      * Abort leaves committed rows; no transaction or rollback.
-      * Output labels remain Japanese; see README for Chinese meanings.
+      * 入力：27B、口座昇順、キー一意。
+      * 金額は分。非数字なら障害中止。
+      * 一方向照合。DBのみ口座は対象外。
+      * 主キーは口座番号。重複時は中止。
+      * 登録行は残る。トランザクションなし。
+      * 出力は日本語。訳はREADME参照。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON31.
        ENVIRONMENT DIVISION.
@@ -19,7 +19,7 @@
        FILE SECTION.
        FD SNAPSHOT-FILE.
        01 SNAPSHOT-RECORD PIC X(27).
-      * OPEN OUTPUT truncates file; only non-MATCH rows are written.
+      * 差異ファイルは毎回再作成する。
        FD DIFFERENCE-FILE.
        01 DIFFERENCE-RECORD PIC X(80).
        WORKING-STORAGE SECTION.
@@ -34,7 +34,7 @@
        01 WS-DB-CUSTOMER PIC X(8).
        01 WS-DB-BALANCE PIC S9(7)V99 COMP-3.
        01 WS-BALANCE PIC S9(7)V99 COMP-3.
-      * WS-EDITED-BALANCE is display-only (9(5).99).
+      * 表示用金額。比較には使用しない。
        01 WS-EDITED-BALANCE PIC 9(5).99.
        01 WS-STATUS PIC X(10).
        01 WS-ROW-COUNT PIC 9(3) VALUE ZERO.
@@ -141,7 +141,7 @@
            MOVE SNAPSHOT-RECORD(1:10) TO WS-ACCOUNT
            MOVE SNAPSHOT-RECORD(11:8) TO WS-CUSTOMER
            MOVE SNAPSHOT-RECORD(19:9) TO WS-BALANCE-TEXT
-      * Amount must be numeric; convert cents to dollars before compare.
+      * ファイルは分、DBは元。比較前に換算。
            IF WS-BALANCE-TEXT IS NUMERIC
                COMPUTE WS-BALANCE =
                    FUNCTION NUMVAL(WS-BALANCE-TEXT) / 100
@@ -151,7 +151,7 @@
                MOVE "Y" TO WS-FAILED
            END-IF.
        3100-LOOKUP-ACCOUNT.
-      * SQLCODE 100 leaves host variables unchanged; clear them first.
+      * SQLCODE 100に備え受取項目を初期化。
            MOVE SPACES TO WS-DB-CUSTOMER
            MOVE ZERO TO WS-DB-BALANCE
            EXEC SQL
@@ -160,7 +160,7 @@
                  FROM ACCOUNT_SNAPSHOT
                 WHERE ACCOUNT_NO = :WS-ACCOUNT
            END-EXEC
-      * MATCH needs equal customer and amount; otherwise CHANGED.
+      * 顧客・金額一致でMATCH。他はCHANGED。
            EVALUATE SQLCODE
              WHEN 0
                IF WS-CUSTOMER = WS-DB-CUSTOMER AND
@@ -182,8 +182,8 @@
                PERFORM 4000-WRITE-RESULT
            END-IF.
        4000-WRITE-RESULT.
-      * Failed INSERT stores no row,
-      * but earlier rows persist; differences output may be incomplete.
+      * キーごとに結果行をINSERTする。
+      * 先行行は登録済み。出力も不完全の場合あり。
            EXEC SQL
                INSERT INTO RECON_RESULT
                    (ACCOUNT_NO, FILE_STATUS, FILE_CUSTOMER,

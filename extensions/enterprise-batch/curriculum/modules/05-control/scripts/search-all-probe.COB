@@ -1,8 +1,8 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. M05-SEARCH-ALL-PROBE.
-      *> Lesson 05.2: SEARCH ALL does a binary search, so the table
-      *> must really be in the declared key order. This searches the
-      *> same three keys laid out sorted and unsorted.
+      *> 05.2 SEARCH ALL は二分探索。表を宣言キー順に
+      *> 実際に整列。同じ3キーを
+      *> 整列済みと未整列で配置して検索。
        DATA DIVISION.
        WORKING-STORAGE SECTION.
        01 SORTED-TABLE.

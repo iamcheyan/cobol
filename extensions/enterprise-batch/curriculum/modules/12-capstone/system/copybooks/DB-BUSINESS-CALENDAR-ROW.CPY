@@ -1,5 +1,5 @@
-      * Logical table 12 business_calendar -> db/business_calendar.dat.
-      * Row: date|open|prev_business_date|next_business_date
+      * 論理テーブル12 business_calendar。
+      * 格納先:db/business_calendar.dat
        01 DB-BUSINESS-CALENDAR-ROW.
           05 DBCAL-DATE           PIC X(8).
           05 DBCAL-OPEN           PIC X(6).

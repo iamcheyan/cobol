@@ -2,9 +2,9 @@
        PROGRAM-ID. INPUTCSV.
        AUTHOR. TEST-DEVELOPER.
       *
-      *  input.txt を読み込み output.csv を作成するサンプル。
-      *  入力形式: 社員番号|氏名|年齢|給与
-      *  例      : 00001|Taro Yamada|28|350000
+      *input.txtを読み込み、output.csvを作成する。
+      *入力形式：社員番号|氏名|年齢|給与
+      *入力例　：00001|Taro Yamada|28|350000
       *
        ENVIRONMENT DIVISION.
        CONFIGURATION SECTION.
@@ -29,7 +29,7 @@
        01  OUTPUT-RECORD                PIC X(256).
 
        WORKING-STORAGE SECTION.
-      * --- 文件状态区 ---
+      *ファイル状態を保持する
        01  WS-FILE-STATUS.
            05  WS-INPUT-STATUS          PIC XX.
                88  INPUT-OK             VALUE "00".
@@ -37,7 +37,7 @@
            05  WS-OUTPUT-STATUS         PIC XX.
                88  OUTPUT-OK            VALUE "00".
 
-      * --- 控制标志与计数器 ---
+      *処理状態と件数を管理する
        01  WS-FLAGS.
            05  WS-EOF-FLAG              PIC X VALUE "N".
                88  EOF-YES              VALUE "Y".
@@ -52,7 +52,7 @@
            05  WS-TOTAL-SALARY          PIC S9(9) COMP-3 VALUE ZERO.
            05  WS-FIELD-COUNT           PIC 99 VALUE ZERO.
 
-      * --- 输入字段分解工作区 ---
+      *入力項目の分解領域
        01  WS-INPUT-FIELDS.
            05  IN-EMPLOYEE-ID           PIC X(20).
            05  IN-NAME-GROUP.
@@ -62,12 +62,12 @@
            05  IN-SALARY                PIC X(30).
            05  CSV-LINE                 PIC X(256).
 
-      * --- 外部 COPYBOOK 引入 (用于测试 copybook 导航) ---
+      *COPYBOOKを取り込み、定義への移動を確認する
        COPY "EMP-REC.CPY".
 
        PROCEDURE DIVISION.
       *================================================================*
-      * 主控制逻辑 (Main Control Logic)                                *
+      *主処理：初期化、ファイル処理、終了処理
       *================================================================*
        0000-MAIN-LOGIC SECTION.
        0000-MAIN.
@@ -77,7 +77,7 @@
            STOP RUN.
 
       *================================================================*
-      * 1000: 初始化与文件打开                                         *
+      *ファイルを開き、出力ヘッダーを設定する
       *================================================================*
        1000-INIT-SECTION SECTION.
        1000-INITIALIZE.
@@ -100,7 +100,7 @@
            WRITE OUTPUT-RECORD.
 
       *================================================================*
-      * 2000: 循环读取与处理文件记录                                   *
+      *入力レコードをEOFまで順次処理する
       *================================================================*
        2000-PROCESS-SECTION SECTION.
        2000-PROCESS-FILE.
@@ -130,7 +130,7 @@
            EXIT.
 
       *================================================================*
-      * 3000: 解析与拆分字段                                           *
+      *区切り文字で入力行を項目に分解する
       *================================================================*
        3000-PARSE-SECTION SECTION.
        3000-PARSE-RECORD.
@@ -154,7 +154,7 @@
            END-IF.
 
       *================================================================*
-      * 4000: 格式化 CSV 并写入输出                                    *
+      *項目をCSV形式に整形して出力する
       *================================================================*
        4000-WRITE-SECTION SECTION.
        4000-FORMAT-AND-WRITE.
@@ -177,7 +177,7 @@
            WRITE OUTPUT-RECORD.
 
       *================================================================*
-      * 9000: 正常收尾与异常退出                                       *
+      *ファイルを閉じ、件数を表示して終了する
       *================================================================*
        9000-FINALIZE-SECTION SECTION.
        9000-FINALIZE.

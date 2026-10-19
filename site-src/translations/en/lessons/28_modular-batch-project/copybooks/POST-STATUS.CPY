@@ -1,2 +1,2 @@
-      * Status: X(12); POSTED/INSUFFICIENT/BAD_TYPE/NO_ACCOUNT.
+      * 状態契約：X(12)。4種類の状態値。
        01 WS-POST-STATUS PIC X(12).

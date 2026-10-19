@@ -1,12 +1,12 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. ESQL-PROBE.
-      *> module08 reference: lessons 08.1 + 08.2 probe.
-      *>   08.1 host/indicator var, NULL vs empty, SQLCODE/STATE.
-      *>   08.2 DECLARE/OPEN/FETCH/CLOSE: no-data 02000 vs error.
-      *> fixed format: Area A col8, Area B col12, code within col72.
-      *> frozen contract: CUSTOMER v1 = 27B. date via BIZ-DATE.
-      *> note: gixsql emits cursor-init after the last user para, so
-      *> the last user para must be a tail (9100-FAIL) not PERFORMed.
+      *> module08 参照：08.1 と 08.2 の実験。
+      *> 08.1 host/indicator 変数、NULL と空値、SQLCODE/STATE。
+      *> 08.2 DECLARE/OPEN/FETCH/CLOSE：02000はデータなし。
+      *> 固定形式：Area A=8列、Area B=12列、最大72列。
+      *> 契約固定：CUSTOMER v1 は27B、日付は BIZ-DATE。
+      *> gixsql は段落末尾に cursor-init を出力ため、
+      *> 末尾を9100-FAILとし、PERFORM対象外に。
        DATA DIVISION.
        WORKING-STORAGE SECTION.
            EXEC SQL BEGIN DECLARE SECTION END-EXEC.
@@ -55,7 +55,7 @@
            DISPLAY 'PROBE=PASS'
            MOVE 0 TO RETURN-CODE
            GOBACK.
-      *> NULL indicator is -1; empty string = indicator 0 + SPACES.
+      *> NULL indicator は -1。空文字は indicator 0 と SPACES。
        1100-NULL-VS-EMPTY.
            MOVE '00000001' TO HV-CUST-ID
            EXEC SQL
@@ -81,7 +81,7 @@
                DISPLAY 'EMPTY-STRING=NO:' HV-NOTE-IND
                ADD 1 TO FAIL-CNT
            END-IF.
-      *> SELECT INTO with no row = 02000 (no data), not an error.
+      *> SELECT INTO の行なしは02000（データなし）。
        1200-NO-DATA.
            MOVE '99999999' TO HV-CUST-ID
            EXEC SQL
@@ -95,7 +95,7 @@
                DISPLAY 'NO-DATA-IS-02000=NO'
                ADD 1 TO FAIL-CNT
            END-IF.
-      *> real error: CHECK constraint violated, SQLSTATE 23514.
+      *> 実エラー：CHECK 制約違反、SQLSTATE 23514。
        1300-ERROR-CLASS.
            EXEC SQL
                INSERT INTO customer
@@ -112,7 +112,7 @@
            END-IF
            EXEC SQL ROLLBACK WORK END-EXEC
            PERFORM 9000-CHECK.
-      *> cursor extract by date; final FETCH = 02000; then reopen.
+      *> 日付で抽出。最終 FETCH は02000、その後再OPEN。
        1400-CURSOR.
            EXEC SQL
                DECLARE CUSTCUR CURSOR FOR
@@ -152,7 +152,7 @@
                DISPLAY 'CURSOR-COUNT=NO'
                ADD 1 TO FAIL-CNT
            END-IF
-      *> after CLOSE + COMMIT, reopen+FETCH: closed-cursor check.
+      *> CLOSE/COMMIT 後に再OPEN/FETCHし、閉鎖を確認。
            EXEC SQL COMMIT WORK END-EXEC
            PERFORM 9000-CHECK
            EXEC SQL OPEN CUSTCUR END-EXEC
@@ -170,7 +170,7 @@
            END-IF
            EXEC SQL CLOSE CUSTCUR END-EXEC
            PERFORM 9000-CHECK.
-      *> unique constraint: second insert same business key = 23505.
+      *> unique constraint：同じ業務キーの再登録は23505。
        1500-UNIQUE.
            MOVE 'DUP0000000000001' TO HV-DUP-TX
            EXEC SQL

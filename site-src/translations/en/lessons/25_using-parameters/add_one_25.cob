@@ -1,6 +1,6 @@
-      * Contract: ADD-ONE receives the parameter address BY REFERENCE,
-      * BY REFERENCE callers see the new value after the increment,
-      * while BY CONTENT changes a copy only; caller stays unchanged.
+      * ADD-ONE は既定の BY REFERENCE で引数アドレスを受け
+      * 1を加えるため、BY REFERENCE の呼出側にも新値が
+      * BY CONTENT は一時コピーだけ変更し、呼出側は不
        IDENTIFICATION DIVISION.
        PROGRAM-ID. ADD-ONE.
        DATA DIVISION.

@@ -1,7 +1,7 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. AMTCALC.
-      *    Shared amount calculation, interface AMTCALC v1.
-      *    Returns 0 accepted, 4 business reject, 8 interface error.
+      *    共通金額計算M、IF AMTCALC v1。
+      *    RC: 0 受理、4 業務却下、8 IFエラー。
        DATA DIVISION.
        WORKING-STORAGE SECTION.
        01 WS-EXPECTED-LENGTH PIC 9(4) COMP-5.

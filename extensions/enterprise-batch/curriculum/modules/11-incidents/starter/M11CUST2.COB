@@ -1,24 +1,24 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. M11CUST2.
-      *> STARTER (module 11 maintenance task 11.5).
-      *>
-      *> The customer classification belongs to the independent,
-      *> versioned ENTERPRISE-CLASS layout (a distinct name from the
-      *> canonical module 07 L4 ENTERPRISE-CUSTOMER-V1) -- NOT to the
-      *> 27-byte canonical CUSTOMER v1, whose byte 27 is the record
-      *> STATUS (A/D).  Widen the classification from 1 to 2 chars
-      *> (layout 001 -> 002, v1 23B -> v2 24B); this program must
-      *> read the frozen v2 snapshot and write the downstream extract.
-      *>
-      *> TODO 1: read enterprise v2 records of 24 bytes, layout '002'.
-      *> TODO 2: take the classification at bytes 23-24 (CLASS|<id>|xx).
-      *> TODO 3: write the extract and counts and return RC0; keep a
-      *>         structural width/version error at RC8.
-      *>
-      *> It compiles as shipped but is NOT implemented: it returns RC12
-      *> so an unfinished starter can never be mistaken for a working
-      *> job.  The reference implementation is in
-      *> instructor/modules/11-incidents/maintenance/M11CUST2.COB.
+      *module 11の保守課題11.5の雛形。
+      *ENTERPRISE-CLASSレイアウトで管理。
+      *module 07 L4の標準ENTERPRISE-CUSTOMER-V1とは別形式。
+      *CUSTOMER v1のbyte 27はSTATUS（A/D）。
+      *区分は別項目。1文字から2文字へ拡張。
+      *（layout 001 -> 002、v1 23B -> v2 24B）。
+      *固定v2スナップショットから抽出を作成。
+      *
+      *TODO 1: 24Bのenterprise v2（layout '002'）。
+      *TODO 2: bytes 23-24の区分を取得。
+      *出力形式: CLASS|<id>|xx。
+      *TODO 3: 抽出ファイルと件数を書き、RC0を返す。
+      *幅/版の構造エラーはRC8と。
+      *
+      *同梱時はコンパイル可、未実装。RC12で終了。
+      *稼働中のジョブと誤認させない。参照実装:
+      *instructor/modules/11-incidents/maintenance/M11CUST2.COB
+      *
+      *
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.

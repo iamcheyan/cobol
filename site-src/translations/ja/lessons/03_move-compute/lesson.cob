@@ -1,6 +1,6 @@
       * 第03課：MOVE と COMPUTE の金額計算サンプル。
       * データはサンプル定数。実口座ではない。
-      * ROUNDED なしは切捨て、ありは受信項目で丸め。
+      * ROUNDEDなしは切捨て、ありは受信桁で丸める。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. MOVE03.
        DATA DIVISION.
@@ -16,7 +16,7 @@
        01 WS-INTEREST-RAW PIC 9(5)V9999 VALUE ZERO.
        01 WS-INTEREST-MOVE PIC 9(5)V99 VALUE ZERO.
        01 WS-INTEREST-TRUNC PIC 9(5)V99 VALUE ZERO.
-      * ROUNDED は受信項目の精度で丸める。
+      * ROUNDEDは受信桁で丸める。中間値は保持。
        01 WS-INTEREST-ROUNDED PIC 9(5)V99 VALUE ZERO.
       * 計上：本課では丸め後利息を計上する。
        01 WS-CLOSING-BALANCE PIC 9(7)V99 VALUE ZERO.

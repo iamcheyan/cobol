@@ -1,5 +1,5 @@
-      * Inputs use a unique ascending 10-digit key; unchecked.
-      * After EOF, remaining rows are one-sided; check EOF first.
+      * 両入力は同一10桁キー昇順・一意。検証なし。
+      * 片側EOF後、他方残りは片側扱い。先にEOF確認。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. MATCH20.
        ENVIRONMENT DIVISION.

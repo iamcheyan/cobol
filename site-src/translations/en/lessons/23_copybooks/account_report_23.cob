@@ -1,11 +1,11 @@
-      * Second consumer: imports account Copybook; shares with LESSON23.
-      * Report row is an in-program constant; no external file is read.
+      * 第2利用側。口座 Copybook を使う。
+      * 報告行は内部定数。外部ファイルは読まない。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. ACCOUNT-REPORT23.
        DATA DIVISION.
        WORKING-STORAGE SECTION.
        COPY "ACCOUNT-REC.CPY".
-      * Edited field is display-only; width from PIC 9(7)V99.
+      * 編集項目は表示用。幅は Copybook に従う。
        01 WS-REPORT-BALANCE PIC 9(7).99 VALUE ZERO.
        PROCEDURE DIVISION.
        0000-MAIN.

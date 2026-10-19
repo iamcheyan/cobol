@@ -1,4 +1,4 @@
-      * Shared parameter: full-word (4-byte) signed binary.
-      * Caller and subprograms must COPY the same declaration;
-      * width or signedness mismatch breaks the interface.
+      * 共有引数：4バイトの符号付き二進数。
+      * 呼出側と各サブプログラムは同じ宣言を COPY す
+      * 幅や符号が違うとインターフェースが壊れる。
        01 AMOUNT-ARGUMENT USAGE BINARY-LONG.

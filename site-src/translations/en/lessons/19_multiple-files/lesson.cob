@@ -1,5 +1,5 @@
-      *Each input has independent EOF; one EOF does not stop the other.
-      *Other I/O errors are failures; close files already opened.
+      * 各EOFは独立。一方のEOF後も他方は続行。
+      * I/O異常は失敗扱い。開いたファイルを閉じる。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. MULTI19.
        ENVIRONMENT DIVISION.

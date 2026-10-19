@@ -75,7 +75,7 @@
                    DISPLAY "結果=拒否 REASON=UNKNOWN_TYPE"
                    ADD 1 TO WS-REJECTED-COUNT
            END-EVALUATE.
-      *Deposit: update only the matching account; reject if absent.
+      *入金：対象口座のみ更新。未検出なら拒否。
        2100-POST-DEPOSIT.
            MOVE WS-DEPOSIT-ACCOUNT(WS-TRANSACTION-NUMBER)
                TO WS-SEARCH-KEY
@@ -93,8 +93,8 @@
                DISPLAY "結果=拒否 REASON=ACCOUNT_NOT_FOUND"
                ADD 1 TO WS-REJECTED-COUNT
            END-IF.
-      *Transfer: update both only if both exist and funds suffice;
-      *If either condition fails, neither balance changes.
+      *振込：両口座あり、残高十分な場合のみ更新。
+      *条件不成立なら、両口座の残高を変更しない。
        2200-POST-TRANSFER.
            MOVE WS-SOURCE-ACCOUNT(WS-TRANSACTION-NUMBER)
                TO WS-SEARCH-KEY

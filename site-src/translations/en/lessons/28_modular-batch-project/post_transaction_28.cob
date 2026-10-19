@@ -1,6 +1,6 @@
-      * LINKAGE order: account, transaction, status; match caller.
-      * BY REFERENCE; only balance and status change.
-      * Statuses: POSTED / INSUFFICIENT / BAD_TYPE / NO_ACCOUNT.
+      * LINKAGE順は口座・取引・状態。
+      * BY REFERENCE。残高と状態のみ更新。
+      * 状態値：POSTED/INSUFFICIENT/BAD_TYPE/NO_ACCOUNT。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. POST-TRANSACTION28.
        DATA DIVISION.

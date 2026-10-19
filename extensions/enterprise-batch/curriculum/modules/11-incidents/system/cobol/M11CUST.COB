@@ -1,14 +1,14 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. M11CUST.
-      *> Snapshot job JOB007C: customer STATUS extract for the
-      *> downstream feed.  Reads the frozen CUSTOMER v1 snapshot
-      *> (27 bytes: id 8, name 10, demo balance 8, status 1) and writes
-      *> one extract line per customer plus per-status counts.
-      *> Byte 27 is the record status (A active / D dormant), NOT a
-      *> customer classification; the 11.5 maintenance task works on a
-      *> separate, versioned enterprise layout and never edits this
-      *> byte.  The offsets here are the frozen v1 contract, not a
-      *> guess.
+      *JOB007Cのスナップショットから
+      *後続フィード向けに顧客STATUSを抽出。
+      *固定CUSTOMER v1の27Bを読み込む。
+      *id 8桁、name 10文字、demo balance 8桁、status 1文字。
+      *顧客ごとに1行を出力し、STATUS別件数を集計。
+      *byte 27はstatus（A/D）。顧客区分ではない。
+      *11.5の別形式でも、このBは変更しない。
+      *位置は固定v1契約に基づく。
+      *
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.

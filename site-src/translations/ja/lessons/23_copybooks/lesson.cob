@@ -9,7 +9,7 @@
       * 宣言の検索先は -I copybooks で指定。
        COPY "ACCOUNT-REC.CPY".
        COPY "TRANSACTION-REC.CPY".
-      * 状態欄は固定長。比較は空白補完、表示時だけ 
+      * 状態欄は固定長。比較は空白補完、表示時だけ
        01 WS-POST-STATUS PIC X(12) VALUE SPACES.
        01 WS-POSTED-COUNT PIC 9(3) VALUE ZERO.
        01 WS-REJECTED-COUNT PIC 9(3) VALUE ZERO.

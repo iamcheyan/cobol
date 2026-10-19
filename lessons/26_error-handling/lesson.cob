@@ -1,9 +1,9 @@
-      * 输入契约：每行 12 字节 = 账户号 X(6) + "|" + 金额数字 X(5)。
-      * FD 缓冲区为 X(20)；21 字节以上的行或末行 20 字节无换行时 READ 报状态 06。
-      * 政策：宽度、分隔符、金额非数字、零金额属业务拒绝，写拒绝文件后继续，不改返回码；
-      * 只有非 EOF 的文件操作失败才令批次失败（RETURN-CODE=1）。
-      * 恢复边界：仅关闭 OPEN 成功的文件；WRITE 状态不为 00 时不得计入受理。
-      * 状态 00 只表示运行库接受了调用，不等于数据已落盘（见 README 写失败边界）。
+      * 入力仕様：各行12B＝口座X(6)＋|＋金額X(5)。
+      * FDはX(20)。21B以上・改行なし20B末行はREAD状態06。
+      * 幅・区切り・金額不正は拒否し続行。
+      * EOF以外の操作失敗でバッチ失敗（RC=1）。
+      * OPEN成功分のみ閉じる。WRITE≠00は受理外。
+      * 状態00は受理のみ。永続化保証なし。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. ERROR26.
        ENVIRONMENT DIVISION.
@@ -95,7 +95,7 @@
                OR WS-SYSTEM-ERROR = "Y"
                PERFORM 2100-READ-ONE-RECORD
            END-PERFORM.
-      * AT END 只覆盖状态 10；其余非零状态（含超长行的 06）按系统故障处理。
+      * AT ENDは10のみ。他状態は障害扱い。
        2100-READ-ONE-RECORD.
            READ TRANSACTION-INPUT
                AT END
@@ -112,8 +112,8 @@
                    WS-INPUT-STATUS
                MOVE "Y" TO WS-SYSTEM-ERROR
            END-IF.
-      * 记录布局来自上游契约：1:6 账户号、7:1 分隔符、8:5 金额。
-      * 先按去尾空格后的实际宽度分流；宽度不符时不再解析分隔符与金额。
+      * 配置仕様：1:6口座、7:1区切り、8:5金額。
+      * 空白除去後に幅判定。不一致時は解析省略。
        3000-VALIDATE-RECORD.
            MOVE SPACES TO WS-REJECT-REASON
            MOVE FD-TRANSACTION-RECORD(1:6) TO WS-ACCOUNT
@@ -141,7 +141,7 @@
            ELSE
                PERFORM 5000-WRITE-REJECTED
            END-IF.
-      * 受理行沿用输入前 12 字节，保证结果文件宽度与输入契约一致。
+      * 入力先頭12Bを使い、受理出力幅を仕様に一致。
        4000-WRITE-ACCEPTED.
            MOVE FD-TRANSACTION-RECORD(1:12)
                TO WS-ACCEPTED-WORK
@@ -154,8 +154,8 @@
                    WS-ACCEPTED-STATUS
                MOVE "Y" TO WS-SYSTEM-ERROR
            END-IF.
-      * 拒绝行 = 账户号 6 + "|" + 原因 X(12)；原因短于 12 字符时靠 LINE SEQUENTIAL
-      * 去掉行尾填充空格，所以实际写出行短于 PIC X(19) 缓冲区。
+      * 拒否行＝口座6＋|＋理由X(12)。短い理由は行順次
+      * 末尾空白を除き、PIC X(19)より短く出力。
        5000-WRITE-REJECTED.
            MOVE SPACES TO WS-REJECTED-WORK
            MOVE WS-ACCOUNT TO WS-REJECTED-WORK(1:6)
@@ -172,7 +172,7 @@
                    WS-REJECTED-STATUS
                MOVE "Y" TO WS-SYSTEM-ERROR
            END-IF.
-      * 只关闭 OPEN 成功的文件；受理输出打开失败时拒绝输出从未打开，不能盲关。
+      * OPEN成功分のみ閉じる。未OPEN分は閉じない。
        8000-CLOSE-FILES.
            IF WS-REJECTED-OPEN = "Y"
                CLOSE REJECTED-OUTPUT

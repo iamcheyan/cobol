@@ -1,8 +1,8 @@
-      *Input contract: ASCII, one record per line, five fields.
-      *Quoted commas are data; "" means one quote.
-      *Fixture sets 200-byte line limit; program does not check it.
-      *Field limit is 20 bytes: longer rows are rejected, not truncated.
-      *First error wins: log cause once; later checks do not overwrite.
+      * ASCII、1行1レコード、5項目。
+      * 引用符内カンマはデータ。「""」は引用符1字。
+      * 200バイト上限は入力データで保証。未検査。
+      * 1項目20バイト。超過行は拒否。切り詰めない。
+      * 初回エラーのみ記録。後続検査で変更しない。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. CSV18.
        ENVIRONMENT DIVISION.

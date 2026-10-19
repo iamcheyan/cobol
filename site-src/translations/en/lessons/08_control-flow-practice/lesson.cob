@@ -58,8 +58,8 @@
                " 符号=" WS-TRANSACTION-CODE
                " 金額=" WS-TRANSACTION-AMOUNT.
        2200-CLASSIFY-AND-POST.
-      * Rules: D deposits; W withdraws if funds suffice, even exactly.
-      * Reject other codes; count rejection without changing balance.
+      * 規則：Dは入金。Wは残高以内で出金。同額可。
+      * 他コード拒否。拒否数を加算し残高不変。
            EVALUATE WS-TRANSACTION-CODE
                WHEN "D"
                    IF WS-TRANSACTION-AMOUNT > ZERO
@@ -105,7 +105,7 @@
                        " 理由=UNKNOWN_TRANSACTION_CODE"
            END-EVALUATE.
        9000-REPORT.
-      * Counts track record outcomes, not accounting entries.
+      * 3件数は処理結果であり、会計科目ではない。
            DISPLAY "処理件数=" WS-PROCESSED-COUNT
            DISPLAY "承認件数=" WS-ACCEPTED-COUNT
            DISPLAY "拒否件数=" WS-REJECTED-COUNT

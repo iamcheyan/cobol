@@ -1,16 +1,16 @@
-      *> CUSTOMER v1 -- canonical frozen interface, 27 bytes, ASCII.
-      *> One record is followed by LF; LF is not counted in the width.
-      *> 1-8   customer_id    8 digits, leading zeros kept, unique
-      *> 9-18  customer_name  10 chars, left justified, space padded
-      *> 19-26 balance_demo   8 digits, minor unit, unsigned demo
-      *> 27    status         1 char: A active, D dormant; else reject
+      *> CUSTOMER v1：固定形式・27バイト・ASCII。
+      *> 各レコードの後にLF。LFは27バイトに含めない。
+      *> 1-8   customer_id    8桁・先頭ゼロ保持・一意。
+      *> 9-18  customer_name  10文字・左詰め・空白埋め。
+      *> 19-26 balance_demo   8桁・最小通貨単位・符号なし
+      *> 27    status         1文字。A=有効、D=休眠
       *>
-      *> Byte 27 is the record STATUS, not a distinction.  The customer
-      *> DISTINCTION for the module 11/12 maintenance exercise is a
-      *> DIFFERENT field and must live in an independent, versioned
-      *> enterprise layout -- never in this byte.  See BANK-SYSTEM.md
-      *> section 2 and module 07 L4 ENTERPRISE-CUSTOMER-V1, whose
-      *> CUSTOMER-CLASSIFICATION is X(1) in v1 and X(2) in v2.
+      *> byte 27はレコードSTATUS。顧客区分ではない。
+      *> module 11/12の顧客区分は別項目であり、独立した
+      *> 版管理されたenterpriseレイアウトに置く。
+      *> このバイトには置かない。BANK-SYSTEM.md 2節と
+      *> module 07 L4 ENTERPRISE-CUSTOMER-V1を参照。
+      *> そのCUSTOMER-CLASSIFICATIONはv1がX(1)、v2がX(2)。
        01 CUSTOMER-RECORD.
           05 CUSTOMER-ID          PIC X(8).
           05 CUSTOMER-NAME        PIC X(10).

@@ -1,10 +1,10 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. BANK-ENTRY.
-      *> Minimal bank nightly batch entry (module 01 reference).
-      *> Reads a posted ACCOUNT v1 (47 bytes) file for one business
-      *> date, validates the interface, counts accepted/rejected rows
-      *> and re-emits validated rows. No balance arithmetic here; the
-      *> account model is introduced from module 02 onward.
+      *> 夜間バッチの最小エントリ（module 01参照）。
+      *> ACCOUNT v1（47 bytes）を1営業日分読み込む。
+      *> IFを検証し、受理・却下件数を集計。
+      *> 検証済み行を再出力。残高計算はmodule 02以降。
+      *>
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.

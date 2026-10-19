@@ -1,9 +1,9 @@
-      * 输入契约：快照每行 27 字节＝账号 10＋客户号 8＋金额分 9，按账号升序且键唯一。
-      * 金额为隐含小数的“分”；非数字金额按系统故障中止批次，不作为业务拒绝。
-      * 本课只做单向核对：数据库独有的账户不参与比对，也不写入 RECON_RESULT。
-      * 结果表以账号为主键，重复文件键或重跑会触发主键错误并中止批次。
-      * 中止不撤销已提交的结果行：本课没有事务，也没有回滚。
-      * 输出标签沿用仓库既有日文约定，中文含义见 README。
+      * 入力：27B、口座昇順、キー一意。
+      * 金額は分。非数字なら障害中止。
+      * 一方向照合。DBのみ口座は対象外。
+      * 主キーは口座番号。重複時は中止。
+      * 登録行は残る。トランザクションなし。
+      * 出力は日本語。訳はREADME参照。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON31.
        ENVIRONMENT DIVISION.
@@ -19,7 +19,7 @@
        FILE SECTION.
        FD SNAPSHOT-FILE.
        01 SNAPSHOT-RECORD PIC X(27).
-      * 差异文件每次运行由 OPEN OUTPUT 截断重建；只有非 MATCH 分类写入其中。
+      * 差異ファイルは毎回再作成する。
        FD DIFFERENCE-FILE.
        01 DIFFERENCE-RECORD PIC X(80).
        WORKING-STORAGE SECTION.
@@ -34,7 +34,7 @@
        01 WS-DB-CUSTOMER PIC X(8).
        01 WS-DB-BALANCE PIC S9(7)V99 COMP-3.
        01 WS-BALANCE PIC S9(7)V99 COMP-3.
-      * WS-EDITED-BALANCE 只负责报告里的定点显示（9(5).99），不参与比较。
+      * 表示用金額。比較には使用しない。
        01 WS-EDITED-BALANCE PIC 9(5).99.
        01 WS-STATUS PIC X(10).
        01 WS-ROW-COUNT PIC 9(3) VALUE ZERO.
@@ -141,7 +141,7 @@
            MOVE SNAPSHOT-RECORD(1:10) TO WS-ACCOUNT
            MOVE SNAPSHOT-RECORD(11:8) TO WS-CUSTOMER
            MOVE SNAPSHOT-RECORD(19:9) TO WS-BALANCE-TEXT
-      * 金额域必须是数字；文件单位是分，数据库 BALANCE 单位是元，比较前先换算。
+      * ファイルは分、DBは元。比較前に換算。
            IF WS-BALANCE-TEXT IS NUMERIC
                COMPUTE WS-BALANCE =
                    FUNCTION NUMVAL(WS-BALANCE-TEXT) / 100
@@ -151,7 +151,7 @@
                MOVE "Y" TO WS-FAILED
            END-IF.
        3100-LOOKUP-ACCOUNT.
-      * SQLCODE 100 时驱动不改写宿主变量，故先清空接收项。
+      * SQLCODE 100に備え受取項目を初期化。
            MOVE SPACES TO WS-DB-CUSTOMER
            MOVE ZERO TO WS-DB-BALANCE
            EXEC SQL
@@ -160,7 +160,7 @@
                  FROM ACCOUNT_SNAPSHOT
                 WHERE ACCOUNT_NO = :WS-ACCOUNT
            END-EXEC
-      * 客户号与金额都相等才算 MATCH，任一不同即 CHANGED（不细分差异种类）。
+      * 顧客・金額一致でMATCH。他はCHANGED。
            EVALUATE SQLCODE
              WHEN 0
                IF WS-CUSTOMER = WS-DB-CUSTOMER AND
@@ -182,8 +182,8 @@
                PERFORM 4000-WRITE-RESULT
            END-IF.
        4000-WRITE-RESULT.
-      * 每个文件键写一行结果；INSERT 失败（如重复键）时本行不落库，
-      * 但更早的行已经提交，差异文件也可能只写了一半。
+      * キーごとに結果行をINSERTする。
+      * 先行行は登録済み。出力も不完全の場合あり。
            EXEC SQL
                INSERT INTO RECON_RESULT
                    (ACCOUNT_NO, FILE_STATUS, FILE_CUSTOMER,

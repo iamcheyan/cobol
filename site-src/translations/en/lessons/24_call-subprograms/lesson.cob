@@ -1,6 +1,6 @@
-      * Call contract: pass amount PIC 9(7)V99 and result PIC X(15)
-      * BY REFERENCE, matching CHECK-AMOUNT linkage order and types.
-      * Business rejection writes result only; main exit code stays 0.
+      * BY REFERENCE で金額 PIC 9(7)V99 と結果 PIC X(15) を渡す
+      * 順序と型は CHECK-AMOUNT の LINKAGE SECTION に合わせる
+      * 業務拒否は結果欄に記録。主プログラム終了コ
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON24.
        DATA DIVISION.
@@ -20,7 +20,7 @@
            DISPLAY "调用方：子程序返回后继续"
            PERFORM 3000-DISPLAY-SUMMARY
            STOP RUN.
-      * Eight cases cover zero, limit edges, minimum positive, and max.
+      * 8例でゼロ、上限の上下、最小正額と最大値を確
        1000-RUN-CHECK-CASES.
            PERFORM 1100-CHECK-ORDINARY-AMOUNT
            PERFORM 1200-CHECK-ZERO-AMOUNT
@@ -55,8 +55,8 @@
            MOVE 500.00 TO WS-AMOUNT
            PERFORM 2000-CALL-AMOUNT-CHECK.
        2000-CALL-AMOUNT-CHECK.
-      * Clear result first: branches write it; clearing is defensive;
-      * unwritten future branch falls to WHEN OTHER, not prior status.
+      * 結果欄を先に消去する。全分岐が書くが、防御
+      * 新分岐が未設定でも、空欄は WHEN OTHER で拒否と
            MOVE SPACES TO WS-CHECK-RESULT
            MOVE WS-AMOUNT TO WS-EDITED-AMOUNT
            DISPLAY "调用前 金额=" WS-EDITED-AMOUNT

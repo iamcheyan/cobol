@@ -1,5 +1,5 @@
-      * Zero-padded 10-digit account keys sort lexically as numbers.
-      * Input or sort errors fail the batch (nonzero return code).
+      * キーは先頭0付き10桁口座番号。比較で昇順。
+      * 入力・ソート異常はバッチ失敗（非ゼロ）。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. SORT21.
        ENVIRONMENT DIVISION.

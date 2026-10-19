@@ -5,10 +5,10 @@
        01 TODO-MARKER PIC X VALUE "Y".
        PROCEDURE DIVISION.
        MAIN-PARA.
-      * TODO: COPY the V1 layout, implement two ordered binary readers,
-      * validate record framing/version/ABI/key/domains before compare,
-      * compare all 175 fields using RAW/TEXT-NORM/NUMERIC/IGNORE rules,
-      * redact sensitive output, verify controls, and publish safely.
+      * 未実装：V1をCOPYし、順序付き二分読取を実装。
+      * レコード枠/version/ABI/key/domain を比較前に検証。
+      * 175項目を RAW/TEXT-NORM/NUMERIC/IGNORE 規則で比較。
+      * 機密を伏字化し、制御値を検証して公開。
            DISPLAY "TODO: B04 core is incomplete"
            MOVE 12 TO RETURN-CODE
            STOP RUN.

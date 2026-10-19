@@ -1,5 +1,5 @@
-      *> Fault: an OCCURS DEPENDING ON item must be the last variable
-      *> item of its group. Data after it must not compile.
+      *故障例：OCCURS DEPENDING ON項目はグループ内の
+      *最後可変項目でなければならない
        IDENTIFICATION DIVISION.
        PROGRAM-ID. FAULTODONOTLAST.
        DATA DIVISION.

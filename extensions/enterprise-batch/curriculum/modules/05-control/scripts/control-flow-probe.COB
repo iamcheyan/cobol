@@ -1,11 +1,11 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. M05-CONTROL-FLOW-PROBE.
-      *> Lesson 05.1 micro-lab, run by check.sh:
-      *>   - PERFORM VARYING   (counted loop over a numeric counter)
-      *>   - inline PERFORM    (PERFORM n TIMES, own END-PERFORM)
-      *>   - paragraph scope   (PERFORM a paragraph stops at its end)
-      *>   - fall-through      (PERFORM ... THRU runs into the next
-      *>                        paragraph, the classic Area B trap)
+      *> 05.1 制御フロー実験。check.sh で実行。
+      *> PERFORM VARYING：数値カウンターによる反復
+      *> インライン PERFORM：PERFORM n TIMES と END-PERFORM
+      *> 段落スコープ：PERFORM は段落末尾で戻る
+      *> 落下：PERFORM ... THRU は次段落へ移る。
+      *> Area B で起きやすい典型的な注意点。
        DATA DIVISION.
        WORKING-STORAGE SECTION.
        01 I PIC 9(2).

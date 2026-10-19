@@ -1,11 +1,11 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. TYPESLAB.
-      *> Module 02 type experiment over a real fixed-width input file:
-      *> PIC A vs PIC X, level 78 constant, level 77 item, level 88
-      *> condition name, VALUE and a 01/05 group. It is a teaching
-      *> experiment only; it is not the CUSTOMER load implementation.
-      *> Key fact: moving a digit-bearing alphanumeric into PIC A does
-      *> NOT reject it - the program must validate with IS ALPHABETIC.
+      *固定入力ファイルを使うM02の型実験：
+      *PIC AとPIC
+      *条件名、VALUE、01/05グループ。学習用の
+      *実験であり、CUSTOMERロードの実装ではない。
+      *要点：数字を含む英数字をPIC Aへ移しても
+      *拒否されない。IS ALPHABETICで検証必要がある。
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.

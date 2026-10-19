@@ -2,7 +2,7 @@
        PROGRAM-ID. SEARCH13.
        DATA DIVISION.
        WORKING-STORAGE SECTION.
-      * SEARCH ALL 前提：实际键值须与 ASCENDING KEY 同序且唯一，重复键同样违反。
+      *SEARCH ALLはキー昇順かつ一意が前提。重複不可。
        01 WS-ACCOUNT-TABLE.
           05 WS-ACCOUNT-ENTRY OCCURS 4 TIMES
              ASCENDING KEY IS WS-ACCOUNT-NUMBER

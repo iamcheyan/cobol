@@ -1,4 +1,4 @@
-      * Transaction: X(10)+X(1)+9(7)V99 = 20 bytes.
+      * 取引契約：計20バイト。主・POSTERで共有。
        01 WS-TRANSACTION-RECORD.
           05 WS-TRANSACTION-ACCOUNT PIC X(10).
           05 WS-TRANSACTION-TYPE PIC X.

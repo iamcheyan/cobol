@@ -1,12 +1,12 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. M11MATCH.
-      *> Snapshot job JOB005: sequential 1:N account master vs sorted
-      *> transactions.  The master must arrive sorted by account_id and
-      *> the transactions by (account_id, sequence, transaction_id);
-      *> both streams are checked and an ordering break is a structural
-      *> error (RC8) that stops the run before anything is published.
-      *> Business rejects (orphan account, overdraft) are RC4 warnings.
-      *> This file is the incident snapshot shipped with module 11.
+      *
+      *
+      *
+      *
+      *
+      *
+      *
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.

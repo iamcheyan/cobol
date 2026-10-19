@@ -1,11 +1,11 @@
-      * TRANSACTION v1 -- FROZEN, 55 bytes, ASCII, LF terminated.
-      * 1-10  account_id      10 digits, match key
-      * 11-26 transaction_id  16 chars, idempotency key part
-      * 27-34 business_date   8 digits, must equal the run business date
-      * 35-40 sequence_no     6 digits, per-account processing order
-      * 41    direction       C credit, D debit
-      * 42-54 amount          13 digits, minor unit, non-negative
-      * 55    status          N new; other statuses are policy-specific
+      *TRANSACTION v1：固定形式、55B、ASCII、LF終端。
+      *1-10 account_id：10桁、照合キー。
+      *11-26 transaction_id：16文字、冪等性キーの一部。
+      *27-34 business_date：8桁、実行営業日と一致。
+      *35-40 sequence_no：6桁、口座ごとの処理順。
+      *41 direction：C=貸方、D=借方。
+      *42-54 amount：13桁、最小通貨単位、非負。
+      *55 status：N=新規。他の値は運用規則による。
        01 TRANSACTION-V1-RECORD.
           05 TX1-ACCOUNT-ID      PIC X(10).
           05 TX1-TRANSACTION-ID  PIC X(16).

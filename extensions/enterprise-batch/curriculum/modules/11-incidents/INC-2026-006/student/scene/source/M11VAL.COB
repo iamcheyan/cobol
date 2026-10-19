@@ -1,10 +1,10 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. BANKVAL.
-      *> JOB002: length and business validation of the received
-      *> TRANSACTION v1 feed.  Structural errors (wrong length or
-      *> non-numeric key fields) abort the whole run with RC8.  Business
-      *> rejects (bad direction/status/date/zero amount) are written out
-      *> with a reason and reported with RC4.  System failures are RC12.
+      *JOB002: 受信したTRANSACTION v1フィードの長さと業
+      * 務規則を検証。
+      *構造エラー（長さ不正または
+      *
+      * キー項目が非数値）はRC8で全実行を中止。
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.

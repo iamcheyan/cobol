@@ -1,8 +1,8 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. BATCH09.
-      *    STARTER for module 09. Compiles, returns RC 12, no publish.
-      *    Implement the three TODO areas and CALL the shared modules
-      *    (CUSTVAL, AMTCALC, LOGGER) as specified in DESIGN.md.
+      * module 09の雛形。コンパイル可能。RC
+      * 12を返し、公
+      * 開しない。
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
@@ -60,11 +60,11 @@
            COPY "TRANSACTION-V1.CPY".
        PROCEDURE DIVISION.
        1000-MAIN.
-      *    TODO 1: read customer.dat, call CUSTVAL per record, write the
-      *    report plus valid/rejected customer outputs.
-      *    TODO 2: key-break account.dat/transaction.dat, call AMTCALC
-      *    per postable transaction, keep opening/closing/credit/debit.
-      *    TODO 3: call LOGGER for JOBSTART, each decision and JOBEND.
+      * TODO 1: customer.datを読込、各レコードでCUSTVALを呼
+      * び出し、
+      * レポートと正常/却下顧客ファイルを書き出す。
+      * TODO 2：キー単位の処理を実装する。
+      * account.dat/transaction.datをキー単位で処理し、
            DISPLAY 'STARTER: not implemented; see README.md' UPON STDERR
            MOVE 12 TO RETURN-CODE
            STOP RUN.

@@ -1,22 +1,22 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. CUSTV2-STARTER.
-      *> STARTER for module 12 JOB002d (enterprise customer
-      *> classification 1 -> 2).
+      *> JOB002d雛形：区分を1桁から2桁へ拡張。
+      *> v1経路は実装済み。31B入力をv2へ正規化。
+      *> v2経路は未実装。受講者の課題：
+      *> 1. 32BのCAP-CUSTOMER-FEED v2を受け付ける。
+      *> bytes 28-29はA1..D1。byte 27はrecord status A/D。
+      *> 2. 区分を検証、BADCLASS/BADVERSIONを却下。
+      *> 3. v2正規化ストリームと制御行を出力。
+      *> v2入力は実装までRC12で失敗させ、公開しない。
+      *> 顧客フィードは独立したenterprise形式。
+      *> 27BのCUSTOMER v1（byte 27=status）は不変。
       *>
-      *> The v1 path is done: a 31 byte CAP-CUSTOMER-FEED v1 feed
-      *> is normalized to the internal v2 form.  The v2 path is NOT
-      *> implemented.
       *>
-      *> TODO (student):
-      *>   1. accept a 32 byte CAP-CUSTOMER-FEED v2 feed (positions
-      *>      28-29 hold the 2 character classification code A1..D1,
-      *>      position 27 stays the record status A/D);
-      *>   2. validate the v2 code and reject BADCLASS/BADVERSION;
-      *>   3. write the normalized v2 stream and the control line.
-      *> Until then a v2 feed fails with RC12 and nothing is published.
       *>
-      *> The customer feed is the independent enterprise layout; the
-      *> 27 byte canonical CUSTOMER v1 (byte 27 = status) is unchanged.
+      *>
+      *>
+      *>
+      *>
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.

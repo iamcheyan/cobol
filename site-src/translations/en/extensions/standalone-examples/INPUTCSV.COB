@@ -2,9 +2,9 @@
        PROGRAM-ID. INPUTCSV.
        AUTHOR. TEST-DEVELOPER.
       *
-      *  Sample that reads input.txt and creates output.csv.
-      *  Input format: employee ID|name|age|salary
-      *   Example : 00001|Taro Yamada|28|350000
+      * input.txtを読み込み、output.csvを作成する。
+      *  入力形式: 社員番号|氏名|年齢|給与
+      *  例      : 00001|Taro Yamada|28|350000
       *
        ENVIRONMENT DIVISION.
        CONFIGURATION SECTION.
@@ -29,7 +29,7 @@
        01  OUTPUT-RECORD                PIC X(256).
 
        WORKING-STORAGE SECTION.
-      * --- File status fields ---
+      * --- ファイル状態領域 ---
        01  WS-FILE-STATUS.
            05  WS-INPUT-STATUS          PIC XX.
                88  INPUT-OK             VALUE "00".
@@ -37,7 +37,7 @@
            05  WS-OUTPUT-STATUS         PIC XX.
                88  OUTPUT-OK            VALUE "00".
 
-      * --- Control flags and counters ---
+      * --- 制御フラグとカウンタ ---
        01  WS-FLAGS.
            05  WS-EOF-FLAG              PIC X VALUE "N".
                88  EOF-YES              VALUE "Y".
@@ -52,7 +52,7 @@
            05  WS-TOTAL-SALARY          PIC S9(9) COMP-3 VALUE ZERO.
            05  WS-FIELD-COUNT           PIC 99 VALUE ZERO.
 
-      * --- Input field parsing workspace ---
+      * --- 入力フィールド分解作業領域 ---
        01  WS-INPUT-FIELDS.
            05  IN-EMPLOYEE-ID           PIC X(20).
            05  IN-NAME-GROUP.
@@ -62,12 +62,12 @@
            05  IN-SALARY                PIC X(30).
            05  CSV-LINE                 PIC X(256).
 
-      * --- External COPYBOOK inclusion (for testing copybook navigation) ---
+      * --- 外部 COPYBOOK (ナビ確認用) ---
        COPY "EMP-REC.CPY".
 
        PROCEDURE DIVISION.
       *================================================================*
-      * Main Control Logic                                *
+      * 主制御ロジック
       *================================================================*
        0000-MAIN-LOGIC SECTION.
        0000-MAIN.
@@ -77,7 +77,7 @@
            STOP RUN.
 
       *================================================================*
-      * 1000: Initialization and file open
+      * 1000: 初期化とオープン
       *================================================================*
        1000-INIT-SECTION SECTION.
        1000-INITIALIZE.
@@ -100,7 +100,7 @@
            WRITE OUTPUT-RECORD.
 
       *================================================================*
-      * 2000: Read loop and record processing
+      * 2000: レコード読み込みと処理
       *================================================================*
        2000-PROCESS-SECTION SECTION.
        2000-PROCESS-FILE.
@@ -130,7 +130,7 @@
            EXIT.
 
       *================================================================*
-      * 3000: Parse and split fields                                           *
+      * 3000: フィールドの解析と分割
       *================================================================*
        3000-PARSE-SECTION SECTION.
        3000-PARSE-RECORD.
@@ -154,7 +154,7 @@
            END-IF.
 
       *================================================================*
-      * 4000: Format CSV and write output                                    *
+      * 4000: CSV 整形と出力書き込み
       *================================================================*
        4000-WRITE-SECTION SECTION.
        4000-FORMAT-AND-WRITE.
@@ -177,7 +177,7 @@
            WRITE OUTPUT-RECORD.
 
       *================================================================*
-      * 9000: Normal completion and error exit
+      * 9000: 正常終了と異常終了
       *================================================================*
        9000-FINALIZE-SECTION SECTION.
        9000-FINALIZE.

@@ -1,5 +1,5 @@
-      * 20-byte transaction record (10+1+9), matching Lesson 22 fixture.
-      * Used only for in-program constants; no external file is read.
+      * 取引20バイト（10+1+9）。第22課と同じ行幅。
+      * 内部定数を格納。外部ファイルは読まない。
        01 WS-TRANSACTION-RECORD.
           05 WS-TRANSACTION-ACCOUNT PIC X(10).
           05 WS-TRANSACTION-TYPE PIC X.

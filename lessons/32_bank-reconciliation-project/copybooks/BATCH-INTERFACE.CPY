@@ -12,5 +12,5 @@
           05 WS-UNCHANGED-COUNT PIC 999.
           05 WS-INSERTED-COUNT PIC 999.
           05 WS-FAILED PIC X.
-      * GixSQL comments the final linkage field; keep this spare byte.
+      *GixSQLはLINKAGEの末尾項目を注釈化用
           05 WS-INTERFACE-RESERVED PIC X.

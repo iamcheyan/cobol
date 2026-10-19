@@ -1,7 +1,7 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. FIXEDREC.
       *================================================================*
-      * FIXEDREC.COB: 80-COLUMN FIXED RECORD PROCESSING & REDEFINES    *
+      *FIXEDREC.COB：固定長取引レコードと形式別再定義
       *================================================================*
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
@@ -22,7 +22,7 @@
        01  RPT-RECORD                  PIC X(80).
 
        WORKING-STORAGE SECTION.
-      *    -- INCLUDE COPYBOOK (REDEFINES DEMO) --
+      *再定義した取引レコードのCOPYBOOKを取り込む
            COPY "TX-REC.CPY".
 
        01  WS-STATUS-FLAGS.
@@ -108,7 +108,7 @@
        2100-HANDLE-RECORD.
            ADD 1 TO WS-CNT-TOTAL
 
-      *    -- USE 88-LEVEL CONDITIONS & REDEFINES FIELDS --
+      *条件名で取引種別ごとの項目を参照する
            EVALUATE TRUE
                WHEN TX-DEPOSIT
                    ADD 1 TO WS-CNT-DEP
@@ -138,15 +138,15 @@
            END-EVALUATE.
 
        3000-GENERATE-REPORT.
-      *    Calculate net cash flow: Deposits - Withdrawals
+      *入金額から出金額を引き純資金流入を算出する
            COMPUTE WS-NET-FLOW = WS-SUM-DEP - WS-SUM-WDR
 
-      *    Write Report Header
+      *レポート見出しを出力する
            WRITE RPT-RECORD FROM RPT-HEADER
            WRITE RPT-RECORD FROM RPT-TITLE
            WRITE RPT-RECORD FROM RPT-HEADER
 
-      *    Write Deposits Summary
+      *入金合計と件数を出力する
            MOVE WS-SUM-DEP TO FMT-AMOUNT
            MOVE WS-CNT-DEP TO FMT-CNT
            MOVE SPACES TO RPT-RECORD
@@ -158,7 +158,7 @@
                   INTO RPT-RECORD
            WRITE RPT-RECORD
 
-      *    Write Withdrawals Summary
+      *出金合計と件数を出力する
            MOVE WS-SUM-WDR TO FMT-AMOUNT
            MOVE WS-CNT-WDR TO FMT-CNT
            MOVE SPACES TO RPT-RECORD
@@ -170,7 +170,7 @@
                   INTO RPT-RECORD
            WRITE RPT-RECORD
 
-      *    Write Transfers Summary
+      *振替合計と件数を出力する
            MOVE WS-SUM-XFR TO FMT-AMOUNT
            MOVE WS-CNT-XFR TO FMT-CNT
            MOVE SPACES TO RPT-RECORD
@@ -184,7 +184,7 @@
 
            WRITE RPT-RECORD FROM RPT-HEADER
 
-      *    Write Net Flow
+      *純資金流入額を出力する
            MOVE WS-NET-FLOW TO FMT-NET
            MOVE SPACES TO RPT-RECORD
            STRING "Net Cash Inflow   : " DELIMITED BY SIZE

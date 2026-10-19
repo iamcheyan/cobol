@@ -1,12 +1,12 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LENGTH-PROBE.
-      *> Module 02 layout experiment: intentionally-wrong, non-contract.
-      *> Compiled against the canonical copybooks/ and once against
-      *> experiments/layout/, it shows how a single wrong PIC shifts the
-      *> record length and every following field offset. The wrong
-      *> variant is a fault demo only: it is NOT a CUSTOMER v1 contract
-      *> and NOT a "27->28" migration. CUSTOMER v1 stays 27 bytes with
-      *> its 27th byte CUSTOMER-STATUS (A/D) only.
+      *M02形式実験。意図的な誤りで非契約。
+      *正規copybooks/とexperiments/layout/を使ってそれぞれ
+      *コンパイルし、誤ったPICひとつで後続の
+      *
+      *誤り版は故障デモ専用で、CUSTOMER v1契約でも
+      *「27->28」移行でもない。CUSTOMER v1は27Bで、
+      *27B目はCUSTOMER-STATUS（A/D）のみ。
        DATA DIVISION.
        WORKING-STORAGE SECTION.
            COPY "CUSTOMER-V1.CPY".

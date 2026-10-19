@@ -1,9 +1,9 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. M06-SORT-SD-PROBE.
-      *> Lesson 06.1: the SD (Sort Description) entry pairs with a
-      *> SORT statement.  This reads a LINE SEQUENTIAL file, sorts it
-      *> ON ASCENDING KEY through the SD work file, and re-emits the
-      *> ordered records.  check.sh compiles and runs it.
+      *> SD項目と SORT 文を連携（06.1）。
+      *> LINE SEQUENTIAL ファイルを読み、SD作業ファイルで
+      *> ASCENDING KEY で整列し、レコードを書き戻す。
+      *> check.sh がコンパイルして実行。
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.

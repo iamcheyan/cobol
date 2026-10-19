@@ -1,8 +1,8 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. M06-RELATIVE-PROBE.
-      *> Lesson 06.4: GnuCOBOL relative file WRITE / READ / REWRITE /
-      *> DELETE keyed by RELATIVE KEY, with duplicate and invalid-key
-      *> status codes. Reading lab only.
+      *> 06.4 GnuCOBOL相対ファイルの WRITE / READ / REWRITE /
+      *> DELETE を RELATIVE KEY 指定。重複キーと不正キーの
+      *> 状態コードを確認する実験。
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.

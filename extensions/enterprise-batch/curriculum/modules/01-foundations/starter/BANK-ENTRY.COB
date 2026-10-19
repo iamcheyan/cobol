@@ -1,9 +1,9 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. BANK-ENTRY-STARTER.
-      *> Module 01 starter: the nightly batch entry skeleton.
-      *> It compiles but is NOT implemented. It must return RC 12 and
-      *> must not publish accepted/rejected outputs until the TODOs
-      *> below are done. Do not edit the instructor reference.
+      *M01の夜間バッチ入口の雛形。
+      *コンパイル可能だが未実装。RC 12を返し、
+      *TODO完了までは受理・拒否出力を公開しない。
+      *以下を完成。講師用参照は編集禁止。
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
@@ -22,16 +22,16 @@
        1000-MAIN.
            ACCEPT IN-PATH FROM ENVIRONMENT 'INPUT_FILE'
            ACCEPT RUN-DATE FROM ENVIRONMENT 'BUSINESS_DATE'
-      *> TODO 1: OPEN INPUT the posted file and detect OPEN failure.
-      *> TODO 2: read raw bytes until X'0A' and reject any record whose
-      *>         byte length is not exactly 47 (short/long/no final LF).
-      *> TODO 3: validate account id digits, layout '001', date equals
-      *>         BUSINESS_DATE, sign in {+,-}, balance numeric, and that
-      *>         account ids are strictly ascending.
-      *> TODO 4: accept status A/F/C into PASS_OUTPUT_FILE, reject the
-      *>         rest with UNKNOWN-STATUS into REJECT_OUTPUT_FILE.
-      *> TODO 5: DISPLAY the JOB/BUSINESS-DATE/CONTROL report lines and
-      *>         set RETURN-CODE 0 (no reject) or 4 (some rejects).
+      *TODO 1:受信ファイルをOPEN INPUTし・失敗を検出。
+      *TODO 2：X'0A'まで生Bを読込、各レコードの
+      *B長が47でないなら拒否(短／長／末尾LFなし)。
+      *TODO 3：口座IDが数字、レイアウトが'001'、日付が
+      *BUSINESS_DATEと一致、符号が{+,-}、残高が数字、
+      *口座IDが厳密な昇順ことを検証。
+      *TODO 4：状態A/F/CをPASS_OUTPUT_FILEへ受理し、
+      *それ以外はUNKNOWN-STATUSでREJECT_OUTPUT_FILEへ。
+      *TODO 5：JOB/BUSINESS-DATE/CONTROLの報告行をDISPLAYし、
+      *RETURN-CODEを拒否なしなら0・一部拒否なら4に。
            DISPLAY 'TODO: implement validated account posted-file entry'
            MOVE 12 TO RETURN-CODE
            GOBACK.

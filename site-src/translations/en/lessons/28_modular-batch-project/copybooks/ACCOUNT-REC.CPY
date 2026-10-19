@@ -1,4 +1,4 @@
-      * Account: X(10)+X(8)+9(7)V99 = 27 bytes.
+      * 口座契約：計27バイト。主・REPORTで共有。
        01 WS-ACCOUNT-RECORD.
           05 WS-ACCOUNT-NUMBER PIC X(10).
           05 WS-CUSTOMER-ID PIC X(8).

@@ -5,10 +5,10 @@
        01 TODO-FOUR-STREAM-STATE PIC X VALUE "N".
        PROCEDURE DIVISION.
        1000-MAIN.
-      *> TODO 1: validate snapshot and previous-day physical bytes.
-      *> TODO 2: preserve the accepted L2 hand-off and source keys.
-      *> TODO 3: SORT customer-key streams; merge the four cursors.
-      *> TODO 4: spool groups; never keep rows in memory.
-      *> TODO 5: calculate controls and isolate ineligible sources.
+      *> 未実装1：snapshotと前日データを物理検証。
+      *> 未実装2：受理済みL2と元データキーを保持。
+      *> 未実装3：顧客キーをSORTし、4カーソルを突合。
+      *> 未実装4：グループをスプール。
+      *> 未実装5：制御合計を算出し、対象外を分離。
            MOVE 12 TO RETURN-CODE
            GOBACK.

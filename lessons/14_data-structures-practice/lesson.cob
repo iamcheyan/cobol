@@ -75,7 +75,7 @@
                    DISPLAY "結果=拒否 REASON=UNKNOWN_TYPE"
                    ADD 1 TO WS-REJECTED-COUNT
            END-EVALUATE.
-      * 存款契约：只更新找到的那一个账户；找不到则整笔拒绝。
+      *入金：対象口座のみ更新。未検出なら拒否。
        2100-POST-DEPOSIT.
            MOVE WS-DEPOSIT-ACCOUNT(WS-TRANSACTION-NUMBER)
                TO WS-SEARCH-KEY
@@ -93,8 +93,8 @@
                DISPLAY "結果=拒否 REASON=ACCOUNT_NOT_FOUND"
                ADD 1 TO WS-REJECTED-COUNT
            END-IF.
-      * 转账契约：来源与目标都存在且来源余额足够才更新两边；
-      * 任一条件不满足则两边余额都不变。
+      *振込：両口座あり、残高十分な場合のみ更新。
+      *条件不成立なら、両口座の残高を変更しない。
        2200-POST-TRANSFER.
            MOVE WS-SOURCE-ACCOUNT(WS-TRANSACTION-NUMBER)
                TO WS-SEARCH-KEY

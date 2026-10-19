@@ -1,4 +1,4 @@
-      * Duplicate accounts fail before posting (see 1110).
+      * 口座重複は記帳前に失敗扱い。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LOADPOST32.
        ENVIRONMENT DIVISION.

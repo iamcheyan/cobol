@@ -1,10 +1,10 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. TRUNC-BAD.
-      *> Fixed-format column experiment: the COMPUTE line below is
-      *> 73 columns wide. The digit at column 73 is deliberately
-      *> outside the source area and becomes invisible to the
-      *> compiler, silently turning the literal 111110 into 11111.
-      *> Compare TRUNC-GOOD.COB and run: make it fit in 72 columns.
+      *固定形式の列実験。以下のCOMPUTE行は
+      *73列幅。列73の数字は意図的に
+      *
+      *リテラル111110は11111になる。
+      *TRUNC-GOOD.COBと比較して実行し、72列に収める。
        DATA DIVISION.
        WORKING-STORAGE SECTION.
        01 WS-BASE PIC 9(9) VALUE 1.

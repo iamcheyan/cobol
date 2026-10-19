@@ -1,6 +1,6 @@
-      * 契约：BY VALUE 接收 4 字节数值本身，不是地址；
-      * 本程序只读取参数并显示，不写回调用方存储。
-      * 调用方必须同样用 BY VALUE，否则取到错误数值。
+      * BY VALUE はアドレスでなく、4バイトの値を受け取
+      * 引数を表示するだけで、呼出側には書き戻さな
+      * 呼出側も BY VALUE を指定。不一致では誤値となる
        IDENTIFICATION DIVISION.
        PROGRAM-ID. REPORT-BINARY.
        DATA DIVISION.

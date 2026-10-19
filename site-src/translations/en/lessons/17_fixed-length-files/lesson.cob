@@ -1,6 +1,6 @@
-      *Contract: accounts.dat has no line breaks; records are 27 bytes.
-      *Total bytes must be a multiple of 27 for aligned offsets.
-      *OPEN OUTPUT replaces balances.dat; it does not append.
+      * accounts.datは改行なし、27バイト固定長。
+      * 合計バイト数は27の倍数。位置合わせに必要。
+      * OPEN OUTPUTはbalances.datを置換。追記しない。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. FIXED17.
        ENVIRONMENT DIVISION.
@@ -16,17 +16,17 @@
                FILE STATUS IS WS-BALANCE-STATUS.
        DATA DIVISION.
        FILE SECTION.
-      *01 starts at col 8; 05 indents to col 11; levels set parents.
-      *Input offsets: account 1-10, customer 11-18,
-      *balance 19-27. V takes no byte; 9 digits = 7 integer + 2 decimal.
+      * 01は8列目、05は11列目。番号が親子関係を示す。
+      * 入力位置：口座番号1-10、顧客番号11-18、
+      * 残高19-27。Vは非占有。9桁は整数7桁と小数2桁。
        FD ACCOUNT-FILE
            RECORD CONTAINS 27 CHARACTERS.
        01 FD-ACCOUNT-RECORD.
           05 FD-ACCOUNT-NUMBER PIC X(10).
           05 FD-CUSTOMER-ID PIC X(8).
           05 FD-ACCOUNT-BALANCE PIC 9(7)V99.
-      *Output is 27 bytes: customer 1-8, account 9-18,
-      *balance 19-27. MOVE uses names; WRITE follows declaration order.
+      * 出力も27バイト：顧客番号1-8、口座番号9-18、
+      * 残高19-27。MOVEは名前対応。WRITEは宣言順。
        FD BALANCE-FILE
            RECORD CONTAINS 27 CHARACTERS.
        01 FD-BALANCE-RECORD.
@@ -38,7 +38,7 @@
        01 WS-BALANCE-STATUS PIC XX VALUE SPACES.
        01 WS-END-OF-FILE PIC X VALUE "N".
        01 WS-IO-ERROR PIC X VALUE "N".
-      *Two-digit count covers 3 rows; wraps at 100.
+      * 2桁件数で3件を処理。100件で桁あふれ。
        01 WS-RECORD-COUNT PIC 9(2) VALUE ZERO.
        PROCEDURE DIVISION.
        0000-MAIN.
@@ -67,8 +67,8 @@
                MOVE 1 TO RETURN-CODE
            END-IF
            STOP RUN.
-      *Fixed READ skips size checks: last row under 27 bytes,
-      *GnuCOBOL 3.2.0 returns 00, retaining prior-row leftover bytes.
+      * 固定長READは総長を未検査。最終行が短くても
+      * GnuCOBOL 3.2.0は状態00を返し、前の残りを保持。
        1000-READ-AND-WRITE.
            READ ACCOUNT-FILE
                AT END

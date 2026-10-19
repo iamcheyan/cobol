@@ -1,5 +1,5 @@
-      *> M04COPY: module 04 lesson 04.2 COPY REPLACING and layout shift.
-      *> Reuses the module 07 canonical enterprise copybook (read-only).
+      *> M04COPY: module 04 lesson 04.2 COPY REPLACING レイアウト
+      *> module 07 正規 enterprise copybook 再利用（読取専用
        IDENTIFICATION DIVISION.
        PROGRAM-ID. M04COPY.
        DATA DIVISION.

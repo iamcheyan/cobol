@@ -1,6 +1,6 @@
-      * 27-byte account record (10+8+9), matching Lessons 17, 20, 22.
-      * Consumers: lesson.cob, account_report_23.cob; Lesson 28 copy.
-      * Width changes alter record length; rebuild all and check bytes.
+      * 口座27バイト（10+8+9）。第17・20・22課と同幅。
+      * 利用側：lesson.cob、account_report_23.cob。
+      * 幅変更時は全利用側を再ビルドし、照合する。
        01 WS-ACCOUNT-RECORD.
           05 WS-ACCOUNT-NUMBER PIC X(10).
           05 WS-CUSTOMER-ID PIC X(8).

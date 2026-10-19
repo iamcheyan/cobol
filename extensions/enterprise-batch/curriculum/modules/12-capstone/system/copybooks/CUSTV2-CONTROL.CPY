@@ -1,10 +1,10 @@
-      * CUSTV2 JOB002c control-total record grammar (key=value, '|').
-      *   CONTROL|RECEIVED=<n>|ACCEPTED=<n>|REJECTED=<n>|UPGRADED=<n>
-      *   REJ|BADID=<n>|BADNAME=<n>|BADSTATUS=<n>|BADCLASS=<n>|
-      *   REJ|...|BADVERSION=<n>
-      * A v1 enterprise feed's A/B/C/D classification is upgraded to
-      * the v2 "<code>1" form (A -> A1 .. D -> D1); the record status
-      * (A/D) is a separate field and is never re-labelled.
+      *CUSTV2 JOB002d制御合計（key=value、|区切り）。
+      *CONTROL|RECEIVED=<n>|ACCEPTED=<n>|REJECTED=<n>|UPGRADED=<n>
+      *REJ|BADID=<n>|BADNAME=<n>|BADSTATUS=<n>|BADCLASS=<n>|
+      *REJ|...|BADVERSION=<n>
+      *v1区分A/B/C/Dをv2の"<code>1"形式へ変換。
+      *A -> A1、B -> B1、C -> C1、D -> D1。
+      *record status A/Dは別項目。名称は変更しない。
        01 CUSTV2-CONTROL-RECORD.
           05 CVCTL-TAG            PIC X(7).
           05 CVCTL-RECEIVED       PIC 9(9).

@@ -2,26 +2,26 @@
        PROGRAM-ID. DATA02.
        DATA DIVISION.
        WORKING-STORAGE SECTION.
-      * Contract: account key is text, not number;
-      * X keeps leading zeros; amounts use 9.
+      * 契約：口座番号は数量ではなくテキスト扱い。
+      * X で保存し、先頭ゼロを失わないようにする。
        01 WS-ACCOUNT-KEY PIC X(12) VALUE "000123456789".
        01 WS-CUSTOMER-NAME PIC A(12) VALUE "ADA LOVELACE".
        01 WS-CUSTOMER-TYPE PIC A(1) VALUE "P".
        01 WS-ACCOUNT-STATUS PIC X(1) VALUE "A".
        01 WS-BRANCH-CODE PIC 9(4) VALUE 2048.
        01 WS-CURRENCY-CODE PIC X(3) VALUE "USD".
-      * Contract: PIC 9(8) only enforces eight digits,
-      * not month, day, or leap-year validity.
+      * 契約：PIC 9(8) は 8 桁の数字だけを保証する。
+      * 月・日・閏年のチェックは別ロジック。
        01 WS-OPEN-DATE-DIGITS PIC 9(8) VALUE 20261013.
        01 WS-CUSTOMER-NUMBER PIC X(10) VALUE "0002046819".
        01 WS-PRODUCT-CODE PIC X(4) VALUE "SAV1".
-      * V claims no storage; DISPLAY still prints it.
-      * (Same effect on DISPLAY output.)
+      * V は記憶位置を取らず小数点位置だけを宣言。
+      * DISPLAY は引き続き小数点を印字する。
        01 WS-LEDGER-BALANCE PIC 9(7)V99 VALUE 125000.75.
        01 WS-AVAILABLE-BALANCE PIC 9(7)V99 VALUE 123500.25.
        01 WS-OVERDRAFT-LIMIT PIC 9(7)V99 VALUE 2500.00.
-      * SIGN LEADING SEPARATE adds one sign character
-      * (so this field is one column wider).
+      * SIGN LEADING SEPARATE は符号用に 1 桁追加。
+      * この項目は同幅の金額より 1 桁広くなる。
        01 WS-LAST-CREDIT PIC S9(7)V99 SIGN LEADING SEPARATE
            CHARACTER VALUE 1250.50.
        01 WS-LAST-DEBIT PIC S9(7)V99 SIGN LEADING SEPARATE

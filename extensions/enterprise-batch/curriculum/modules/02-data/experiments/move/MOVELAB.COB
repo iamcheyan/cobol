@@ -1,10 +1,10 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. MOVELAB.
-      *> Module 02 MOVE experiment. It only DISPLAYs fixed results; it
-      *> processes no bank file, so it must NEVER be used as the main
-      *> implementation of the CUSTOMER lab. Each case demonstrates one
-      *> COBOL MOVE rule: implied decimals, category conversion,
-      *> padding/truncation and signed display.
+      *M02MOVE実験。固定結果をDISPLAYだけで・
+      *銀行ファイルは処理しない
+      *絶対に使わない。各例でCOBOLのMOVE規則を示す：
+      *暗黙小数、カテゴリ変換、
+      *空白埋め／切り詰め、符号付き表示。
        DATA DIVISION.
        WORKING-STORAGE SECTION.
        01 WS-N1 PIC 9(3)V99 VALUE 41.5.

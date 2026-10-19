@@ -1,10 +1,10 @@
-      * Contract: all three programs share AMOUNT-ARGUMENT declaration.
-      * It is 4-byte signed binary; width and signedness must match.
-      * BY REFERENCE changes caller storage,
-      * BY CONTENT changes a copy; BY VALUE passes the value;
-      * caller field stays unchanged.
-      * Arguments match by USING position, regardless of name;
-      * convention mismatch is not reported by the compiler.
+      * 全3プログラムで同じ AMOUNT-ARGUMENT 宣言を使う。
+      * 4バイト符号付き二進数。幅と符号を合わせる。
+      * BY REFERENCE は呼出側の領域を変更する。
+      * BY CONTENT は一時コピーのみ変更。BY VALUE は値を
+      * BY CONTENT と BY VALUE では呼出側は変わらない。
+      * 引数は USING の位置順で対応し、名前は無関係。
+      * 方式が不一致でもコンパイラは警告しない。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LESSON25.
        DATA DIVISION.
@@ -57,7 +57,7 @@
            DISPLAY "呼出側=呼出前 方式="
                FUNCTION TRIM(WS-MODE TRAILING)
                " 値=" WS-EDITED-ACTUAL.
-      * Self-check sees caller storage only; cannot verify receipt.
+      * 自己検査は呼出側だけを見て、受取値は検証し
        8100-CHECK-ACTUAL.
            MOVE AMOUNT-ARGUMENT TO WS-ACTUAL
            MOVE WS-ACTUAL TO WS-EDITED-ACTUAL

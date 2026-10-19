@@ -1,8 +1,8 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. M06-LINESEQ-PROBE.
-      *> Lesson 06.2: the same 5-byte logical record written by LINE
-      *> SEQUENTIAL and by a fixed byte stream. Reading the line file as
-      *> raw bytes exposes the LF that LINE SEQUENTIAL hides.
+      *> 06.2 同じ論理5Bレコードを LINE SEQUENTIAL と
+      *> 固定で書く。行ファイルを生Bで
+      *> 読むと、LINE SEQUENTIAL が隠す LF を確認できる。
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.

@@ -1,20 +1,20 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. NIGHTRPT.
-      *> Module 12 capstone JOB007: build the customer-day downstream
-      *> file and the human daily report from the published closing
-      *> master (ACCOUNT v1, 47 bytes) joined to the enterprise customer
-      *> view.
+      *> module 12 JOB007：closing masterと顧客ビューを結合。
+      *> customer-dayと日次レポートを作成。
+      *> closing masterはACCOUNT v1、47B。
+      *> 顧客ビューはCAP-CUSTOMER-FEED。
+      *> v1は31、v2は32B。byte 27はrecord status A/D。
+      *> 区分は別項目。v1はbyte 28、v2はbytes 28-29。
+      *> NIGHTRPT_LAYOUTを全行の実幅と一致させる。
+      *> 幅不一致は構造異常RC8。ファイルは非公開。
+      *> メモリ使用量はMAX-CUST件に制限。
+      *> closing masterは1件ずつ読込。
       *>
-      *> The customer view is the independent CAP-CUSTOMER-FEED
-      *> layout: v1 (31 bytes) or v2 (32 bytes).  Byte 27 is the record
-      *> STATUS (A/D); the CLASSIFICATION is a separate field: byte 28
-      *> in v1, bytes 28-29 in v2. The declared layout (NIGHTRPT_LAYOUT)
-      *> must match the physical record width of every row; a mismatch
-      *> is a structural error (RC8) and nothing is published.  This
-      *> guard stops a wrong-layout run from silently mis-joining rows.
       *>
-      *> Memory is bounded by MAX-CUST customers, not by the number of
-      *> accounts: the closing master is streamed one record at a time.
+      *>
+      *>
+      *>
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.

@@ -1,5 +1,5 @@
-      * Logical table 8 reject_log -> db/reject_log.dat.
-      * Row: date|stage|txid|customer or reason
+      *論理テーブル8 reject_log：db/reject_log.dat。
+      *形式：date|stage|txid|customer または reason。
        01 DB-REJECT-LOG-ROW.
           05 DBRL-DATE            PIC X(8).
           05 DBRL-STAGE           PIC X(10).

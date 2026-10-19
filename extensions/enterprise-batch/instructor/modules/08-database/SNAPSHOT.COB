@@ -1,13 +1,13 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. SNAPSHOT.
-      *> module08 ref: 08.2 cursor extract + 08.3 reconcile vs upstream.
-      *>   1) cursor-extract customers by date to 27B CUSTOMER v1.
-      *>   2) write metadata: date, schema/layout version, cutoff.
-      *>   3) bounded two-pointer reconcile vs upstream 27B, emit
-      *>      MATCH / FIELD-DIFF / DB-ONLY / FILE-ONLY diffs.
-      *> RC: 0 none; 4 business diff; 8 structural; 12 system.
-      *> paths via env: M08_BIZ_DATE/M08_SNAPSHOT/M08_META/
-      *>   M08_UPSTREAM/M08_DIFF/M08_CONTROL.
+      *> module08 参照: 08.2 cursor 抽出 + 08.3 上流と照合。
+      *> 1) 日付で顧客 cursor 抽出し、27B CUSTOMER v1 出力。
+      *> 2) 日付、schema/layout version、cutoff  metadata 記録。
+      *> 3) 上流 27B と範囲限定した二ポインタ照合し、
+      *>    MATCH / FIELD-DIFF / DB-ONLY / FILE-ONLY 差分を出力。
+      *> RC: 0 差分なし・4 業務差分・8 構造エラー・12
+      *環境変数でパス指定：M08_BIZ_DATE/M08_SNAPSHOT/M08_META/
+      *>   M08_UPSTREAM/M08_DIFF/M08_CONTROL。
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
@@ -116,7 +116,7 @@
            ELSE MOVE 0 TO RETURN-CODE
            END-IF
            GOBACK.
-      *> cursor extract to 27B; count NULL/empty notes via indicator.
+      *> 27B  cursor 抽出し・indicator で NULL/空値注記集計
        1100-EXTRACT.
            EXEC SQL
                DECLARE CUSTCUR CURSOR FOR
@@ -151,7 +151,7 @@
            END-PERFORM
            EXEC SQL CLOSE CUSTCUR END-EXEC
            PERFORM 9000-CHECK.
-      *> metadata: date, schema/layout version, cutoff, counters.
+      *> metadata: 日付、schema/layout version、cutoff、件数。
        1200-METADATA.
            EXEC SQL
                SELECT schema_version INTO :HV-SCHEMA
@@ -191,7 +191,7 @@
            MOVE SPACES TO WS-META-TEXT
            STRING 'SNAPSHOT_BYTES=' WS-BAL-TEXT INTO WS-META-TEXT
            WRITE META-REC FROM WS-META-TEXT.
-      *> count upstream rows (FILE-ROWS) first, then reopen to merge.
+      *> 先に上流行数（FILE-ROWS）数え、再 OPEN マージ。
        1250-COUNT-UPSTREAM.
            MOVE 0 TO FILE-ROWS
            PERFORM UNTIL WS-EOF-U = 'Y'
@@ -200,7 +200,7 @@
                IF WS-EOF-U = 'N' ADD 1 TO FILE-ROWS END-IF
            END-PERFORM
            MOVE 'N' TO WS-EOF-U.
-      *> bounded two-pointer merge: two cursors and current keys only.
+      *> 範囲限定二ポインタマージ: 2 つ cursor 現在キー
        1300-RECONCILE.
            IF WS-END-FILE = 'N'
                READ SNAP-FILE AT END MOVE 'Y' TO WS-EOF-S

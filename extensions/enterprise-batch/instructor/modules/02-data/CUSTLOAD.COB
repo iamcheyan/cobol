@@ -1,9 +1,9 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. CUSTLOAD.
-      *> Customer Record v1 (27 bytes) loader and validator (module 02
-      *> reference). Validates raw byte length, key charset/order, the
-      *> required name, the unsigned balance_demo digits and the status
-      *> letter, then re-emits accepted rows and a control report.
+      *> Customer Record v1（27 bytes）の読込・検証（module 02
+      *> 参照）。B長、キー文字種・順序、必須氏名、
+      *> 符号なし balance_demo 数字ステータス文字検証し
+      *> 受理行と制御レポートを出力。
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.

@@ -7,8 +7,8 @@
        01 WS-WITHDRAWAL PIC 9(7)V99 VALUE 40.10.
        01 WS-CLOSING-BALANCE PIC 9(7)V99 VALUE ZERO.
        PROCEDURE DIVISION.
-      * All four items are shared; all paragraphs access the same data.
-      * Initialize first; otherwise it clears processing results.
+      * 4項目は共有領域。各段落が同じデータを扱う。
+      * 初期化後に処理する。逆順では結果が消える。
        0000-MAIN.
            PERFORM 1000-INITIALIZE
            PERFORM 2000-PROCESS

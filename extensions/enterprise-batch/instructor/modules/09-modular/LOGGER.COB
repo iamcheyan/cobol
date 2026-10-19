@@ -1,8 +1,8 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. LOGGER.
-      *    Shared append-only log module, interface LOGGER v1.
-      *    Called BY CONTENT; keeps an in-process sequence counter.
-      *    Returns 0 written, 8 interface error, 12 system error.
+      *    共通追記専用ログM、IF LOGGER v1。
+      *    BY CONTENT で呼び出し・プロセス内連番カウン
+      *    RC: 0 書込済み・8 IFエラー・12 システムエラー
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.

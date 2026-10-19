@@ -1,5 +1,5 @@
-      *> STARTER for module 04 lesson 04.2. Builds as-is but INCOMPLETE.
-      *> Complete the TODO paragraphs, set WS-EXERCISES-DONE to 'Y'.
+      *M04レッスン04.2雛形。ビルド可・未完了。
+      *TODO段落を完成しWS-EXERCISES-DONEを'Y'に。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. M04COPY.
        DATA DIVISION.
@@ -12,9 +12,9 @@
                MOVE 12 TO RETURN-CODE
                GOBACK
            END-IF
-      *> TODO 04.2a: COPY the enterprise copybook (V1) and again with
-      *> COPY REPLACING that widens CUSTOMER-CLASSIFICATION to PIC X(2).
-      *> TODO 04.2b: show LENGTH OF V2 - LENGTH OF V1 = 1.
-      *> TODO 04.2c: extract CUSTOMER-ID with reference modification.
+      *TODO 04.2a：enterprise copybook（V1）をCOPYし、さらに
+      *COPY REPLACINGでCUSTOMER-CLASSIFICATIONをPIC X(2)へ拡張。
+      *TODO 04.2b：LENGTH OF V2 - LENGTH OF V1 = 1を示す。
+      *TODO 04.2c：参照修飾でCUSTOMER-IDを取り出す。
            DISPLAY 'LESSON,04.2'
            GOBACK.

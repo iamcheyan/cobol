@@ -1,8 +1,8 @@
 >>SOURCE FORMAT IS FREE
 IDENTIFICATION DIVISION.
 PROGRAM-ID. CONVERT-FREE.
-*> Free-format half of the format comparison pair. Same logic as
-*> FIXED.COB; free format has no Area A/B or column 72 boundary.
+*> 書式比較ペア自由形式版。同じ処理をFIXED.COBで記述
+*> 自由形式にはArea A/Bや列72の境界がない。
 DATA DIVISION.
 WORKING-STORAGE SECTION.
 01 WS-BASE PIC 9(9) VALUE 1.

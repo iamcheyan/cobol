@@ -1,7 +1,7 @@
-      * Call contract: amount PIC 9(7)V99 BY REFERENCE (read-only here)
-      * result PIC X(15) is written here; order must match caller USING.
-      * Status: ZERO-AMOUNT (zero), LIMIT-EXCEEDED (over 1000.00),
-      * VALID (including 1000.00); GOBACK does not set caller exit code.
+      * 金額 PIC 9(7)V99 を BY REFERENCE で渡す（読取専用）
+      * 結果 PIC X(15) に書く。USING と順序を合わせる。
+      * 状態：ZERO-AMOUNT（ゼロ）、LIMIT-EXCEEDED（1000.00超
+      * VALID（1000.00を含む）。GOBACK で戻り、終了コード
        IDENTIFICATION DIVISION.
        PROGRAM-ID. CHECK-AMOUNT.
        DATA DIVISION.

@@ -1,9 +1,9 @@
-      * Input: 12 bytes = acct X(6) + "|" + numeric amount X(5).
-      * FD X(20); >21-byte or unterminated 20-byte rows READ as 06.
-      * Reject bad width, delimiter, or amount; continue; preserve RC.
-      * Only non-EOF file failures fail batch (RETURN-CODE=1).
-      * Close opened files only; count only on WRITE status 00.
-      * Status 00 means call accepted, not data saved (see README).
+      * 入力仕様：各行12B＝口座X(6)＋|＋金額X(5)。
+      * FDはX(20)。21B以上・改行なし20B末行はREAD状態06。
+      * 幅・区切り・金額不正は拒否し続行。
+      * EOF以外の操作失敗でバッチ失敗（RC=1）。
+      * OPEN成功分のみ閉じる。WRITE≠00は受理外。
+      * 状態00は受理のみ。永続化保証なし。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. ERROR26.
        ENVIRONMENT DIVISION.
@@ -95,7 +95,7 @@
                OR WS-SYSTEM-ERROR = "Y"
                PERFORM 2100-READ-ONE-RECORD
            END-PERFORM.
-      * AT END sets 10; other nonzero statuses (incl. long-row 06) fail.
+      * AT ENDは10のみ。他状態は障害扱い。
        2100-READ-ONE-RECORD.
            READ TRANSACTION-INPUT
                AT END
@@ -112,8 +112,8 @@
                    WS-INPUT-STATUS
                MOVE "Y" TO WS-SYSTEM-ERROR
            END-IF.
-      * Layout: 1:6 account, 7:1 delimiter, 8:5 amount.
-      * Check trimmed width first; skip parsing if invalid.
+      * 配置仕様：1:6口座、7:1区切り、8:5金額。
+      * 空白除去後に幅判定。不一致時は解析省略。
        3000-VALIDATE-RECORD.
            MOVE SPACES TO WS-REJECT-REASON
            MOVE FD-TRANSACTION-RECORD(1:6) TO WS-ACCOUNT
@@ -141,7 +141,7 @@
            ELSE
                PERFORM 5000-WRITE-REJECTED
            END-IF.
-      * Accepted row reuses first 12 input bytes, preserving width.
+      * 入力先頭12Bを使い、受理出力幅を仕様に一致。
        4000-WRITE-ACCEPTED.
            MOVE FD-TRANSACTION-RECORD(1:12)
                TO WS-ACCEPTED-WORK
@@ -154,8 +154,8 @@
                    WS-ACCEPTED-STATUS
                MOVE "Y" TO WS-SYSTEM-ERROR
            END-IF.
-      * Reject row = acct 6 + "|" + reason X(12); trailing spaces trim,
-      * so output is shorter than PIC X(19).
+      * 拒否行＝口座6＋|＋理由X(12)。短い理由は行順次
+      * 末尾空白を除き、PIC X(19)より短く出力。
        5000-WRITE-REJECTED.
            MOVE SPACES TO WS-REJECTED-WORK
            MOVE WS-ACCOUNT TO WS-REJECTED-WORK(1:6)
@@ -172,7 +172,7 @@
                    WS-REJECTED-STATUS
                MOVE "Y" TO WS-SYSTEM-ERROR
            END-IF.
-      * Close opened files only; reject unopened if accept OPEN fails.
+      * OPEN成功分のみ閉じる。未OPEN分は閉じない。
        8000-CLOSE-FILES.
            IF WS-REJECTED-OPEN = "Y"
                CLOSE REJECTED-OUTPUT

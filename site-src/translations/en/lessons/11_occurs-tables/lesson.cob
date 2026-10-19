@@ -7,8 +7,8 @@
              10 WS-TXN-CODE PIC X.
              10 WS-TXN-AMOUNT PIC 9(5)V99.
        01 WS-SAMPLE-INDEX PIC 9(2) VALUE ZERO.
-      *Table capacity is 4; the traversal limit must not exceed it.
-      *An out-of-range subscript reads adjacent bytes without an error.
+      *表容量は4。上限は容量以下。
+      *範囲外添字はエラーでなく、隣接領域を読む。
        01 WS-LAST-SAMPLE PIC 9 VALUE 4.
        01 WS-PROCESSED-COUNT PIC 9(3) VALUE ZERO.
        01 WS-ACCOUNT-BALANCE PIC 9(7)V99 VALUE 1000.00.
@@ -36,7 +36,7 @@
            DISPLAY "明細=" WS-SAMPLE-INDEX
                " コード=" WS-TXN-CODE(WS-SAMPLE-INDEX)
                " 金額=" WS-TXN-AMOUNT(WS-SAMPLE-INDEX)
-      *Unknown codes do not affect balances; validation is skipped.
+      *未知コードは残高に影響しない。
            EVALUATE WS-TXN-CODE(WS-SAMPLE-INDEX)
                WHEN "C"
                    COMPUTE WS-ACCOUNT-BALANCE =

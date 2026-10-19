@@ -3,8 +3,8 @@
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
-      * 分行输入：上游按行送达，1 行即 1 条记录。
-      * 超长行会拆成多条记录，最大行长由上游限定。
+      * 1行を1レコードとして上流から受け取る。
+      * 長い行は分割。最大長は上流で制限。
            SELECT TRANSACTION-FILE
                ASSIGN TO "transactions.txt"
                ORGANIZATION IS LINE SEQUENTIAL
@@ -12,17 +12,17 @@
        DATA DIVISION.
        FILE SECTION.
        FD TRANSACTION-FILE.
-      * FD 记录区固定 100 字符，短行右侧补空格。
+      * FDは100文字固定。短い行は右を空白で埋める。
        01 FD-TRANSACTION-RECORD PIC X(100).
        WORKING-STORAGE SECTION.
        01 WS-FILE-STATUS PIC XX VALUE SPACES.
        01 WS-END-OF-FILE PIC X VALUE "N".
-      * 计数两位，超过 99 条会回绕。
+      * 件数は2桁。99件超で桁あふれ。
        01 WS-RECORD-COUNT PIC 9(2) VALUE ZERO.
        PROCEDURE DIVISION.
        0000-MAIN.
            OPEN INPUT TRANSACTION-FILE
-      * 文件缺失时状态 35；不进入 READ，退出码 1。
+      * ファイルなしは状態35。READせず終了コード1。
            IF WS-FILE-STATUS NOT = "00"
                DISPLAY "オープン=FAILED STATUS=" WS-FILE-STATUS
                MOVE 1 TO RETURN-CODE
@@ -44,11 +44,11 @@
        1000-READ-ONE-RECORD.
            READ TRANSACTION-FILE
                AT END
-      * EOF 是正常结束，不是错误；只置标志不计数。
+      * EOFは正常終了。フラグのみ設定し、件数外。
                    MOVE "Y" TO WS-END-OF-FILE
                NOT AT END
                    ADD 1 TO WS-RECORD-COUNT
-      * TRIM 只影响显示，记录区仍是 100 字符。
+      * TRIMは表示のみ。レコード領域は100文字。
                    DISPLAY "レコード="
                        FUNCTION TRIM(FD-TRANSACTION-RECORD TRAILING)
            END-READ.

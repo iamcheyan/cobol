@@ -1,18 +1,18 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. M11CUST2.
-      *> Reference implementation for module 11 maintenance 11.5:
-      *> enterprise-CLASS v2 classification extract.
+      *> module 11 maintenance 11.5 の参照実装:
+      *> enterprise-CLASS v2 分類データ抽出。
       *>
-      *> The customer distinction is NOT the canonical CUSTOMER v1 byte
-      *> 27 (that byte is the record STATUS A/D).  It lives in the
-      *> independent, versioned enterprise-class lab layout (a distinct
-      *> name from canonical module 07 L4 ENTERPRISE-CUSTOMER-V1): v1
-      *> (23 bytes, layout 001) carries CUSTOMER-CLASSIFICATION X(1) =
-      *> A/B/C/D; v2 (24 bytes, layout 002) widens it to X(2) =
-      *> A1/B1/C1/D1.  This program reads the frozen v2 snapshot and
-      *> writes the downstream extract.  v1 files are migrated by
-      *> migrate-customer.py, never rewritten in place; a v1 file (or
-      *> 27-byte CUSTOMER v1 record) is rejected by width/version.
+      *> 顧客区分は正規 CUSTOMER v1 の byte 27 ではない。
+      *> byte 27 レコード STATUS A/D 示す。区分独立版管理
+      *> enterprise-class 演習レイアウト定義。これ module 07
+      *> L4 ENTERPRISE-CUSTOMER-V1 別レイアウト。v1（23 bytes,
+      *> layout 001） CUSTOMER-CLASSIFICATION X(1) = A/B/C/D 持つ。
+      *> v2（24 bytes, layout 002）は X(2) = A1/B1/C1/D1 に拡張。
+      *> こプログラム固定 v2 snapshot 読み・後続抽出出
+      *> v1 ファイル migrate-customer.py で移行し・直接書き
+      *> v1 ファイル（また 27-byte CUSTOMER v1 record）幅また
+      *> 不一致として却下。
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.

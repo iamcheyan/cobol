@@ -1,5 +1,5 @@
-      * Logical table 4 batch_run -> db/run/<date>.table.
-      * Row: date|run_id|layout|phase|rc (phase start/applied/published)
+      * 論理テーブル4 batch_run：db/run/<date>.table。
+      * 形式:date|run_id|layout|phase|rc
        01 DB-BATCH-RUN-ROW.
           05 DBR-DATE             PIC X(8).
           05 DBR-RUN-ID           PIC X(40).

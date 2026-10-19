@@ -2,8 +2,8 @@
        PROGRAM-ID. GROUP09.
        DATA DIVISION.
        WORKING-STORAGE SECTION.
-      * 层级号决定父子关系，缩进只为便于阅读。
-      * 组项按声明顺序连续占字节，内部无分隔符。
+      * レベル番号で親子を決める。字下げは表示用。
+      * 項目は宣言順に連続配置。区切りなし。
        01 WS-TRANSACTION-RECORD.
           05 WS-CUSTOMER-INFO.
              10 WS-CUSTOMER-ID PIC X(8) VALUE "C0001042".
@@ -18,10 +18,10 @@
              10 WS-TXN-CODE PIC X VALUE "D".
              10 WS-TXN-AMOUNT PIC 9(5)V99 VALUE 125.50.
              10 WS-STATUS PIC X(7) VALUE "PENDING".
-      * 外部定长记录的接收区，与本记录同为 58 字节。
+      * 外部固定長の受取領域。本レコードと同じ58B。
        01 WS-EXPORT-LINE PIC X(58).
        PROCEDURE DIVISION.
-      * 两个 WS-STATUS 同名，引用时必须用 OF 指定父组。
+      * WS-STATUSは同名。参照時はOFで親を指定。
            DISPLAY "顧客ID="
                WS-CUSTOMER-ID OF WS-CUSTOMER-INFO
            DISPLAY "顧客名="
@@ -34,11 +34,11 @@
            DISPLAY "取引金額="
                WS-TXN-AMOUNT OF WS-TXN-INFO
            DISPLAY "取引状態=" WS-STATUS OF WS-TXN-INFO
-      * 金额字段单独显示时才出现小数点。
-      * 组显示只输出存储字节，不插入小数点。
+      * 金額項目の単独表示時のみ小数点が現れる。
+      * グループ表示は格納バイト出力。小数点なし。
            DISPLAY "グループデータ=[" WS-TRANSACTION-RECORD "]"
-      * 整组搬运是字节复制，不做数值换算。
-      * 宽度由接收项的 PIC 决定；两项同为 58 字节。
+      * 全体転送はバイト複写。数値変換なし。
+      * 両方とも 58 バイトです。
            MOVE WS-TRANSACTION-RECORD TO WS-EXPORT-LINE
            DISPLAY "外部記録=[" WS-EXPORT-LINE "]"
            STOP RUN.

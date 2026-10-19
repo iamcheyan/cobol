@@ -3,7 +3,7 @@
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
-      * TODO: Declare two input streams and their FILE STATUS items.
+      * 未実装：入力2系統と FILE STATUS 項目を宣言。
        DATA DIVISION.
        WORKING-STORAGE SECTION.
            COPY 'ACCOUNT-V1.CPY'.
@@ -16,9 +16,9 @@
            ACCEPT M-PATH FROM ENVIRONMENT 'ACCOUNT_FILE'
            ACCEPT T-PATH FROM ENVIRONMENT 'TRANSACTION_FILE'
            ACCEPT RUN-DATE FROM ENVIRONMENT 'BUSINESS_DATE'
-      * TODO: Validate date, open files and read the first records.
-      * TODO: Implement comparison, EOF draining and counters.
-      * TODO: Close files; return 0 only after reconciliation.
+      * 未実装：日付検証、OPEN、先頭レコード読込。
+      * 未実装：比較、EOF までの読込、件数カウント。
+      * 未実装：ファイルを閉じ、成功時は0を返す。
            DISPLAY 'STARTER: NOT IMPLEMENTED' UPON STDERR
            MOVE 12 TO RETURN-CODE
            GOBACK.

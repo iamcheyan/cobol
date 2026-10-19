@@ -1,7 +1,7 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. TBLSRCH.
       *================================================================*
-      * TBLSRCH.COB: IN-MEMORY TABLES, OCCURS & BINARY SEARCH ALL      *
+      *TBLSRCH.COB：通貨レート表とSEARCH ALLによる換算
       *================================================================*
        ENVIRONMENT DIVISION.
        CONFIGURATION SECTION.
@@ -10,7 +10,7 @@
        WORKING-STORAGE SECTION.
 
       *================================================================*
-      * 1. SORTED CURRENCY EXCHANGE TABLE (BINARY SEARCH TARGET)       *
+      *二分探索対象の通貨レート表（コード順）
       *================================================================*
        01  WS-CURRENCY-TABLE-DATA.
            05  FILLER          PIC X(15) VALUE "AUD000000006520".
@@ -24,7 +24,7 @@
            05  FILLER          PIC X(15) VALUE "SGD000000007560".
            05  FILLER          PIC X(15) VALUE "USD000000010000".
 
-      *    REDEFINE AS STRUCTURED ARRAY (TABLE)
+      *固定長データを検索用の表形式に再定義する
        01  WS-CURRENCY-TABLE REDEFINES WS-CURRENCY-TABLE-DATA.
            05  CURR-ENTRY OCCURS 10 TIMES
                           ASCENDING KEY IS CURR-CODE
@@ -33,7 +33,7 @@
                10  CURR-RATE-TO-USD    PIC 9(06)V9(06).
 
       *================================================================*
-      * 2. SAMPLE CONVERSION REQUESTS                                  *
+      *換算処理の入力例
       *================================================================*
        01  WS-REQUEST-TABLE-DATA.
            05  FILLER                  PIC X(14) VALUE "EUR0000150000".
@@ -48,7 +48,7 @@
                10  REQ-AMT             PIC 9(09)V99.
 
       *================================================================*
-      * 3. WORKING FIELDS & ACCUMULATORS                               *
+      *換算作業領域と合計値
       *================================================================*
        01  WS-WORK-VARS.
            05  WS-USD-EQUIV            PIC 9(11)V99 COMP-3 VALUE ZERO.
@@ -76,7 +76,7 @@
            PERFORM VARYING REQ-IDX FROM 1 BY 1 UNTIL REQ-IDX > 5
                SET CURR-NOT-FOUND TO TRUE
 
-      *        -- HIGH SPEED BINARY SEARCH IN SORTED TABLE --
+      *整列済み表を二分探索して通貨コードを照合
                SEARCH ALL CURR-ENTRY
                    AT END
                        DISPLAY "  [FAIL] Currency not supported: "

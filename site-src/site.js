@@ -119,6 +119,7 @@ if (courseToggle && courseBody && courseNav && readingLayout) {
   };
   const setOpen = open => {
     courseBody.classList.toggle('open', open);
+    courseBody.hidden = !open;
     courseNav.classList.toggle('collapsed', !open);
     readingLayout.classList.toggle('sidebar-collapsed', !open);
     courseToggle.setAttribute('aria-expanded', String(open));

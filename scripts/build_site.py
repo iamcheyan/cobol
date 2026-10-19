@@ -26,6 +26,7 @@ from site_history import HISTORY
 from site_glossary import GLOSSARY
 from lesson_context import LESSON_CONTEXT
 from site_glossary_japan import JAPAN_TERMS
+from site_hardware import HARDWARE
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "build" / "site"
@@ -100,6 +101,8 @@ LOCALES = {
         "kn_about": "COBOL 是什么",
         "kn_about_desc": "语言定位、四个分部、为什么长成现在这样，以及它今天还在哪些行业运行。",
         "kn_history": "COBOL 史话",
+        "kn_hardware": "硬件演进",
+        "kn_hardware_desc": "从打孔卡、磁带与大型机，到个人电脑和开放系统；沿时间线看 COBOL 的变化与遗留契约。",
         "kn_history_desc": "从 1959 年的会议、FACT 之争与那块墓碑，到 ISO/IEC 1989:2023 的标准化历程。",
         "kn_reference": "速查手册",
         "kn_reference_desc": "固定格式列规则、PIC 符号、USAGE 实测字节数、常用语句与文件状态码，一页查完。",
@@ -215,6 +218,8 @@ LOCALES = {
         "kn_about": "What is COBOL",
         "kn_about_desc": "What the language is for, its four divisions, why it looks the way it does, and where it still runs.",
         "kn_history": "A short history",
+        "kn_hardware": "Hardware evolution",
+        "kn_hardware_desc": "From punched cards, tape, and mainframes to PCs and open systems; trace COBOL and the contracts left behind.",
         "kn_history_desc": "From the 1959 meetings, the FACT fight and the tombstone, to ISO/IEC 1989:2023.",
         "kn_reference": "Reference sheet",
         "kn_reference_desc": "Fixed-format columns, PICTURE symbols, measured USAGE sizes, statements and file status codes.",
@@ -330,6 +335,8 @@ LOCALES = {
         "kn_about": "COBOL とは",
         "kn_about_desc": "言語の目的、4 つの DIVISION、なぜこの形なのか、現在も動く分野。",
         "kn_history": "COBOL 史話",
+        "kn_hardware": "ハードウェアの変遷",
+        "kn_hardware_desc": "パンチカード、テープ、メインフレームから PC・オープンシステムへ。COBOL の変化と残った契約をたどります。",
         "kn_history_desc": "1959 年の会合、FACT 論争と墓石、ISO/IEC 1989:2023 までの標準化。",
         "kn_reference": "リファレンス",
         "kn_reference_desc": "固定形式の桁、PIC 記号、USAGE の実測バイト数、主要な文、ファイル状態コード。",
@@ -1003,7 +1010,7 @@ def reference_page(locale: str) -> str:
 
 
 
-KNOWLEDGE_PAGES = ("about", "history", "reference", "glossary")
+KNOWLEDGE_PAGES = ("about", "history", "hardware", "reference", "glossary")
 
 
 def _knowledge_nav(locale: str, current: str, page: Path) -> str:
@@ -1052,6 +1059,60 @@ def history_page(locale: str) -> str:
     )
 
 
+def hardware_illustration(locale: str) -> str:
+    """Inline SVG overview: four hardware eras, with compact editorial symbols."""
+    data = HARDWARE[locale]
+    labels = [era["date"] for era in data["eras"]]
+    icons = [
+        '<rect x="24" y="30" width="72" height="88" rx="3"/><circle cx="38" cy="44" r="2"/><circle cx="52" cy="44" r="2"/><circle cx="66" cy="44" r="2"/><circle cx="80" cy="44" r="2"/><circle cx="38" cy="58" r="2"/><circle cx="66" cy="58" r="2"/><circle cx="80" cy="72" r="2"/><path d="M36 92h48"/>',
+        '<rect x="25" y="42" width="44" height="62" rx="20"/><circle cx="83" cy="73" r="25"/><circle cx="83" cy="73" r="7"/><path d="M69 73h8M89 73h10M25 53h44M25 92h44"/>',
+        '<rect x="22" y="28" width="78" height="90" rx="3"/><path d="M34 42h54M34 58h54M34 74h54M34 90h54"/><circle cx="88" cy="42" r="2"/><circle cx="88" cy="58" r="2"/>',
+        '<rect x="20" y="32" width="82" height="55" rx="4"/><path d="M61 87v15M43 104h36"/><rect x="67" y="76" width="38" height="28" rx="3"/><path d="M72 82h28M72 88h28M72 94h20"/>',
+    ]
+    blocks = []
+    for i, (label, icon) in enumerate(zip(labels, icons)):
+        x = 22 + i * 172
+        blocks.append(
+            f'<g transform="translate({x} 0)" class="hardware-era-icon era-tone-{i+1}"><rect class="hardware-panel" x="0" y="0" width="146" height="178" rx="3"/>'
+            f'<g class="hardware-icon" transform="translate(18 12)">{icon}</g>'
+            f'<text class="hardware-number" x="12" y="145">0{i+1}</text>'
+            f'<text class="hardware-label" x="38" y="145">{html.escape(label)}</text></g>'
+        )
+    return ('<figure class="hardware-figure"><svg viewBox="0 0 710 178" role="img" aria-label="'
+            + html.escape(data["title"], quote=True) + '">' + ''.join(blocks)
+            + '</svg><figcaption>' + html.escape(data["columns_intro"]) + '</figcaption></figure>')
+
+
+def hardware_page(locale: str) -> str:
+    """Illustrated hardware timeline and COBOL's evolving compatibility contracts."""
+    data = HARDWARE[locale]
+    timeline = []
+    for i, era in enumerate(data["eras"]):
+        timeline.append(
+            f'<section class="hardware-era" id="era-{i+1}"><div class="hardware-era-index">0{i+1}</div>'
+            f'<div class="hardware-era-content"><p class="hardware-date">{html.escape(era["date"])}</p>'
+            f'<h2>{html.escape(era["title"])}</h2><p class="hardware-device">{html.escape(era["hardware"])}</p>'
+            f'<p>{inline_rich(era["body"])}</p><h3>COBOL</h3><p>{inline_rich(era["cobol"])}</p>'
+            f'<div class="hardware-legacy"><strong>{html.escape(data["eyebrow"])}</strong><p>{inline_rich(era["legacy"])}</p></div>'
+            f'</div></section>'
+        )
+    columns = ''.join(
+        f'<div class="hardware-column-row"><code>{html.escape(col)}</code><strong>{html.escape(name)}</strong>'
+        f'<span>{inline_rich(desc)}</span></div>' for col, name, desc in data["columns"]
+    )
+    return (
+        _knowledge_nav(locale, "hardware", Path("hardware.html"))
+        + f'<p class="eyebrow">{data["eyebrow"]}</p><h1>{html.escape(data["title"])}</h1>'
+        + f'<p class="plugin-lead">{inline_rich(data["lead"])}</p>'
+        + hardware_illustration(locale)
+        + '<div class="hardware-timeline">' + ''.join(timeline) + '</div>'
+        + f'<section class="hardware-columns"><h2>{html.escape(data["columns_title"])}</h2>'
+        + f'<p>{inline_rich(data["columns_intro"])}</p><div class="hardware-column-table">{columns}</div>'
+        + f'<p class="hardware-line-note">{inline_rich(data["line_number_note"])}</p></section>'
+        + f'<p class="plugin-license">{inline_rich(data["note"])}</p>'
+    )
+
+
 def glossary_page(locale: str) -> str:
     """Terminology lookup, filterable in place."""
     data = GLOSSARY[locale]
@@ -1084,6 +1145,7 @@ def knowledge_page(locale: str) -> str:
     cards = [
         ("about", labels["kn_about_desc"]),
         ("history", labels["kn_history_desc"]),
+        ("hardware", labels["kn_hardware_desc"]),
         ("reference", labels["kn_reference_desc"]),
         ("glossary", labels["kn_glossary_desc"]),
     ]
@@ -1180,6 +1242,8 @@ def build_locale(locale: str) -> int:
         shell(locale, LOCALES[locale]["reference_title"], reference_page(locale), Path("reference.html")), encoding="utf-8")
     (root / "history.html").write_text(
         shell(locale, LOCALES[locale]["kn_history"], history_page(locale), Path("history.html")), encoding="utf-8")
+    (root / "hardware.html").write_text(
+        shell(locale, LOCALES[locale]["kn_hardware"], hardware_page(locale), Path("hardware.html")), encoding="utf-8")
     (root / "glossary.html").write_text(
         shell(locale, LOCALES[locale]["kn_glossary"], glossary_page(locale), Path("glossary.html")), encoding="utf-8")
     (root / "knowledge.html").write_text(

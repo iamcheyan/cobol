@@ -58,7 +58,7 @@ _translated_by: site-src/translation agent
 ## 実行環境
 
 - GnuCOBOL 3.2.x（`cobc`）、GixSQL プリコンパイラー（`gixpp`）、`sqlite3` コマンドラインプログラム、`gcc`。
-- ツールチェーンは第 29 課のインストール先を再利用します。デフォルトは `GIXSQL_ROOT=$script_dir/../29_embedded-sql/build/toolchain/usr` なので、既定パスを使うには第 29 課の [`install-toolchain.sh`](../29_embedded-sql/README.md#运行环境) を実行済みである必要があります。別の場所にインストールした場合は `GIXSQL_ROOT=/path/to/usr` を設定します。
+- ツールチェーンは第 29 課のインストール先を再利用します。既定は `GIXSQL_ROOT=$script_dir/../29_embedded-sql/build/toolchain/usr` なので、既定パスを使うには第 29 課の [`install-toolchain.sh`](../29_embedded-sql/README.md#运行环境) が生成したツールチェーンが必要です。
 - ツールチェーンは複数の課で共有するため、第 29 課で `./build.sh clean` を**実行しないでください**。共有 GixSQL インストールが削除されます。第 31 課の `clean` が削除するのは、本課の `build/` のみです。
 - ソースは固定形式（第 7 列が指示領域、Area A は第 8 列、Area B は第 12 列から）です。`-std=cobol85` は使用しません。`COMP-3`、`FUNCTION TRIM`、`FUNCTION NUMVAL` には GnuCOBOL のデフォルト方言が必要です。実測では、`lesson.cob` のプログラムテキスト 214 行の最長は 68 バイトで、第 72 列を越えていません。第 7 列は `*` コメント行だけに使います。
 - ビルドディレクトリは本課の `build/`（`.gitignore` 対象）です。差異レポート `differences.txt` は本課のディレクトリに出力されます。GixSQL ランタイムは `gixsql.log` を**プロセスの作業ディレクトリ**に追記します（`build.sh run` は作業ディレクトリを本課のディレクトリにするため、`lesson.cob` の隣に見えます）。どちらも Git の対象外です。

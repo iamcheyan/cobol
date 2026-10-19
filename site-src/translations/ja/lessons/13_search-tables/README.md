@@ -186,4 +186,4 @@ rm -rf build                                   # 清理生成的可执行文件
 - [GnuCOBOL Programmer’s Guide：SEARCH](https://superbol.eu/gnucobpg/chapter7.html#search)
 - [GnuCOBOL Programmer’s Guide：SEARCH ALL](https://superbol.eu/gnucobpg/chapter7.html#search-all)
 - [GnuCOBOL Programmer’s Guide：OCCURS](https://superbol.eu/gnucobpg/chapter6.html#occurs)
-- 仓库课程主页：[README.md](../../README.md)
+- リポジトリのコースホーム：[README.md](../../README.md)

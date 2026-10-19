@@ -126,10 +126,67 @@ def cobol_check(original: str, candidate: str) -> list[str]:
 
 
 FENCE_RE = re.compile(r"```.*?```", re.S)
+# Markdown link destinations must stay byte-identical to the source, including non-English
+# fragments such as ``README.md#运行环境``. Strip them before judging prose.
+LINK_DEST_RE = re.compile(r"\]\([^)]*\)")
 INLINE_RE = re.compile(r"`[^`\n]*`")
 HAN_RE = re.compile(r"[\u4e00-\u9fff]")
 KANA_RE = re.compile(r"[\u3040-\u30ff]")
 LATIN_RE = re.compile(r"[A-Za-z]")
+
+# Characters written in Simplified Chinese that standard Japanese orthography does not use.
+# They survive even when a whole paragraph was pasted in untranslated, which is the failure
+# mode ``language_problem`` misses: such a file is mostly Japanese, so the global ratio
+# still looks fine while individual paragraphs are Chinese.
+SIMPLIFIED_ONLY = set(
+    "课这说时问题应该发际关键认让请还们对为经过样么怎觉给带开关录态级别户账码币钱务"
+    "验证据预处义读译输总汇层块针从导术简复识网软设项团队规范质检试运编执调变逻历组释"
+)
+
+# The repository-root README carries a language switcher that names 简体中文 on purpose.
+SIMPLIFIED_ALLOWED = {Path("README.md")}
+
+
+def mixed_language_problems(locale: str, text: str) -> list[str]:
+    """Report lines that are prose in another locale's language.
+
+    Two independent signals:
+
+    * Simplified-only characters (a Chinese sentence pasted into an en/ja file).
+    * A run of six or more Han characters with no kana at all, outside tables and code,
+      which is what an untranslated Chinese paragraph looks like inside a Japanese file.
+
+    Tables and fenced code are skipped: they hold measured output and identifiers that
+    must stay byte-identical. Japanese headings made only of kanji are also exempt, so
+    the kana rule only fires on sentence-length lines.
+    """
+    problems: list[str] = []
+    in_fence = False
+    for number, raw in enumerate(text.splitlines(), start=1):
+        line = raw.strip()
+        if line.startswith("```"):
+            in_fence = not in_fence
+            continue
+        if in_fence or not line or line.startswith("|"):
+            continue
+        core = LINK_DEST_RE.sub("]", INLINE_RE.sub("", line))
+        if locale == "ja":
+            simplified = sorted({ch for ch in core if ch in SIMPLIFIED_ONLY})
+            if simplified:
+                problems.append(
+                    f"line {number}: Simplified Chinese character(s) {''.join(simplified)}"
+                )
+                continue
+            # Japanese technical writing uses kanji-only labels and summaries
+            # (標準出力、分類基準、読込6件 = 受理2件). Only sentence-length runs are suspect.
+            if len(HAN_RE.findall(core)) >= 20 and not KANA_RE.search(core) and not core.startswith("#"):
+                problems.append(f"line {number}: long kanji-only run with no kana (untranslated Chinese)")
+        elif locale == "en":
+            if "](/" in core or "](" in core and "README" in core:
+                continue  # language switcher and file-link rows name languages on purpose
+            if len(HAN_RE.findall(core)) >= 10 and not KANA_RE.search(core):
+                problems.append(f"line {number}: Chinese sentence in English prose")
+    return problems
 
 
 def prose_only(text: str) -> str:
@@ -189,6 +246,9 @@ def main() -> int:
                 problem = language_problem(locale, translated)
                 if problem:
                     failures.append(f"{locale}/{rel}: {problem}")
+                if rel not in SIMPLIFIED_ALLOWED or locale == "en":
+                    for detail in mixed_language_problems(locale, translated):
+                        failures.append(f"{locale}/{rel}: {detail}")
             elif source.suffix.lower() in COBOL_SUFFIXES:
                 for problem in cobol_check(original, translated):
                     failures.append(f"{locale}/{rel}: {problem}")

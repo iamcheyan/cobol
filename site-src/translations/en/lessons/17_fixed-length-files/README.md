@@ -122,6 +122,83 @@ Why change the order? Part of the reason is teaching: you can see that `MOVE` tr
 
 **Counter width:** `WS-RECORD-COUNT` is `PIC 9(2)`, so it can represent only `00`–`99`. The three-record fixture is far below the limit. In a measured run with 100 records (2700 bytes), `balances.dat` is still the correct 2700 bytes, but `クローズ完了 件数=` displays `00`. If the count may reach three digits, the counter must be widened.
 
+## Checking Field Positions in the Editor
+
+A 27-byte record is too narrow for a column ruler to show anything: it fits on one screen, so you cannot measure how far column 19 is from column 27. Real core-system masters are not like that. A 200-byte record is normal, with fields sitting at columns 89, 109, and 177. **At that width, counting spaces is no longer possible.**
+
+That is why this lesson ships a 200-byte account master, [`account-master-200.dat`](./account-master-200.dat): 3 records × 200 bytes = 600 bytes, with every field laid out in one line.
+
+| Byte positions | Length | Field | Value in record 1 |
+|---:|---:|---|---|
+| 1–10 | 10 | Account number | `0001234567` |
+| 11–18 | 8 | Customer ID | `C0001042` |
+| 19–48 | 30 | Customer name (left-justified, space-padded) | `TANAKA ICHIRO` |
+| 49–56 | 8 | Branch | `BR-TOKYO` |
+| 57–64 | 8 | Open date `YYYYMMDD` | `20200115` |
+| 65–72 | 8 | Last transaction date `YYYYMMDD` | `20261014` |
+| 73–80 | 8 | Product type | `ORDINARY` |
+| 81–88 | 8 | Account status | `ACTIVE` |
+| 89–108 | 20 | Balance (minor currency unit, right-justified, zero-padded) | `00000000000010000000` |
+| 109–116 | 8 | Currency | `JPY` |
+| 117–136 | 20 | Memo 1 | `SALARY ACCOUNT` |
+| 137–156 | 20 | Memo 2 | `NO CREDIT LIMIT` |
+| 157–176 | 20 | Memo 3 | `MONTHLY STATEMENT` |
+| 177–200 | 24 | Reserved | `TOKYO-01` |
+
+The balance sits at columns 89–108 as a 20-digit integer in minor units. `00000000000010000000` reads as 10000000 cents, that is 100000.00. This field is not the compact 9-byte `PIC 9(7)V99` form; it is a fixed 20-byte text field. Both forms appear in real masters, and you read whichever the interface document specifies.
+
+### Install the column ruler
+
+Counting to column 89 by hand is not realistic. Use [`position-ruler.nvim`](https://github.com/iamcheyan/position-ruler.nvim) to draw the column numbers at the top of the window:
+
+```lua
+{
+  "iamcheyan/position-ruler.nvim",
+  ft = { "text", "csv" },
+  cmd = { "PositionJump", "PositionRange", "PositionRulerToggle" },
+  opts = {},
+  config = function(_, opts)
+    require("position-ruler").setup(opts)
+  end,
+}
+```
+
+`.dat` is not a `text` filetype by default, so register it once:
+
+```lua
+vim.filetype.add({ extension = { dat = "text" } })
+```
+
+Open the fixture and a ruler appears at the top of the window, labelling every tenth column:
+
+```text
+1...+...10....+...20....+...30....+...40....+...50....+...60....+...70....+...80
+```
+
+### Measure the offsets with three actions
+
+Once installed, checking a field position takes three actions:
+
+| Action | Command | Result on this lesson's fixture |
+|---|---|---|
+| Jump to a column | `:PositionJump 89` | The cursor lands on the first byte of the balance field; the ruler follows horizontal scrolling |
+| Measure a span | Select columns 19–48, then `:PositionRange` | Reports `POSITION(19:48)`, exactly 30 characters |
+| Read the current position | Status line | Shows `Ln 1  Col 89  Pos 89` |
+
+After `:PositionJump 89` the cursor sits at column 89, and taking one character should give the first `0` of the balance. Select the whole range from column 89 to column 108 and `:PositionRange` must report a width of 20.
+
+A 200-byte record does not fit in an 80-column window, so you need to scroll horizontally. The ruler moves with `leftcol`: after scrolling to the second half, the ticks show the real column numbers from 89 onward rather than restarting at 1.
+
+### Break the layout yourself
+
+This is the most valuable step in the lesson. Delete the first character of the name field in record 1 — the `T` at column 19 — and save. The file goes from 600 bytes to 599.
+
+Now look again. The customer ID at columns 11–18 is still in place, but from column 19 onward `ANAKA ICHIRO` has shifted one position left. Jump to column 49 with `:PositionJump 49`: where the branch `BR-TOKYO` should be, you now read `ANAKA ICH`.
+
+**The program will not react at all.** It opens the file, reads it, writes the output, and exits with code `0`, exactly as before. Because 599 divided by 200 still leaves a remainder, it will not even complain that the file length is wrong. Only someone checking columns with the ruler can see it.
+
+That is the entire risk of a fixed-length interface: **it guarantees widths, not that the contents line up.** The column ruler does not change that fact. It only turns "the finance team notices next week" into "you see it the moment you open the file".
+
 ## A Path Through the Source
 
 See the complete source in [`lesson.cob`](./lesson.cob). Read it in data-flow order; the four paragraphs have these responsibilities:

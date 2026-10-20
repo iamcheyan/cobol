@@ -1,6 +1,6 @@
 # Neovim 编辑器辅助教程
 
-以下八篇教程介绍 `cobol.nvim` 的固定格式编辑、结构导航、字段估算、诊断和项目工作流。这里是可选工具资料，不是 32 课主课程的前置要求；教程使用 `extensions/standalone-examples/` 中的示例，并在对应功能旁提供真实 Neovim 截图。插件需要 Neovim 0.10+；结构标记与面包屑需要 Tree-sitter 解析器，诊断需要 GnuCOBOL（`cobc`），Aerial 与 blink.cmp 为可选依赖。
+以下十一篇教程介绍 `cobol.nvim` 的固定格式编辑、结构导航、字段估算、诊断和项目工作流。这里是可选工具资料，不是 32 课主课程的前置要求；教程使用 `extensions/standalone-examples/` 中的示例，并在对应功能旁提供真实 Neovim 截图。插件需要 Neovim 0.10+；结构标记与面包屑需要 Tree-sitter 解析器，诊断需要 GnuCOBOL（`cobc`），Aerial 与 blink.cmp 为可选依赖。
 
 ## 教程目录
 
@@ -12,3 +12,6 @@
 - [实战示例](tutorials/06-practical-examples-guide.md)
 - [插件练习](tutorials/07-cobol-nvim-plugin-lab.md)
 - [多光标批量编辑](tutorials/08-multicursor-batch-editing.md)
+- [文件与内容搜索：snacks picker](tutorials/09-snacks-picker.md)
+- [屏幕内快速跳转：flash.nvim](tutorials/10-flash-jump.md)
+- [跨文件查找替换：grug-far](tutorials/11-grug-far.md)

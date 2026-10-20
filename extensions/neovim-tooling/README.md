@@ -1,6 +1,6 @@
 # Neovim 编辑器辅助教程
 
-这套教程讲的是**你本机 Neovim 配置里真正在用的工具**，分两类：
+这套教程讲的是**你本机 Neovim 配置里真正在用的工具**，分七类（含 COBOL 专用与通用能力）：
 
 - **COBOL 专用**（01–07）：`cobol.nvim` 提供的固定格式标尺、结构导航、PIC 计算、GnuCOBOL 诊断。
 - **通用编辑器能力**（08–23）：搜索、跳转、批量编辑、代码理解、Git、会话管理。
@@ -67,12 +67,30 @@
 | [19](tutorials/19-gitsigns.md) | 行级 Git 操作 | hunk 暂存/重置，blame |
 | [20](tutorials/20-diffview.md) | 完整差异与历史 | 并排 diff，文件历史 |
 
-### 六、会话与发现
+### 六、界面与外观
 
 | 篇 | 主题 | 你会学会 |
 |---|---|---|
 | [21](tutorials/21-auto-session.md) | 会话保存与恢复 | 按目录保存布局 |
 | [22](tutorials/22-which-key.md) | 按键发现 | `<leader>` + 停顿，逐层展开 |
+| [24](tutorials/24-bufferline.md) | 缓冲区标签栏 | 顶部标签、改动标记 |
+| [25](tutorials/25-noice.md) | 消息与命令行 | 命令行、复制提示、确认框 |
+| [26](tutorials/26-dashboard.md) | 启动页 | 最近文件、快捷入口 |
+| [27](tutorials/27-ccc-color.md) | 颜色编辑 | 拾色器、格式转换 |
+| [28](tutorials/28-satellite.md) | 边缘滚动标记 | 改动/诊断/搜索的分布 |
+| [29](tutorials/29-rainbow-delimiters.md) | 彩虹括号 | 嵌套层级着色 |
+| [30](tutorials/30-markview.md) | Markdown 渲染 | 标题/表格/代码块 |
+
+### 七、辅助与其它
+
+| 篇 | 主题 | 你会学会 |
+|---|---|---|
+| [31](tutorials/31-mini-pairs.md) | 自动配对 | `(` `"` 自动补全与跳过 |
+| [32](tutorials/32-contextline.md) | 面包屑下拉 | 结构菜单（COBOL 里通常为空） |
+| [33](tutorials/33-bookmark.md) | 书签 | 标记位置，`]b` / `[b` 跳转 |
+| [34](tutorials/34-batch-and-shellcheck.md) | 批处理与 Shell 检查 | `.bat` 支持、`shellcheck` 诊断 |
+| [35](tutorials/35-vimquest.md) | 英语词汇练习 | 在代码里练英语（不影响开发） |
+| [36](tutorials/36-vim-visual-multi.md) | 另一套多光标 | `Ctrl-n` 行尾/行首模式 |
 
 ## 建议学习顺序
 

@@ -1,6 +1,6 @@
 # Neovim Editor Tutorials
 
-These tutorials cover **the tools actually in use in your local Neovim configuration**, in two groups:
+These tutorials cover **the tools actually in use in your local Neovim configuration**, across seven groups (COBOL-specific plus general editor skills):
 
 - **COBOL-specific** (01–07): fixed-format rulers, structural navigation, PIC calculation and GnuCOBOL diagnostics from `cobol.nvim`.
 - **General editor skills** (08–23): search, jumping, batch editing, code understanding, Git and session management.
@@ -67,14 +67,30 @@ The two complement each other. The COBOL tools handle column positions and copyb
 | [19](tutorials/19-gitsigns.md) | Line-level Git operations | Stage/reset hunks, blame |
 | [20](tutorials/20-diffview.md) | Full diffs and history | Side-by-side diff, file history |
 
-### 6. Sessions and discovery
+### 6. Interface and appearance
 
 | # | Topic | What you learn |
 |---|---|---|
 | [21](tutorials/21-auto-session.md) | Session save and restore | Per-directory layouts |
 | [22](tutorials/22-which-key.md) | Key discovery | `<leader>` plus a pause, drill down layer by layer |
+| [24](tutorials/24-bufferline.md) | Buffer tab line | Tabs at the top, modification markers |
+| [25](tutorials/25-noice.md) | Messages and cmdline | Cmdline, yank toast, confirm dialog |
+| [26](tutorials/26-dashboard.md) | Start screen | Recent files, shortcuts |
+| [27](tutorials/27-ccc-color.md) | Colour editing | Picker, format conversion |
+| [28](tutorials/28-satellite.md) | Scrollbar markers | Where changes, diagnostics and matches are |
+| [29](tutorials/29-rainbow-delimiters.md) | Rainbow delimiters | Colouring nesting levels |
+| [30](tutorials/30-markview.md) | Markdown rendering | Headings, tables, code blocks |
 
-## Suggested order
+### 7. Helpers and others
+
+| # | Topic | What you learn |
+|---|---|---|
+| [31](tutorials/31-mini-pairs.md) | Auto-pairs | Auto-close and skip for `(` and `"` |
+| [32](tutorials/32-contextline.md) | Breadcrumb dropdown | Structure menu (usually empty for COBOL) |
+| [33](tutorials/33-bookmark.md) | Bookmarks | Mark positions, `]b` / `[b` to jump |
+| [34](tutorials/34-batch-and-shellcheck.md) | Batch and Shell lint | `.bat` support, `shellcheck` diagnostics |
+| [35](tutorials/35-vimquest.md) | English vocabulary drill | Practice English in code (does not affect coding) |
+| [36](tutorials/36-vim-visual-multi.md) | The other multi-cursor | `Ctrl-n` end/start-of-line modes |
 
 **If time is short**, these four cover 80% of daily work:
 
@@ -92,6 +108,11 @@ The two complement each other. The COBOL tools handle column positions and copyb
 
 7. [11 grug-far](tutorials/11-grug-far.md) — cross-file batch replacement
 8. [20 diffview](tutorials/20-diffview.md) — reviewing changes
+
+## Suggested order
+
+**If time is short**, these four cover 80% of daily work:
+
 
 ## How to read these
 

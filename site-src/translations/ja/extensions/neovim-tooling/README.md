@@ -1,6 +1,6 @@
 # Neovim エディター補助チュートリアル
 
-本シリーズは**あなたのローカル Neovim 設定で実際に使っているツール**を扱います。2 種類に分かれます。
+本シリーズは**あなたのローカル Neovim 設定で実際に使っているツール**を扱います。7 つの分類（COBOL 専用と汎用機能）に分かれます。
 
 - **COBOL 専用**（01–07）：`cobol.nvim` が提供する固定形式ルーラー、構造ナビゲーション、PIC 計算、GnuCOBOL 診断。
 - **汎用エディター機能**（08–23）：検索、ジャンプ、一括編集、コード理解、Git、セッション管理。
@@ -67,12 +67,30 @@
 | [19](tutorials/19-gitsigns.md) | 行単位の Git 操作 | hunk のステージ／リセット、blame |
 | [20](tutorials/20-diffview.md) | 完全な差分と履歴 | 並列 diff、ファイル履歴 |
 
-### 6. セッションと発見
+### 6. 画面と外観
 
 | # | テーマ | 学べること |
 |---|---|---|
 | [21](tutorials/21-auto-session.md) | セッションの保存と復元 | ディレクトリ単位のレイアウト |
 | [22](tutorials/22-which-key.md) | キーの発見 | `<leader>`＋間、階層を順に展開 |
+| [24](tutorials/24-bufferline.md) | バッファのタブバー | 上部タブ、変更マーク |
+| [25](tutorials/25-noice.md) | メッセージとコマンドライン | コマンドライン、ヤンク通知、確認ダイアログ |
+| [26](tutorials/26-dashboard.md) | 起動画面 | 最近のファイル、ショートカット |
+| [27](tutorials/27-ccc-color.md) | 色の編集 | カラーピッカー、形式変換 |
+| [28](tutorials/28-satellite.md) | 端のスクロールマーカー | 変更・診断・検索の分布 |
+| [29](tutorials/29-rainbow-delimiters.md) | レインボー括弧 | 入れ子階層の着色 |
+| [30](tutorials/30-markview.md) | Markdown の描画 | 見出し・表・コードブロック |
+
+### 7. 補助とその他
+
+| # | テーマ | 学べること |
+|---|---|---|
+| [31](tutorials/31-mini-pairs.md) | 自動ペア | `(` `"` の自動補完とスキップ |
+| [32](tutorials/32-contextline.md) | パンくずドロップダウン | 構造メニュー（COBOL では通常空） |
+| [33](tutorials/33-bookmark.md) | ブックマーク | 位置を記録し `]b` / `[b` で移動 |
+| [34](tutorials/34-batch-and-shellcheck.md) | バッチと Shell の検査 | `.bat` 対応、`shellcheck` 診断 |
+| [35](tutorials/35-vimquest.md) | 英単語練習 | コード上で英語を練習（開発には無関係） |
+| [36](tutorials/36-vim-visual-multi.md) | もう一つのマルチカーソル | `Ctrl-n` の行末／行頭モード |
 
 ## おすすめの順序
 

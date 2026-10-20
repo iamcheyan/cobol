@@ -1,0 +1,17 @@
+      * 练习 1：把 WS-CUSTOMER-* 全部改名为 WS-CLIENT-*
+      * 任务：用多光标一次改完 4 行，不要逐行手改。
+      * 提示：光标停在 CUSTOMER 上，<leader>A 全量匹配，再 cw 改词。
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. RENAMEF.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 WS-CUSTOMER-ID      PIC X(8)  VALUE "C0001042".
+       01 WS-CUSTOMER-NAME    PIC X(10) VALUE "TANAKA".
+       01 WS-CUSTOMER-STATUS  PIC X(1)  VALUE "A".
+       01 WS-CUSTOMER-CITY    PIC X(8)  VALUE "TOKYO".
+       PROCEDURE DIVISION.
+           DISPLAY WS-CUSTOMER-ID
+           DISPLAY WS-CUSTOMER-NAME
+           DISPLAY WS-CUSTOMER-STATUS
+           DISPLAY WS-CUSTOMER-CITY
+           STOP RUN.

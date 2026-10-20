@@ -29,7 +29,7 @@ Neovim 辅助练习见 [`neovim-tooling/tutorials/`](neovim-tooling/tutorials/01
 
 ## Neovim 插件教程
 
-[`neovim-tooling/tutorials/`](neovim-tooling/tutorials/01-punchcard-and-ruler.md) 保留七篇 `cobol.nvim` 教程，覆盖固定格式标尺、结构导航、PIC 计算、诊断、编译工作流、实战示例和插件回归练习。它们是编辑器辅助资料，不是主课程的先修要求。
+[`neovim-tooling/tutorials/`](neovim-tooling/tutorials/01-punchcard-and-ruler.md) 保留八篇编辑器教程，覆盖固定格式标尺、结构导航、PIC 计算、诊断、编译工作流、实战示例、插件回归练习，以及用 `multicursor.nvim` 做字段改名、`PIC` 统一、状态码批量替换等多光标操作。它们是编辑器辅助资料，不是主课程的先修要求。
 
 ## 独立 COBOL 示例
 

@@ -1,17 +1,125 @@
 # Neovim Editor Tutorials
 
-These eleven tutorials introduce fixed-format editing, structural navigation, field estimation, diagnostics, and project workflows with `cobol.nvim`. They are optional editor materials, not prerequisites for the 32-lesson main course. The tutorials use examples from `extensions/standalone-examples/` and include real Neovim screenshots alongside the relevant features. The plugin requires Neovim 0.10 or later; Tree-sitter parsers are needed for structural markers and breadcrumbs, GnuCOBOL (`cobc`) is needed for diagnostics, and Aerial and blink.cmp are optional dependencies.
+These tutorials cover **the tools actually in use in your local Neovim configuration**, in two groups:
 
-## Tutorial Index
+- **COBOL-specific** (01–07): fixed-format rulers, structural navigation, PIC calculation and GnuCOBOL diagnostics from `cobol.nvim`.
+- **General editor skills** (08–23): search, jumping, batch editing, code understanding, Git and session management.
 
-- [Fixed-Format Columns and the Ruler](tutorials/01-punchcard-and-ruler.md)
-- [Structure Overview, Outline, and Go to Definition](tutorials/02-structure-and-navigation.md)
-- [PIC and Memory Calculations](tutorials/03-pic-and-memory-calculator.md)
-- [Syntax Checking and Diagnostics](tutorials/04-syntax-check-and-diagnostics.md)
-- [Compilation and Workflow](tutorials/05-compilation-and-workflow.md)
-- [Practical Examples](tutorials/06-practical-examples-guide.md)
-- [Plugin Lab](tutorials/07-cobol-nvim-plugin-lab.md)
-- [Multi-Cursor Batch Editing](tutorials/08-multicursor-batch-editing.md)
-- [File and Content Search: snacks picker](tutorials/09-snacks-picker.md)
-- [On-Screen Jumping: flash.nvim](tutorials/10-flash-jump.md)
-- [Cross-File Search and Replace: grug-far](tutorials/11-grug-far.md)
+The two complement each other. The COBOL tools handle column positions and copybooks; the general tools handle "find something in several hundred lines" and "change many places at once".
+
+**Not a prerequisite for the main course.** This is optional tooling material, to consult as needed. Tutorials use real files from `extensions/standalone-examples/` and `lessons/`.
+
+## Requirements
+
+| Dependency | Used for |
+|---|---|
+| Neovim 0.10+ | Everything |
+| `cobol.nvim` | 01–07, plus COBOL structure and diagnostics |
+| Tree-sitter parser | Highlighting and folding (**COBOL has none**, see 16) |
+| GnuCOBOL (`cobc`) | Syntax diagnostics, compilation |
+| Aerial, blink.cmp | Optional; their absence does not break anything else |
+
+## Tutorial index
+
+### 1. COBOL-specific: `cobol.nvim`
+
+| # | Topic | What you learn |
+|---|---|---|
+| [01](tutorials/01-punchcard-and-ruler.md) | Fixed-format columns and the ruler | What columns 7/8/12/73 mean, overflow warnings |
+| [02](tutorials/02-structure-and-navigation.md) | Structure overview, outline, definition jumps | `gd` / `gf` / `K`, Aerial outline |
+| [03](tutorials/03-pic-and-memory-calculator.md) | PIC and memory calculation | Estimating bytes with `:CobolCalcRecord` |
+| [04](tutorials/04-syntax-check-and-diagnostics.md) | Syntax checking and diagnostics | `cobc` diagnostics inside the editor |
+| [05](tutorials/05-compilation-and-workflow.md) | Compilation and workflow | Build, run, locate errors |
+| [06](tutorials/06-practical-examples-guide.md) | Practical examples | Four standalone examples with the plugin |
+| [07](tutorials/07-cobol-nvim-plugin-lab.md) | Plugin lab | Combined practice |
+
+### 2. Search and jumping
+
+| # | Topic | What you learn |
+|---|---|---|
+| [09](tutorials/09-snacks-picker.md) | File and content search (snacks picker) | `ff`/`fg`/`fw`, picker internals, quickfix hand-off |
+| [10](tutorials/10-flash-jump.md) | On-screen jumping (flash) | `s`/`S`, combining with operators |
+| [11](tutorials/11-grug-far.md) | Cross-file search and replace (grug-far) | `<leader>sr`, match-count safety check, staged replacement |
+| [23](tutorials/23-quicker.md) | quickfix context expansion | `>`/`<` to expand result context |
+
+### 3. Batch editing
+
+| # | Topic | What you learn |
+|---|---|---|
+| [08](tutorials/08-multicursor-batch-editing.md) | Multi-cursor batch editing | `gaip`, `ciW`, `C`, `ci"`, `g<C-a>` |
+| [12](tutorials/12-mini-ai-textobjects.md) | Text objects (mini.ai) | Semantic boundaries, `cia`/`ciq`/`g` |
+| [13](tutorials/13-mini-surround.md) | Surrounds (mini.surround) | `gsa`/`gsd`/`gsr` |
+| [14](tutorials/14-smart-paste.md) | Smart paste | Keep relative indent, rebase to the current line |
+
+### 4. Understanding code
+
+| # | Topic | What you learn |
+|---|---|---|
+| [15](tutorials/15-lsp-code-intelligence.md) | LSP code intelligence | Jump/references/rename, **COBOL has no LSP** |
+| [16](tutorials/16-treesitter-and-folding.md) | Treesitter and folding | Treesitter limits, where COBOL folding comes from |
+| [17](tutorials/17-aerial-outline.md) | Code outline (aerial) | `<leader>cs`, the COBOL-specific backend |
+| [18](tutorials/18-conform-formatting.md) | Formatting (conform) | `<leader>F`, **auto-format is off by default** |
+
+### 5. Git
+
+| # | Topic | What you learn |
+|---|---|---|
+| [19](tutorials/19-gitsigns.md) | Line-level Git operations | Stage/reset hunks, blame |
+| [20](tutorials/20-diffview.md) | Full diffs and history | Side-by-side diff, file history |
+
+### 6. Sessions and discovery
+
+| # | Topic | What you learn |
+|---|---|---|
+| [21](tutorials/21-auto-session.md) | Session save and restore | Per-directory layouts |
+| [22](tutorials/22-which-key.md) | Key discovery | `<leader>` plus a pause, drill down layer by layer |
+
+## Suggested order
+
+**If time is short**, these four cover 80% of daily work:
+
+1. **[22 which-key](tutorials/22-which-key.md)** — learn how to find the other keys first
+2. **[09 snacks picker](tutorials/09-snacks-picker.md)** — find files, search content
+3. **[19 gitsigns](tutorials/19-gitsigns.md)** — see exactly what you changed
+4. **[08 multi-cursor](tutorials/08-multicursor-batch-editing.md)** — change many places at once
+
+**Working on COBOL code**, add:
+
+5. [01 column rules](tutorials/01-punchcard-and-ruler.md) — the basis of fixed format
+6. [17 aerial](tutorials/17-aerial-outline.md) — COBOL paragraph structure
+
+**Editing course documentation**, add:
+
+7. [11 grug-far](tutorials/11-grug-far.md) — cross-file batch replacement
+8. [20 diffview](tutorials/20-diffview.md) — reviewing changes
+
+## How to read these
+
+Every page follows the same shape:
+
+| Section | Content |
+|---|---|
+| What problem it solves | A comparison table showing the cost of not using it |
+| Your actual configuration | Real config pulled from `lua/plugins/*.lua` |
+| Key table | Keys that actually work in your setup |
+| Measured observations | What a real session showed (marked "measured") |
+| Exercises | Concrete steps with **acceptance criteria** |
+| Pitfalls | Common failure causes |
+| Official documentation | `:help` topics and repository links |
+| Limits | Which restrictions come from your config rather than plugin defaults |
+
+**"Measured" only appears where something was actually run.** Unverified steps are explicitly marked as "practise first" or "not verified".
+
+## Relationship to the main course
+
+The 32-lesson course teaches COBOL itself. These tutorials teach **how to write and change COBOL efficiently in an editor**.
+
+- The main course does not depend on these tutorials.
+- But these tutorials repeatedly use files from the main course (lesson 17's fixed-length records, lesson 20's matching, lesson 32's capstone).
+- Recommendation: **read the relevant course section first, then practise with the tutorial.**
+
+## References
+
+- Neovim documentation: `:help`
+- Your config repository: `~/nvim`
+- Per-plugin quick reference: `~/nvim/docs/plugins/PLUGINS.md` (47 plugins, five short sections each — shallower but broader than these tutorials)

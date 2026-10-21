@@ -26,14 +26,14 @@ flash 的优势：**一次输入，多个候选，按标签直达**。不比正�
 
 ```lua
 { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
-{ "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
+{ "S", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash Jump (Shift)" },
 { "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
 ```
 
 | 按键 | 模式 | 作用 |
 |---|---|---|
 | `s` | n / x / o | 跳转到任意位置 |
-| `S` | n / x / o | 按 **Treesitter 节点**跳转 |
+| `S` | n / x / o | 与 `s` 一样进行 Flash 字符跳转 |
 | `<C-s>` | 命令行 | 搜索时切换 flash 提示 |
 
 **注意 `r` 和 `R` 被移除了**（配置里注释掉了），原因写在配置里：避免与 `substitute.nvim` 冲突。所以网上教程里的 `r`（remote flash）在你的环境里**不可用**。
@@ -106,31 +106,31 @@ v s "      选到某个引号 —— 选中字符串字面量
 c s .      改到某个句点 —— 替换半个句子
 ```
 
-## 5. `S`：按语法节点跳转
+## 5. `S`：Flash 跳转的备用键
 
-`S` 用 Treesitter 找**语法节点**的起点，而不是任意字符。标签只出现在节点边界，数量少得多。
+`S` 与 `s` 调用同一个 Flash 字符跳转功能。使用大小写不同的按键可在终端或键位冲突时作为备用入口；它不再执行 Treesitter 节点选择，也不会触发 Neovim 原生的整行替换。
 
-实测（同一个 COBOL 文件按 `S`）：
+按 `S` 后输入目标字符，Flash 会为匹配位置显示标签，选择标签即可跳转。
 
 ```text
 abcIDENTIFICATION DIVISION.
 PROGRAM-ID. FLASHTEST.a
 ```
 
-只有两处标签：`IDENTIFICATION` 开头（整条语句的节点）和文件末尾。因为这两个是顶层节点的边界。
+行为与 `s` 相同；标签对应目标字符的匹配位置，不依赖 COBOL Treesitter 节点。
 
-### 什么时候用 `S` 而不是 `s`
+### 什么时候用 `S`
 
 | 想跳到 | 用 |
 |---|---|
 | 某个具体字符 | `s` |
-| 下一段/下一个语句的开头 | `S` |
+| 需要第二个 Flash 跳转入口或终端对 `s` 的处理有冲突 | `S` |
 | 某个括号/引号 | `s` |
-| 下一个函数/段落定义 | `S` |
+| 按字符定位任意位置 | `s` 或 `S` |
 
-`S` 在 COBOL 里跳段落（`0100-INIT.`）、`SECTION`、`DIVISION` 起点特别好用——它们是明确的语法节点。
+`S` 不按 COBOL 语法结构筛选位置；要跳到段落或 Division，可输入该结构独有的字符后选对应标签。
 
-**前提**：需要 Tree-sitter 的 COBOL parser。没有 parser 时 `S` 不会标出节点。检查：
+该映射只调用 Flash 的普通跳转，不依赖 Treesitter parser。
 
 ```vim
 :lua print(vim.treesitter.language.add("cobol"))
@@ -153,7 +153,7 @@ PROGRAM-ID. FLASHTEST.a
 | 按 `s` | 进入等待输入状态，无标签 |
 | 输入 `A` | 所有 `A` 后出现小写字母标签 |
 | 按 `j` | 跳到第 5 行 `WS-ALPHA`，`col()` = 14 |
-| 按 `S` | 只有语法节点边界出现标签（本例 2 个） |
+| 按 `S` 并输入字符 | 与 `s` 一样显示字符匹配标签 |
 | 按 `<Esc>` | 退出，光标不动 |
 
 ## 8. 练习
@@ -189,7 +189,7 @@ nvim lessons/17_fixed-length-files/lesson.cob
 
 **验收**：删除范围是从光标到**你选的那个**引号，不是最近的那个。
 
-### 练习 4：`S` 跳段落
+### 练习 4：用 `S` 进行 Flash 跳转
 
 1. `gg`
 2. 按 `S`
@@ -254,5 +254,5 @@ flash 按字节定位，多字节字符（日文注释里的假名）可能标�
 ## 11. 边界
 
 - 本篇按键来自你的本地配置（`lua/plugins/flash.lua`），只有 `s`、`S`、`<C-s>` 三个，且 `r`/`R` 已被移除。
-- `S` 依赖 Tree-sitter 的 COBOL parser；没装 parser 时它不会标出节点。
+- `S` 与 `s` 一样调用 Flash 字符跳转，不依赖 Treesitter parser。
 - 实测记录来自真实终端会话；标签字母的具体分配由 flash 内部算法决定，同一文件两次按 `s` 可能给出不同的标签排布。

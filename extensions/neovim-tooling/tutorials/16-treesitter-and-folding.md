@@ -34,7 +34,7 @@ toml tsx typescript vim vimdoc xml yaml
 | 语法高亮 | 部分（靠 `cobol.nvim` 的正则高亮） |
 | 折叠 | **可用**（`cobol.nvim` 自己实现 Division/Section/Paragraph 折叠） |
 | Treesitter 文本对象 | **不可用**（mini.ai 配置里主动返回空） |
-| `S`（flash 节点跳转） | **不可用** |
+| Flash 的 `S` 按键 | 可用；当前映射是普通字符跳转，不依赖 Treesitter 节点 |
 
 `cobol.nvim` 在配置里说明了：
 
@@ -56,7 +56,7 @@ cd ~/development/cobol.nvim/tree-sitter-cobol
 make
 ```
 
-装好后 `S`（flash）和 mini.ai 的 `o`/`f`/`c` 才生效。**但这不在当前配置里**——默认没装。
+安装后可供 Treesitter 查询使用；Flash 的 `S` 当前映射为普通字符跳转，mini.ai 的部分 Treesitter 文本对象仍受 COBOL filetype 防护。
 
 ## 3. 折叠（nvim-ufo）
 
@@ -127,7 +127,7 @@ n-ufo 的自定义摘要形如：
 ### 不能用
 
 - Treesitter 文本对象（`iao`、`iaf`、`iac`）
-- flash 的 `S` 节点跳转
+- Flash 的 Treesitter 节点选择（当前 `S` 映射是普通字符跳转，不使用此功能）
 - `%` 的语法配对（`cobol.nvim` 有自己的 `%` 实现，跳 `IF`/`END-IF`）
 
 **所以 COBOL 的结构能力来自 `cobol.nvim`，不是 Treesitter。** 理解这点能避免很多"为什么文档说能用我这里不行"的困惑。
@@ -181,9 +181,9 @@ nvim lessons/26_error-handling/lesson.cob
 
 ## 7. 踩坑
 
-### COBOL 里 `S` 没反应
+### COBOL 里的 Flash 按键
 
-flash 的 `S` 需要 Treesitter parser。COBOL 没有装，所以不生效。用 `cobol.nvim` 的 `%` 跳结构配对，或用 `cobol.nvim` 的 Aerial 大纲。
+`S` 和 `s` 都执行 Flash 字符跳转。`S` 不再调用 Treesitter 节点选择，因此不会因语法节点范围而表现为整块选择。
 
 ### 语法高亮不对
 
@@ -227,6 +227,6 @@ COBOL buffer 里应该是 `expr`（由插件设置）。
 
 ## 9. 边界
 
-- `ensure_installed` 列表（`lua/plugins/treesitter.lua`）**不含 `cobol`**。COBOL 的折叠和高亮来自 `cobol.nvim`，不是 Treesitter。
-- 想在 COBOL 里用 Treesitter 文本对象和 `S` 跳转，需要手动编译 `cobol.nvim` 仓库里的 `tree-sitter-cobol`，并解除 mini.ai 配置里的 filetype 屏蔽。
+- `ensure_installed` 列表（`lua/plugins/treesitter.lua`）不含 `cobol`；本机 parser 由 `cobol.nvim` 构建脚本安装。COBOL 的折叠和高亮主要来自 `cobol.nvim`。
+- mini.ai 的 Treesitter 文本对象仍对 COBOL filetype 返回空值；Flash 的 `S` 是普通字符跳转，不依赖该 parser。
 - 本篇不覆盖手工编译 parser 的完整步骤；那属于插件开发范畴，见 `cobol.nvim` 仓库的 `scripts/build_parser.sh`。

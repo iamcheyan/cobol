@@ -26,14 +26,14 @@ Defined in `lua/plugins/flash.lua`, only three keys:
 
 ```lua
 { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
-{ "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
+{ "S", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash Jump (Shift)" },
 { "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
 ```
 
 | Key | Mode | Action |
 |---|---|---|
 | `s` | n / x / o | Jump anywhere |
-| `S` | n / x / o | Jump by **Treesitter node** |
+| `S` | n / x / o | Flash character jump, same as `s` |
 | `<C-s>` | command line | Toggle flash while searching |
 
 **`r` and `R` were removed** (commented out in the config) to avoid clashing with `substitute.nvim`. So `r` (remote flash) from online tutorials **does not work here**.
@@ -106,31 +106,31 @@ v s "      select to a quote — grab a string literal
 c s .      change to a period — rewrite half a sentence
 ```
 
-## 5. `S`: Jump by Syntax Node
+## 5. `S`: Alternate Flash Jump Key
 
-`S` uses Treesitter to find **syntax node** starts rather than arbitrary characters. Labels appear only at node boundaries, so there are far fewer.
+`S` invokes the same Flash character-jump action as `s`. It is an alternate entry key and no longer selects Treesitter nodes or falls through to Neovim’s native whole-line replace command.
 
-Measured (pressing `S` in the same COBOL file):
+Press `S`, type a target character, then choose a label to jump to that match.
 
 ```text
 abcIDENTIFICATION DIVISION.
 PROGRAM-ID. FLASHTEST.a
 ```
 
-Only two labels: the start of `IDENTIFICATION` (the whole statement node) and the end of the file — those are the top-level node boundaries.
+The labels depend on the target character you type and the visible matches; they are no longer filtered by Treesitter nodes.
 
-### When to use `S` instead of `s`
+### When to use `S`
 
 | Want to jump to | Use |
 |---|---|
 | A specific character | `s` |
-| The start of the next paragraph or statement | `S` |
+| A second Flash entry key, or when the terminal interferes with `s` | `S` |
 | A bracket or quote | `s` |
-| The next function or paragraph definition | `S` |
+| Jump to a character match | `s` or `S` |
 
-`S` is especially good in COBOL for jumping to paragraph (`0100-INIT.`), `SECTION`, and `DIVISION` starts, since those are explicit syntax nodes.
+`S` does not filter matches by COBOL syntax. To jump to a paragraph or Division, type a distinctive character and choose its label.
 
-**Requirement:** a Tree-sitter COBOL parser. Without one, `S` labels nothing. Check with:
+This mapping invokes Flash’s regular character jump and does not require a Tree-sitter parser.
 
 ```vim
 :lua print(vim.treesitter.language.add("cobol"))
@@ -153,7 +153,7 @@ Useful when the pattern is long and there are many matches: jump straight to the
 | Press `s` | Enters a wait-for-input state, no labels |
 | Type `A` | Lowercase labels appear after every `A` |
 | Press `j` | Jumps to `WS-ALPHA` on line 5, `col()` = 14 |
-| Press `S` | Only syntax node boundaries are labelled (2 here) |
+| Press `S` and type a character | Shows character-match labels, just like `s` |
 | Press `<Esc>` | Exits without moving |
 
 ## 8. Exercises
@@ -189,15 +189,15 @@ On a disposable copy:
 
 **Accept:** the deletion runs from the cursor to **the quote you chose**, not the nearest one.
 
-### Exercise 4: `S` to jump paragraphs
+### Exercise 4: Use `S` for a Flash jump
 
 1. `gg`
-2. Press `S`
-3. Notice labels only at syntax node boundaries
+2. Press `S` and type a distinctive character.
+3. Choose a label and confirm the cursor jumps to that match.
 
-**Accept:** far fewer labels than `s` with a common character.
+**Accept:** the same character-jump behavior as `s`, without filtering by syntax nodes.
 
-**Contrast:** run `s` with `D` and count labels to see the difference between `S` and `s`.
+**Contrast:** run `s` and `S` with the same character; both show character-match labels.
 
 ### Exercise 5: Command-line flash
 
@@ -254,5 +254,5 @@ Check current mappings:
 ## 11. Limits
 
 - Keys here come from your local config (`lua/plugins/flash.lua`): only `s`, `S`, `<C-s>`, with `r`/`R` removed.
-- `S` depends on a Tree-sitter COBOL parser; without one it labels no nodes.
+- `S` invokes the same Flash character jump as `s`; it does not depend on a Tree-sitter parser.
 - Measurements come from real terminal sessions; the specific label letters are decided by flash's internal algorithm, so pressing `s` twice on the same file may produce different label layouts.

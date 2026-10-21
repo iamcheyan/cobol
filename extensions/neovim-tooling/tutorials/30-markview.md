@@ -169,7 +169,7 @@ Markdown 很长（比如本教程）时渲染会慢一点。必要时关掉。
 | 渲染 Markdown | markview（`<leader>um`） |
 | 编辑 Markdown 结构 | 常规 vim 操作 |
 | 大纲跳转 | aerial（`<leader>cs`，支持 markdown backend） |
-| 格式化 Markdown | conform（`prettierd`） |
+| 格式化 Markdown | LSP 或外部格式化工具 |
 
 **markview 只改显示，不改文件内容。** 关掉它文件还是原样。
 

@@ -169,7 +169,7 @@ Rendering can be a little slow for long Markdown files (such as this tutorial). 
 | Render Markdown | markview (`<leader>um`) |
 | Edit Markdown structure | Regular Vim operations |
 | Navigate the outline | aerial (`<leader>cs`, supports the Markdown backend) |
-| Format Markdown | conform (`prettierd`) |
+| Format Markdown | LSP or an external formatter |
 
 **markview changes only the display, not the file contents.** The file remains unchanged when rendering is off.
 

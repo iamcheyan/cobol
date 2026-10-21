@@ -169,7 +169,7 @@ nvim lessons/17_fixed-length-files/README.md
 | Markdown のレンダリング | markview（`<leader>um`） |
 | Markdown の構造編集 | 通常の Vim 操作 |
 | アウトライン移動 | aerial（`<leader>cs`、markdown backend 対応） |
-| Markdown のフォーマット | conform（`prettierd`） |
+| Markdown のフォーマット | LSP または外部の整形ツール |
 
 **markview が変更するのは表示だけで、ファイルの内容は変更しません。** 無効にしてもファイルは元のままです。
 

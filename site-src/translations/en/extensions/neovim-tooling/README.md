@@ -1,11 +1,11 @@
 # Neovim Editor Tutorials
 
-These tutorials cover **the tools actually in use in your local Neovim configuration**, across seven groups (COBOL-specific plus general editor skills):
+These tutorials cover **the tools actually in use in your local Neovim configuration**, across seven groups (COBOL-specific, our own line-based multi-cursor plugin, and general editor skills):
 
 - **COBOL-specific** (01–07): fixed-format rulers, structural navigation, PIC calculation and GnuCOBOL diagnostics from `cobol.nvim`.
 - **General editor skills** (08–23): search, jumping, batch editing, code understanding, Git and session management.
 
-The two complement each other. The COBOL tools handle column positions and copybooks; the general tools handle "find something in several hundred lines" and "change many places at once".
+The three have distinct roles: COBOL tools handle column positions and copybooks; our `multicursor-line.nvim` adds cursors according to the layout of selected lines; general tools handle search, code navigation and batch editing.
 
 **Not a prerequisite for the main course.** This is optional tooling material, to consult as needed. Tutorials use real files from `extensions/standalone-examples/` and `lessons/`.
 
@@ -60,7 +60,6 @@ just group adjacent guides so you can find one quickly.
 | [15](tutorials/15-lsp-code-intelligence.md) | LSP code intelligence | Jump/references/rename, **COBOL has no LSP** |
 | [16](tutorials/16-treesitter-and-folding.md) | Treesitter and folding | Treesitter limits, where COBOL folding comes from |
 | [17](tutorials/17-aerial-outline.md) | Code outline (aerial) | `<leader>cs`, the COBOL-specific backend |
-| [18](tutorials/18-conform-formatting.md) | Formatting (conform) | `<leader>F`, **auto-format is off by default** |
 
 ### 5. Git
 
@@ -98,7 +97,7 @@ just group adjacent guides so you can find one quickly.
 | [33](tutorials/33-bookmark.md) | Bookmarks | Mark positions, `]b` / `[b` to jump |
 | [34](tutorials/34-batch-and-shellcheck.md) | Batch and Shell lint | `.bat` support, `shellcheck` diagnostics |
 | [35](tutorials/35-vimquest.md) | English vocabulary drill | Practice English in code (does not affect coding) |
-| [36](tutorials/36-vim-visual-multi.md) | The other multi-cursor | `Ctrl-n` end/start-of-line modes |
+| [37](tutorials/37-multicursor-line.md) | Add cursors by line (our plugin) | Smart head, absolute BOL, tail and alternating layouts |
 
 ## Suggested order
 

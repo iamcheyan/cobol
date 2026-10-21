@@ -198,9 +198,6 @@ nvim lessons/32_bank-reconciliation-project/build.sh
 
 **这是配置有意的**（`map_keys = false`）。用 Aerial 或命令访问。
 
-### 与 conform 的 shfmt 冲突
-
-conform 用 `shfmt` 格式化 Shell，lint 用 `shellcheck` 检查。**一个管格式，一个管错误**，不冲突。
 
 ### 大脚本检查慢
 

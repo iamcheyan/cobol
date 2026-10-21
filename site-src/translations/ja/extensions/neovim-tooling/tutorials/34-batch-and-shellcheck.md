@@ -198,10 +198,6 @@ nvim lessons/32_bank-reconciliation-project/build.sh
 
 **これは意図した設定です**（`map_keys = false`）。Aerial またはコマンドから使います。
 
-### conform の shfmt と競合する
-
-conform は `shfmt` で Shell をフォーマットし、lint は `shellcheck` で検査します。**一方は整形、もう一方は問題の検出**を行うため、競合しません。
-
 ### 大きなスクリプトのチェックが遅い
 
 `shellcheck` は外部プロセスです。非常に大きなスクリプトでは一時的に待たされる場合があります。これは正常です。

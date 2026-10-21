@@ -198,10 +198,6 @@ Or configure the `-e` option for `shellcheck`.
 
 **This is intentional** (`map_keys = false`). Use Aerial or commands to access its features.
 
-### Conflict with conform's shfmt
-
-conform formats Shell with `shfmt`, while lint checks it with `shellcheck`. **One formats; the other checks for errors**, so they don't conflict.
-
 ### Linting a Large Script Is Slow
 
 `shellcheck` is an external process. Very large scripts may pause briefly. That's normal.

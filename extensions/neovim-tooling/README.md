@@ -1,11 +1,11 @@
 # Neovim 编辑器辅助教程
 
-这套教程讲的是**你本机 Neovim 配置里真正在用的工具**，分七类（含 COBOL 专用与通用能力）：
+这套教程讲的是**你本机 Neovim 配置里真正在用的工具**，分七类（含 COBOL 专用、自研多光标插件与通用能力）：
 
 - **COBOL 专用**（01–07）：`cobol.nvim` 提供的固定格式标尺、结构导航、PIC 计算、GnuCOBOL 诊断。
 - **通用编辑器能力**（08–23）：搜索、跳转、批量编辑、代码理解、Git、会话管理。
 
-两者互补。COBOL 专用工具处理列位置和 Copybook；通用工具处理"在几百行里找东西"和"一次改很多处"这件事。
+三类工具各有分工：COBOL 专用工具处理列位置和 Copybook；自研的 `multicursor-line.nvim` 按选定行的布局添加光标；通用工具处理搜索、代码导航与批量编辑。
 
 **不是主课的前置要求。** 这是可选工具资料，随时可按需查阅。教程使用 `extensions/standalone-examples/` 和 `lessons/` 中的真实文件。
 
@@ -59,7 +59,6 @@
 | [15](tutorials/15-lsp-code-intelligence.md) | LSP 代码智能 | 跳转/引用/重命名，**COBOL 没有 LSP** |
 | [16](tutorials/16-treesitter-and-folding.md) | 语法解析与折叠 | Treesitter 能力边界，COBOL 折叠来源 |
 | [17](tutorials/17-aerial-outline.md) | 代码大纲（aerial） | `<leader>cs`，COBOL 专用 backend |
-| [18](tutorials/18-conform-formatting.md) | 代码格式化 | `<leader>F`，**默认关闭自动格式化** |
 
 ### 五、Git 操作
 
@@ -97,7 +96,7 @@
 | [33](tutorials/33-bookmark.md) | 书签 | 标记位置，`]b` / `[b` 跳转 |
 | [34](tutorials/34-batch-and-shellcheck.md) | 批处理与 Shell 检查 | `.bat` 支持、`shellcheck` 诊断 |
 | [35](tutorials/35-vimquest.md) | 英语词汇练习 | 在代码里练英语（不影响开发） |
-| [36](tutorials/36-vim-visual-multi.md) | 另一套多光标 | `Ctrl-n` 行尾/行首模式 |
+| [37](tutorials/37-multicursor-line.md) | 按行生成多光标（自研插件） | 首字符前、绝对行首、行尾与交替布局 |
 
 ## 建议学习顺序
 

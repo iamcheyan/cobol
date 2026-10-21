@@ -1,11 +1,11 @@
 # Neovim エディター補助チュートリアル
 
-本シリーズは**あなたのローカル Neovim 設定で実際に使っているツール**を扱います。7 つの分類（COBOL 専用と汎用機能）に分かれます。
+本シリーズは**あなたのローカル Neovim 設定で実際に使っているツール**を扱います。7 つの分類（COBOL 専用、自作の行単位マルチカーソル、汎用機能）に分かれます。
 
 - **COBOL 専用**（01–07）：`cobol.nvim` が提供する固定形式ルーラー、構造ナビゲーション、PIC 計算、GnuCOBOL 診断。
 - **汎用エディター機能**（08–23）：検索、ジャンプ、一括編集、コード理解、Git、セッション管理。
 
-両者は補完関係にあります。COBOL 専用ツールは桁位置とコピーブックを扱い、汎用ツールは「数百行から目的を探す」「複数箇所を一度に変える」を扱います。
+3 種類のツールにはそれぞれ役割があります。COBOL 専用ツールは桁位置と Copybook を扱い、自作の `multicursor-line.nvim` は選択した行の形に合わせてカーソルを追加し、汎用ツールは検索・コード移動・一括編集を扱います。
 
 **メインコースの前提条件ではありません。** 必要に応じて参照する任意のツール資料です。チュートリアルは `extensions/standalone-examples/` と `lessons/` の実ファイルを使います。
 
@@ -59,7 +59,6 @@
 | [15](tutorials/15-lsp-code-intelligence.md) | LSP によるコード理解 | ジャンプ/参照/リネーム、**COBOL に LSP は無い** |
 | [16](tutorials/16-treesitter-and-folding.md) | Treesitter と折りたたみ | Treesitter の限界、COBOL の折りたたみの出所 |
 | [17](tutorials/17-aerial-outline.md) | コードアウトライン（aerial） | `<leader>cs`、COBOL 専用 backend |
-| [18](tutorials/18-conform-formatting.md) | コード整形（conform） | `<leader>F`、**自動整形は既定でオフ** |
 
 ### 5. Git
 
@@ -97,7 +96,7 @@
 | [33](tutorials/33-bookmark.md) | ブックマーク | 位置を記録し `]b` / `[b` で移動 |
 | [34](tutorials/34-batch-and-shellcheck.md) | バッチと Shell の検査 | `.bat` 対応、`shellcheck` 診断 |
 | [35](tutorials/35-vimquest.md) | 英単語練習 | コード上で英語を練習（開発には無関係） |
-| [36](tutorials/36-vim-visual-multi.md) | もう一つのマルチカーソル | `Ctrl-n` の行末／行頭モード |
+| [37](tutorials/37-multicursor-line.md) | 行単位でカーソルを追加（自作プラグイン） | スマート行頭、絶対行頭、行末、交互配置 |
 
 ## おすすめの順序
 

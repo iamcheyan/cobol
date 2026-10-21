@@ -57,6 +57,10 @@ Restoration is also **per tab and per window**: an outline on the right next to 
 
 **These keys are under the `<leader>w` (windows) group**, because a session is essentially a saved window layout.
 
+![One session per directory: saved on exit, restored when you return.](images/21-session-cycle.png)
+
+One session per directory: saved on exit, restored when you return.
+
 ## 4. How It Works
 
 ### Automatic Save and Restore

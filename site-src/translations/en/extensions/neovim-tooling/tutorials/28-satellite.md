@@ -58,6 +58,10 @@ handlers = {
 
 `overlap = true` allows markers to overlap; `priority = 100` keeps the cursor marker on top.
 
+![Four marker kinds from four sources; satellite only paints them on the edge.](images/28-satellite-markers.png)
+
+Four marker kinds from four sources; satellite only paints them on the edge.
+
 ## 3. How to Read It
 
 Markers appear on the **right side of the window**, along the scrollbar:

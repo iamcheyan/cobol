@@ -40,6 +40,10 @@ Defined in `lua/plugins/flash.lua`, only three keys:
 
 The `o` mode is operator-pending, for combinations like `d` `s`.
 
+![Three steps: cursor where it is → press `s` and type a target character → press the label that appears. No line counting, no regex.](images/10-flash-flow.png)
+
+Three steps: cursor where it is → press `s` and type a target character → press the label that appears. No line counting, no regex.
+
 ## 3. Basic Usage: `s` + Character + Label
 
 ### Three steps

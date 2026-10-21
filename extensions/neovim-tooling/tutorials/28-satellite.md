@@ -58,6 +58,10 @@ handlers = {
 
 `overlap = true` 允许标记重叠；`priority = 100` 保证光标标记在最上层。
 
+![四类标记来自四个不同来源，satellite 只负责把它们画到窗口边缘。](images/28-satellite-markers.png)
+
+四类标记来自四个不同来源，satellite 只负责把它们画到窗口边缘。
+
 ## 3. 怎么看
 
 标记出现在**窗口右侧**（滚动条位置）：

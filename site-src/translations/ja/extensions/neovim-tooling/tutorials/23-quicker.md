@@ -49,6 +49,10 @@ quicker.nvim は quickfix に「前後の文脈を展開する」機能を追加
 
 `ft = "qf"` は quickfix buffer でのみ読み込む設定です。
 
+![検索から 1 件ずつの確認まで：結果を quickfix に入れ、`>` で展開します。](images/23-quicker-expand.png)
+
+検索から 1 件ずつの確認まで：結果を quickfix に入れ、`>` で展開します。
+
 ## 3. キー操作
 
 | キー | 動作 |

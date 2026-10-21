@@ -15,6 +15,10 @@ conform.nvim calls the appropriate formatter for each file type and respects a g
 | Temporarily disable formatting | Edit the configuration | Toggle with `<leader>uf` |
 | Find an available formatter | Look it up yourself | `:ConformInfo` |
 
+![The save path: `autoformat` defaults to `false`, so saving never formats. Either run `<leader>F` manually or flip the toggle first.](images/18-conform-decision.png)
+
+The save path: `autoformat` defaults to `false`, so saving never formats. Either run `<leader>F` manually or flip the toggle first.
+
 ## 2. Your Configuration
 
 `lua/plugins/conform.lua`:

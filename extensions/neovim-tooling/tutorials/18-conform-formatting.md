@@ -15,6 +15,10 @@ conform.nvim 按文件类型调用对应的格式化工具，并尊重一个全�
 | 临时关闭格式化 | 改配置 | `<leader>uf` 切换 |
 | 找可用格式化工具 | 自己查 | `:ConformInfo` |
 
+![保存时的判断路径：`autoformat` 默认为 `false`，所以保存不会格式化；要格式化要么手动 `<leader>F`，要么先切换开关。](images/18-conform-decision.png)
+
+保存时的判断路径：`autoformat` 默认为 `false`，所以保存不会格式化；要格式化要么手动 `<leader>F`，要么先切换开关。
+
 ## 2. 你的配置
 
 `lua/plugins/conform.lua`：

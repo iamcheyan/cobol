@@ -17,6 +17,10 @@
 | 修 lint 问题 | 手动查 | `<leader>ca` 代码动作 |
 | 看错误 | 编译后翻输出 | 行内 mark 实时显示 |
 
+![COBOL 的能力边界：`gd`／`K`／`gf` 来自 `cobol.nvim`，不是 LSP。COBOL 没有 LSP server，所以 LSP 的按键不会被注册。](images/15-lsp-boundary.png)
+
+COBOL 的能力边界：`gd`／`K`／`gf` 来自 `cobol.nvim`，不是 LSP。COBOL 没有 LSP server，所以 LSP 的按键不会被注册。
+
 ## 2. 你的配置
 
 `lua/plugins/lsp.lua`。键位按 **server 能力**动态注册——某个 server 不支持某功能时不会绑定那个键。

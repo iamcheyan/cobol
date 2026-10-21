@@ -61,6 +61,10 @@ quicker.nvim adds “expand context” to quickfix: press `>` to show the 2 line
 
 You can press `>` repeatedly; each time it expands more context (`add_to_existing = true`).
 
+![From search to reading each hit: results go to quickfix, then `>` expands in place.](images/23-quicker-expand.png)
+
+From search to reading each hit: results go to quickfix, then `>` expands in place.
+
 ## 4. Complete Workflow
 
 ### From Search to Quickfix

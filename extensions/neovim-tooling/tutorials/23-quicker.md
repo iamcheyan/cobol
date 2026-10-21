@@ -61,6 +61,10 @@ quicker.nvim 给 quickfix 加上「展开上下文」：按 `>` 显示命中行�
 
 `>` 可以连按，每次再展开更多（`add_to_existing = true`）。
 
+![从搜索到逐条查看：结果先进 quickfix，再用 `>` 就地展开上下文。展开只发生在 quickfix buffer 里。](images/23-quicker-expand.png)
+
+从搜索到逐条查看：结果先进 quickfix，再用 `>` 就地展开上下文。展开只发生在 quickfix buffer 里。
+
 ## 4. 完整工作流
 
 ### 从搜索到 quickfix

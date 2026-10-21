@@ -60,6 +60,10 @@
 
 この4つは `Snacks.words` を使います。LSP references より軽量で、同じ名前のシンボルを手早く確認するのに向いています。
 
+![COBOL の能力の出どころ：`gd`／`K`／`gf` は `cobol.nvim` が提供します。](images/15-lsp-boundary.png)
+
+COBOL の能力の出どころ：`gd`／`K`／`gf` は `cobol.nvim` が提供します。
+
 ## 3. COBOL の場合
 
 **COBOL には LSP server がありません。** そのため、COBOL では次のようになります。

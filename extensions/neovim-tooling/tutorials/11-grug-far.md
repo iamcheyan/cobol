@@ -62,6 +62,10 @@ grug-far 的做法：**先展示全部匹配（含行号、上下文），你确
 
 `headerMaxWidth = 80`：顶部标题栏最大宽度。
 
+![搜索、过滤、看匹配数，这三步都在写入前完成。`matches in N files` 是决定「能不能执行」的唯一依据。](images/11-grug-far-flow.png)
+
+搜索、过滤、看匹配数，这三步都在写入前完成。`matches in N files` 是决定「能不能执行」的唯一依据。
+
 ## 3. 界面结构
 
 按 `<leader>sr` 后：

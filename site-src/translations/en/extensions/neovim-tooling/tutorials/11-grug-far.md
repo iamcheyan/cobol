@@ -62,6 +62,10 @@ In `x` (visual) mode, `<leader>sr` carries the selection.
 
 `headerMaxWidth = 80` caps the header width.
 
+![Search, filter and read the match count before anything is written. `matches in N files` is the only basis for deciding whether to run the replace.](images/11-grug-far-flow.png)
+
+Search, filter and read the match count before anything is written. `matches in N files` is the only basis for deciding whether to run the replace.
+
 ## 3. The Interface
 
 After `<leader>sr`:

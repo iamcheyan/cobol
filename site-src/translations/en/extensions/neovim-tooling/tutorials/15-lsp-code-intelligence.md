@@ -60,6 +60,10 @@ They complement each other. COBOL has no official LSP server, but your configura
 
 These four use `Snacks.words`. They're lighter-weight than LSP references and are useful for quickly scanning occurrences of a symbol with the same name.
 
+![Where COBOL's abilities come from: `gd`, `K` and `gf` are `cobol.nvim`, not LSP.](images/15-lsp-boundary.png)
+
+Where COBOL's abilities come from: `gd`, `K` and `gf` are `cobol.nvim`, not LSP.
+
 ## 3. The situation with COBOL
 
 **COBOL has no LSP server.** So:

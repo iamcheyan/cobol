@@ -19,10 +19,6 @@ nvim extensions/standalone-examples/INPUTCSV.COB
 3. `:CobolGuideToggle` で列ルーラーと Winbar の表示を切り替えます。`:CobolGuideEnable` / `:CobolGuideDisable` でガイドと診断の紐付けを明示的に有効・無効にできます。
 4. `gcc`、Visual モードの `gc`、または `<leader>c*` でコメントを切り替えます。`:CobolFormatCase` で予約語の大文字・小文字を整えます。範囲を指定しない場合はバッファ全体を、範囲を指定した場合はその範囲だけを処理します。
 
-![固定形式の列ルーラーと Winbar](images/fixed-format-ruler.png)
-
-スクリーンショットには 7、8、12、73 列目のルーラーと現在位置のパンくずが表示されています。`:CobolGuideToggle` で表示を切り替えます。`:CobolGuideDisable` は現在の診断も消去しますが、読み込み済みのマッピングと折りたたみ設定は保持します。
-
 ## 構造ナビゲーション、アウトライン、Copybook
 
 1. `PERFORM 1000-INITIALIZE` の Paragraph 名にカーソルを置いて `gd` を押し、`<C-o>` で戻ります。`<C-i>` で jumplist の次の位置へ進みます。
@@ -30,27 +26,13 @@ nvim extensions/standalone-examples/INPUTCSV.COB
 3. パーサーが利用できる場合、IF ブロック内にカーソルを置くと、最も内側の構造を示す色付きマーカー、接続線、ELSE/WHEN マーカーが表示されます。`%` で構造キーワード間を移動し、`vaf` / `vif` で IF ブロックの外側／内側を選択します。
 4. Aerial を別途インストールし、このプラグインが提供する COBOL バックエンドを有効にする必要があります。`:AerialToggle` で開きます。このプラグインは `<leader>cs` を既定で割り当てません。
 
-![IF/ELSE/END-IF の範囲と Syms アウトライン](images/structure-scope.png)
-
-Neovim の実画面で、Syms アウトラインと対応する IF 範囲マーカーを示しています。Syms はユーザーが設定した外部 UI であり、このプラグインが提供するのは Aerial バックエンドです。
-
-![Aerial の COBOL アウトライン](images/aerial-outline.png)
-
-![Copybook の浮動プレビューウィンドウ](images/copybook-preview.png)
-
 ## PIC 推定、診断、折りたたみ
 
 1. レベル 01 のレコード上で `<leader>cr` / `:CobolCalcRecord` を実行し、フィールドのオフセットとサイズ推定を確認します。グループレベルの `OCCURS` 回数は子フィールドに乗算されず、大きな `REDEFINES` の重ね合わせも合計を増やしません。そのため、ABI の保証値として扱わないでください。
 2. `<leader>cl` / `:CobolLint` で GnuCOBOL のチェックをすぐに実行し、`<leader>cq` / `:CobolQuickfix` で Quickfix を開きます。診断は保存時、編集後のデバウンス時、Insert モードを抜けたときにも自動実行できます。
 3. `za`、`zc`、`zo` で Division、Section、Paragraph、データ項目の折りたたみを操作します。ネイティブ折りたたみは IF/EVALUATE の折りたたみを作りません。他の fold provider が制御ブロックの折りたたみを作成する場合、プラグインは構造の要約を表示できます。
 
-![PIC とレコードレイアウトの推定](images/record-layout.png)
-
-![GnuCOBOL コンパイラー診断](images/compiler-diagnostics.png)
-
-![COBOL の構造折りたたみ](images/folding.png)
-
-## キーとコマンド
+## キーマップとコマンド
 
 | 操作 | 機能 |
 |---|---|

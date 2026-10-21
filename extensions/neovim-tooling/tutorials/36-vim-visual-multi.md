@@ -133,9 +133,9 @@ end
 可视模式下 `Ctrl-n` 会基于选区加光标。
 
 
-![连续多行结构相同时，可以在行首或行尾用 `Ctrl-n` 一次加多个光标。](images/36-vimvisualmulti-context.png)
+![在第一条 COBOL 声明末尾按配置的 `Ctrl-n` 后，vim-visual-multi 在下一条声明末尾增加了第二个光标（底栏显示 `2 / 2`）。](images/36-vimvisualmulti-context.png)
 
-连续多行结构相同时，可以在行首或行尾用 `Ctrl-n` 一次加多个光标。
+此实拍画面展示自定义行尾模式：光标位于第一条声明末尾，按 `Ctrl-n` 后，下一个光标落在第二条声明末尾。
 
 ## 5. COBOL 场景
 

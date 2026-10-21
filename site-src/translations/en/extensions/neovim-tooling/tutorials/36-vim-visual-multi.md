@@ -133,9 +133,9 @@ Even without your customizations, it has a full set of features:
 In Visual mode, `Ctrl-n` adds a cursor based on the selection.
 
 
-![When consecutive lines share a shape, `Ctrl-n` at end or start of line adds cursors in one go.](images/36-vimvisualmulti-context.png)
+![After pressing the configured `Ctrl-n` at the end of the first COBOL declaration, vim-visual-multi adds a second cursor at the end of the next declaration (status shows `2 / 2`).](images/36-vimvisualmulti-context.png)
 
-When consecutive lines share a shape, `Ctrl-n` at end or start of line adds cursors in one go.
+This real capture shows the custom end-of-line mode: the first declaration has the initial cursor, and `Ctrl-n` places the next one at the end of the following declaration.
 
 ## 5. COBOL Scenarios
 

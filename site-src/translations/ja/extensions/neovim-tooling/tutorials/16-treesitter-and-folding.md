@@ -88,11 +88,6 @@ n-ufo のカスタム要約は次のような形式です。
 
 折りたたまれた行数を表示します。
 
-
-![`:CobolCalcRecord` が出力する項目レイアウト表。オフセット、PIC、合計長。](images/16-treesitter-context.png)
-
-`:CobolCalcRecord` が出力する項目レイアウト表。オフセット、PIC、合計長。
-
 ## 4. 構文ハイライト
 
 ### 有効化/無効化

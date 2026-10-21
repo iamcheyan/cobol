@@ -17,11 +17,6 @@ When you paste code into Neovim from a browser, chat window, or another file, th
 
 smart-paste **preserves relative indentation inside the block** and realigns only the “first line” to the current line; the rest follow its relative indentation.
 
-
-![The paste target: fields share a column, and the block's relative indent must survive.](images/14-smart-paste-context.png)
-
-The paste target: fields share a column, and the block's relative indent must survive.
-
 ## 2. Your configuration
 
 `lua/plugins/smart-paste.lua`. This plugin's configuration is longer than the others because it handles three paste sources:

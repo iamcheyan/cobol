@@ -15,11 +15,6 @@ mini.surround を使うと、**3つのキーと対象の記号**で操作でき�
 | 外側の引用符を削除 | 2か所を削除 | `gsd"` |
 | 行全体を括弧で囲む | 両端を手作業で編集 | `gsa(`（Visual mode で選択後） |
 
-
-![4 つの `VALUE` 句のリテラルは、`gsa"` と `ci"` の格好の練習対象です。](images/13-surround-context.png)
-
-4 つの `VALUE` 句のリテラルは、`gsa"` と `ci"` の格好の練習対象です。
-
 ## 2. 設定内容
 
 `lua/plugins/mini-surround.lua`：

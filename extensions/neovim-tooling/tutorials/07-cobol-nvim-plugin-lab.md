@@ -19,10 +19,6 @@ nvim extensions/standalone-examples/INPUTCSV.COB
 3. `:CobolGuideToggle` 切换列标尺及 Winbar；`:CobolGuideEnable` / `:CobolGuideDisable` 可显式启用或停用提示与诊断附着。
 4. 用 `gcc`、Visual `gc` 或 `<leader>c*` 切换注释；用 `:CobolFormatCase` 格式化保留字。命令无范围时处理整个缓冲区，有范围时只处理该范围。
 
-![固定格式列标尺与 Winbar](images/fixed-format-ruler.png)
-
-截图展示第 7、8、12、73 列标尺和当前位置面包屑。用 `:CobolGuideToggle` 切换；`:CobolGuideDisable` 还会清理当前诊断，但会保留已装入的映射和折叠设置。
-
 ## 结构导航、大纲与 Copybook
 
 1. 在 `PERFORM 1000-INITIALIZE` 的段落名上按 `gd`，再按 `<C-o>` 返回；`<C-i>` 沿 jumplist 前进。
@@ -30,25 +26,11 @@ nvim extensions/standalone-examples/INPUTCSV.COB
 3. 解析器可用时，将光标放在 IF 块内观察最内层结构的彩色起止标记、连接线与 ELSE/WHEN 标记；按 `%` 在结构起止词间移动，`vaf` / `vif` 选择 IF 外部/内部。
 4. Aerial 需要单独安装并启用本插件提供的 COBOL backend。用 `:AerialToggle` 打开；插件本身不默认绑定 `<leader>cs`。
 
-![IF/ELSE/END-IF 结构范围与 Syms 大纲](images/structure-scope.png)
-
-此真实画面显示 Syms 大纲和已配对 IF 范围标记。Syms 是用户配置的外部 UI；本插件提供的是 Aerial 后端。
-
-![Aerial COBOL 大纲](images/aerial-outline.png)
-
-![Copybook 浮窗预览](images/copybook-preview.png)
-
 ## PIC 估算、诊断与折叠
 
 1. 在 01 记录上运行 `<leader>cr` / `:CobolCalcRecord` 查看字段偏移和大小估算。组级 `OCCURS` 不会乘算子字段合计，较大的 `REDEFINES` 覆盖也不会扩大合计，因此不要将结果当作 ABI 保证。
 2. 用 `<leader>cl` / `:CobolLint` 立即运行 GnuCOBOL 检查；`<leader>cq` / `:CobolQuickfix` 打开 Quickfix。诊断也可在保存、编辑防抖和离开 Insert 时自动触发。
 3. `za`、`zc`、`zo` 操作 Division、Section、Paragraph 和数据项折叠。原生折叠不自行创建 IF/EVALUATE 折叠；若其它 fold provider 建立控制块折叠，插件可提供结构摘要。
-
-![PIC 和记录布局估算](images/record-layout.png)
-
-![GnuCOBOL 编译器诊断](images/compiler-diagnostics.png)
-
-![COBOL 结构折叠](images/folding.png)
 
 ## 快捷键与命令
 

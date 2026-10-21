@@ -88,11 +88,6 @@ After a pair is inserted, typing the closing character (or pressing `→`) moves
 
 Press Backspace between `()` to delete both characters (if configured).
 
-
-![Statements like `PIC X(10)` mix parentheses and quotes — exactly where auto-pairs applies.](images/31-pairs-context.png)
-
-Statements like `PIC X(10)` mix parentheses and quotes — exactly where auto-pairs applies.
-
 ## 4. COBOL Scenarios
 
 ### Scenario 1: Write `PIC X(10)`

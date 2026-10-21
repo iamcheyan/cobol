@@ -120,11 +120,6 @@ This trips people up constantly, so state it plainly:
 
 ---
 
-
-![Four `01` declarations whose field names and `PIC` clauses line up in the same columns — the shape multi-cursor was made for.](images/08-multicursor-context.png)
-
-Four `01` declarations whose field names and `PIC` clauses line up in the same columns — the shape multi-cursor was made for.
-
 ## 3. Five Actions That Cover 90% of Cases
 
 ### Action 1: One cursor per line (`ga` + motion)

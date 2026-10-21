@@ -98,6 +98,8 @@ LOCALES = {
         "nav_knowledge": "知识库",
         "nav_editor": "编辑器教程",
         "nav_editor_expand": "展开教程目录",
+        "course_legacy": "旧版基础课程",
+        "course_enterprise": "企业批处理课程",
         "nav_editor_collapse": "收起教程目录",
         "tutorial_index_link": "教程目录",
         "kn_eyebrow": "KNOWLEDGE BASE",
@@ -221,6 +223,8 @@ LOCALES = {
         "nav_knowledge": "Knowledge",
         "nav_editor": "Editor guide",
         "nav_editor_expand": "Expand tutorial list",
+        "course_legacy": "Legacy workshop",
+        "course_enterprise": "Enterprise batch",
         "nav_editor_collapse": "Collapse tutorial list",
         "tutorial_index_link": "All tutorials",
         "kn_eyebrow": "KNOWLEDGE BASE",
@@ -344,6 +348,8 @@ LOCALES = {
         "nav_knowledge": "ナレッジ",
         "nav_editor": "エディター教程",
         "nav_editor_expand": "チュートリアル一覧を展開",
+        "course_legacy": "旧版基礎コース",
+        "course_enterprise": "企業バッチコース",
         "nav_editor_collapse": "チュートリアル一覧を折りたたむ",
         "tutorial_index_link": "チュートリアル目次",
         "kn_eyebrow": "KNOWLEDGE BASE",
@@ -860,6 +866,75 @@ def tutorial_pager(locale: str, slug: str) -> str:
             f'{"".join(parts)}</nav>')
 
 
+# Each extension course keeps its own ordered syllabus. A page inside one of
+# them shows that course's contents in the sidebar instead of the 32-lesson
+# main course.
+COURSE_SETS = {
+    "extensions/legacy-workshop/lessons": ("legacy", "legacy_workshop"),
+    "extensions/enterprise-batch/curriculum/modules": ("enterprise", "enterprise_batch"),
+}
+
+
+@functools.lru_cache(maxsize=None)
+def course_set_items(kind: str, locale: str) -> tuple[tuple[str, str, str], ...]:
+    """(relative page, short label, group) for one extension course."""
+    if kind == "legacy":
+        root = ROOT / "extensions/legacy-workshop/lessons"
+        items = []
+        for d in sorted(p for p in root.iterdir() if p.is_dir()):
+            readme = d / "README.md"
+            if not readme.exists():
+                continue
+            title = title_of(readme, locale)
+            short = re.sub(r"^\s*\d+\s*[-.、]\s*", "", title).strip() or d.name
+            items.append((f"extensions/legacy-workshop/lessons/{d.name}/README.html", short, ""))
+        return tuple(items)
+    if kind == "enterprise":
+        root = ROOT / "extensions/enterprise-batch/curriculum/modules"
+        items = []
+        for d in sorted(p for p in root.iterdir() if p.is_dir()):
+            readme = d / "README.md"
+            if not readme.exists():
+                continue
+            title = title_of(readme, locale)
+            # Module titles already start with their number ("01 COBOL 与 ..."),
+            # which the sidebar prints separately; drop the duplicate prefix.
+            short = re.sub(r"^\s*\d+\s*[-.、:]?\s*", "", title).strip() or d.name
+            items.append((f"extensions/enterprise-batch/curriculum/modules/{d.name}/README.html", short, ""))
+        return tuple(items)
+    return ()
+
+
+def course_set_of(page: Path) -> str | None:
+    """Which extension course a page belongs to, if any."""
+    posix = page.as_posix()
+    for prefix, (kind, _label) in COURSE_SETS.items():
+        if posix.startswith(prefix + "/"):
+            return kind
+    return None
+
+
+def course_set_nav(locale: str, kind: str, page: Path) -> str:
+    labels = LOCALES[locale]
+    items = course_set_items(kind, locale)
+    key = "course_legacy" if kind == "legacy" else "course_enterprise"
+    current = page.as_posix()
+    rows = []
+    for target, short, _group in items:
+        is_current = current == target
+        num = Path(target).parent.name[:2]
+        rows.append(
+            f'<a class="tutorial-link{" current" if is_current else ""}" '
+            f'href="{site_href(Path(locale) / target, locale, page)}">'
+            f'<span>{html.escape(num)}</span><em>{html.escape(short)}</em></a>')
+    return (
+        f'<div class="nav-heading">{labels[key]} <span>{len(items)}</span></div>'
+        f'<div class="tutorial-group">{"".join(rows)}</div>'
+        f'<a class="directory-link" href="{site_href(Path(locale) / "extensions/README.html", locale, page)}">'
+        f'{labels["nav_extensions"]} →</a>'
+    )
+
+
 def lesson_pager(locale: str, source: Path, page: Path) -> str:
     """Previous / next links at the end of a lesson, plus a way back to the index."""
     labels = LOCALES[locale]
@@ -893,7 +968,7 @@ def lesson_pager(locale: str, source: Path, page: Path) -> str:
 
 
 def shell(locale: str, title: str, body: str, page: Path, home: bool = False,
-          tutorial_slug: str | None = None) -> str:
+          tutorial_slug: str | None = None, course_kind: str | None = None) -> str:
     labels = LOCALES[locale]
     home_href = site_href(Path(locale) / "index.html", locale, page)
     directory = site_href(Path(locale) / "lessons/DIRECTORY.html", locale, page)
@@ -914,6 +989,22 @@ def shell(locale: str, title: str, body: str, page: Path, home: bool = False,
     )
     if home:
         main = f'<main class="home">{body}</main>'
+    elif course_kind is not None:
+        set_key = "course_legacy" if course_kind == "legacy" else "course_enterprise"
+        main = (
+            f'<div class="reading-layout"><aside class="course-nav tutorial-nav">'
+            f'<button class="course-toggle" type="button" aria-expanded="true" aria-label="{labels["course_collapse"]}" '
+            f'title="{labels["course_collapse"]}" aria-controls="course-body" '
+            f'data-expand-label="{labels["course_expand"]}" data-collapse-label="{labels["course_collapse"]}" '
+            f'data-open-label="{labels[set_key]}" data-closed-label="{labels["course_expand"]}">'
+            f'<span class="course-toggle-label">{labels[set_key]}</span>'
+            f'<b class="course-count">{len(course_set_items(course_kind, locale))}</b>'
+            f'<span class="course-toggle-icon" aria-hidden="true">‹</span></button>'
+            f'<div class="course-body" id="course-body">{course_set_nav(locale, course_kind, page)}</div></aside>'
+            f'<main class="article"><div class="article-top"><a href="{home_href}">{labels["nav_home"]}</a>'
+            f'<span>/</span><a href="{extensions}">{labels["nav_extensions"]}</a><span>/</span>'
+            f'<span>{html.escape(title)}</span></div><article>{body}</article></main></div>'
+        )
     elif tutorial_slug is not None:
         main = (
             f'<div class="reading-layout"><aside class="course-nav tutorial-nav">'
@@ -1368,7 +1459,8 @@ def build_locale(locale: str) -> int:
             slug = source.stem
         if slug is not None:
             body = body + tutorial_pager(locale, slug)
-        dest.write_text(shell(locale, title_of(source, locale), body, rel, tutorial_slug=slug),
+        dest.write_text(shell(locale, title_of(source, locale), body, rel, tutorial_slug=slug,
+                              course_kind=course_set_of(rel)),
                         encoding="utf-8")
         pages += 1
     for source in resource_sources():

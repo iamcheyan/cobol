@@ -15,6 +15,11 @@ mini.surround turns this into **three letters followed by a target delimiter**.
 | Remove surrounding quotes | Find and delete both | `gsd"` |
 | Put parentheses around an entire line | Do both ends manually | `gsa(` (after selecting in Visual mode) |
 
+
+![The literals in these four `VALUE` clauses are the natural target for `gsa"` and `ci"`.](images/13-surround-context.png)
+
+The literals in these four `VALUE` clauses are the natural target for `gsa"` and `ci"`.
+
 ## 2. Your configuration
 
 `lua/plugins/mini-surround.lua`:

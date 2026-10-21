@@ -88,6 +88,11 @@ n-ufo 的自定义摘要形如：
 
 显示被折叠的行数。
 
+
+![`:CobolCalcRecord` 输出的字段布局表：偏移、PIC 与合计长度。](images/16-treesitter-context.png)
+
+`:CobolCalcRecord` 输出的字段布局表：偏移、PIC 与合计长度。
+
 ## 4. 语法高亮
 
 ### 开启/关闭

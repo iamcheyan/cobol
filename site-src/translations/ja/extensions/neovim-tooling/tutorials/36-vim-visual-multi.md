@@ -21,6 +21,11 @@ dependencies = { "mg979/vim-visual-multi" },
 
 したがって余分なプラグインではありません。`multicursor-line` の行頭・行末カーソル機能は、このプラグインを土台にしています。
 
+
+![連続する行の形が同じなら、行末や行頭で `Ctrl-n` を使って一度にカーソルを追加できます。](images/36-vimvisualmulti-context.png)
+
+連続する行の形が同じなら、行末や行頭で `Ctrl-n` を使って一度にカーソルを追加できます。
+
 ## 2. 設定で行っていること
 
 `lua/plugins/vim-visual-multi.lua` はプラグインを読み込むだけではなく、**`Ctrl-n` の動作を再定義しています**。

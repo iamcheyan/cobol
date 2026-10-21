@@ -65,6 +65,11 @@ opts = {
 | `:DiffviewFocusFiles` | ファイルパネルにフォーカスを移す |
 | `:DiffviewRefresh` | 更新 |
 
+
+![`DiffviewOpen` の実画面。左がファイルパネル、中央が旧版、右が新版で、変更行がハイライトされます。](images/20-diffview.png)
+
+`DiffviewOpen` の実画面。左がファイルパネル、中央が旧版、右が新版で、変更行がハイライトされます。
+
 ## 4. 画面構成
 
 `:DiffviewOpen` を開くと、次のように表示されます。

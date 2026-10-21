@@ -20,6 +20,11 @@ Vim's built-in text objects only have character-level boundaries such as `w`, `s
 
 mini.ai's approach: **inspect the cursor's context and automatically find suitable boundaries**.
 
+
+![The four `PIC` widths differ. `ciw` stops at the hyphen; `ciW` replaces the whole word.](images/12-textobjects-context.png)
+
+The four `PIC` widths differ. `ciw` stops at the hyphen; `ciW` replaces the whole word.
+
 ## 2. Your configuration
 
 `lua/plugins/mini-ai.lua`, with `n_lines = 500` (maximum search range: 500 lines).

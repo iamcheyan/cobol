@@ -15,6 +15,11 @@ It presents diffs side by side (old on the left, new on the right), with a file 
 | View a file's history | `git log -p file` | Sidebar lists all revisions |
 | Three-way merge | Manual process | Built-in three-way view |
 
+
+![`DiffviewOpen` in action: file panel on the left, old side in the middle, new side on the right, changed lines highlighted.](images/20-diffview.png)
+
+`DiffviewOpen` in action: file panel on the left, old side in the middle, new side on the right, changed lines highlighted.
+
 ## 2. Your Configuration
 
 `lua/plugins/diffview.lua`:

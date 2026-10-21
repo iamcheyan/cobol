@@ -15,6 +15,11 @@ Regex highlighting only recognizes “there is an `IF` on this line.” Treesitt
 
 A COBOL `IF` / `END-IF` block can span dozens of lines and be nested several levels deep. Regex-based folding is completely unreliable here.
 
+
+![The layout table from `:CobolCalcRecord`: offsets, PICs and the total length.](images/16-treesitter-context.png)
+
+The layout table from `:CobolCalcRecord`: offsets, PICs and the total length.
+
 ## 2. Your Configuration
 
 `lua/plugins/treesitter.lua`; the `ensure_installed` list contains 28 languages:

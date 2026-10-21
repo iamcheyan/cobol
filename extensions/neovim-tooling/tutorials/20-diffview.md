@@ -65,6 +65,11 @@ opts = {
 | `:DiffviewFocusFiles` | 焦点移到文件面板 |
 | `:DiffviewRefresh` | 刷新 |
 
+
+![`DiffviewOpen` 的实际画面：左侧文件面板、中间旧版本、右侧新版本，改动行高亮。](images/20-diffview.png)
+
+`DiffviewOpen` 的实际画面：左侧文件面板、中间旧版本、右侧新版本，改动行高亮。
+
 ## 4. 界面结构
 
 打开 `:DiffviewOpen` 后：

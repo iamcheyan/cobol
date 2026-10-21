@@ -93,6 +93,11 @@ signs = {
 |---|---|
 | `<leader>uG` | 开/关 Git 符号 |
 
+
+![左侧的 `┃` 是 gitsigns 的改动标记：第 5 行与第 16 行附近各有一处 hunk。](images/19-gitsigns-hunks.png)
+
+左侧的 `┃` 是 gitsigns 的改动标记：第 5 行与第 16 行附近各有一处 hunk。
+
 ## 4. 典型工作流
 
 ### 工作流一：只提交一部分改动

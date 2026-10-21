@@ -132,6 +132,11 @@ Even without your customizations, it has a full set of features:
 
 In Visual mode, `Ctrl-n` adds a cursor based on the selection.
 
+
+![When consecutive lines share a shape, `Ctrl-n` at end or start of line adds cursors in one go.](images/36-vimvisualmulti-context.png)
+
+When consecutive lines share a shape, `Ctrl-n` at end or start of line adds cursors in one go.
+
 ## 5. COBOL Scenarios
 
 ### Scenario 1: Add the Same Suffix to Several Line Ends

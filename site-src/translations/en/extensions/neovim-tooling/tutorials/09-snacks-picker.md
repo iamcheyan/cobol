@@ -59,6 +59,11 @@ Defined in `lua/config/keymaps-defaults.lua`. `<leader>` is **space**.
 
 `<leader>fR` is easy to overlook but very useful: you searched halfway, went off to edit something, and pressing it brings back the same query and results.
 
+
+![Grepping for `WS-ACCT`: hits with file:line:column on the left, live preview on the right.](images/09-snacks-picker.png)
+
+Grepping for `WS-ACCT`: hits with file:line:column on the left, live preview on the right.
+
 ## 3. Working Inside the Picker
 
 Once open you face three areas:

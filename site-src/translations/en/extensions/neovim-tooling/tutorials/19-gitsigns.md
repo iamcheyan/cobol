@@ -93,6 +93,11 @@ A configuration comment says these are LazyVim-style shortcuts, **without the `h
 |---|---|
 | `<leader>uG` | Toggle Git signs |
 
+
+![The `┃` markers on the left are gitsigns hunks — one near line 5, another near line 16.](images/19-gitsigns-hunks.png)
+
+The `┃` markers on the left are gitsigns hunks — one near line 5, another near line 16.
+
 ## 4. Typical Workflows
 
 ### Workflow 1: Commit Only Some Changes

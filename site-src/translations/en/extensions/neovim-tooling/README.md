@@ -1,9 +1,9 @@
 # Neovim Editor Tutorials
 
-These tutorials cover **the tools actually in use in your local Neovim configuration**, across seven groups (COBOL-specific, our own line-based multi-cursor plugin, and general editor skills):
+These tutorials cover **the tools actually in use in your local Neovim configuration** across seven groups, including COBOL-specific tools, our own line-based multi-cursor plugin, and general editor skills.
 
 - **COBOL-specific** (01–07): fixed-format rulers, structural navigation, PIC calculation and GnuCOBOL diagnostics from `cobol.nvim`.
-- **General editor skills** (08–23): search, jumping, batch editing, code understanding, Git and session management.
+- **General editor skills** (08–17, 19–35): search, jumping, batch editing, code understanding, Git and sessions. Our `multicursor-line.nvim` is listed separately in Guide 37.
 
 The three have distinct roles: COBOL tools handle column positions and copybooks; our `multicursor-line.nvim` adds cursors according to the layout of selected lines; general tools handle search, code navigation and batch editing.
 
@@ -21,8 +21,7 @@ The three have distinct roles: COBOL tools handle column positions and copybooks
 
 ## Tutorial index
 
-The guides are ordered by number; read the lower numbers first. Categories
-just group adjacent guides so you can find one quickly.
+The 35 current guides are ordered by number across 01–37 (guides 18 and 36 have been withdrawn). Categories group adjacent guides so you can find one quickly.
 
 ### 1. COBOL-specific: `cobol.nvim`
 

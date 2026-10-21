@@ -15,7 +15,7 @@ The materials below are mapped to the 32-lesson course. Use them for extra pract
 | 29–31 | [`legacy-workshop/lessons/16-intrinsic-functions-dates/`](legacy-workshop/lessons/16-intrinsic-functions-dates/), [`enterprise-batch/curriculum/modules/08-database/`](enterprise-batch/curriculum/modules/08-database/) | Date functions and advanced, real Embedded SQL |
 | 32 | [`legacy-workshop/lessons/28-capstone-night-batch/`](legacy-workshop/lessons/28-capstone-night-batch/), [`29-reference-topic-map/`](legacy-workshop/lessons/29-reference-topic-map/), [`enterprise-batch/curriculum/modules/11-incidents/`](enterprise-batch/curriculum/modules/11-incidents/), [`12-capstone/`](enterprise-batch/curriculum/modules/12-capstone/) | Nightly batch processing, review, incident investigation, and an enterprise capstone |
 
-For editor tooling practice, see the [Neovim Editor Tutorials](neovim-tooling/README.md) (37 pages, covering COBOL-specific tools, our line-based multicursor plugin, plus general search, batch editing, code understanding, Git and sessions); four standalone examples are in [`standalone-examples/`](standalone-examples/README.md).
+For editor tooling practice, see the [Neovim Editor Tutorials](neovim-tooling/README.md) (35 pages, covering COBOL-specific tools, our line-based multicursor plugin, plus general search, batch editing, code understanding, Git and sessions); four standalone examples are in [`standalone-examples/`](standalone-examples/README.md).
 
 ## Legacy Introductory Course
 
@@ -29,7 +29,7 @@ Course design, instructor reference implementations, grading, and review materia
 
 ## Neovim Plugin Tutorials
 
-The [Neovim Editor Tutorials](neovim-tooling/README.md) contain **37 pages** in seven groups: COBOL-specific `cobol.nvim` (01–07), search and jumping (09–11, 23), batch editing (08, 12–14), code understanding (15–18), Git (19–20), interface and appearance (22, 24–30), and helpers (21, 31–37). Each page documents the keymaps on this machine, measured observations, exercises and acceptance criteria. Not a prerequisite for the main course.
+The [Neovim Editor Tutorials](neovim-tooling/README.md) contain **35 pages** in seven groups: COBOL-specific `cobol.nvim` (01–07), search and jumping (09–11, 23), batch editing (08, 12–14), code understanding (15–17, 19), Git (19–20), interface and appearance (22, 24–30), and helpers (21, 31–35, 37). Each page documents the keymaps on this machine, measured observations, exercises and acceptance criteria. Not a prerequisite for the main course.
 
 **Where to start**: open the [tutorial index](neovim-tooling/README.md) — it has the categorised list and three recommended reading orders (limited time / COBOL work / course docs).
 

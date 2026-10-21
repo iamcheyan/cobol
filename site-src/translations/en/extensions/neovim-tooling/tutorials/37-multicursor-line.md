@@ -16,15 +16,19 @@ The basic workflow:
 
 The key idea is “select first, apply second”: the plugin only processes the selected lines. It does not guess which lines you intend to change.
 
+![multicursor-line.nvim places three cursors before the first character of three COBOL declarations; the status line reads “head (3 lines)”.](images/37-multicursor-line.png)
+
+This real capture uses the native backend: it skips the indentation spaces and places each cursor before `01`. Press `i` to begin synchronized input.
+
 ## 2. Five Cursor Layouts
 
 | Layout | Position | Common mappings |
 |---|---|---|
-| Smart head (`head`) | Before the first non-blank character on each line, skipping indentation | Visual mode `<leader>h` / `<leader>i`; mnemonic `<leader>mh` / `<leader>mi` |
-| Absolute beginning of line (`bol`) | Column 0, before indentation | Visual mode `<leader>H` / `<leader>0`; mnemonic `<leader>mH` / `<leader>m0` |
-| Tail (`tail`) | After the last character on each line | Visual mode `<leader>t`; mnemonic `<leader>mt` |
-| Alternating head and tail | Alternates between line end and first non-blank character | `<leader>a` / `<leader>ma` |
-| Alternating absolute BOL and tail | Alternates between line end and column 0 | `<leader>A` / `<leader>mA` |
+| Smart head (`head`) | Before the first non-blank character on each line, skipping indentation | Visual mode `<leader>h`; Normal mode `<leader>mh` |
+| Absolute beginning of line (`bol`) | Column 0, before indentation | Visual mode `<leader>H` / `<leader>0`; Normal mode `<leader>mH` / `<leader>m0` |
+| Tail (`tail`) | After the last character on each line | Visual mode `<leader>t`; Normal mode `<leader>mt` |
+| Alternating head and tail | Alternates between line end and first non-blank character | Visual mode `<leader>a`; Normal mode `<leader>ma` |
+| Alternating absolute BOL and tail | Alternates between line end and column 0 | Visual mode `<leader>A`; Normal mode `<leader>mA` |
 
 Visual-mode mappings are useful when you want to mark the range precisely. The `<leader>m…` mnemonic mappings are also registered in Normal mode and use the current line plus an optional count to determine the range. Visual block mode (`<C-v>`) can also define a rectangular selection.
 
@@ -43,7 +47,7 @@ For example, suppose you want to add the same prefix to several COBOL declaratio
 3. Press `i` and type the text; all cursors receive the same input.
 4. Press `<Esc>` to finish.
 
-To insert before Area A while including the indentation, choose `<leader>m0` (absolute beginning of line). In Normal mode, `2<leader>mh` can add cursors on the current line and the next two lines. Start with a small range and verify it before typing.
+To insert before Area A while including the indentation, choose `<leader>m0` (absolute beginning of line). In Normal mode, `2<leader>mh` adds cursors on the current line and the next line. Start with a small range and verify it before typing.
 
 ## 4. Commands and Ranges
 
@@ -68,15 +72,15 @@ Smart head skips each line's indentation; absolute BOL places the cursor at colu
 
 The plugin computes cursor positions. Synchronized typing and backspace in multi-cursor mode are provided by the selected backend. Press `<Esc>` to leave the mode before continuing ordinary editing. For large edits, practice on a few lines first and inspect the result.
 
-## 6. How It Differs from the Other Multi-Cursor Tools
+## 6. How It Differs from the Existing Multi-Cursor Plugins
 
 | Tool | Best suited for |
 |---|---|
 | `multicursor-line.nvim` | Adding cursors at line heads, beginnings, tails, or alternating positions in a known range |
 | `multicursor.nvim` | Adding cursors progressively by motion, paragraph, or match, such as `gaip` |
-| `vim-visual-multi` | Interactively selecting repeated words, skipping matches, and moving or adjusting a cursor set (plugin defaults) |
+| `vim-visual-multi` | Interactively selecting repeated words, skipping matches, and moving or adjusting a cursor set |
 
-They can be used together, but solve different problems. When the line layout is known, `multicursor-line.nvim` is direct; for content-based matching, use a tool that selects matches interactively.
+They can be used together, but solve different problems. When the line layout is known, `multicursor-line.nvim` is direct; for content-based matching, `multicursor.nvim` or `vim-visual-multi` is more suitable.
 
 ### Local Key Conflict
 

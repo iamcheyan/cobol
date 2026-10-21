@@ -799,7 +799,7 @@ def tutorial_items(locale: str) -> tuple[tuple[str, str, str], ...]:
     # Order the sidebar by category in index order, then by tutorial number, so
     # the groups never interleave (the index tables also list re-runs of a
     # tutorial under a quick-route heading).
-    # Sidebar order is the tutorial number: 01 -> 36, so the guides read as a
+    # Sidebar order follows tutorial numbers, with withdrawn guides omitted.
     # plain sequence. Categories only label each run of guides.
     items.sort(key=lambda item: item[0])
     return tuple(items)

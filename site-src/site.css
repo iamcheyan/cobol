@@ -190,3 +190,19 @@
 .lesson-pager .pager-empty{border:0;background-color:transparent}
 .lesson-pager .pager-finish .pager-dir{color:var(--muted)}
 @media(max-width:640px){.lesson-pager{grid-template-columns:1fr;gap:10px;margin-top:30px}.lesson-pager .pager-next{text-align:left;align-items:flex-start}.lesson-pager .pager-empty{display:none}}
+/* Editor-guide sidebar: same visual language as the lesson list, but grouped
+   by the tutorial categories so the 36 guides stay navigable. */
+.tutorial-nav .course-body{padding:0 10px 14px}
+.tutorial-group-label{margin:14px 0 5px;padding:0 4px;color:var(--purple);font:500 9.5px/1.4 var(--mono);letter-spacing:.09em;text-transform:uppercase}
+.tutorial-group{display:flex;flex-direction:column}
+.tutorial-link{display:flex;gap:9px;align-items:flex-start;padding:6px 8px;border-left:2px solid transparent;text-decoration:none;color:var(--nav-ink);font-size:11px;line-height:1.45}
+.tutorial-link:hover{color:var(--purple);background:var(--hover)}
+.tutorial-link.current{border-left-color:var(--purple);background:var(--hover);color:var(--purple);font-weight:600}
+.tutorial-link span{flex:0 0 19px;color:var(--muted-2);font:10px var(--mono);padding-top:1px}
+.tutorial-link em{font-style:normal;min-width:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.tutorial-nav .directory-link{margin-top:14px;border-top:1px solid var(--line)}
+@media(max-width:760px){
+  .tutorial-nav .course-body{padding:0 14px 12px}
+  .tutorial-group-label{margin:11px 0 4px;font-size:9px}
+  .tutorial-link{padding:8px 6px;font-size:12px}
+}

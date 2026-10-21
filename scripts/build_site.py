@@ -51,6 +51,7 @@ ASSET_VERSION = asset_version()
 LOCALES = {
     "zh-cn": {
         "pager_prev": "上一课", "pager_next": "下一课",
+        "tpager_prev": "上一篇", "tpager_next": "下一篇", "tpager_end": "已到最后一篇",
         "pager_all": "全部课程", "pager_end": "完成全部 32 课",
         "html": "zh-CN", "name": "简体中文", "brand_sub": "实战课程",
         "nav_home": "课程首页", "nav_directory": "32 课目录", "nav_extensions": "拓展课程",
@@ -96,6 +97,9 @@ LOCALES = {
         "nav_about": "COBOL 是什么", "nav_reference": "速查手册",
         "nav_knowledge": "知识库",
         "nav_editor": "编辑器教程",
+        "nav_editor_expand": "展开教程目录",
+        "nav_editor_collapse": "收起教程目录",
+        "tutorial_index_link": "教程目录",
         "kn_eyebrow": "KNOWLEDGE BASE",
         "kn_title": "COBOL 知识库",
         "kn_lead": "除了 32 课主课程，这里还有四份资料：语言背景、发展史话、可随时查的速查手册，以及术语表。都不需要按顺序读。",
@@ -170,6 +174,7 @@ LOCALES = {
     },
     "en": {
         "pager_prev": "Previous lesson", "pager_next": "Next lesson",
+        "tpager_prev": "Previous guide", "tpager_next": "Next guide", "tpager_end": "Last guide",
         "pager_all": "All lessons", "pager_end": "You have reached the last lesson",
         "html": "en", "name": "English", "brand_sub": "Practical Course",
         "nav_home": "Home", "nav_directory": "32 lessons", "nav_extensions": "Extensions",
@@ -215,6 +220,9 @@ LOCALES = {
         "nav_about": "What is COBOL", "nav_reference": "Reference",
         "nav_knowledge": "Knowledge",
         "nav_editor": "Editor guide",
+        "nav_editor_expand": "Expand tutorial list",
+        "nav_editor_collapse": "Collapse tutorial list",
+        "tutorial_index_link": "All tutorials",
         "kn_eyebrow": "KNOWLEDGE BASE",
         "kn_title": "COBOL knowledge base",
         "kn_lead": "Beyond the 32-lesson course there are four references: what the language is, how it came to be, a lookup sheet, and a glossary. None of them needs to be read in order.",
@@ -289,6 +297,7 @@ LOCALES = {
     },
     "ja": {
         "pager_prev": "前のレッスン", "pager_next": "次のレッスン",
+        "tpager_prev": "前のチュートリアル", "tpager_next": "次のチュートリアル", "tpager_end": "最後のチュートリアルです",
         "pager_all": "全レッスン", "pager_end": "最後のレッスンです",
         "html": "ja", "name": "日本語", "brand_sub": "実践コース",
         "nav_home": "ホーム", "nav_directory": "全32レッスン", "nav_extensions": "発展教材",
@@ -334,6 +343,9 @@ LOCALES = {
         "nav_about": "COBOL とは", "nav_reference": "リファレンス",
         "nav_knowledge": "ナレッジ",
         "nav_editor": "エディター教程",
+        "nav_editor_expand": "チュートリアル一覧を展開",
+        "nav_editor_collapse": "チュートリアル一覧を折りたたむ",
+        "tutorial_index_link": "チュートリアル目次",
         "kn_eyebrow": "KNOWLEDGE BASE",
         "kn_title": "COBOL ナレッジベース",
         "kn_lead": "32 課のコースとは別に 4 つの資料を用意しています。言語の概要、成り立ちの史話、引けるリファレンス、用語集です。順番に読む必要はありません。",
@@ -748,6 +760,110 @@ def lesson_workspace(locale: str, source: Path, page: Path) -> str:
     return f'<div class="lesson-workspace"><nav class="lesson-tabs" role="tablist">{tabs}</nav>{"".join(panels)}</div>'
 
 
+TUTORIAL_DIR = "extensions/neovim-tooling/tutorials"
+TUTORIAL_INDEX = "extensions/neovim-tooling/README.md"
+
+
+@functools.lru_cache(maxsize=None)
+def tutorial_items(locale: str) -> tuple[tuple[str, str, str], ...]:
+    """(slug, short label, group label) for the editor guides, in reading order.
+
+    Group names come from the index page so the sidebar grouping cannot drift
+    from the index. Falls back to no group when a locale has no index.
+    """
+    index = translated(ROOT / TUTORIAL_INDEX, locale) or (ROOT / TUTORIAL_INDEX)
+    groups: dict[str, str] = {}
+    current = ""
+    for line in index.read_text(encoding="utf-8").splitlines():
+        head = re.match(r"^###\s+(.+?)\s*$", line)
+        if head:
+            current = head.group(1)
+            continue
+        link = re.match(r"^\|\s*\[(\d{2})\]\(tutorials/([^)]+)\.md\)", line)
+        if link and current and link.group(2) not in groups:
+            # The index also lists a few tutorials twice (e.g. in the quick
+            # routes); keep the first category each tutorial appears under.
+            groups[link.group(2)] = current
+    items = []
+    for path in sorted((ROOT / TUTORIAL_DIR).glob("*.md")):
+        slug = path.stem
+        title = title_of(path, locale)
+        short = re.sub(r"^第?\s*\d+\s*[课課]\s*[：:]\s*", "", title).strip() or slug
+        items.append((slug, short, groups.get(slug, "")))
+    # Order the sidebar by category in index order, then by tutorial number, so
+    # the groups never interleave (the index tables also list re-runs of a
+    # tutorial under a quick-route heading).
+    def group_rank(group: str) -> tuple[int, int]:
+        # Category headings are numbered in the index ("2. 検索とジャンプ"); sort
+        # on that number so the sidebar follows the index order exactly.
+        match = re.match(r"^\s*(\d+)\.", group)
+        return (int(match.group(1)) if match else 999, len(group))
+
+    items.sort(key=lambda item: (group_rank(item[2]), item[0]))
+    return tuple(items)
+
+
+def tutorial_nav(locale: str, slug: str) -> str:
+    """Grouped tutorial list for the sidebar, with the current item marked."""
+    labels = LOCALES[locale]
+    items = tutorial_items(locale)
+    blocks: list[str] = []
+    last_group = None
+    rows: list[str] = []
+    for item_slug, short, group in items:
+        if group != last_group:
+            if rows:
+                blocks.append(f'<div class="tutorial-group">{"".join(rows)}</div>')
+                rows = []
+            if group:
+                blocks.append(f'<p class="tutorial-group-label">{html.escape(group)}</p>')
+            last_group = group
+        current = " current" if item_slug == slug else ""
+        num = item_slug[:2]
+        rows.append(
+            f'<a class="tutorial-link{current}" href="{html.escape(item_slug)}.html">'
+            f'<span>{num}</span><em>{html.escape(short)}</em></a>')
+    if rows:
+        blocks.append(f'<div class="tutorial-group">{"".join(rows)}</div>')
+    return (
+        f'<div class="nav-heading">{labels["nav_editor"]} <span>{len(items)}</span></div>'
+        f'{"".join(blocks)}'
+        f'<a class="directory-link" href="../README.html">{labels["tutorial_index_link"]}</a>'
+    )
+
+
+def tutorial_pager(locale: str, slug: str) -> str:
+    """Previous / next navigation between editor guides."""
+    labels = LOCALES[locale]
+    items = tutorial_items(locale)
+    slugs = [item[0] for item in items]
+    if slug not in slugs:
+        return ""
+    index = slugs.index(slug)
+    parts = []
+    if index > 0:
+        prev_slug, prev_short, _ = items[index - 1]
+        parts.append(
+            f'<a class="pager-link pager-prev" href="{html.escape(prev_slug)}.html">'
+            f'<span class="pager-dir">← {labels["tpager_prev"]}</span>'
+            f'<span class="pager-title">{html.escape(prev_short)}</span></a>')
+    else:
+        parts.append('<span class="pager-link pager-empty"></span>')
+    if index + 1 < len(items):
+        next_slug, next_short, _ = items[index + 1]
+        parts.append(
+            f'<a class="pager-link pager-next" href="{html.escape(next_slug)}.html">'
+            f'<span class="pager-dir">{labels["tpager_next"]} →</span>'
+            f'<span class="pager-title">{html.escape(next_short)}</span></a>')
+    else:
+        parts.append(
+            f'<a class="pager-link pager-next pager-finish" href="../README.html">'
+            f'<span class="pager-dir">{labels["tpager_end"]}</span>'
+            f'<span class="pager-title">{labels["tutorial_index_link"]} →</span></a>')
+    return (f'<nav class="lesson-pager" aria-label="{labels["nav_editor"]}">'
+            f'{"".join(parts)}</nav>')
+
+
 def lesson_pager(locale: str, source: Path, page: Path) -> str:
     """Previous / next links at the end of a lesson, plus a way back to the index."""
     labels = LOCALES[locale]
@@ -780,7 +896,8 @@ def lesson_pager(locale: str, source: Path, page: Path) -> str:
             f'{"".join(parts)}</nav>')
 
 
-def shell(locale: str, title: str, body: str, page: Path, home: bool = False) -> str:
+def shell(locale: str, title: str, body: str, page: Path, home: bool = False,
+          tutorial_slug: str | None = None) -> str:
     labels = LOCALES[locale]
     home_href = site_href(Path(locale) / "index.html", locale, page)
     directory = site_href(Path(locale) / "lessons/DIRECTORY.html", locale, page)
@@ -801,6 +918,21 @@ def shell(locale: str, title: str, body: str, page: Path, home: bool = False) ->
     )
     if home:
         main = f'<main class="home">{body}</main>'
+    elif tutorial_slug is not None:
+        main = (
+            f'<div class="reading-layout"><aside class="course-nav tutorial-nav">'
+            f'<button class="course-toggle" type="button" aria-expanded="true" aria-label="{labels["nav_editor_collapse"]}" '
+            f'title="{labels["nav_editor_collapse"]}" aria-controls="course-body" '
+            f'data-expand-label="{labels["nav_editor_expand"]}" data-collapse-label="{labels["nav_editor_collapse"]}" '
+            f'data-open-label="{labels["nav_editor"]}" data-closed-label="{labels["nav_editor_expand"]}">'
+            f'<span class="course-toggle-label">{labels["nav_editor"]}</span>'
+            f'<b class="course-count">{len(tutorial_items(locale))}</b>'
+            f'<span class="course-toggle-icon" aria-hidden="true">‹</span></button>'
+            f'<div class="course-body" id="course-body">{tutorial_nav(locale, tutorial_slug)}</div></aside>'
+            f'<main class="article"><div class="article-top"><a href="{home_href}">{labels["nav_home"]}</a>'
+            f'<span>/</span><a href="{editor}">{labels["nav_editor"]}</a><span>/</span>'
+            f'<span>{html.escape(title)}</span></div><article>{body}</article></main></div>'
+        )
     else:
         main = (
             f'<div class="reading-layout"><aside class="course-nav">'
@@ -1230,7 +1362,18 @@ def build_locale(locale: str) -> int:
             body = render_markdown(source, locale)
             if locale != "zh-cn" and translated(source, locale) is None:
                 body = pending(locale, source, rel) + body
-        dest.write_text(shell(locale, title_of(source, locale), body, rel), encoding="utf-8")
+        slug = None
+        try:
+            parts = source.relative_to(ROOT).parts
+        except ValueError:
+            parts = ()
+        if len(parts) == 4 and parts[:3] == ("extensions", "neovim-tooling", "tutorials") \
+                and source.name != "README.md":
+            slug = source.stem
+        if slug is not None:
+            body = body + tutorial_pager(locale, slug)
+        dest.write_text(shell(locale, title_of(source, locale), body, rel, tutorial_slug=slug),
+                        encoding="utf-8")
         pages += 1
     for source in resource_sources():
         rel = source.relative_to(ROOT)

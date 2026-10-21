@@ -34,7 +34,7 @@ toml tsx typescript vim vimdoc xml yaml
 | 構文ハイライト | 一部利用可能（`cobol.nvim` の正規表現ハイライトによる） |
 | 折りたたみ | **利用可能**（`cobol.nvim` が Division/Section/Paragraph の折りたたみを独自実装） |
 | Treesitter テキストオブジェクト | **利用不可**（mini.ai の設定で意図的に空を返す） |
-| Flash の `S` キー | 利用可能。現在はノード選択ではなく通常の文字ジャンプ |
+| `S`（flash のノード移動） | **利用不可** |
 
 `cobol.nvim` の設定には次のように記載されています。
 
@@ -56,7 +56,7 @@ cd ~/development/cobol.nvim/tree-sitter-cobol
 make
 ```
 
-インストールすると Treesitter 利用側からパーサーを使えます。Flash の `S` は通常の文字ジャンプで、mini.ai の一部 Treesitter オブジェクトは COBOL で引き続き無効です。
+インストールすると `S`（flash）と mini.ai の `o`/`f`/`c` が使えるようになります。**ただし、現在の設定には含まれていません**。デフォルトではインストールされません。
 
 ## 3. 折りたたみ（nvim-ufo）
 
@@ -127,7 +127,7 @@ n-ufo のカスタム要約は次のような形式です。
 ### 使えない機能
 
 - Treesitter テキストオブジェクト（`iao`、`iaf`、`iac`）
-- Flash の Treesitter ノード選択（現在の `S` マッピングでは使用しません）
+- flash の `S` によるノード移動
 - `%` による構文上の対応箇所への移動（`cobol.nvim` 独自の `%` 実装があり、`IF`/`END-IF` 間を移動）
 
 **つまり、COBOL の構造関連機能を提供するのは Treesitter ではなく `cobol.nvim` です。** これを理解しておくと、「ドキュメントでは使えるのに、なぜ自分の環境では動かないのか」という混乱を避けられます。
@@ -181,9 +181,9 @@ nvim lessons/26_error-handling/lesson.cob
 
 ## 7. よくある問題
 
-### COBOL での Flash キー
+### COBOL で `S` が反応しない
 
-`S` と `s` はどちらも Flash の文字ジャンプを実行します。`S` は Treesitter ノードを選択しません。
+flash の `S` には Treesitter parser が必要です。COBOL にはインストールされていないため動作しません。構造上の対応箇所へ移動するには `cobol.nvim` の `%` を使うか、`cobol.nvim` の Aerial アウトラインを使ってください。
 
 ### 構文ハイライトが正しくない
 
@@ -228,5 +228,5 @@ COBOL buffer ではプラグインが設定する `expr` になっているは�
 ## 9. 対象範囲
 
 - `ensure_installed` リスト（`lua/plugins/treesitter.lua`）に **`cobol` は含まれていません**。COBOL の折りたたみとハイライトは Treesitter ではなく `cobol.nvim` が提供します。
-- mini.ai の Treesitter テキストオブジェクトは COBOL では引き続き空を返します。Flash の `S` は通常の文字ジャンプで、Treesitter ノードには依存しません。
+- COBOL で Treesitter テキストオブジェクトと `S` による移動を使うには、`cobol.nvim` リポジトリにある `tree-sitter-cobol` を手動でコンパイルし、mini.ai の設定にある filetype の除外を解除する必要があります。
 - この記事では parser を手動でコンパイルする詳しい手順は扱いません。これはプラグイン開発の範囲です。`cobol.nvim` リポジトリの `scripts/build_parser.sh` を参照してください。

@@ -34,7 +34,7 @@ toml tsx typescript vim vimdoc xml yaml
 | Syntax highlighting | Partial (using regex highlighting from `cobol.nvim`) |
 | Folding | **Available** (`cobol.nvim` implements Division/Section/Paragraph folding itself) |
 | Treesitter text objects | **Unavailable** (`mini.ai` configuration explicitly returns empty) |
-| Flash `S` key | Available; currently performs a regular character jump, not node selection |
+| `S` (flash node jump) | **Unavailable** |
 
 `cobol.nvim` documents this in its configuration:
 
@@ -56,7 +56,7 @@ cd ~/development/cobol.nvim/tree-sitter-cobol
 make
 ```
 
-After installation, the parser is available to Treesitter consumers; Flash `S` currently performs a regular character jump, while some mini.ai Treesitter objects remain guarded for COBOL.
+After installation, `S` (flash) and `o`/`f`/`c` from mini.ai will work. **However, this is not part of the current configuration**—it is not installed by default.
 
 ## 3. Folding (nvim-ufo)
 
@@ -127,7 +127,7 @@ Parsers in the `ensure_installed` list are installed automatically; install othe
 ### What Does Not Work
 
 - Treesitter text objects (`iao`, `iaf`, `iac`)
-- Flash Treesitter node selection (the current `S` mapping uses regular character jump instead)
+- The `S` node jump in flash
 - Syntax matching with `%` (`cobol.nvim` has its own `%` implementation for jumping between `IF`/`END-IF`)
 
 **COBOL's structural features come from `cobol.nvim`, not Treesitter.** Understanding this avoids a lot of confusion about “why it doesn't work for me when the documentation says it should.”
@@ -181,9 +181,9 @@ Then use `:InspectTree` to view the syntax tree for a Python file.
 
 ## 7. Pitfalls
 
-### Flash Keys in COBOL
+### `S` Does Nothing in COBOL
 
-Both `S` and `s` invoke Flash character jump. `S` no longer selects Treesitter nodes, so it will not behave like a large structural selection.
+flash's `S` requires a Treesitter parser. COBOL does not have one installed, so it has no effect. Use `cobol.nvim`'s `%` to jump between matching structural elements, or use `cobol.nvim`'s Aerial outline.
 
 ### Syntax Highlighting Is Wrong
 
@@ -227,6 +227,6 @@ A newly installed parser takes effect after you reopen the buffer. Alternatively
 
 ## 9. Boundaries
 
-- The `ensure_installed` list (`lua/plugins/treesitter.lua`) does not include `cobol`; the local parser is installed by the `cobol.nvim` build script. COBOL folding and most highlighting come from `cobol.nvim`.
-- mini.ai Treesitter text objects still return no objects for COBOL; Flash `S` is a regular character jump and does not rely on that parser.
+- The `ensure_installed` list (`lua/plugins/treesitter.lua`) **does not include `cobol`**. COBOL folding and highlighting come from `cobol.nvim`, not Treesitter.
+- To use Treesitter text objects and `S` navigation in COBOL, you must manually compile `tree-sitter-cobol` from the `cobol.nvim` repository and remove the filetype exclusion from the mini.ai configuration.
 - This tutorial does not cover the full process of compiling the parser manually; that falls under plugin development. See `scripts/build_parser.sh` in the `cobol.nvim` repository.

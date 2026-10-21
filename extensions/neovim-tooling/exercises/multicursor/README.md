@@ -9,10 +9,10 @@ nvim 01-rename-field.cob
 
 | 文件 | 练习目标 | 关键按键 |
 |---|---|---|
-| `01-rename-field.cob` | `WS-CUSTOMER-*` → `WS-CLIENT-*`（8 处） | `<leader>A` + `ciW` |
+| `01-rename-field.cob` | `WS-CUSTOMER-*` → `WS-CLIENT-*`（8 处） | `Ctrl+Shift+n` + `c` |
 | `02-unify-pic.cob` | 四个不同长度的 `PIC` 统一为 `PIC 9(9).` | `gaip` + `fP` + `C` |
 | `03-split-selection.cob` | 四个 `VALUE "A".."D"` 改成 `"N"` | `gaip` + `ci"` |
-| `04-sequence-fill.cob` | 六个 `"000"` 变成 `"001".."006"` | `gaip` + `g<C-a>` |
+| `04-sequence-fill.cob` | 六个 `"000"` 变成 `"001".."006"` | `Ctrl+Shift+n` 后逐项修改 |
 | `05-fixed-format-batch.cob` | 状态码与 `PIC` 两步批量改 | `ci"` 与 `C` 分开用 |
 
 改完用语法检查确认没有改坏：

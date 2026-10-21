@@ -2,7 +2,7 @@
 
 Renaming COBOL fields, unifying `PIC` clauses, or swapping status codes line by line is slow and easy to get wrong. `multicursor.nvim` puts a cursor on every position you need so a single edit applies to all of them.
 
-This page uses the **official configuration**: no customisation, no patched keymaps. Every key and action below comes from the plugin author's recommended setup.
+This page follows the actual keymaps in the local `lua/plugins/multicursor.lua`: VS Code-style `Ctrl-n`, `Ctrl+Shift+n` and `Ctrl-d` are added on top of the plugin, and the line-wise and skip mappings are kept.
 
 ---
 
@@ -22,7 +22,7 @@ Four fields, four nearly identical lines. When you need to:
 - rename the `WS-ACCT-*` prefix to `WS-ACCOUNT-*` (4 declarations plus 3 references);
 - widen every `PIC X(...)` to `PIC X(100)`;
 - change `VALUE "A"` to `VALUE "P"` on three records;
-- fill six placeholder lines with sequence numbers 001–006;
+- fill six placeholder lines with different sequence numbers;
 
 the single-cursor approach is "change one, `n` to the next, change again". The multi-cursor approach is "place cursors everywhere, change once".
 
@@ -30,97 +30,28 @@ the single-cursor approach is "change one, `n` to the next, change again". The m
 
 ---
 
-## 2. Installation and Configuration
+## 2. Local Configuration and Keymaps
 
-The official recommended setup (`lazy.nvim`):
+The local configuration (`lua/plugins/multicursor.lua`) adds VS Code-style keys to the plugin and loads it eagerly so `Ctrl+Shift+n` works on the first press:
 
-```lua
-{
-  "jake-stewart/multicursor.nvim",
-  branch = "1.0",
-  config = function()
-    local mc = require("multicursor-nvim")
-    mc.setup()
-
-    local set = vim.keymap.set
-
-    -- Add a cursor above/below, or skip a line
-    set({"n", "x"}, "<up>", function() mc.lineAddCursor(-1) end)
-    set({"n", "x"}, "<down>", function() mc.lineAddCursor(1) end)
-    set({"n", "x"}, "<leader><up>", function() mc.lineSkipCursor(-1) end)
-    set({"n", "x"}, "<leader><down>", function() mc.lineSkipCursor(1) end)
-
-    -- Add a cursor on the next/previous match, or skip it
-    set({"n", "x"}, "<leader>n", function() mc.matchAddCursor(1) end)
-    set({"n", "x"}, "<leader>s", function() mc.matchSkipCursor(1) end)
-    set({"n", "x"}, "<leader>N", function() mc.matchAddCursor(-1) end)
-    set({"n", "x"}, "<leader>S", function() mc.matchSkipCursor(-1) end)
-
-    -- Mouse: Ctrl + left click adds/removes, Ctrl + drag
-    set("n", "<c-leftmouse>", mc.handleMouse)
-    set("n", "<c-leftdrag>", mc.handleMouseDrag)
-    set("n", "<c-leftrelease>", mc.handleMouseRelease)
-
-    -- Temporarily disable/enable cursors
-    set({"n", "x"}, "<c-q>", mc.toggleCursor)
-
-    -- A layer that only applies while multiple cursors exist
-    mc.addKeymapLayer(function(layerSet)
-      layerSet({"n", "x"}, "<left>", mc.prevCursor)
-      layerSet({"n", "x"}, "<right>", mc.nextCursor)
-      layerSet({"n", "x"}, "<leader>x", mc.deleteCursor)
-      layerSet("n", "<esc>", function()
-        if not mc.cursorsEnabled() then
-          mc.enableCursors()
-        else
-          mc.clearCursors()
-        end
-      end)
-    end)
-
-    -- Cursor appearance
-    local hl = vim.api.nvim_set_hl
-    hl(0, "MultiCursorCursor", { reverse = true })
-    hl(0, "MultiCursorVisual", { link = "Visual" })
-    hl(0, "MultiCursorSign", { link = "SignColumn" })
-    hl(0, "MultiCursorMatchPreview", { link = "Search" })
-  end
-}
-```
-
-### Three extra actions used on this page
-
-The official example config is deliberately minimal. The three below come from the "Advanced Actions" section of the official documentation and are used throughout this page:
-
-```lua
--- After selecting lines, ga plus a motion adds one cursor per line:
--- gg vip gaip  → one cursor per line of the paragraph
-set({"n", "x"}, "ga", mc.addCursorOperator)
-
--- Match every occurrence of the word/selection under the cursor in the file
-set({"n", "x"}, "<leader>A", mc.matchAllAddCursors)
-
--- Treat all cursors as one sequence when incrementing
-set({"n", "x"}, "g<c-a>", mc.sequenceIncrement)
-set({"n", "x"}, "g<c-x>", mc.sequenceDecrement)
-```
-
-### The critical distinction: `n` versus `<leader>n`
-
-This trips people up constantly, so state it plainly:
-
-| Key | Effect | Use for |
+| Key | Mode | Action |
 |---|---|---|
-| `n` | Native vim search, next match | Ordinary movement |
-| `<leader>n` | **Add a cursor** at the next match | Multi-cursor |
-| `<leader>s` | Skip the next match, **no cursor** | Multi-cursor |
-| `<leader>A` | Add a cursor at **every** match in the file | Multi-cursor |
+| `Ctrl-n` | Normal / Visual | Add the next match for the word or selection |
+| `Ctrl+Shift+n` | Normal / Visual | Add cursors at all matches for the word or selection |
+| `Ctrl-d` | Normal / Visual | Skip the next match without adding a cursor |
+| `<up>` / `<down>` | Normal / Visual | Add a cursor above / below |
+| `<leader><up>` / `<leader><down>` | Normal / Visual | Skip a line, then add a cursor |
+| `ga` + motion | Normal / Visual | Add cursors by motion, for example `gaip` |
+| `<leader>a` | Normal | Align cursor columns |
+| `<leader>gv` | Normal | Restore the previous cursor set |
+| `<C-q>` | Normal / Visual | Pause or resume the other cursors |
+| `<Esc>` | With active cursors | Clear cursors; if paused, enable them first |
 
-`<leader>A` is the lazy option: put the cursor on `WS-ACCT`, press it once, and every `WS-ACCT` in the file has a cursor.
+The plugin's example configuration uses `<leader>n`, `<leader>s`, `<leader>N` and `<leader>S`; those are not the local match mappings. This guide uses the local keys in the table above.
 
 ---
 
-## 3. Five Actions That Cover 90% of Cases
+## 3. Five Common Actions
 
 ### Action 1: One cursor per line (`ga` + motion)
 
@@ -182,6 +113,7 @@ The four original `PIC` clauses had different lengths (`X(10)`, `X(20)`, `9(7)V9
 | `C` | **To end of line** | Replacing "everything from here on" |
 | `ci"` | Inside quotes | String literals |
 | `cc` | Whole line | Rewriting a whole line |
+| `c` | Current selection | Replacing matched text after `Ctrl+Shift+n` |
 
 ### Action 3: Replace whole identifiers (`ciW`)
 
@@ -206,7 +138,21 @@ before                                    after
 
 When `-` is not part of `iskeyword`, `ciw` only selects up to the hyphen. `ciW` uses whitespace boundaries and covers the whole run.
 
-### Action 4: Batch-replace quoted content (`ci"`)
+### Action 4: Select every match with `Ctrl+Shift+n`
+
+The first three actions use `gaip` to add a cursor per line. When the target is a repeated piece of text (for example `CUSTOMER`), match selection is more direct:
+
+```text
+Select CUSTOMER in Visual mode
+Ctrl+Shift+n    " every CUSTOMER in the file is selected
+c               " change all selections
+CLIENT
+<Esc>
+```
+
+To change only some occurrences, add them one at a time with `Ctrl-n` and skip unwanted matches with `Ctrl-d`.
+
+### Action 5: Batch-replace quoted content (`ci"`)
 
 Changing status codes, classification values, and fixed literals is the highest-frequency job:
 
@@ -229,28 +175,6 @@ before                            after ci" + N
 ```
 
 Four different values become the same value in one pass. **Because `ci"` is scoped to "inside the quotes", content length does not matter.**
-
-### Action 5: Sequential numbering (`g<C-a>`)
-
-For numbering records or generating test data:
-
-```text
-gg gaip      " one cursor per line
-f" l         " into the digits inside the quotes
-g<C-a>       " increment
-```
-
-Measured:
-
-```text
-before                                after g<C-a>
-01 WS-LINE-01 PIC X(40) VALUE "000".  →  VALUE "001".
-01 WS-LINE-02 PIC X(40) VALUE "000".  →  VALUE "002".
-01 WS-LINE-03 PIC X(40) VALUE "000".  →  VALUE "003".
-01 WS-LINE-04 PIC X(40) VALUE "000".  →  VALUE "004".
-```
-
-The difference from native `Ctrl-a`: `g<C-a>` (`mc.sequenceIncrement`) **treats every cursor as one continuous sequence**. Native `Ctrl-a` increments each independently, so all four become `001`; `g<C-a>` yields `001 002 003 004`.
 
 ---
 
@@ -277,7 +201,7 @@ It does not "turn off multi-cursor". It **freezes the other cursors so the main 
 
 ### `<Esc>` has two behaviours
 
-In the official config `<Esc>` is:
+In the local configuration `<Esc>` is:
 
 ```lua
 if not mc.cursorsEnabled() then
@@ -304,7 +228,7 @@ cd extensions/neovim-tooling/exercises/multicursor
 nvim 01-rename-field.cob
 ```
 
-Steps: cursor on any `WS-CUSTOMER` → `<leader>A` → `ciW` → type the new name → `<Esc>`.
+Steps: select `CUSTOMER` in Visual mode → `Ctrl+Shift+n` to select all matches → `c` → type `CLIENT` → `<Esc>`.
 
 **Accept:** all 8 occurrences changed, and `cobc -fsyntax-only 01-rename-field.cob` still passes.
 
@@ -326,16 +250,16 @@ Steps: `gg` → `gaip` → `f"` → `l` → `ci"` → `N` → `<Esc>`.
 
 **Accept:** all four lines read `VALUE "N".`
 
-### Exercise 4: Fill a sequence
+### Exercise 4: Skip a match you do not want to edit
 
-`04-sequence-fill.cob` — six `VALUE "000"` become `"001"` through `"006"`.
+Use `01-rename-field.cob` to practice Visual selection and skipping:
 
-Steps: `gg` → `gaip` → `f"` → `l` → `g<C-a>`.
+1. Put the cursor on the `C` in `CUSTOMER` and select `CUSTOMER` in Visual mode.
+2. Press `Ctrl-n` to add the next matching selection.
+3. Press `Ctrl-d` to skip a match you do not want to change.
+4. Press `c` on the remaining matches, type `CLIENT`, then press `<Esc>`.
 
-**Accept:** 001, 002, 003, 004, 005, 006 in order.
-
-**Contrast test:** try native `Ctrl-a` once and observe that everything becomes `001` — that is why `g<C-a>` exists.
-
+**Check**: only the selected `CUSTOMER` fragments become `CLIENT`; the skipped match stays unchanged.
 ### Exercise 5: Combined
 
 `05-fixed-format-batch.cob` — two separate passes:
@@ -369,17 +293,15 @@ cobc -fsyntax-only your-file.cob
 | Add cursor below | `<down>` | Line by line |
 | Add cursor above | `<up>` | Line by line |
 | Skip a line and add | `<leader><down>` | Skips the current line |
-| Add cursor at next match | `<leader>n` | Word or selection match |
-| Add cursor at previous match | `<leader>N` | Reverse direction |
-| Skip next match | `<leader>s` | No cursor added |
-| Add cursors at all matches | `<leader>A` | Whole file at once |
+| Add cursor at next match | `Ctrl-n` | Word or selection match |
+| Skip next match | `Ctrl-d` | No cursor added |
+| Add cursors at all matches | `Ctrl+Shift+n` | Whole file at once |
 | Add per motion | `ga` + motion | `gaip` = one per line |
 | Switch main cursor | `<left>` / `<right>` | Only with multiple cursors |
 | Delete current cursor | `<leader>x` | Only with multiple cursors |
 | Freeze/resume others | `<c-q>` | Main cursor moves alone |
 | Clear all cursors | `<Esc>` | In the normal state |
 | Mouse add cursor | `<c-leftmouse>` | Ctrl + left click |
-| Sequential numbers | `g<C-a>` / `g<C-x>` | All cursors as one sequence |
 
 ### Text-object choices
 
@@ -396,7 +318,7 @@ cobc -fsyntax-only your-file.cob
 
 ## 8. Official Documentation
 
-This page covers the common subset. For the full action list (`splitCursors`, `transposeCursors`, `alignCursors`, `operator`, diagnostic actions and more), see the bundled help:
+This page covers the common subset, with keys as configured locally. For the full action list (`splitCursors`, `transposeCursors`, `alignCursors`, `operator`, diagnostic actions and more), see the bundled help:
 
 ```vim
 :h multicursor
@@ -410,6 +332,6 @@ Repository: <https://github.com/jake-stewart/multicursor.nvim>
 
 ## 9. Limits
 
-- Every key on this page comes from the **official example configuration**, with no customisation. Your local setup may differ; check with `:map <leader>n`.
+- This page follows the current `lua/plugins/multicursor.lua`. Match keys are customized to `Ctrl-n`, `Ctrl+Shift+n` and `Ctrl-d`; the local setup also maps `ga`, `<leader>a` and `<leader>gv`.
 - The "measured" results come from real terminal sessions on Neovim 0.10+, not from inference. The cursor glyph (`│` versus `┃`) may vary slightly between versions.
 - Multi-cursor does not change COBOL semantics; it applies the same edit at several positions. **The `cobc` result remains the source of truth.**

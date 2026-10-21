@@ -1,6 +1,6 @@
       * 练习 4：把 6 个占位号 000 改造成连续序号 001-006.
-      * 任务：gaip 加光标到 6 行，光标停在 000 上，用 g<C-a> 一次递增。
-      * 说明：sequenceIncrement treats all cursors as one sequence.
+      * 任务：在 000 上按 Ctrl+Shift+n 全选匹配，再逐个改成不同序号（本机未映射 g<C-a>）。
+      * 说明：本机 multicursor 配置未绑定 sequenceIncrement。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. SEQFILL.
        DATA DIVISION.

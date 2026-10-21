@@ -1,8 +1,8 @@
       * 练习 5（综合）：把 3 条记录的状态码 "A" 改成 "P"，
       * 并把 PIC X(1) 改成 PIC X(2)。
       * 任务拆分：
-      *   1) 光标停在 "A" 上，<leader>A 全量匹配引号内取值，ci" 改成 "P"
-      *   2) 光标停在 PIC 上，<leader>A，再用 C 改到行尾
+      *   1) 光标停在 "A" 上，Ctrl+Shift+n 全量匹配，ci" 改成 "P"
+      *   2) 光标停在 PIC 上，Ctrl+Shift+n，再用 C 改到行尾
       * 注意：两步分开做，不要把引号内容和 PIC 混在一次操作里。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. FIXBAT.

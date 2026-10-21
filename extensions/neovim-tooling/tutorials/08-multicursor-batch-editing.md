@@ -2,7 +2,7 @@
 
 COBOL 改字段名、统一 `PIC`、批量换状态码这类活，一行一行改既慢又容易漏。`multicursor.nvim` 让你把光标同时放在多个位置，一次操作改完。
 
-本篇讲的是**官方配置**：不自定义、不魔改，所有按键和动作都来自插件作者的默认建议。本篇不引入 `cobol.nvim` 之外的依赖。
+本篇按本机 `lua/plugins/multicursor.lua` 的实际按键讲解：在插件基础上增加了 VS Code 风格的 `Ctrl-n`、`Ctrl+Shift+n`、`Ctrl-d`，并保留按行添加与跳过等映射。本篇不引入 `cobol.nvim` 之外的依赖。
 
 ---
 
@@ -22,7 +22,7 @@ COBOL 的数据声明天生重复：
 - 把 `WS-ACCT-*` 前缀改成 `WS-ACCOUNT-*`（4 处声明 + 3 处引用）；
 - 把所有 `PIC X(...)` 统一成 `PIC X(100)`；
 - 把三条记录的 `VALUE "A"` 改成 `VALUE "P"`；
-- 给 6 个占位行填上 001–006 的序号；
+- 给 6 个占位行分别填入不同序号；
 
 单光标做法是"改一处、`n` 找下一处、再改"。多光标做法是"把光标一次性放到所有位置，改一次"。
 
@@ -30,97 +30,28 @@ COBOL 的数据声明天生重复：
 
 ---
 
-## 2. 安装与配置
+## 2. 本机配置与按键
 
-官方推荐配置（`lazy.nvim`）：
+本机配置（`lua/plugins/multicursor.lua`）在插件默认行为上增加了 VS Code 风格键位，并使用 eager load 确保 `Ctrl+Shift+n` 首次按下也能生效：
 
-```lua
-{
-  "jake-stewart/multicursor.nvim",
-  branch = "1.0",
-  config = function()
-    local mc = require("multicursor-nvim")
-    mc.setup()
-
-    local set = vim.keymap.set
-
-    -- 上下加光标 / 跳过一行
-    set({"n", "x"}, "<up>", function() mc.lineAddCursor(-1) end)
-    set({"n", "x"}, "<down>", function() mc.lineAddCursor(1) end)
-    set({"n", "x"}, "<leader><up>", function() mc.lineSkipCursor(-1) end)
-    set({"n", "x"}, "<leader><down>", function() mc.lineSkipCursor(1) end)
-
-    -- 按词/选区匹配加光标，或跳过
-    set({"n", "x"}, "<leader>n", function() mc.matchAddCursor(1) end)
-    set({"n", "x"}, "<leader>s", function() mc.matchSkipCursor(1) end)
-    set({"n", "x"}, "<leader>N", function() mc.matchAddCursor(-1) end)
-    set({"n", "x"}, "<leader>S", function() mc.matchSkipCursor(-1) end)
-
-    -- 鼠标：Ctrl + 左键加/删光标，Ctrl + 拖动
-    set("n", "<c-leftmouse>", mc.handleMouse)
-    set("n", "<c-leftdrag>", mc.handleMouseDrag)
-    set("n", "<c-leftrelease>", mc.handleMouseRelease)
-
-    -- 临时禁用/启用光标
-    set({"n", "x"}, "<c-q>", mc.toggleCursor)
-
-    -- 只多光标时才生效的按键层
-    mc.addKeymapLayer(function(layerSet)
-      layerSet({"n", "x"}, "<left>", mc.prevCursor)
-      layerSet({"n", "x"}, "<right>", mc.nextCursor)
-      layerSet({"n", "x"}, "<leader>x", mc.deleteCursor)
-      layerSet("n", "<esc>", function()
-        if not mc.cursorsEnabled() then
-          mc.enableCursors()
-        else
-          mc.clearCursors()
-        end
-      end)
-    end)
-
-    -- 光标外观
-    local hl = vim.api.nvim_set_hl
-    hl(0, "MultiCursorCursor", { reverse = true })
-    hl(0, "MultiCursorVisual", { link = "Visual" })
-    hl(0, "MultiCursorSign", { link = "SignColumn" })
-    hl(0, "MultiCursorMatchPreview", { link = "Search" })
-  end
-}
-```
-
-### 本篇额外用到的三个动作
-
-官方示例配置只给最小集。下面三个是官方文档"Advanced Actions"一节的内容，本篇会用到，建议一起加上：
-
-```lua
--- 选中几行后，ga 加一个 motion 就能给每一行加光标：
--- gg vip gaip  → 段落每一行一个光标
-set({"n", "x"}, "ga", mc.addCursorOperator)
-
--- 全文件匹配光标下的词/选区
-set({"n", "x"}, "<leader>A", mc.matchAllAddCursors)
-
--- 连续序号：把所有光标的数字当成一条序列递增
-set({"n", "x"}, "g<c-a>", mc.sequenceIncrement)
-set({"n", "x"}, "g<c-x>", mc.sequenceDecrement)
-```
-
-### 关键区分：`n` 与 `<leader>n`
-
-这里有个必须讲清的地方，否则会一直用错：
-
-| 按键 | 作用 | 用于 |
+| 按键 | 模式 | 操作 |
 |---|---|---|
-| `n` | 原生 vim 搜索下一个 | 普通跳转 |
-| `<leader>n` | **加一个光标**到下一个匹配 | 多光标 |
-| `<leader>s` | 跳过下一个匹配，**不加**光标 | 多光标 |
-| `<leader>A` | 一次给**全文件**所有匹配加光标 | 多光标 |
+| `Ctrl-n` | Normal / Visual | 在当前词或选择上添加下一个匹配光标 |
+| `Ctrl+Shift+n` | Normal / Visual | 为当前词或选择添加所有匹配光标 |
+| `Ctrl-d` | Normal / Visual | 跳过下一个匹配，不添加光标 |
+| `<up>` / `<down>` | Normal / Visual | 向上／向下添加光标 |
+| `<leader><up>` / `<leader><down>` | Normal / Visual | 跳过一行再添加光标 |
+| `ga` + motion | Normal / Visual | 按 motion 添加光标，例如 `gaip` |
+| `<leader>a` | Normal | 对齐光标列 |
+| `<leader>gv` | Normal | 恢复上一次光标集合 |
+| `<C-q>` | Normal / Visual | 暂停或恢复其它光标 |
+| `<Esc>` | 有活动光标时 | 清除光标；若光标被暂停则先恢复 |
 
-`<leader>A` 是最省事的：光标停在 `WS-ACCT` 上按一次，全文件所有 `WS-ACCT` 都有光标了。
+插件示例配置中的 `<leader>n`、`<leader>s`、`<leader>N`、`<leader>S` 不是本机的匹配快捷键；本教程统一使用上表的本机按键。
 
 ---
 
-## 3. 五个动作，覆盖 90% 场景
+## 3. 五个常用动作
 
 ### 动作一：逐行加光标（`ga` + motion）
 
@@ -182,6 +113,7 @@ PIC 9(9).      " 输入新内容
 | `C` | **到行尾** | 替换"从这里开始全部" |
 | `ci"` | 引号内内容 | 替换字符串字面量 |
 | `cc` | 整行 | 整行重写 |
+| `c` | 当前选区 | 配合 `Ctrl+Shift+n` 批量替换匹配文本 |
 
 ### 动作三：整行替换标识符（`ciW`）
 
@@ -206,7 +138,21 @@ before                                    after
 
 注意 COBOL 标识符里的 `-` 不是 `iskeyword` 的一部分时，`ciw` 只选到连字符。`ciW` 用空白边界，才能覆盖整串。
 
-### 动作四：引号内容批量替换（`ci"`）
+### 动作四：用 `Ctrl+Shift+n` 一次选全部匹配
+
+前面三个动作都先用 `gaip` 逐行加光标。若目标是一段重复文本（例如 `CUSTOMER`），用匹配选择更直接：
+
+```text
+在 CUSTOMER 上 Visual 选中 CUSTOMER
+Ctrl+Shift+n    " 全文件所有 CUSTOMER 都选中
+c               " 改掉所有选中
+CLIENT
+<Esc>
+```
+
+只想改其中几处时，用 `Ctrl-n` 逐个加入，用 `Ctrl-d` 跳过不想改的匹配。
+
+### 动作五：引号内容批量替换（`ci"`）
 
 改状态码、改分类值、改固定字面量，这是最高频的一类活：
 
@@ -229,28 +175,6 @@ before                          after ci" + N
 ```
 
 四个不同的值 `"A" "B" "C" "D"` 一次变成同一个值。**因为 `ci"` 的作用范围是"引号内"，与内容长度无关。**
-
-### 动作五：连续序号（`g<C-a>`）
-
-给多条记录编号、生成测试数据时用：
-
-```text
-gg gaip      " 每行一个光标
-f" l         " 进到引号内数字
-g<C-a>       " 递增
-```
-
-实测：
-
-```text
-before                          after g<C-a>
-01 WS-LINE-01 PIC X(40) VALUE "000".  →  VALUE "001".
-01 WS-LINE-02 PIC X(40) VALUE "000".  →  VALUE "002".
-01 WS-LINE-03 PIC X(40) VALUE "000".  →  VALUE "003".
-01 WS-LINE-04 PIC X(40) VALUE "000".  →  VALUE "004".
-```
-
-`g<C-a>`（`mc.sequenceIncrement`）和原生 `Ctrl-a` 的区别：**把所有光标的数字当成一条连续序列**。原生 `Ctrl-a` 是每个数字各加 1，结果全是 `001`；`g<C-a>` 得到 `001 002 003 004`。
 
 ---
 
@@ -277,7 +201,7 @@ before                          after g<C-a>
 
 ### `<Esc>` 的两种行为
 
-官方配置里 `<Esc>` 是：
+本机配置里 `<Esc>` 是：
 
 ```lua
 if not mc.cursorsEnabled() then
@@ -304,7 +228,7 @@ cd extensions/neovim-tooling/exercises/multicursor
 nvim 01-rename-field.cob
 ```
 
-步骤：光标停在某个 `WS-CUSTOMER` 上 → `<leader>A` → `ciW` → 输入新名 → `<Esc>`。
+步骤：Visual 选中 `CUSTOMER` → `Ctrl+Shift+n` 选择全部匹配 → `c` → 输入 `CLIENT` → `<Esc>`。
 
 **验收**：8 处全部改变，`cobc -fsyntax-only 01-rename-field.cob` 仍通过。
 
@@ -326,16 +250,16 @@ nvim 01-rename-field.cob
 
 **验收**：四行都是 `VALUE "N".`
 
-### 练习 4：填连续序号
+### 练习 4：跳过不需要修改的匹配
 
-`04-sequence-fill.cob` — 六个 `VALUE "000"` 变成 `"001"` 到 `"006"`。
+`01-rename-field.cob` 中使用 Visual 选择和跳过操作：
 
-步骤：`gg` → `gaip` → `f"` → `l` → `g<C-a>`。
+1. 在 `WS-CUSTOMER` 的 `C` 上进入 Visual 模式，选中 `CUSTOMER`。
+2. 按 `Ctrl-n` 加入下一个相同匹配。
+3. 对不想改的匹配按 `Ctrl-d` 跳过。
+4. 对其余匹配按 `c` 输入 `CLIENT`，再按 `<Esc>`。
 
-**验收**：依次为 001、002、003、004、005、006。
-
-**对比实验**：用原生 `Ctrl-a` 试一次，会发现全是 `001`——这就是 `g<C-a>` 存在的理由。
-
+**验收**：只有选中的 `CUSTOMER` 片段改为 `CLIENT`，被跳过的匹配不变。
 ### 练习 5：综合
 
 `05-fixed-format-batch.cob` — 两步分开做：
@@ -369,17 +293,15 @@ cobc -fsyntax-only 你的文件.cob
 | 下面加光标 | `<down>` | 逐行向下 |
 | 上面加光标 | `<up>` | 逐行向上 |
 | 跳一行再加 | `<leader><down>` | 跳过当前行 |
-| 下一个匹配加光标 | `<leader>n` | 按词/选区匹配 |
-| 上一个匹配加光标 | `<leader>N` | 反向 |
-| 跳过下一个匹配 | `<leader>s` | 不加光标 |
-| 全文件匹配加光标 | `<leader>A` | 一次到底 |
+| 下一个匹配加光标 | `Ctrl-n` | 按词/选区匹配 |
+| 跳过下一个匹配 | `Ctrl-d` | 不加光标 |
+| 全文件匹配加光标 | `Ctrl+Shift+n` | 一次到底 |
 | 按 motion 逐行加 | `ga` + motion | `gaip` = 每行 |
 | 切换主光标 | `<left>` / `<right>` | 只在多光标时生效 |
 | 删掉当前光标 | `<leader>x` | 只在多光标时生效 |
 | 冻结/恢复其他光标 | `<c-q>` | 主光标可单独移动 |
 | 清除全部光标 | `<Esc>` | 正常状态下 |
 | 鼠标加光标 | `<c-leftmouse>` | Ctrl + 左键 |
-| 连续序号 | `g<C-a>` / `g<C-x>` | 所有光标算一条序列 |
 
 ### 文本对象选择
 
@@ -396,7 +318,7 @@ cobc -fsyntax-only 你的文件.cob
 
 ## 8. 官方文档
 
-本篇只覆盖常用部分。完整动作列表（`splitCursors`、`transposeCursors`、`alignCursors`、`operator`、诊断相关等）见插件自带帮助：
+本篇只覆盖常用部分，按键以本机配置为准。完整动作列表（`splitCursors`、`transposeCursors`、`alignCursors`、`operator`、诊断相关等）见插件自带帮助：
 
 ```vim
 :h multicursor
@@ -410,6 +332,6 @@ cobc -fsyntax-only 你的文件.cob
 
 ## 9. 边界
 
-- 本篇的按键全部来自**官方示例配置**，没有自定义。你的本地配置可能不同，以 `:map <leader>n` 等实际查询为准。
+- 本篇按键依据当前 `lua/plugins/multicursor.lua`。匹配键已自定义为 `Ctrl-n`、`Ctrl+Shift+n`、`Ctrl-d`；本机另有 `ga`、`<leader>a`、`<leader>gv` 映射。
 - 文中"实测结果"来自 Neovim 0.10+ 真实终端操作，不是推测。不同版本的光标渲染符号（`│` / `┃`）可能略有差异。
 - 多光标不改变 COBOL 的语义，它只是让同样的编辑动作作用到多个位置。**改完仍以 `cobc` 的编译结果为准。**

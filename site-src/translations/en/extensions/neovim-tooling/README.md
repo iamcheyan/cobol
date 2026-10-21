@@ -39,7 +39,7 @@ The 34 current guides are ordered by number across 01–37 (guides 18, 36 and 37
 
 | # | Topic | What you learn |
 |---|---|---|
-| [08](tutorials/08-multicursor-batch-editing.md) | Multi-cursor batch editing | `gaip`, `ciW`, `C`, `ci"`, `g<C-a>` |
+| [08](tutorials/08-multicursor-batch-editing.md) | Multi-cursor batch editing | `Ctrl-n`, `Ctrl+Shift+n`, `gaip`, `C`, `ci"` |
 | [09](tutorials/09-snacks-picker.md) | File and content search (snacks picker) | `ff`/`fg`/`fw`, picker internals, quickfix hand-off |
 | [10](tutorials/10-flash-jump.md) | On-screen jumping (flash) | `s`/`S`, combining with operators |
 | [11](tutorials/11-grug-far.md) | Cross-file search and replace (grug-far) | `<leader>sr`, match-count safety check, staged replacement |

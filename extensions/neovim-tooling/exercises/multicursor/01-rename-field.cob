@@ -1,6 +1,6 @@
       * 练习 1：把 WS-CUSTOMER-* 全部改名为 WS-CLIENT-*
       * 任务：用多光标一次改完 4 行，不要逐行手改。
-      * 提示：光标停在 CUSTOMER 上，<leader>A 全量匹配，再 cw 改词。
+      * 提示：Visual 选中 CUSTOMER，Ctrl+Shift+n 全量匹配，再 c 改成 CLIENT。
        IDENTIFICATION DIVISION.
        PROGRAM-ID. RENAMEF.
        DATA DIVISION.

@@ -39,7 +39,7 @@
 
 | # | テーマ | 学べること |
 |---|---|---|
-| [08](tutorials/08-multicursor-batch-editing.md) | マルチカーソルによる一括編集 | `gaip`、`ciW`、`C`、`ci"`、`g<C-a>` |
+| [08](tutorials/08-multicursor-batch-editing.md) | マルチカーソルによる一括編集 | `Ctrl-n`、`Ctrl+Shift+n`、`gaip`、`C`、`ci"` |
 | [09](tutorials/09-snacks-picker.md) | ファイルと内容の検索（snacks picker） | `ff`/`fg`/`fw`、picker 内部キー、quickfix 連携 |
 | [10](tutorials/10-flash-jump.md) | 画面内の高速ジャンプ（flash） | `s`/`S`、操作子との組み合わせ |
 | [11](tutorials/11-grug-far.md) | ファイル横断の検索置換（grug-far） | `<leader>sr`、一致数の安全確認、段階的な置換 |

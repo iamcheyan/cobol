@@ -39,7 +39,7 @@
 
 | 篇 | 主题 | 你会学会 |
 |---|---|---|
-| [08](tutorials/08-multicursor-batch-editing.md) | 多光标批量编辑 | `gaip`、`ciW`、`C`、`ci"`、`g<C-a>` |
+| [08](tutorials/08-multicursor-batch-editing.md) | 多光标批量编辑 | `Ctrl-n`、`Ctrl+Shift+n`、`gaip`、`C`、`ci"` |
 | [09](tutorials/09-snacks-picker.md) | 文件与内容搜索（snacks picker） | `ff`/`fg`/`fw`，picker 内部按键，quickfix 流转 |
 | [10](tutorials/10-flash-jump.md) | 屏幕内快速跳转（flash） | `s`/`S`，配合操作符 |
 | [11](tutorials/11-grug-far.md) | 跨文件查找替换（grug-far） | `<leader>sr`，匹配数安全检查，分级替换 |

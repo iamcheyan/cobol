@@ -2,7 +2,7 @@
 
 COBOL の項目名変更、`PIC` 句の統一、状態コードの一括置換を 1 行ずつやるのは遅く、漏れも起きます。`multicursor.nvim` は必要な位置すべてにカーソルを置き、1 回の操作でまとめて変更します。
 
-本ページは**公式設定**のまま使います。独自カスタマイズはせず、キー割り当ても作者推奨のものをそのまま紹介します。
+本ページはローカルの `lua/plugins/multicursor.lua` にある実際のキー割り当てに沿って説明します。プラグインに VS Code 風の `Ctrl-n`、`Ctrl+Shift+n`、`Ctrl-d` を追加し、行単位の追加やスキップのマッピングも残しています。
 
 ---
 
@@ -22,7 +22,7 @@ COBOL のデータ宣言は本質的に繰り返しです。
 - `WS-ACCT-*` を `WS-ACCOUNT-*` に改名（宣言 4 箇所＋参照 3 箇所）；
 - すべての `PIC X(...)` を `PIC X(100)` に広げる；
 - 3 レコードの `VALUE "A"` を `VALUE "P"` にする；
-- 6 行のプレースホルダに 001〜006 の連番を入れる。
+- 6 行のプレースホルダに異なる連番を入れる。
 
 単一カーソルでは「1 箇所変更 → `n` で次へ → また変更」になります。マルチカーソルでは「全位置にカーソルを置く → 1 回変更」です。
 
@@ -30,97 +30,28 @@ COBOL のデータ宣言は本質的に繰り返しです。
 
 ---
 
-## 2. インストールと設定
+## 2. ローカル設定とキー割り当て
 
-公式推奨の設定（`lazy.nvim`）です。
+ローカル設定（`lua/plugins/multicursor.lua`）では、プラグインに VS Code 風のキーを追加しています。`Ctrl+Shift+n` を初回から確実に使えるよう eager load も設定しています。
 
-```lua
-{
-  "jake-stewart/multicursor.nvim",
-  branch = "1.0",
-  config = function()
-    local mc = require("multicursor-nvim")
-    mc.setup()
-
-    local set = vim.keymap.set
-
-    -- 上下にカーソル追加／1 行スキップ
-    set({"n", "x"}, "<up>", function() mc.lineAddCursor(-1) end)
-    set({"n", "x"}, "<down>", function() mc.lineAddCursor(1) end)
-    set({"n", "x"}, "<leader><up>", function() mc.lineSkipCursor(-1) end)
-    set({"n", "x"}, "<leader><down>", function() mc.lineSkipCursor(1) end)
-
-    -- 単語／選択範囲の一致で追加、またはスキップ
-    set({"n", "x"}, "<leader>n", function() mc.matchAddCursor(1) end)
-    set({"n", "x"}, "<leader>s", function() mc.matchSkipCursor(1) end)
-    set({"n", "x"}, "<leader>N", function() mc.matchAddCursor(-1) end)
-    set({"n", "x"}, "<leader>S", function() mc.matchSkipCursor(-1) end)
-
-    -- マウス：Ctrl＋左クリックで追加／削除、Ctrl＋ドラッグ
-    set("n", "<c-leftmouse>", mc.handleMouse)
-    set("n", "<c-leftdrag>", mc.handleMouseDrag)
-    set("n", "<c-leftrelease>", mc.handleMouseRelease)
-
-    -- カーソルの一時無効化／有効化
-    set({"n", "x"}, "<c-q>", mc.toggleCursor)
-
-    -- マルチカーソル時だけ有効なキーマップ層
-    mc.addKeymapLayer(function(layerSet)
-      layerSet({"n", "x"}, "<left>", mc.prevCursor)
-      layerSet({"n", "x"}, "<right>", mc.nextCursor)
-      layerSet({"n", "x"}, "<leader>x", mc.deleteCursor)
-      layerSet("n", "<esc>", function()
-        if not mc.cursorsEnabled() then
-          mc.enableCursors()
-        else
-          mc.clearCursors()
-        end
-      end)
-    end)
-
-    -- カーソルの見た目
-    local hl = vim.api.nvim_set_hl
-    hl(0, "MultiCursorCursor", { reverse = true })
-    hl(0, "MultiCursorVisual", { link = "Visual" })
-    hl(0, "MultiCursorSign", { link = "SignColumn" })
-    hl(0, "MultiCursorMatchPreview", { link = "Search" })
-  end
-}
-```
-
-### 本ページで追加する 3 つのアクション
-
-公式のサンプル設定は意図的に最小限です。以下の 3 つは公式ドキュメントの「Advanced Actions」に載っているもので、本ページで使用します。
-
-```lua
--- 行を選択して ga＋motion で 1 行 1 カーソル
--- gg vip gaip → 段落の各行にカーソル
-set({"n", "x"}, "ga", mc.addCursorOperator)
-
--- カーソル下の単語／選択範囲に一致する全箇所へカーソル
-set({"n", "x"}, "<leader>A", mc.matchAllAddCursors)
-
--- 全カーソルを 1 本の連番として増減
-set({"n", "x"}, "g<c-a>", mc.sequenceIncrement)
-set({"n", "x"}, "g<c-x>", mc.sequenceDecrement)
-```
-
-### 最重要の区別：`n` と `<leader>n`
-
-ここを混同すると延々と間違えます。
-
-| キー | 動作 | 用途 |
+| キー | モード | 動作 |
 |---|---|---|
-| `n` | vim 標準の次検索 | 通常移動 |
-| `<leader>n` | 次の一致に**カーソルを追加** | マルチカーソル |
-| `<leader>s` | 次の一致をスキップ（**追加しない**） | マルチカーソル |
-| `<leader>A` | **ファイル全体**の一致すべてに追加 | マルチカーソル |
+| `Ctrl-n` | Normal / Visual | カーソル下の単語または選択文字列の次の一致に追加 |
+| `Ctrl+Shift+n` | Normal / Visual | 単語または選択文字列の全一致に追加 |
+| `Ctrl-d` | Normal / Visual | 次の一致をスキップし、カーソルを追加しない |
+| `<up>` / `<down>` | Normal / Visual | 上／下にカーソルを追加 |
+| `<leader><up>` / `<leader><down>` | Normal / Visual | 1 行飛ばしてカーソルを追加 |
+| `ga` + motion | Normal / Visual | motion に沿って追加。例：`gaip` |
+| `<leader>a` | Normal | カーソル列を整列 |
+| `<leader>gv` | Normal | 直前のカーソル集合を復元 |
+| `<C-q>` | Normal / Visual | ほかのカーソルを一時停止／再開 |
+| `<Esc>` | カーソル有効時 | カーソルを解除。停止中なら先に再開 |
 
-`<leader>A` が最も楽です。`WS-ACCT` の上で 1 回押せば、ファイル内のすべての `WS-ACCT` にカーソルが付きます。
+プラグインのサンプル設定では `<leader>n`、`<leader>s`、`<leader>N`、`<leader>S` を使いますが、本機の一致検索キーは上表のとおりです。以降は本機の実際の割り当てを使います。
 
 ---
 
-## 3. 主要 5 アクションで 9 割をカバー
+## 3. よく使う 5 つの操作
 
 ### アクション 1：1 行 1 カーソル（`ga`＋motion）
 
@@ -206,7 +137,21 @@ WS-CLIENT-XX       " 新しい名前を入力
 
 `-` が `iskeyword` に含まれない場合、`ciw` はハイフンまでしか選択しません。`ciW` は空白境界を使うため、文字列全体を覆えます。
 
-### アクション 4：引用符内の一括置換（`ci"`）
+### アクション 4：`Ctrl+Shift+n` で全一致を選択
+
+最初の 3 つは `gaip` で行ごとにカーソルを追加します。対象が繰り返し現れる文字列（例：`CUSTOMER`）なら、一致選択の方が直接的です。
+
+```text
+Visual モードで CUSTOMER を選択
+Ctrl+Shift+n    " ファイル内のすべての CUSTOMER を選択
+c               " すべての選択を変更
+CLIENT
+<Esc>
+```
+
+一部だけ変更する場合は `Ctrl-n` で 1 件ずつ追加し、変更しない一致は `Ctrl-d` でスキップします。
+
+### アクション 5：引用符内の一括置換（`ci"`）
 
 状態コード、区分値、固定リテラルの変更は最も頻度が高い作業です。
 
@@ -229,28 +174,6 @@ N            " 新しい値を入力
 ```
 
 4 つの異なる値が 1 回で同じ値になります。**`ci"` の範囲は「引用符内」なので、内容の長さは関係ありません。**
-
-### アクション 5：連番（`g<C-a>`）
-
-レコードへの番号付けやテストデータ生成に使います。
-
-```text
-gg gaip      " 各行に 1 カーソル
-f" l         " 引用符内の数字へ
-g<C-a>       " 増加
-```
-
-実測：
-
-```text
-変更前                                 g<C-a> の後
-01 WS-LINE-01 PIC X(40) VALUE "000".  →  VALUE "001".
-01 WS-LINE-02 PIC X(40) VALUE "000".  →  VALUE "002".
-01 WS-LINE-03 PIC X(40) VALUE "000".  →  VALUE "003".
-01 WS-LINE-04 PIC X(40) VALUE "000".  →  VALUE "004".
-```
-
-標準の `Ctrl-a` との違い：`g<C-a>`（`mc.sequenceIncrement`）は**全カーソルを 1 本の連続した数列として扱います**。標準の `Ctrl-a` は各数字を独立に +1 するので全部 `001` になりますが、`g<C-a>` は `001 002 003 004` になります。
 
 ---
 
@@ -277,7 +200,7 @@ g<C-a>       " 増加
 
 ### `<Esc>` の 2 つの動作
 
-公式設定では `<Esc>` は次のとおりです。
+ローカル設定では `<Esc>` は次のとおりです。
 
 ```lua
 if not mc.cursorsEnabled() then
@@ -304,7 +227,7 @@ cd extensions/neovim-tooling/exercises/multicursor
 nvim 01-rename-field.cob
 ```
 
-手順：任意の `WS-CUSTOMER` にカーソル → `<leader>A` → `ciW` → 新しい名前を入力 → `<Esc>`。
+手順：Visual モードで `CUSTOMER` を選択 → `Ctrl+Shift+n` で全一致を選択 → `c` → `CLIENT` を入力 → `<Esc>`。
 
 **合格条件**：8 箇所すべて変更され、`cobc -fsyntax-only 01-rename-field.cob` が通ること。
 
@@ -326,16 +249,16 @@ nvim 01-rename-field.cob
 
 **合格条件**：4 行すべてが `VALUE "N".` になること。
 
-### 演習 4：連番の埋め込み
+### 演習 4：変更しない一致をスキップ
 
-`04-sequence-fill.cob` — 6 つの `VALUE "000"` を `"001"` から `"006"` に。
+`01-rename-field.cob` で Visual 選択とスキップを練習します。
 
-手順：`gg` → `gaip` → `f"` → `l` → `g<C-a>`。
+1. `WS-CUSTOMER` の `C` にカーソルを置き、Visual モードで `CUSTOMER` を選択します。
+2. `Ctrl-n` で次の一致を追加します。
+3. 変更しない一致では `Ctrl-d` を押してスキップします。
+4. 残りの一致で `c` を押し、`CLIENT` と入力して `<Esc>` を押します。
 
-**合格条件**：001、002、003、004、005、006 の順になること。
-
-**比較実験**：標準の `Ctrl-a` を試すと全部 `001` になります。これが `g<C-a>` の存在理由です。
-
+**確認**：選択した `CUSTOMER` だけが `CLIENT` に変わり、スキップした一致は変わりません。
 ### 演習 5：総合
 
 `05-fixed-format-batch.cob` — 2 回に分けて実施します。
@@ -369,17 +292,15 @@ cobc -fsyntax-only your-file.cob
 | 下にカーソル追加 | `<down>` | 1 行ずつ |
 | 上にカーソル追加 | `<up>` | 1 行ずつ |
 | 1 行スキップして追加 | `<leader><down>` | 現在行を飛ばす |
-| 次の一致に追加 | `<leader>n` | 単語／選択範囲の一致 |
-| 前の一致に追加 | `<leader>N` | 逆方向 |
-| 次の一致をスキップ | `<leader>s` | 追加しない |
-| 全一致に追加 | `<leader>A` | ファイル全体 |
+| 次の一致に追加 | `Ctrl-n` | 単語／選択範囲の一致 |
+| 次の一致をスキップ | `Ctrl-d` | 追加しない |
+| 全一致に追加 | `Ctrl+Shift+n` | ファイル全体 |
 | motion で追加 | `ga`＋motion | `gaip` で各行 |
 | 主カーソル切替 | `<left>` / `<right>` | マルチカーソル時のみ |
 | 現在のカーソルを削除 | `<leader>x` | マルチカーソル時のみ |
 | 他カーソルを凍結／再開 | `<c-q>` | 主カーソルだけ動かせる |
 | 全カーソル解除 | `<Esc>` | 通常状態 |
 | マウスで追加 | `<c-leftmouse>` | Ctrl＋左クリック |
-| 連番 | `g<C-a>` / `g<C-x>` | 全カーソルを 1 数列として扱う |
 
 ### テキストオブジェクトの選択
 
@@ -391,12 +312,13 @@ cobc -fsyntax-only your-file.cob
 | `C` | 行末まで | `PIC` 句全体 |
 | `ci"` | 引用符内 | リテラル、状態コード |
 | `cc` | 行全体 | 行の書き換え（コメント行には使わない） |
+| `c` | 現在の選択 | `Ctrl+Shift+n` 後の一致テキスト置換 |
 
 ---
 
 ## 8. 公式ドキュメント
 
-本ページはよく使う部分だけを扱います。全アクション一覧（`splitCursors`、`transposeCursors`、`alignCursors`、`operator`、診断系など）は同梱ヘルプを参照してください。
+本ページはよく使う部分だけを、本機の設定に沿ったキーで扱います。全アクション一覧（`splitCursors`、`transposeCursors`、`alignCursors`、`operator`、診断系など）は同梱ヘルプを参照してください。
 
 ```vim
 :h multicursor
@@ -410,6 +332,6 @@ cobc -fsyntax-only your-file.cob
 
 ## 9. 範囲と限界
 
-- 本ページのキーはすべて**公式サンプル設定**に由来し、カスタマイズしていません。ローカル設定が異なる場合は `:map <leader>n` で確認してください。
+- 本ページは現在の `lua/plugins/multicursor.lua` に基づいています。一致検索キーは `Ctrl-n`、`Ctrl+Shift+n`、`Ctrl-d` に変更されており、`ga`、`<leader>a`、`<leader>gv` もローカルで割り当てています。
 - 「実測」の結果は Neovim 0.10 以降の実ターミナル操作によるもので、推測ではありません。カーソル記号（`│` と `┃`）はバージョンにより多少異なる場合があります。
 - マルチカーソルは COBOL の意味を変えません。同じ編集を複数位置に適用するだけです。**最終判断は `cobc` のコンパイル結果に従ってください。**

@@ -15,7 +15,7 @@
 | 29–31 | [`legacy-workshop/lessons/16-intrinsic-functions-dates/`](legacy-workshop/lessons/16-intrinsic-functions-dates/)、[`enterprise-batch/curriculum/modules/08-database/`](enterprise-batch/curriculum/modules/08-database/) | 日期函数与真实 Embedded SQL 进阶 |
 | 32 | [`legacy-workshop/lessons/28-capstone-night-batch/`](legacy-workshop/lessons/28-capstone-night-batch/)、[`29-reference-topic-map/`](legacy-workshop/lessons/29-reference-topic-map/)、[`enterprise-batch/curriculum/modules/11-incidents/`](enterprise-batch/curriculum/modules/11-incidents/)、[`12-capstone/`](enterprise-batch/curriculum/modules/12-capstone/) | 夜间批处理、知识回顾、事故调查和企业级毕业项目 |
 
-编辑器工具练习见 [Neovim 编辑器辅助教程](neovim-tooling/README.md)（35 篇，含 COBOL 专用、自研多光标插件与通用的搜索、批量编辑、代码理解、Git、会话管理）；四个独立示例见 [`standalone-examples/`](standalone-examples/README.md)。
+编辑器工具练习见 [Neovim 编辑器辅助教程](neovim-tooling/README.md)（34 篇，含 COBOL 专用与通用的搜索、批量编辑、代码理解、Git、会话管理）；四个独立示例见 [`standalone-examples/`](standalone-examples/README.md)。
 
 ## 旧版基础课程
 
@@ -29,7 +29,7 @@
 
 ## Neovim 插件教程
 
-[Neovim 编辑器辅助教程](neovim-tooling/README.md) 共 **35 篇**，按七类整理：COBOL 专用的 `cobol.nvim`（01–07）、搜索与跳转（09–11、23）、批量编辑（08、12–14）、代码理解（15–17、19）、Git（19–20）、界面与外观（22、24–30）、辅助与其它（21、31–35、37）。每篇含你本机的实际按键、实测记录、练习与验收标准。不是主课程的先修要求。
+[Neovim 编辑器辅助教程](neovim-tooling/README.md) 共 **34 篇**，按七类整理：COBOL 专用的 `cobol.nvim`（01–07）、搜索与跳转（09–11、23）、批量编辑（08、12–14）、代码理解（15–17、19）、Git（19–20）、界面与外观（22、24–30）、辅助与其它（21、31–35）。每篇含你本机的实际按键、实测记录、练习与验收标准。不是主课程的先修要求。
 
 **从哪进**：先打开 [教程目录](neovim-tooling/README.md)，里面有分类索引和三套推荐阅读顺序（时间有限 / 做 COBOL / 改课程文档）。
 

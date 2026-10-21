@@ -1,11 +1,11 @@
 # Neovim Editor Tutorials
 
-These tutorials cover **the tools actually in use in your local Neovim configuration** across seven groups, including COBOL-specific tools, our own line-based multi-cursor plugin, and general editor skills.
+These tutorials cover **the tools actually in use in your local Neovim configuration** across seven groups, including COBOL-specific tools and general editor skills.
 
 - **COBOL-specific** (01–07): fixed-format rulers, structural navigation, PIC calculation and GnuCOBOL diagnostics from `cobol.nvim`.
-- **General editor skills** (08–17, 19–35): search, jumping, batch editing, code understanding, Git and sessions. Our `multicursor-line.nvim` is listed separately in Guide 37.
+- **General editor skills** (08–17, 19–35): search, jumping, batch editing, code understanding, Git and sessions.
 
-The three have distinct roles: COBOL tools handle column positions and copybooks; our `multicursor-line.nvim` adds cursors according to the layout of selected lines; general tools handle search, code navigation and batch editing.
+The two have distinct roles: COBOL tools handle column positions and copybooks; general tools handle search, code navigation and batch editing.
 
 **Not a prerequisite for the main course.** This is optional tooling material, to consult as needed. Tutorials use real files from `extensions/standalone-examples/` and `lessons/`.
 
@@ -21,7 +21,7 @@ The three have distinct roles: COBOL tools handle column positions and copybooks
 
 ## Tutorial index
 
-The 35 current guides are ordered by number across 01–37 (guides 18 and 36 have been withdrawn). Categories group adjacent guides so you can find one quickly.
+The 34 current guides are ordered by number across 01–37 (guides 18, 36 and 37 have been withdrawn). Categories group adjacent guides so you can find one quickly.
 
 ### 1. COBOL-specific: `cobol.nvim`
 
@@ -96,7 +96,6 @@ The 35 current guides are ordered by number across 01–37 (guides 18 and 36 hav
 | [33](tutorials/33-bookmark.md) | Bookmarks | Mark positions, `]b` / `[b` to jump |
 | [34](tutorials/34-batch-and-shellcheck.md) | Batch and Shell lint | `.bat` support, `shellcheck` diagnostics |
 | [35](tutorials/35-vimquest.md) | English vocabulary drill | Practice English in code (does not affect coding) |
-| [37](tutorials/37-multicursor-line.md) | Add cursors by line (our plugin) | Smart head, absolute BOL, tail and alternating layouts |
 
 ## Suggested order
 

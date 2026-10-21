@@ -46,7 +46,7 @@ opts = {
 
 ### 注意 `<leader>m` 组
 
-which-key 配置里 `<leader>m` 是 **bookmarks** 组。但 `multicursor-line.nvim` 也用 `<leader>m` 前缀（`mh`、`mH`、`mt`、`m0`、`ma`、`mA`）——两者在 `<leader>m` 组下共存，`<leader>mt` 恰好被 bookmark 占用。
+which-key 配置里 `<leader>m` 是 **bookmarks** 组；`mh`、`mH`、`mt`、`m0`、`ma`、`mA` 等键都由本插件使用。
 
 ## 3. 使用场景
 
@@ -126,12 +126,6 @@ nvim lessons/32_bank-reconciliation-project/lesson.cob
 
 ## 5. 踩坑
 
-### `<leader>mt` 被 multicursor-line 占用
-
-你的配置里 `multicursor-line.nvim` 也绑了 `<leader>mt`（multi-cursor 行尾加光标）。两者冲突时，**后加载的生效**。
-
-用 `:verbose nmap <leader>mt` 确认当前是谁在处理。
-
 ### 书签在关闭文件后还在吗
 
 取决于插件的存储方式（项目级持久化）。通常下次打开还在。**以实际测试为准**——打一个书签、重启 Neovim、看还在不在。
@@ -171,6 +165,5 @@ vim 原生 `ma` 是设置标记。插件用 `<leader>m*`，不冲突（前缀不
 ## 8. 边界
 
 - 本篇配置来自 `lua/plugins/bookmark.lua`：`<leader>mt`/`mm`/`mc`/`mC`、`]b`/`[b`，`mouse = true`。
-- **`<leader>mt` 与 `multicursor-line.nvim` 的键位重叠**（后者也用 `<leader>mt`）。实际生效者以后加载为准，用 `:verbose nmap` 确认。
 - `<leader>mC` 清除范围是**整个项目**，比 `<leader>mc`（当前缓冲区）大得多。
 - 书签持久化行为以实际测试为准；这是你自己开发的插件（`iamcheyan/`）。

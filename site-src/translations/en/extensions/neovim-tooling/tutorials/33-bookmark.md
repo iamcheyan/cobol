@@ -46,7 +46,7 @@ opts = {
 
 ### Note the `<leader>m` Group
 
-In the which-key configuration, `<leader>m` is the **bookmarks** group. But `multicursor-line.nvim` also uses the `<leader>m` prefix (`mh`, `mH`, `mt`, `m0`, `ma`, `mA`). Both coexist under the `<leader>m` group; bookmark happens to use `<leader>mt`.
+In the which-key configuration, `<leader>m` is the **bookmarks** group; `mh`, `mH`, `mt`, `m0`, `ma` and `mA` are all used by this plugin.
 
 ## 3. Use Cases
 
@@ -126,12 +126,6 @@ nvim lessons/32_bank-reconciliation-project/lesson.cob
 
 ## 5. Common Issues
 
-### `<leader>mt` Is Used by multicursor-line
-
-Your configuration also maps `<leader>mt` in `multicursor-line.nvim` (to add a cursor at the end of a multi-cursor line). If the mappings conflict, **the one loaded later takes effect**.
-
-Use `:verbose nmap <leader>mt` to see which mapping currently handles it.
-
 ### Do Bookmarks Persist After Closing a File?
 
 This depends on how the plugin stores them (project-level persistence). They usually remain when you reopen the file. **Confirm by testing**—set a bookmark, restart Neovim, and see whether it is still there.
@@ -171,6 +165,5 @@ Repository: <https://github.com/iamcheyan/bookmark.nvim>
 ## 8. Boundaries
 
 - This tutorial describes `lua/plugins/bookmark.lua`: `<leader>mt`/`mm`/`mc`/`mC`, `]b`/`[b`, and `mouse = true`.
-- **`<leader>mt` overlaps with a `multicursor-line.nvim` mapping** (which also uses `<leader>mt`). The mapping loaded later takes effect; use `:verbose nmap` to check.
 - `<leader>mC` clears bookmarks for the **entire project**, a much wider scope than `<leader>mc` (the current buffer).
 - Confirm bookmark persistence by testing; this is a plugin you develop (`iamcheyan/`).

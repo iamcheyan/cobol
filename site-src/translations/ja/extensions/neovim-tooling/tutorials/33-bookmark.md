@@ -46,7 +46,7 @@ opts = {
 
 ### `<leader>m` グループに注意
 
-which-key の設定では `<leader>m` は **bookmarks** グループです。一方、`multicursor-line.nvim` も `<leader>m` で始まるキー（`mh`、`mH`、`mt`、`m0`、`ma`、`mA`）を使います。両者は `<leader>m` グループ内で共存しますが、`<leader>mt` は bookmark が使います。
+which-key の設定では `<leader>m` は **bookmarks** グループです。`mh`、`mH`、`mt`、`m0`、`ma`、`mA` はすべて本プラグインが使います。
 
 ## 3. 使用場面
 
@@ -126,12 +126,6 @@ nvim lessons/32_bank-reconciliation-project/lesson.cob
 
 ## 5. つまずいたとき
 
-### `<leader>mt` が multicursor-line に使われる
-
-設定では `multicursor-line.nvim` も `<leader>mt`（複数カーソルを行末に追加）に割り当てています。競合する場合は、**後から読み込まれた方が有効**です。
-
-現在どちらが処理しているか、`:verbose nmap <leader>mt` で確認してください。
-
 ### ファイルを閉じてもブックマークは残るか
 
 プラグインの保存方式（プロジェクト単位の永続化）によります。通常は次回開いたときにも残ります。**実際に確認してください**。ブックマークを付けて Neovim を再起動し、残っているか見ます。
@@ -171,6 +165,5 @@ Vim 標準の `ma` はマークを設定します。プラグインは `<leader>
 ## 8. 適用範囲
 
 - このページの設定は `lua/plugins/bookmark.lua` に基づきます：`<leader>mt`／`mm`／`mc`／`mC`、`]b`／`[b`、`mouse = true`。
-- **`<leader>mt` は `multicursor-line.nvim` のキーと重なります**（こちらも `<leader>mt` を使います）。どちらが有効かは後から読み込まれた方です。`:verbose nmap` で確認してください。
 - `<leader>mC` は**プロジェクト全体**を消去し、`<leader>mc`（現在のバッファ）より範囲が大幅に広くなります。
 - ブックマークの永続化動作は実際に確認してください。このプラグインは自作（`iamcheyan/`）です。

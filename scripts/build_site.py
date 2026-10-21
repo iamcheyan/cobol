@@ -793,13 +793,9 @@ def tutorial_items(locale: str) -> tuple[tuple[str, str, str], ...]:
     # Order the sidebar by category in index order, then by tutorial number, so
     # the groups never interleave (the index tables also list re-runs of a
     # tutorial under a quick-route heading).
-    def group_rank(group: str) -> tuple[int, int]:
-        # Category headings are numbered in the index ("2. 検索とジャンプ"); sort
-        # on that number so the sidebar follows the index order exactly.
-        match = re.match(r"^\s*(\d+)\.", group)
-        return (int(match.group(1)) if match else 999, len(group))
-
-    items.sort(key=lambda item: (group_rank(item[2]), item[0]))
+    # Sidebar order is the tutorial number: 01 -> 36, so the guides read as a
+    # plain sequence. Categories only label each run of guides.
+    items.sort(key=lambda item: item[0])
     return tuple(items)
 
 
@@ -808,7 +804,7 @@ def tutorial_nav(locale: str, slug: str) -> str:
     labels = LOCALES[locale]
     items = tutorial_items(locale)
     blocks: list[str] = []
-    last_group = None
+    last_group = object()
     rows: list[str] = []
     for item_slug, short, group in items:
         if group != last_group:

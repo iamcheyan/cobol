@@ -21,6 +21,8 @@
 
 ## 教程目录
 
+教程按编号顺序排列，编号小的先读。分类只是把相邻的教程归成一组，方便查找。
+
 ### 一、COBOL 专用：`cobol.nvim`
 
 | 篇 | 主题 | 你会学会 |
@@ -33,20 +35,19 @@
 | [06](tutorials/06-practical-examples-guide.md) | 实战示例 | 四个独立示例配合插件 |
 | [07](tutorials/07-cobol-nvim-plugin-lab.md) | 插件练习 | 综合演练 |
 
-### 二、搜索与跳转
-
-| 篇 | 主题 | 你会学会 |
-|---|---|---|
-| [09](tutorials/09-snacks-picker.md) | 文件与内容搜索（snacks picker） | `ff`/`fg`/`fw`，picker 内部按键，quickfix 流转 |
-| [10](tutorials/10-flash-jump.md) | 屏幕内快速跳转（flash） | `s`/`S`，配合操作符 |
-| [11](tutorials/11-grug-far.md) | 跨文件查找替换（grug-far） | `<leader>sr`，匹配数安全检查，分级替换 |
-| [23](tutorials/23-quicker.md) | quickfix 上下文展开 | `>`/`<` 展开结果上下文 |
-
-### 三、批量编辑
+### 二、找到并改动：多光标、搜索与替换
 
 | 篇 | 主题 | 你会学会 |
 |---|---|---|
 | [08](tutorials/08-multicursor-batch-editing.md) | 多光标批量编辑 | `gaip`、`ciW`、`C`、`ci"`、`g<C-a>` |
+| [09](tutorials/09-snacks-picker.md) | 文件与内容搜索（snacks picker） | `ff`/`fg`/`fw`，picker 内部按键，quickfix 流转 |
+| [10](tutorials/10-flash-jump.md) | 屏幕内快速跳转（flash） | `s`/`S`，配合操作符 |
+| [11](tutorials/11-grug-far.md) | 跨文件查找替换（grug-far） | `<leader>sr`，匹配数安全检查，分级替换 |
+
+### 三、编辑辅助
+
+| 篇 | 主题 | 你会学会 |
+|---|---|---|
 | [12](tutorials/12-mini-ai-textobjects.md) | 文本对象（mini.ai） | 按语义边界选中，`cia`/`ciq`/`g` |
 | [13](tutorials/13-mini-surround.md) | 包围符号（mini.surround） | `gsa`/`gsd`/`gsr` |
 | [14](tutorials/14-smart-paste.md) | 智能粘贴 | 保持相对缩进，重排到当前行 |
@@ -67,12 +68,18 @@
 | [19](tutorials/19-gitsigns.md) | 行级 Git 操作 | hunk 暂存/重置，blame |
 | [20](tutorials/20-diffview.md) | 完整差异与历史 | 并排 diff，文件历史 |
 
-### 六、界面与外观
+### 六、会话与发现
 
 | 篇 | 主题 | 你会学会 |
 |---|---|---|
 | [21](tutorials/21-auto-session.md) | 会话保存与恢复 | 按目录保存布局 |
 | [22](tutorials/22-which-key.md) | 按键发现 | `<leader>` + 停顿，逐层展开 |
+| [23](tutorials/23-quicker.md) | quickfix 上下文展开 | `>`/`<` 展开结果上下文 |
+
+### 七、界面与外观
+
+| 篇 | 主题 | 你会学会 |
+|---|---|---|
 | [24](tutorials/24-bufferline.md) | 缓冲区标签栏 | 顶部标签、改动标记 |
 | [25](tutorials/25-noice.md) | 消息与命令行 | 命令行、复制提示、确认框 |
 | [26](tutorials/26-dashboard.md) | 启动页 | 最近文件、快捷入口 |
@@ -81,7 +88,7 @@
 | [29](tutorials/29-rainbow-delimiters.md) | 彩虹括号 | 嵌套层级着色 |
 | [30](tutorials/30-markview.md) | Markdown 渲染 | 标题/表格/代码块 |
 
-### 七、辅助与其它
+### 八、辅助与其它
 
 | 篇 | 主题 | 你会学会 |
 |---|---|---|

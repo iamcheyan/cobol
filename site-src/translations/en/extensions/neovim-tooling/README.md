@@ -21,6 +21,9 @@ The two complement each other. The COBOL tools handle column positions and copyb
 
 ## Tutorial index
 
+The guides are ordered by number; read the lower numbers first. Categories
+just group adjacent guides so you can find one quickly.
+
 ### 1. COBOL-specific: `cobol.nvim`
 
 | # | Topic | What you learn |
@@ -33,20 +36,19 @@ The two complement each other. The COBOL tools handle column positions and copyb
 | [06](tutorials/06-practical-examples-guide.md) | Practical examples | Four standalone examples with the plugin |
 | [07](tutorials/07-cobol-nvim-plugin-lab.md) | Plugin lab | Combined practice |
 
-### 2. Search and jumping
-
-| # | Topic | What you learn |
-|---|---|---|
-| [09](tutorials/09-snacks-picker.md) | File and content search (snacks picker) | `ff`/`fg`/`fw`, picker internals, quickfix hand-off |
-| [10](tutorials/10-flash-jump.md) | On-screen jumping (flash) | `s`/`S`, combining with operators |
-| [11](tutorials/11-grug-far.md) | Cross-file search and replace (grug-far) | `<leader>sr`, match-count safety check, staged replacement |
-| [23](tutorials/23-quicker.md) | quickfix context expansion | `>`/`<` to expand result context |
-
-### 3. Batch editing
+### 2. Find and change: multi-cursor, search and replace
 
 | # | Topic | What you learn |
 |---|---|---|
 | [08](tutorials/08-multicursor-batch-editing.md) | Multi-cursor batch editing | `gaip`, `ciW`, `C`, `ci"`, `g<C-a>` |
+| [09](tutorials/09-snacks-picker.md) | File and content search (snacks picker) | `ff`/`fg`/`fw`, picker internals, quickfix hand-off |
+| [10](tutorials/10-flash-jump.md) | On-screen jumping (flash) | `s`/`S`, combining with operators |
+| [11](tutorials/11-grug-far.md) | Cross-file search and replace (grug-far) | `<leader>sr`, match-count safety check, staged replacement |
+
+### 3. Editing helpers
+
+| # | Topic | What you learn |
+|---|---|---|
 | [12](tutorials/12-mini-ai-textobjects.md) | Text objects (mini.ai) | Semantic boundaries, `cia`/`ciq`/`g` |
 | [13](tutorials/13-mini-surround.md) | Surrounds (mini.surround) | `gsa`/`gsd`/`gsr` |
 | [14](tutorials/14-smart-paste.md) | Smart paste | Keep relative indent, rebase to the current line |
@@ -67,12 +69,18 @@ The two complement each other. The COBOL tools handle column positions and copyb
 | [19](tutorials/19-gitsigns.md) | Line-level Git operations | Stage/reset hunks, blame |
 | [20](tutorials/20-diffview.md) | Full diffs and history | Side-by-side diff, file history |
 
-### 6. Interface and appearance
+### 6. Sessions and discovery
 
 | # | Topic | What you learn |
 |---|---|---|
 | [21](tutorials/21-auto-session.md) | Session save and restore | Per-directory layouts |
 | [22](tutorials/22-which-key.md) | Key discovery | `<leader>` plus a pause, drill down layer by layer |
+| [23](tutorials/23-quicker.md) | quickfix context expansion | `>`/`<` to expand result context |
+
+### 7. Interface and appearance
+
+| # | Topic | What you learn |
+|---|---|---|
 | [24](tutorials/24-bufferline.md) | Buffer tab line | Tabs at the top, modification markers |
 | [25](tutorials/25-noice.md) | Messages and cmdline | Cmdline, yank toast, confirm dialog |
 | [26](tutorials/26-dashboard.md) | Start screen | Recent files, shortcuts |
@@ -81,7 +89,7 @@ The two complement each other. The COBOL tools handle column positions and copyb
 | [29](tutorials/29-rainbow-delimiters.md) | Rainbow delimiters | Colouring nesting levels |
 | [30](tutorials/30-markview.md) | Markdown rendering | Headings, tables, code blocks |
 
-### 7. Helpers and others
+### 8. Helpers and others
 
 | # | Topic | What you learn |
 |---|---|---|
@@ -91,6 +99,8 @@ The two complement each other. The COBOL tools handle column positions and copyb
 | [34](tutorials/34-batch-and-shellcheck.md) | Batch and Shell lint | `.bat` support, `shellcheck` diagnostics |
 | [35](tutorials/35-vimquest.md) | English vocabulary drill | Practice English in code (does not affect coding) |
 | [36](tutorials/36-vim-visual-multi.md) | The other multi-cursor | `Ctrl-n` end/start-of-line modes |
+
+## Suggested order
 
 **If time is short**, these four cover 80% of daily work:
 
@@ -108,11 +118,6 @@ The two complement each other. The COBOL tools handle column positions and copyb
 
 7. [11 grug-far](tutorials/11-grug-far.md) — cross-file batch replacement
 8. [20 diffview](tutorials/20-diffview.md) — reviewing changes
-
-## Suggested order
-
-**If time is short**, these four cover 80% of daily work:
-
 
 ## How to read these
 

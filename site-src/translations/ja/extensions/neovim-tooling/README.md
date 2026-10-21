@@ -21,6 +21,8 @@
 
 ## チュートリアル一覧
 
+チュートリアルは番号順に並んでいます。番号の小さいものから読んでください。分類は隣り合う教程を探しやすくするためのまとめです。
+
 ### 1. COBOL 専用：`cobol.nvim`
 
 | # | テーマ | 学べること |
@@ -33,20 +35,19 @@
 | [06](tutorials/06-practical-examples-guide.md) | 実践的なサンプル | 独立した 4 サンプルとプラグイン |
 | [07](tutorials/07-cobol-nvim-plugin-lab.md) | プラグイン演習 | 総合演習 |
 
-### 2. 検索とジャンプ
-
-| # | テーマ | 学べること |
-|---|---|---|
-| [09](tutorials/09-snacks-picker.md) | ファイルと内容の検索（snacks picker） | `ff`/`fg`/`fw`、picker 内部キー、quickfix 連携 |
-| [10](tutorials/10-flash-jump.md) | 画面内の高速ジャンプ（flash） | `s`/`S`、操作子との組み合わせ |
-| [11](tutorials/11-grug-far.md) | ファイル横断の検索置換（grug-far） | `<leader>sr`、一致数の安全確認、段階的な置換 |
-| [23](tutorials/23-quicker.md) | quickfix の文脈展開 | `>`/`<` で結果の前後を展開 |
-
-### 3. 一括編集
+### 2. 見つけて変える：マルチカーソル・検索・置換
 
 | # | テーマ | 学べること |
 |---|---|---|
 | [08](tutorials/08-multicursor-batch-editing.md) | マルチカーソルによる一括編集 | `gaip`、`ciW`、`C`、`ci"`、`g<C-a>` |
+| [09](tutorials/09-snacks-picker.md) | ファイルと内容の検索（snacks picker） | `ff`/`fg`/`fw`、picker 内部キー、quickfix 連携 |
+| [10](tutorials/10-flash-jump.md) | 画面内の高速ジャンプ（flash） | `s`/`S`、操作子との組み合わせ |
+| [11](tutorials/11-grug-far.md) | ファイル横断の検索置換（grug-far） | `<leader>sr`、一致数の安全確認、段階的な置換 |
+
+### 3. 編集の補助
+
+| # | テーマ | 学べること |
+|---|---|---|
 | [12](tutorials/12-mini-ai-textobjects.md) | テキストオブジェクト（mini.ai） | 意味的境界での選択、`cia`/`ciq`/`g` |
 | [13](tutorials/13-mini-surround.md) | 囲み記号（mini.surround） | `gsa`/`gsd`/`gsr` |
 | [14](tutorials/14-smart-paste.md) | スマートペースト | 相対インデントを保ち、現在行に合わせる |
@@ -67,12 +68,18 @@
 | [19](tutorials/19-gitsigns.md) | 行単位の Git 操作 | hunk のステージ／リセット、blame |
 | [20](tutorials/20-diffview.md) | 完全な差分と履歴 | 並列 diff、ファイル履歴 |
 
-### 6. 画面と外観
+### 6. セッションと発見
 
 | # | テーマ | 学べること |
 |---|---|---|
 | [21](tutorials/21-auto-session.md) | セッションの保存と復元 | ディレクトリ単位のレイアウト |
 | [22](tutorials/22-which-key.md) | キーの発見 | `<leader>`＋間、階層を順に展開 |
+| [23](tutorials/23-quicker.md) | quickfix の文脈展開 | `>`/`<` で結果の前後を展開 |
+
+### 7. 画面と外観
+
+| # | テーマ | 学べること |
+|---|---|---|
 | [24](tutorials/24-bufferline.md) | バッファのタブバー | 上部タブ、変更マーク |
 | [25](tutorials/25-noice.md) | メッセージとコマンドライン | コマンドライン、ヤンク通知、確認ダイアログ |
 | [26](tutorials/26-dashboard.md) | 起動画面 | 最近のファイル、ショートカット |
@@ -81,7 +88,7 @@
 | [29](tutorials/29-rainbow-delimiters.md) | レインボー括弧 | 入れ子階層の着色 |
 | [30](tutorials/30-markview.md) | Markdown の描画 | 見出し・表・コードブロック |
 
-### 7. 補助とその他
+### 8. 補助とその他
 
 | # | テーマ | 学べること |
 |---|---|---|

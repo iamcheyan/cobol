@@ -15,7 +15,7 @@
 | 29–31 | [`legacy-workshop/lessons/16-intrinsic-functions-dates/`](legacy-workshop/lessons/16-intrinsic-functions-dates/)、[`enterprise-batch/curriculum/modules/08-database/`](enterprise-batch/curriculum/modules/08-database/) | 日付関数と実際の Embedded SQL の応用 |
 | 32 | [`legacy-workshop/lessons/28-capstone-night-batch/`](legacy-workshop/lessons/28-capstone-night-batch/)、[`29-reference-topic-map/`](legacy-workshop/lessons/29-reference-topic-map/)、[`enterprise-batch/curriculum/modules/11-incidents/`](enterprise-batch/curriculum/modules/11-incidents/)、[`12-capstone/`](enterprise-batch/curriculum/modules/12-capstone/) | 夜間バッチ処理、知識の振り返り、インシデント調査、企業向け総合課題 |
 
-Neovim の演習は [`neovim-tooling/tutorials/`](neovim-tooling/tutorials/01-punchcard-and-ruler.md)、4 つの独立したサンプルは [`standalone-examples/`](standalone-examples/README.md) を参照してください。
+エディターのツール練習は [Neovim エディター補助チュートリアル](neovim-tooling/README.md)（36 本。COBOL 専用に加え、検索、一括編集、コード理解、Git、セッション管理を扱う汎用編を含む）、4 つの独立したサンプルは [`standalone-examples/`](standalone-examples/README.md) を参照してください。
 
 ## 旧版入門コース
 
@@ -29,7 +29,9 @@ Neovim の演習は [`neovim-tooling/tutorials/`](neovim-tooling/tutorials/01-pu
 
 ## Neovim プラグインのチュートリアル
 
-[`neovim-tooling/tutorials/`](neovim-tooling/tutorials/01-punchcard-and-ruler.md) には、固定形式のルーラー、構造ナビゲーション、PIC 計算、診断、コンパイルのワークフロー、実践例、プラグインの回帰演習を扱う `cobol.nvim` のチュートリアルが 7 本あります。エディター向けの補助資料であり、メインコースの前提条件ではありません。
+[Neovim エディター補助チュートリアル](neovim-tooling/README.md) は全 **36 本**で、7 分類に整理されています。COBOL 専用の `cobol.nvim`（01–07）、検索とジャンプ（09–11、23）、一括編集（08、12–14）、コード理解（15–18）、Git（19–20）、画面と外観（22、24–30）、補助とその他（21、31–36）。各ページに本機の実際のキー、実測記録、演習と合格条件があります。メインコースの前提条件ではありません。
+
+**どこから入るか**：まず [チュートリアル目次](neovim-tooling/README.md) を開いてください。分類索引と、3 通りの推奨順序（時間がない／COBOL を扱う／コース文書を編集する）があります。
 
 ## 独立した COBOL サンプル
 

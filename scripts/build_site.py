@@ -86,6 +86,7 @@ LOCALES = {
         "start_term": "终端 · Debian / Ubuntu", "start_open": "打开第 01 课",
         "more_eyebrow": "BEYOND THE MAIN COURSE", "more_title": "继续探索",
         "more_kn": "知识库", "more_kn_desc": "语言背景、史话、速查手册与术语表",
+        "more_ed": "编辑器教程", "more_ed_desc": "Neovim 插件的按键、实测与练习（36 篇）",
         "more_ext": "拓展课程", "more_ext_desc": "旧版专题、企业批处理与编辑器教程",
         "more_src": "课程源码", "more_src_desc": "查看代码、夹具与构建脚本",
         "nav_plugins": "cobol.nvim",
@@ -94,6 +95,7 @@ LOCALES = {
         "more_gnu_desc": "配套编译器与官方文档",
         "nav_about": "COBOL 是什么", "nav_reference": "速查手册",
         "nav_knowledge": "知识库",
+        "nav_editor": "编辑器教程",
         "kn_eyebrow": "KNOWLEDGE BASE",
         "kn_title": "COBOL 知识库",
         "kn_lead": "除了 32 课主课程，这里还有四份资料：语言背景、发展史话、可随时查的速查手册，以及术语表。都不需要按顺序读。",
@@ -203,6 +205,7 @@ LOCALES = {
         "start_term": "Terminal · Debian / Ubuntu", "start_open": "Open lesson 01",
         "more_eyebrow": "BEYOND THE MAIN COURSE", "more_title": "Keep exploring",
         "more_kn": "Knowledge base", "more_kn_desc": "Language background, history, reference and glossary",
+        "more_ed": "Editor guide", "more_ed_desc": "Neovim plugin keys, measured steps and exercises (36 pages)",
         "more_ext": "Extensions", "more_ext_desc": "Legacy topics, enterprise batch and editor tutorials",
         "more_src": "Course source", "more_src_desc": "Code, fixtures and build scripts",
         "nav_plugins": "cobol.nvim",
@@ -211,6 +214,7 @@ LOCALES = {
         "more_gnu_desc": "Companion compiler and official documentation",
         "nav_about": "What is COBOL", "nav_reference": "Reference",
         "nav_knowledge": "Knowledge",
+        "nav_editor": "Editor guide",
         "kn_eyebrow": "KNOWLEDGE BASE",
         "kn_title": "COBOL knowledge base",
         "kn_lead": "Beyond the 32-lesson course there are four references: what the language is, how it came to be, a lookup sheet, and a glossary. None of them needs to be read in order.",
@@ -320,6 +324,7 @@ LOCALES = {
         "start_term": "ターミナル · Debian / Ubuntu", "start_open": "レッスン01を開く",
         "more_eyebrow": "BEYOND THE MAIN COURSE", "more_title": "さらに学ぶ",
         "more_kn": "ナレッジベース", "more_kn_desc": "言語の概要・史話・リファレンス・用語集",
+        "more_ed": "エディター教程", "more_ed_desc": "Neovim プラグインのキー・実測・演習（36 本）",
         "more_ext": "発展教材", "more_ext_desc": "旧版のトピック、企業バッチ、エディタのチュートリアル",
         "more_src": "コースのソース", "more_src_desc": "コード、フィクスチャ、ビルドスクリプト",
         "nav_plugins": "cobol.nvim",
@@ -328,6 +333,7 @@ LOCALES = {
         "more_gnu_desc": "対応コンパイラと公式ドキュメント",
         "nav_about": "COBOL とは", "nav_reference": "リファレンス",
         "nav_knowledge": "ナレッジ",
+        "nav_editor": "エディター教程",
         "kn_eyebrow": "KNOWLEDGE BASE",
         "kn_title": "COBOL ナレッジベース",
         "kn_lead": "32 課のコースとは別に 4 つの資料を用意しています。言語の概要、成り立ちの史話、引けるリファレンス、用語集です。順番に読む必要はありません。",
@@ -780,6 +786,7 @@ def shell(locale: str, title: str, body: str, page: Path, home: bool = False) ->
     directory = site_href(Path(locale) / "lessons/DIRECTORY.html", locale, page)
     extensions = site_href(Path(locale) / "extensions/README.html", locale, page)
     plugins = site_href(Path(locale) / "plugins.html", locale, page)
+    editor = site_href(Path(locale) / "extensions/neovim-tooling/README.html", locale, page)
     gnucobol = site_href(Path(locale) / "gnucobol.html", locale, page)
     knowledge = site_href(Path(locale) / "knowledge.html", locale, page)
     languages = "".join(
@@ -830,7 +837,7 @@ def shell(locale: str, title: str, body: str, page: Path, home: bool = False) ->
 <header class="masthead">
 <a class="brand" href="{home_href}"><img src="{site_href(Path(locale) / "assets/shire_200.png", locale, page)}" alt="GnuCOBOL Shire horse mascot"><span><strong>GnuCOBOL</strong><small>{html.escape(labels["brand_sub"])}</small></span></a>
 <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="{labels["nav_menu"]}"><span class="nav-bars" aria-hidden="true"></span><span class="nav-toggle-label">{labels["nav_menu"]}</span></button>
-<nav id="site-nav"><a href="{directory}">{labels["nav_directory"]}</a><a class="nav-plugin" href="{plugins}">{labels["nav_plugins"]}</a><details class="nav-library"><summary>{labels["nav_resources"]}</summary><div class="nav-library-menu"><a href="{knowledge}">{labels["nav_knowledge"]}</a><a href="{extensions}">{labels["nav_extensions"]}</a><a href="{gnucobol}">{labels["nav_gnucobol"]}</a></div></details><a class="nav-source" href="https://github.com/iamcheyan/cobol" aria-label="{labels["nav_source"]}" title="{labels["nav_source"]}" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .9a11.1 11.1 0 0 0-3.51 21.63c.55.1.76-.24.76-.54v-2.08c-3.1.67-3.76-1.31-3.76-1.31-.5-1.29-1.24-1.63-1.24-1.63-1.02-.7.08-.69.08-.69 1.13.08 1.73 1.16 1.73 1.16 1 1.72 2.62 1.22 3.26.93.1-.73.39-1.22.71-1.5-2.48-.28-5.09-1.24-5.09-5.52 0-1.22.44-2.22 1.16-3-.12-.28-.5-1.42.11-2.96 0 0 .95-.3 3.05 1.15a10.6 10.6 0 0 1 5.56 0c2.12-1.45 3.06-1.15 3.06-1.15.61 1.54.23 2.68.11 2.96.72.78 1.15 1.78 1.15 3 0 4.29-2.61 5.23-5.1 5.51.4.35.76 1.03.76 2.08v3.08c0 .3.2.65.77.54A11.1 11.1 0 0 0 12 .9Z"/></svg></a><div class="language-menu" aria-label="{labels["nav_lang"]}">{languages}</div></nav>
+<nav id="site-nav"><a href="{directory}">{labels["nav_directory"]}</a><a class="nav-plugin" href="{plugins}">{labels["nav_plugins"]}</a><details class="nav-library"><summary>{labels["nav_resources"]}</summary><div class="nav-library-menu"><a href="{knowledge}">{labels["nav_knowledge"]}</a><a href="{editor}">{labels["nav_editor"]}</a><a href="{extensions}">{labels["nav_extensions"]}</a><a href="{gnucobol}">{labels["nav_gnucobol"]}</a></div></details><a class="nav-source" href="https://github.com/iamcheyan/cobol" aria-label="{labels["nav_source"]}" title="{labels["nav_source"]}" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .9a11.1 11.1 0 0 0-3.51 21.63c.55.1.76-.24.76-.54v-2.08c-3.1.67-3.76-1.31-3.76-1.31-.5-1.29-1.24-1.63-1.24-1.63-1.02-.7.08-.69.08-.69 1.13.08 1.73 1.16 1.73 1.16 1 1.72 2.62 1.22 3.26.93.1-.73.39-1.22.71-1.5-2.48-.28-5.09-1.24-5.09-5.52 0-1.22.44-2.22 1.16-3-.12-.28-.5-1.42.11-2.96 0 0 .95-.3 3.05 1.15a10.6 10.6 0 0 1 5.56 0c2.12-1.45 3.06-1.15 3.06-1.15.61 1.54.23 2.68.11 2.96.72.78 1.15 1.78 1.15 3 0 4.29-2.61 5.23-5.1 5.51.4.35.76 1.03.76 2.08v3.08c0 .3.2.65.77.54A11.1 11.1 0 0 0 12 .9Z"/></svg></a><div class="language-menu" aria-label="{labels["nav_lang"]}">{languages}</div></nav>
 <button class="theme-toggle" type="button" aria-label="{html.escape(labels["theme_dark"])}" aria-pressed="false" data-dark-label="{html.escape(labels["theme_dark"])}" data-light-label="{html.escape(labels["theme_light"])}" title="{html.escape(labels["theme_dark"])}"><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.6A8.6 8.6 0 1 1 9.4 3.5a6.9 6.9 0 0 0 11.1 11.1Z"/></svg><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M4.2 12H2M22 12h-2.2M6.5 6.5 5 5M19 19l-1.5-1.5M17.5 6.5 19 5M5 19l1.5-1.5"/></svg></button>
 </header>
 {main}
@@ -1203,7 +1210,7 @@ def homepage(locale: str) -> str:
 <section class="course-overview"><div class="section-title"><div><p class="eyebrow">{labels["path_eyebrow"]}</p><h2>{labels["path_title"]}</h2></div><a href="lessons/DIRECTORY.html">{labels["path_link"]}</a></div><div class="stages">{stages}</div></section>
 <section class="start-row"><div><p class="eyebrow">{labels["start_eyebrow"]}</p><h2>{labels["start_title"]}</h2><p>{labels["start_text"]}</p></div><div class="start-command"><span>{labels["start_term"]}</span><code>sudo apt install gnucobol make</code><a href="lessons/01_hello-cobol/README.html">{labels["start_open"]} <b>↗</b></a></div></section>
 {plugin_section(locale)}
-<section class="more-reading"><div><p class="eyebrow">{labels["more_eyebrow"]}</p><h2>{labels["more_title"]}</h2></div><a href="knowledge.html"><span>{labels["more_kn"]}</span><strong>{labels["more_kn_desc"]}</strong><b>→</b></a><a href="extensions/README.html"><span>{labels["more_ext"]}</span><strong>{labels["more_ext_desc"]}</strong><b>→</b></a><a href="gnucobol.html"><span>{labels["nav_gnucobol"]}</span><strong>{labels["more_gnu_desc"]}</strong><b>→</b></a></section>'''
+<section class="more-reading"><div><p class="eyebrow">{labels["more_eyebrow"]}</p><h2>{labels["more_title"]}</h2></div><a href="knowledge.html"><span>{labels["more_kn"]}</span><strong>{labels["more_kn_desc"]}</strong><b>→</b></a><a href="extensions/neovim-tooling/README.html"><span>{labels["more_ed"]}</span><strong>{labels["more_ed_desc"]}</strong><b>→</b></a><a href="extensions/README.html"><span>{labels["more_ext"]}</span><strong>{labels["more_ext_desc"]}</strong><b>→</b></a><a href="gnucobol.html"><span>{labels["nav_gnucobol"]}</span><strong>{labels["more_gnu_desc"]}</strong><b>→</b></a></section>'''
     return shell(locale, labels["nav_home"], body, Path("index.html"), home=True)
 
 
